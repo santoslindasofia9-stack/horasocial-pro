@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 
 <html class="light" lang="es"><head>
@@ -8,6 +9,19 @@
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <script id="tailwind-config">
+=======
+
+html_content = '''<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>HORASOCIAL PRO - Mensajes</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&family=Comfortaa:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script>
+>>>>>>> parent of bb256dd (Update code.html)
         tailwind.config = {
           darkMode: "class",
           theme: {
@@ -120,6 +134,23 @@
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
         .chat-bubble-received { border-radius: 4px 20px 20px 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.02); }
         .chat-bubble-sent { border-radius: 20px 20px 4px 20px; }
+<<<<<<< HEAD
+=======
+        .slide-in-right { animation: slideInRight 0.3s ease-out forwards; }
+        .slide-out-right { animation: slideOutRight 0.3s ease-in forwards; }
+        .fade-in { animation: fadeIn 0.2s ease-out forwards; }
+        @keyframes slideInRight { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        @keyframes slideOutRight { from { transform: translateX(0); opacity: 1; } to { transform: translateX(100%); opacity: 0; } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+        .typing-dot { animation: typingBounce 1.4s infinite ease-in-out both; }
+        .typing-dot:nth-child(1) { animation-delay: -0.32s; }
+        .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+        @keyframes typingBounce { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1); } }
+        .contact-item { transition: all 0.2s ease; }
+        .contact-item:active { transform: scale(0.98); }
+        .message-input:focus { outline: none; }
+        .back-btn:active { transform: scale(0.92); }
+>>>>>>> parent of bb256dd (Update code.html)
     </style>
 <style>
     body {
@@ -281,12 +312,665 @@
         const container = document.getElementById('message-container');
         container.scrollTop = container.scrollHeight;
 
+<<<<<<< HEAD
         // Visual depth effect on scroll
         container.addEventListener('scroll', () => {
             const blobs = document.querySelectorAll('.blur-blob');
             const scrollVal = container.scrollTop * 0.1;
             blobs[0].style.transform = `translateY(${scrollVal}px)`;
             blobs[1].style.transform = `translateY(-${scrollVal}px)`;
+=======
+    <!-- Atmospheric Blobs -->
+    <div class="blur-blob bg-secondary-container top-[-100px] left-[-100px]"></div>
+    <div class="blur-blob bg-error top-[40%] right-[-100px]"></div>
+
+    <!-- ====== HEADER ====== -->
+    <header class="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-md shadow-sm h-16 flex items-center justify-between px-4">
+        <div class="flex items-center gap-2 text-headline-sm font-bold text-on-surface">
+            <span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">school</span>
+            <span class="font-headline-sm">HORASOCIAL PRO</span>
+        </div>
+        <div class="flex items-center gap-3">
+            <div class="text-right hidden sm:block">
+                <p class="text-label-md font-bold text-on-surface">Prof. Alejandro Gómez</p>
+                <p class="text-[10px] text-on-surface-variant">Docente de Enlace</p>
+            </div>
+            <div class="w-10 h-10 rounded-full border-2 border-secondary-container bg-gradient-to-br from-secondary to-secondary-container flex items-center justify-center text-white font-bold text-sm">
+                AG
+            </div>
+        </div>
+    </header>
+
+    <!-- ====== MAIN CONTENT ====== -->
+    <main class="flex-1 flex flex-col pt-16 pb-20 overflow-hidden relative z-10">
+
+        <!-- ====== PANTALLA 1: LISTA DE CHATS ====== -->
+        <div id="chat-list-screen" class="flex flex-col h-full">
+            <!-- Header de Mensajes -->
+            <div class="px-4 pt-4 pb-3 bg-white/40 backdrop-blur-sm border-b border-outline-variant/30">
+                <div class="flex items-center justify-between mb-3">
+                    <h1 class="font-comfortaa text-headline-md font-bold text-primary">Mensajes</h1>
+                    <div class="flex items-center gap-2">
+                        <span class="text-[12px] text-secondary font-semibold bg-secondary/10 px-3 py-1 rounded-full">4 activos</span>
+                    </div>
+                </div>
+                <!-- Search -->
+                <div class="relative flex items-center mb-3">
+                    <span class="material-symbols-outlined absolute left-3 text-outline text-[20px]">search</span>
+                    <input type="text" id="search-input" placeholder="Buscar estudiantes o conversaciones..." 
+                           class="w-full bg-surface-container-low border-none rounded-xl py-2.5 pl-10 pr-4 text-label-md focus:ring-2 focus:ring-secondary/50 shadow-sm"
+                           oninput="filterContacts(this.value)">
+                </div>
+                <!-- Filtros rápidos -->
+                <div class="flex gap-2 overflow-x-auto pb-1 no-scrollbar" id="filter-buttons">
+                    <button onclick="setFilter('all')" class="filter-btn px-4 py-1.5 bg-primary text-white rounded-full text-[12px] font-semibold whitespace-nowrap transition-all" data-filter="all">Todos</button>
+                    <button onclick="setFilter('unread')" class="filter-btn px-4 py-1.5 bg-white border border-outline-variant text-on-surface-variant rounded-full text-[12px] font-semibold whitespace-nowrap transition-all" data-filter="unread">No leídos</button>
+                    <button onclick="setFilter('absence')" class="filter-btn px-4 py-1.5 bg-white border border-outline-variant text-on-surface-variant rounded-full text-[12px] font-semibold whitespace-nowrap transition-all" data-filter="absence">Inasistencias</button>
+                    <button onclick="setFilter('reports')" class="filter-btn px-4 py-1.5 bg-white border border-outline-variant text-on-surface-variant rounded-full text-[12px] font-semibold whitespace-nowrap transition-all" data-filter="reports">Reportes</button>
+                </div>
+            </div>
+
+            <!-- Lista de Contactos -->
+            <div class="flex-1 overflow-y-auto custom-scrollbar" id="contacts-list">
+                <!-- Contacto 1: Valentina Torres - Activo con mensaje nuevo -->
+                <div class="contact-item flex items-center gap-3 p-4 hover:bg-surface-container-low cursor-pointer border-b border-outline-variant/20" onclick="openChat(0)">
+                    <div class="relative flex-shrink-0">
+                        <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-pink-400 to-rose-600 flex items-center justify-center text-white font-bold text-lg shadow-md">
+                            VT
+                        </div>
+                        <span class="absolute bottom-0 right-0 w-3.5 h-3.5 bg-green-500 border-2 border-white rounded-full"></span>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <div class="flex justify-between items-start mb-0.5">
+                            <h3 class="font-bold text-label-md truncate text-on-surface">Valentina Torres</h3>
+                            <span class="text-[11px] text-secondary font-semibold whitespace-nowrap ml-2">14:20</span>
+                        </div>
+                        <p class="text-[13px] text-on-surface-variant truncate leading-snug">Profe, ya subí el reporte final de la semana. ¿Lo puede revisar?</p>
+                        <div class="flex items-center gap-2 mt-1.5">
+                            <span class="px-2 py-0.5 bg-secondary/10 text-secondary text-[10px] font-bold rounded-md uppercase tracking-wide">Estudiante</span>
+                            <span class="px-2 py-0.5 bg-error/10 text-error text-[10px] font-bold rounded-md uppercase tracking-wide">Inasistencia</span>
+                        </div>
+                    </div>
+                    <div class="flex flex-col items-end gap-1 ml-2">
+                        <span class="w-5 h-5 bg-secondary text-white rounded-full flex items-center justify-center text-[10px] font-bold">2</span>
+                    </div>
+                </div>
+
+                <!-- Contacto 2: Carlos Mendoza - Pendiente de reporte -->
+                <div class="contact-item flex items-center gap-3 p-4 hover:bg-surface-container-low cursor-pointer border-b border-outline-variant/20" onclick="openChat(1)">
+                    <div class="relative flex-shrink-0">
+                        <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-400 to-indigo-600 flex items-center justify-center text-white font-bold text-lg shadow-md">
+                            CM
+                        </div>
+                        <span class="absolute bottom-0 right-0 w-3.5 h-3.5 bg-gray-300 border-2 border-white rounded-full"></span>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <div class="flex justify-between items-start mb-0.5">
+                            <h3 class="font-bold text-label-md truncate text-on-surface">Carlos Mendoza</h3>
+                            <span class="text-[11px] text-outline whitespace-nowrap ml-2">Ayer</span>
+                        </div>
+                        <p class="text-[13px] text-on-surface-variant truncate leading-snug">Profesor, tengo una duda sobre las horas del proyecto comunitario...</p>
+                        <div class="flex items-center gap-2 mt-1.5">
+                            <span class="px-2 py-0.5 bg-secondary/10 text-secondary text-[10px] font-bold rounded-md uppercase tracking-wide">Estudiante</span>
+                            <span class="px-2 py-0.5 bg-amber-100 text-amber-700 text-[10px] font-bold rounded-md uppercase tracking-wide">Reporte</span>
+                        </div>
+                    </div>
+                    <div class="flex flex-col items-end gap-1 ml-2">
+                        <span class="w-5 h-5 bg-secondary text-white rounded-full flex items-center justify-center text-[10px] font-bold">1</span>
+                    </div>
+                </div>
+
+                <!-- Contacto 3: Ana Lucía Martínez - Todo OK -->
+                <div class="contact-item flex items-center gap-3 p-4 hover:bg-surface-container-low cursor-pointer border-b border-outline-variant/20" onclick="openChat(2)">
+                    <div class="relative flex-shrink-0">
+                        <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-purple-400 to-violet-600 flex items-center justify-center text-white font-bold text-lg shadow-md">
+                            AL
+                        </div>
+                        <span class="absolute bottom-0 right-0 w-3.5 h-3.5 bg-green-500 border-2 border-white rounded-full"></span>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <div class="flex justify-between items-start mb-0.5">
+                            <h3 class="font-bold text-label-md truncate text-on-surface">Ana Lucía Martínez</h3>
+                            <span class="text-[11px] text-outline whitespace-nowrap ml-2">Ayer</span>
+                        </div>
+                        <p class="text-[13px] text-on-surface-variant truncate leading-snug">¡Gracias profe! Ya quedó todo claro. Saludos.</p>
+                        <div class="flex items-center gap-2 mt-1.5">
+                            <span class="px-2 py-0.5 bg-secondary/10 text-secondary text-[10px] font-bold rounded-md uppercase tracking-wide">Estudiante</span>
+                            <span class="px-2 py-0.5 bg-green-100 text-green-700 text-[10px] font-bold rounded-md uppercase tracking-wide">Al día</span>
+                        </div>
+                    </div>
+                    <div class="flex flex-col items-end gap-1 ml-2">
+                        <span class="material-symbols-outlined text-[16px] text-secondary" style="font-variation-settings: 'FILL' 1;">done_all</span>
+                    </div>
+                </div>
+
+                <!-- Contacto 4: Diego Gómez - Inasistencia crítica -->
+                <div class="contact-item flex items-center gap-3 p-4 hover:bg-surface-container-low cursor-pointer border-b border-outline-variant/20" onclick="openChat(3)">
+                    <div class="relative flex-shrink-0">
+                        <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-400 to-teal-600 flex items-center justify-center text-white font-bold text-lg shadow-md">
+                            DG
+                        </div>
+                        <span class="absolute bottom-0 right-0 w-3.5 h-3.5 bg-gray-300 border-2 border-white rounded-full"></span>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <div class="flex justify-between items-start mb-0.5">
+                            <h3 class="font-bold text-label-md truncate text-on-surface">Diego Gómez</h3>
+                            <span class="text-[11px] text-error font-semibold whitespace-nowrap ml-2">Hace 3 días</span>
+                        </div>
+                        <p class="text-[13px] text-error truncate leading-snug font-medium">⚠️ Faltó a la jornada del viernes sin justificación</p>
+                        <div class="flex items-center gap-2 mt-1.5">
+                            <span class="px-2 py-0.5 bg-secondary/10 text-secondary text-[10px] font-bold rounded-md uppercase tracking-wide">Estudiante</span>
+                            <span class="px-2 py-0.5 bg-error/10 text-error text-[10px] font-bold rounded-md uppercase tracking-wide">Inasistencia</span>
+                            <span class="px-2 py-0.5 bg-red-100 text-red-700 text-[10px] font-bold rounded-md uppercase tracking-wide">Urgente</span>
+                        </div>
+                    </div>
+                    <div class="flex flex-col items-end gap-1 ml-2">
+                        <span class="w-5 h-5 bg-error text-white rounded-full flex items-center justify-center text-[10px] font-bold">!</span>
+                    </div>
+                </div>
+
+                <!-- Contacto 5: Sofía Fernández -->
+                <div class="contact-item flex items-center gap-3 p-4 hover:bg-surface-container-low cursor-pointer border-b border-outline-variant/20" onclick="openChat(4)">
+                    <div class="relative flex-shrink-0">
+                        <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-400 to-orange-600 flex items-center justify-center text-white font-bold text-lg shadow-md">
+                            SF
+                        </div>
+                        <span class="absolute bottom-0 right-0 w-3.5 h-3.5 bg-green-500 border-2 border-white rounded-full"></span>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <div class="flex justify-between items-start mb-0.5">
+                            <h3 class="font-bold text-label-md truncate text-on-surface">Sofía Fernández</h3>
+                            <span class="text-[11px] text-outline whitespace-nowrap ml-2">Lun</span>
+                        </div>
+                        <p class="text-[13px] text-on-surface-variant truncate leading-snug">Profe, ¿cuándo es la próxima jornada de reforestación?</p>
+                        <div class="flex items-center gap-2 mt-1.5">
+                            <span class="px-2 py-0.5 bg-secondary/10 text-secondary text-[10px] font-bold rounded-md uppercase tracking-wide">Estudiante</span>
+                            <span class="px-2 py-0.5 bg-blue-100 text-blue-700 text-[10px] font-bold rounded-md uppercase tracking-wide">Consulta</span>
+                        </div>
+                    </div>
+                    <div class="flex flex-col items-end gap-1 ml-2">
+                        <span class="material-symbols-outlined text-[16px] text-outline" style="font-variation-settings: 'FILL' 1;">done</span>
+                    </div>
+                </div>
+
+                <!-- Contacto 6: Juan Carlos Rodríguez -->
+                <div class="contact-item flex items-center gap-3 p-4 hover:bg-surface-container-low cursor-pointer border-b border-outline-variant/20" onclick="openChat(5)">
+                    <div class="relative flex-shrink-0">
+                        <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-cyan-400 to-sky-600 flex items-center justify-center text-white font-bold text-lg shadow-md">
+                            JC
+                        </div>
+                        <span class="absolute bottom-0 right-0 w-3.5 h-3.5 bg-gray-300 border-2 border-white rounded-full"></span>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <div class="flex justify-between items-start mb-0.5">
+                            <h3 class="font-bold text-label-md truncate text-on-surface">Juan Carlos Rodríguez</h3>
+                            <span class="text-[11px] text-outline whitespace-nowrap ml-2">Dom</span>
+                        </div>
+                        <p class="text-[13px] text-on-surface-variant truncate leading-snug">Adjunto el certificado de horas de la fundación. Gracias.</p>
+                        <div class="flex items-center gap-2 mt-1.5">
+                            <span class="px-2 py-0.5 bg-secondary/10 text-secondary text-[10px] font-bold rounded-md uppercase tracking-wide">Estudiante</span>
+                            <span class="px-2 py-0.5 bg-amber-100 text-amber-700 text-[10px] font-bold rounded-md uppercase tracking-wide">Documento</span>
+                        </div>
+                    </div>
+                    <div class="flex flex-col items-end gap-1 ml-2">
+                        <span class="material-symbols-outlined text-[16px] text-outline" style="font-variation-settings: 'FILL' 1;">done_all</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ====== PANTALLA 2: CHAT INDIVIDUAL ====== -->
+        <div id="chat-screen" class="hidden flex-col h-full bg-white/50">
+            <!-- Chat Header -->
+            <div class="px-4 py-3 bg-white/80 backdrop-blur-md flex items-center justify-between border-b border-outline-variant/20 shadow-sm">
+                <div class="flex items-center gap-3">
+                    <button onclick="backToList()" class="back-btn w-9 h-9 flex items-center justify-center rounded-full hover:bg-surface-container transition-colors">
+                        <span class="material-symbols-outlined text-on-surface">arrow_back</span>
+                    </button>
+                    <div class="relative">
+                        <div id="chat-avatar" class="w-10 h-10 rounded-2xl bg-gradient-to-br from-pink-400 to-rose-600 flex items-center justify-center text-white font-bold text-sm shadow-md">
+                            VT
+                        </div>
+                        <span id="chat-status-dot" class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 border-2 border-white rounded-full"></span>
+                    </div>
+                    <div>
+                        <h2 id="chat-name" class="font-bold text-label-md">Valentina Torres</h2>
+                        <p id="chat-status" class="text-[11px] text-green-600 font-medium">En línea</p>
+                    </div>
+                </div>
+                <div class="flex gap-2">
+                    <button class="w-9 h-9 flex items-center justify-center rounded-full hover:bg-surface-container transition-colors text-on-surface-variant">
+                        <span class="material-symbols-outlined text-[20px]">call</span>
+                    </button>
+                    <button onclick="showQuickActions()" class="w-9 h-9 flex items-center justify-center rounded-full hover:bg-surface-container transition-colors text-on-surface-variant">
+                        <span class="material-symbols-outlined text-[20px]">more_vert</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Acciones Rápidas (desplegable) -->
+            <div id="quick-actions" class="hidden absolute top-[120px] right-4 bg-white rounded-xl shadow-lg border border-outline-variant/20 p-2 z-50 w-56">
+                <button onclick="sendQuickMessage('inasistencia')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-surface-container-low text-left transition-colors">
+                    <span class="material-symbols-outlined text-error text-[20px]">event_busy</span>
+                    <span class="text-[13px] font-medium">Preguntar inasistencia</span>
+                </button>
+                <button onclick="sendQuickMessage('horas')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-surface-container-low text-left transition-colors">
+                    <span class="material-symbols-outlined text-secondary text-[20px]">schedule</span>
+                    <span class="text-[13px] font-medium">Consultar horas</span>
+                </button>
+                <button onclick="sendQuickMessage('reporte')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-surface-container-low text-left transition-colors">
+                    <span class="material-symbols-outlined text-amber-600 text-[20px]">description</span>
+                    <span class="text-[13px] font-medium">Solicitar reporte</span>
+                </button>
+                <button onclick="sendQuickMessage('jornada')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-surface-container-low text-left transition-colors">
+                    <span class="material-symbols-outlined text-green-600 text-[20px]">event</span>
+                    <span class="text-[13px] font-medium">Próxima jornada</span>
+                </button>
+                <div class="border-t border-outline-variant/30 my-1"></div>
+                <button onclick="sendQuickMessage('llamada')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-surface-container-low text-left transition-colors">
+                    <span class="material-symbols-outlined text-primary text-[20px]">videocam</span>
+                    <span class="text-[13px] font-medium">Programar llamada</span>
+                </button>
+            </div>
+
+            <!-- Messages Area -->
+            <div class="flex-1 overflow-y-auto p-4 flex flex-col gap-3 custom-scrollbar" id="message-container">
+                <!-- Fecha -->
+                <div class="flex justify-center my-2">
+                    <span class="text-[11px] text-outline bg-surface-container-low px-3 py-1 rounded-full">Hoy</span>
+                </div>
+                <!-- Messages se cargan dinámicamente -->
+            </div>
+
+            <!-- Typing Indicator (hidden by default) -->
+            <div id="typing-indicator" class="hidden px-4 py-2">
+                <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-full bg-gradient-to-br from-pink-400 to-rose-600 flex items-center justify-center text-white text-[10px] font-bold">VT</div>
+                    <div class="bg-white px-4 py-3 rounded-2xl rounded-tl-none shadow-sm flex items-center gap-1">
+                        <div class="w-2 h-2 bg-outline rounded-full typing-dot"></div>
+                        <div class="w-2 h-2 bg-outline rounded-full typing-dot"></div>
+                        <div class="w-2 h-2 bg-outline rounded-full typing-dot"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Input Area -->
+            <div class="px-4 py-3 bg-white border-t border-outline-variant/30 flex items-center gap-2">
+                <button class="w-10 h-10 flex items-center justify-center text-outline hover:bg-surface-container rounded-full transition-colors">
+                    <span class="material-symbols-outlined">attach_file</span>
+                </button>
+                <div class="flex-1 bg-surface-container-low rounded-2xl px-4 py-2.5 flex items-center gap-2">
+                    <input type="text" id="message-input" class="message-input w-full bg-transparent border-none focus:ring-0 text-label-md" 
+                           placeholder="Escribe un mensaje..." 
+                           onkeypress="if(event.key==='Enter') sendMessage()">
+                </div>
+                <button onclick="sendMessage()" class="w-10 h-10 bg-primary text-white rounded-full flex items-center justify-center shadow-md active:scale-95 transition-transform hover:bg-primary/90">
+                    <span class="material-symbols-outlined">send</span>
+                </button>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- ====== BOTTOM NAVIGATION ====== -->
+    <nav class="fixed bottom-0 left-0 w-full h-[70px] bg-surface/95 backdrop-blur-xl flex justify-around items-center px-2 pb-safe shadow-[0px_-4px_20px_rgba(15,23,42,0.05)] z-50">
+        <button onclick="window.location.href='/maestro/dashboard'" class="bottom-nav-item flex flex-col items-center justify-center gap-1 px-4 py-2 text-on-surface-variant hover:text-secondary transition-all duration-200 active:scale-90 relative">
+            <span class="material-symbols-outlined text-[24px]">dashboard</span>
+            <span class="text-[10px] font-semibold">Dashboard</span>
+        </button>
+        <button onclick="window.location.href='/maestro/estudiantes'" class="bottom-nav-item flex flex-col items-center justify-center gap-1 px-4 py-2 text-on-surface-variant hover:text-secondary transition-all duration-200 active:scale-90 relative">
+            <span class="material-symbols-outlined text-[24px]">group</span>
+            <span class="text-[10px] font-semibold">Estudiantes</span>
+        </button>
+        <button onclick="window.location.href='/maestro/tecnico'" class="bottom-nav-item flex flex-col items-center justify-center gap-1 px-4 py-2 text-on-surface-variant hover:text-secondary transition-all duration-200 active:scale-90 relative">
+            <span class="material-symbols-outlined text-[24px]">engineering</span>
+            <span class="text-[10px] font-semibold">Gestión</span>
+        </button>
+        <button class="bottom-nav-item active flex flex-col items-center justify-center gap-1 px-4 py-2 text-secondary transition-all duration-200 relative">
+            <span class="material-symbols-outlined text-[24px]" style="font-variation-settings: 'FILL' 1;">mail</span>
+            <span class="text-[10px] font-semibold">Mensajes</span>
+            <span class="absolute top-1 right-2 w-2 h-2 bg-error rounded-full"></span>
+        </button>
+    </nav>
+
+    <script>
+        // ====== DATOS DE CONTACTOS ======
+        const contacts = [
+            {
+                id: 0,
+                name: "Valentina Torres",
+                initials: "VT",
+                gradient: "from-pink-400 to-rose-600",
+                status: "online",
+                lastMessage: "Profe, ya subí el reporte final de la semana. ¿Lo puede revisar?",
+                time: "14:20",
+                unread: 2,
+                tags: ["Estudiante", "Inasistencia"],
+                tagColors: ["bg-secondary/10 text-secondary", "bg-error/10 text-error"],
+                messages: [
+                    { type: "received", text: "¡Hola Profe! Una consulta sobre las horas de servicio en la fundación. ¿Cuentan las horas de capacitación previa?", time: "14:15" },
+                    { type: "sent", text: "Hola Valentina. Sí, las horas de inducción y capacitación técnica se contabilizan hasta un máximo de 10 horas del total.", time: "14:18", read: true },
+                    { type: "received", text: "¡Excelente! Entonces ya casi termino mis 80 horas. Le adjunto el reporte de asistencia de esta semana para que le eche un ojo.", time: "14:20" },
+                    { type: "received", text: "Profe, ya subí el reporte final de la semana. ¿Lo puede revisar?", time: "14:22" }
+                ]
+            },
+            {
+                id: 1,
+                name: "Carlos Mendoza",
+                initials: "CM",
+                gradient: "from-blue-400 to-indigo-600",
+                status: "offline",
+                lastMessage: "Profesor, tengo una duda sobre las horas del proyecto comunitario...",
+                time: "Ayer",
+                unread: 1,
+                tags: ["Estudiante", "Reporte"],
+                tagColors: ["bg-secondary/10 text-secondary", "bg-amber-100 text-amber-700"],
+                messages: [
+                    { type: "received", text: "Profesor, buenas tardes. Tengo una duda sobre las horas del proyecto comunitario.", time: "Ayer 16:30" },
+                    { type: "sent", text: "Hola Carlos, cuéntame tu duda.", time: "Ayer 16:45", read: true },
+                    { type: "received", text: "¿Las horas del sábado pasado cuentan doble por ser fin de semana?", time: "Ayer 17:00" }
+                ]
+            },
+            {
+                id: 2,
+                name: "Ana Lucía Martínez",
+                initials: "AL",
+                gradient: "from-purple-400 to-violet-600",
+                status: "online",
+                lastMessage: "¡Gracias profe! Ya quedó todo claro. Saludos.",
+                time: "Ayer",
+                unread: 0,
+                tags: ["Estudiante", "Al día"],
+                tagColors: ["bg-secondary/10 text-secondary", "bg-green-100 text-green-700"],
+                messages: [
+                    { type: "received", text: "Profe, ¿podría confirmarme si ya tengo las 80 horas completas?", time: "Ayer 10:00" },
+                    { type: "sent", text: "Hola Ana, revisé tu expediente y sí, tienes 82 horas validadas. ¡Felicidades!", time: "Ayer 10:15", read: true },
+                    { type: "received", text: "¡Gracias profe! Ya quedó todo claro. Saludos.", time: "Ayer 10:20" }
+                ]
+            },
+            {
+                id: 3,
+                name: "Diego Gómez",
+                initials: "DG",
+                gradient: "from-emerald-400 to-teal-600",
+                status: "offline",
+                lastMessage: "⚠️ Faltó a la jornada del viernes sin justificación",
+                time: "Hace 3 días",
+                unread: 0,
+                tags: ["Estudiante", "Inasistencia", "Urgente"],
+                tagColors: ["bg-secondary/10 text-secondary", "bg-error/10 text-error", "bg-red-100 text-red-700"],
+                messages: [
+                    { type: "system", text: "⚠️ Alerta de inasistencia: Diego Gómez no asistió a la jornada de Servicios Comunitarios del viernes 13 de junio sin presentar justificación.", time: "Vie 18:00" },
+                    { type: "sent", text: "Diego, noté que no asististe a la jornada del viernes. ¿Todo está bien? Por favor contáctame para regularizar tu situación.", time: "Vie 18:30", read: false }
+                ]
+            },
+            {
+                id: 4,
+                name: "Sofía Fernández",
+                initials: "SF",
+                gradient: "from-amber-400 to-orange-600",
+                status: "online",
+                lastMessage: "Profe, ¿cuándo es la próxima jornada de reforestación?",
+                time: "Lun",
+                unread: 0,
+                tags: ["Estudiante", "Consulta"],
+                tagColors: ["bg-secondary/10 text-secondary", "bg-blue-100 text-blue-700"],
+                messages: [
+                    { type: "received", text: "Profe, ¿cuándo es la próxima jornada de reforestación?", time: "Lun 09:00" },
+                    { type: "sent", text: "Hola Sofía, será el próximo sábado 21 de junio a las 8:00 AM en la Zona Verde Norte.", time: "Lun 09:15", read: true }
+                ]
+            },
+            {
+                id: 5,
+                name: "Juan Carlos Rodríguez",
+                initials: "JC",
+                gradient: "from-cyan-400 to-sky-600",
+                status: "offline",
+                lastMessage: "Adjunto el certificado de horas de la fundación. Gracias.",
+                time: "Dom",
+                unread: 0,
+                tags: ["Estudiante", "Documento"],
+                tagColors: ["bg-secondary/10 text-secondary", "bg-amber-100 text-amber-700"],
+                messages: [
+                    { type: "received", text: "Profe, le adjunto el certificado de horas de la fundación. Gracias.", time: "Dom 14:00" },
+                    { type: "sent", text: "Recibido Juan Carlos. Lo revisaré y te confirmo en cuanto esté validado.", time: "Dom 14:30", read: true }
+                ]
+            }
+        ];
+
+        let currentChat = null;
+        let currentFilter = 'all';
+
+        // ====== FUNCIONES ======
+        function openChat(contactId) {
+            currentChat = contacts.find(c => c.id === contactId);
+            if (!currentChat) return;
+
+            // Actualizar header del chat
+            document.getElementById('chat-name').textContent = currentChat.name;
+            document.getElementById('chat-avatar').className = `w-10 h-10 rounded-2xl bg-gradient-to-br ${currentChat.gradient} flex items-center justify-center text-white font-bold text-sm shadow-md`;
+            document.getElementById('chat-avatar').textContent = currentChat.initials;
+            
+            const statusDot = document.getElementById('chat-status-dot');
+            const statusText = document.getElementById('chat-status');
+            if (currentChat.status === 'online') {
+                statusDot.className = 'absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 border-2 border-white rounded-full';
+                statusText.textContent = 'En línea';
+                statusText.className = 'text-[11px] text-green-600 font-medium';
+            } else {
+                statusDot.className = 'absolute bottom-0 right-0 w-2.5 h-2.5 bg-gray-300 border-2 border-white rounded-full';
+                statusText.textContent = 'Últ. vez ' + currentChat.time;
+                statusText.className = 'text-[11px] text-outline font-medium';
+            }
+
+            // Renderizar mensajes
+            renderMessages();
+
+            // Marcar como leído
+            currentChat.unread = 0;
+            updateUnreadBadge();
+
+            // Animar transición
+            document.getElementById('chat-list-screen').classList.add('hidden');
+            document.getElementById('chat-screen').classList.remove('hidden');
+            document.getElementById('chat-screen').classList.add('slide-in-right');
+            
+            // Scroll al final
+            setTimeout(() => {
+                const container = document.getElementById('message-container');
+                container.scrollTop = container.scrollHeight;
+            }, 100);
+        }
+
+        function backToList() {
+            document.getElementById('chat-screen').classList.add('slide-out-right');
+            setTimeout(() => {
+                document.getElementById('chat-screen').classList.add('hidden');
+                document.getElementById('chat-screen').classList.remove('slide-in-right', 'slide-out-right');
+                document.getElementById('chat-list-screen').classList.remove('hidden');
+                document.getElementById('quick-actions').classList.add('hidden');
+                currentChat = null;
+            }, 250);
+        }
+
+        function renderMessages() {
+            const container = document.getElementById('message-container');
+            container.innerHTML = `
+                <div class="flex justify-center my-3">
+                    <span class="text-[11px] text-outline bg-surface-container-low px-3 py-1 rounded-full">Hoy</span>
+                </div>
+            `;
+
+            currentChat.messages.forEach((msg, index) => {
+                if (msg.type === 'system') {
+                    container.innerHTML += `
+                        <div class="flex justify-center my-3 fade-in" style="animation-delay: ${index * 0.05}s">
+                            <div class="bg-error/10 border border-error/20 text-error text-[12px] px-4 py-2.5 rounded-xl max-w-[90%] text-center leading-relaxed">
+                                ${msg.text}
+                            </div>
+                        </div>
+                    `;
+                } else if (msg.type === 'received') {
+                    container.innerHTML += `
+                        <div class="flex gap-2 max-w-[85%] fade-in" style="animation-delay: ${index * 0.05}s">
+                            <div class="w-8 h-8 rounded-full bg-gradient-to-br ${currentChat.gradient} flex items-center justify-center text-white text-[10px] font-bold flex-shrink-0 self-end">
+                                ${currentChat.initials}
+                            </div>
+                            <div class="chat-bubble-received bg-white p-3 text-[14px] leading-relaxed text-on-surface shadow-sm">
+                                ${msg.text}
+                                <div class="text-[10px] text-outline mt-1 text-right">${msg.time}</div>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    container.innerHTML += `
+                        <div class="flex flex-col items-end gap-1 max-w-[85%] self-end fade-in" style="animation-delay: ${index * 0.05}s">
+                            <div class="chat-bubble-sent bg-primary text-white p-3 text-[14px] leading-relaxed shadow-md">
+                                ${msg.text}
+                                <div class="flex items-center justify-end gap-1 text-[10px] text-secondary-fixed mt-1">
+                                    ${msg.time} 
+                                    <span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">${msg.read ? 'done_all' : 'done'}</span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+            });
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('message-input');
+            const text = input.value.trim();
+            if (!text || !currentChat) return;
+
+            const now = new Date();
+            const timeStr = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
+
+            // Agregar mensaje enviado
+            currentChat.messages.push({ type: 'sent', text: text, time: timeStr, read: false });
+            
+            // Renderizar
+            renderMessages();
+            input.value = '';
+
+            // Scroll al final
+            const container = document.getElementById('message-container');
+            container.scrollTop = container.scrollHeight;
+
+            // Simular respuesta del estudiante después de 2 segundos
+            showTypingIndicator();
+            setTimeout(() => {
+                hideTypingIndicator();
+                const responses = [
+                    "Entendido profe, gracias por la información.",
+                    "Perfecto, me queda claro. ¿Hay algo más que deba hacer?",
+                    "Gracias profe, quedo atento/a a sus indicaciones.",
+                    "Vale, lo reviso y le confirmo.",
+                    "Muchas gracias por su tiempo, profe."
+                ];
+                const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+                currentChat.messages.push({ type: 'received', text: randomResponse, time: timeStr });
+                renderMessages();
+                container.scrollTop = container.scrollHeight;
+            }, 2500);
+        }
+
+        function showTypingIndicator() {
+            document.getElementById('typing-indicator').classList.remove('hidden');
+            const container = document.getElementById('message-container');
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function hideTypingIndicator() {
+            document.getElementById('typing-indicator').classList.add('hidden');
+        }
+
+        function showQuickActions() {
+            const qa = document.getElementById('quick-actions');
+            qa.classList.toggle('hidden');
+        }
+
+        function sendQuickMessage(type) {
+            document.getElementById('quick-actions').classList.add('hidden');
+            const input = document.getElementById('message-input');
+            
+            const messages = {
+                inasistencia: `Hola ${currentChat.name.split(' ')[0]}, noté que has tenido algunas inasistencias recientes. ¿Podrías explicarme qué pasó? Es importante regularizar tu situación para que no afecte tus horas de servicio.`,
+                horas: `Hola ${currentChat.name.split(' ')[0]}, te escribo para consultarte sobre el estado de tus horas de servicio social. ¿Tienes alguna duda o necesitas ayuda con el conteo?`,
+                reporte: `Hola ${currentChat.name.split(' ')[0]}, necesito que me envíes el reporte de actividades de esta semana lo antes posible. Recuerda que es requisito para validar tus horas.`,
+                jornada: `Hola ${currentChat.name.split(' ')[0]}, te informo que la próxima jornada será el sábado 21 de junio a las 8:00 AM. Por favor confirma tu asistencia.`,
+                llamada: `Hola ${currentChat.name.split(' ')[0]}, ¿te parece si agendamos una videollamada para revisar tu progreso? ¿Qué día y hora te queda mejor?`
+            };
+
+            input.value = messages[type] || '';
+            input.focus();
+        }
+
+        function filterContacts(query) {
+            const items = document.querySelectorAll('.contact-item');
+            items.forEach((item, index) => {
+                const contact = contacts[index];
+                const match = contact.name.toLowerCase().includes(query.toLowerCase()) ||
+                             contact.lastMessage.toLowerCase().includes(query.toLowerCase()) ||
+                             contact.tags.some(tag => tag.toLowerCase().includes(query.toLowerCase()));
+                item.style.display = match ? 'flex' : 'none';
+            });
+        }
+
+        function setFilter(filter) {
+            currentFilter = filter;
+            
+            // Actualizar botones
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                if (btn.dataset.filter === filter) {
+                    btn.className = 'filter-btn px-4 py-1.5 bg-primary text-white rounded-full text-[12px] font-semibold whitespace-nowrap transition-all';
+                } else {
+                    btn.className = 'filter-btn px-4 py-1.5 bg-white border border-outline-variant text-on-surface-variant rounded-full text-[12px] font-semibold whitespace-nowrap transition-all';
+                }
+            });
+
+            // Filtrar contactos
+            const items = document.querySelectorAll('.contact-item');
+            items.forEach((item, index) => {
+                const contact = contacts[index];
+                let show = true;
+                
+                if (filter === 'unread') show = contact.unread > 0;
+                else if (filter === 'absence') show = contact.tags.includes('Inasistencia');
+                else if (filter === 'reports') show = contact.tags.includes('Reporte');
+                
+                item.style.display = show ? 'flex' : 'none';
+            });
+        }
+
+        function updateUnreadBadge() {
+            const totalUnread = contacts.reduce((sum, c) => sum + c.unread, 0);
+            const navBadge = document.querySelector('.bottom-nav-item.active .absolute');
+            if (navBadge) {
+                navBadge.style.display = totalUnread > 0 ? 'block' : 'none';
+            }
+        }
+
+        // Cerrar quick actions al hacer click fuera
+        document.addEventListener('click', (e) => {
+            const qa = document.getElementById('quick-actions');
+            const btn = e.target.closest('button[onclick="showQuickActions()"]');
+            if (!qa.contains(e.target) && !btn) {
+                qa.classList.add('hidden');
+            }
+>>>>>>> parent of bb256dd (Update code.html)
         });
     </script>
+<<<<<<< HEAD
 </body></html>
+=======
+</body>
+</html>'''
+
+# Save to file
+with open('/mnt/agents/output/mensajes.html', 'w', encoding='utf-8') as f:
+    f.write(html_content)
+
+print("Archivo guardado exitosamente")
+print(f"Tamaño: {len(html_content)} caracteres")
+>>>>>>> parent of bb256dd (Update code.html)
