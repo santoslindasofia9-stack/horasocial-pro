@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;family=Inter:wght@400;500;600&amp;family=Comfortaa:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary-fixed": "#001e2f",
+                        "on-tertiary-fixed": "#001e2c",
+                        "surface-container-lowest": "#ffffff",
+                        "background": "#f7f9fb",
+                        "tertiary-container": "#001e2c",
+                        "primary": "#0F172A",
+                        "on-background": "#191c1e",
+                        "outline": "#76777d",
+                        "on-surface-variant": "#45464d",
+                        "surface-container": "#eceef0",
+                        "surface-bright": "#f7f9fb",
+                        "on-primary": "#ffffff",
+                        "surface-variant": "#e0e3e5",
+                        "on-tertiary": "#ffffff",
+                        "on-tertiary-container": "#008ebf",
+                        "error-container": "#ffdad6",
+                        "surface-container-high": "#e6e8ea",
+                        "surface-container-low": "#f2f4f6",
+                        "inverse-primary": "#bec6e0",
+                        "on-error-container": "#93000a",
+                        "tertiary-fixed": "#c4e7ff",
+                        "secondary-container": "#39b8fd",
+                        "on-secondary-fixed-variant": "#004c6e",
+                        "tertiary-fixed-dim": "#7bd0ff",
+                        "surface-dim": "#d8dadc",
+                        "on-error": "#ffffff",
+                        "secondary": "#006591",
+                        "on-surface": "#191c1e",
+                        "surface-container-highest": "#e0e3e5",
+                        "primary-fixed": "#dae2fd",
+                        "on-secondary": "#ffffff",
+                        "on-primary-fixed-variant": "#3f465c",
+                        "on-primary-fixed": "#131b2e",
+                        "inverse-on-surface": "#eff1f3",
+                        "tertiary": "#000000",
+                        "secondary-fixed-dim": "#89ceff",
+                        "outline-variant": "#c6c6cd",
+                        "inverse-surface": "#2d3133",
+                        "on-tertiary-fixed-variant": "#004c69",
+                        "primary-container": "#131b2e",
+                        "error": "#ba1a1a",
+                        "primary-fixed-dim": "#bec6e0",
+                        "surface-tint": "#565e74",
+                        "surface": "#f7f9fb",
+                        "on-secondary-container": "#004666",
+                        "secondary-fixed": "#c9e6ff",
+                        "on-primary-container": "#7c839b",
+                        "celeste-accent": "#0EA5E9"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "1rem",
+                        "xl": "1.25rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xs": "4px",
+                        "unit": "4px",
+                        "margin-desktop": "48px",
+                        "margin-mobile": "16px",
+                        "lg": "24px",
+                        "sm": "8px",
+                        "gutter": "24px",
+                        "xl": "32px",
+                        "md": "16px"
+                    },
+                    "fontFamily": {
+                        "system-title": ["Comfortaa", "cursive"],
+                        "headline-lg": ["Plus Jakarta Sans"],
+                        "headline-md": ["Plus Jakarta Sans"],
+                        "headline-sm": ["Plus Jakarta Sans"],
+                        "label-md": ["Inter"],
+                        "body-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "label-sm": ["Inter"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            background-color: #f7f9fb;
+            position: relative;
+            overflow-x: hidden;
+        }
+        .blur-blob {
+            position: fixed;
+            z-index: -1;
+            filter: blur(80px);
+            opacity: 0.15;
+            border-radius: 50%;
+        }
+        .card-shadow {
+            box-shadow: 0px 4px 20px rgba(15, 23, 42, 0.05);
+        }
+        .gear-pattern {
+            background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 14c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm11.2 4.3l1.8-1.5c.2-.2.2-.5 0-.7l-2.1-3.6c-.1-.2-.4-.3-.6-.2l-2.3.9c-.5-.4-1-.7-1.5-.9l-.4-2.4c0-.2-.3-.4-.6-.4h-4.2c-.3 0-.5.2-.6.4l-.4 2.4c-.6.2-1.1.5-1.5.9l-2.3-.9c-.2-.1-.5 0-.6.2l-2.1 3.6c-.1.2-.1.5.1.7l1.8 1.5c-.1.3-.1.5-.1.8s0 .5.1.8l-1.8 1.5c-.2.2-.2.5 0 .7l2.1 3.6c.1.2.4.3.6.2l2.3-.9c.5.4 1 .7 1.5.9l.4 2.4c0 .2.3.4.6.4h4.2c.3 0 .5-.2.6-.4l.4-2.4c.6-.2 1.1-.5 1.5-.9l2.3.9c.2.1.5 0 .6-.2l2.1-3.6c.1-.2.1-.5-.1-.7l-1.8-1.5c.1-.3.1-.5.1-.8s0-.5-.1-.8z' fill='%23ffffff' fill-opacity='0.05'/%3E%3C/svg%3E");
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-body-md text-on-surface">
+<!-- Atmospheric Blobs -->
+<div class="blur-blob bg-celeste-accent w-[500px] h-[500px] -top-40 -left-20"></div>
+<div class="blur-blob bg-error w-[400px] h-[400px] bottom-0 -right-20" style="opacity: 0.08;"></div>
+<!-- Header (TopAppBar) -->
+<header class="fixed top-0 w-full h-16 bg-surface-container-lowest shadow-sm z-50 flex justify-between items-center px-margin-mobile md:px-margin-desktop">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-3xl" data-icon="school">school</span>
+<span class="font-system-title text-headline-sm font-bold text-primary tracking-tight">HORASOCIAL PRO</span>
+</div>
+<div class="flex items-center gap-3">
+<div class="hidden md:flex flex-col items-end">
+<span class="font-label-md text-primary">Prof. Alejandro Gómez</span>
+<span class="text-xs text-on-surface-variant">Docente Técnico</span>
+</div>
+<img alt="Teacher Profile" class="w-10 h-10 rounded-full object-cover border-2 border-celeste-accent" data-alt="A professional headshot of a middle-aged male teacher with a friendly expression. He is wearing a neat charcoal suit over a white shirt, positioned against a soft-focus academic hallway background. The lighting is bright and natural, reflecting a professional and reliable educational environment in line with a high-end SaaS dashboard aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB3JYipNTFXEF4sRylSDZBFYtxrR2OugWQr-pmnpiLgwGbh1ytcveHa0Un_qlJB1TskYS9cvq-gNZfXlGJEg4fxh8FQqO-kD9OoNoGrEap9ztwjx540c3Qa2DFNDw_L7LEly_ad-2tKyKj0oBIXtIRQFkHuWi7J772s_3fT0uohrDwavrH4Hf0Qs7oFqJFLWBctXe7Kdn0nG9OmcnmoqVpU574xwE8FMjxEJX8GPY7G3wqRkjZHweoyK4vqX2zn5-DK-fuZYCWxUkpg"/>
+</div>
+</header>
+<main class="pt-24 pb-32 px-margin-mobile md:px-margin-desktop max-w-7xl mx-auto space-y-6">
+<!-- Specialty Banner -->
+<section class="relative bg-primary rounded-xl p-8 overflow-hidden gear-pattern flex flex-col md:flex-row justify-between items-center gap-6">
+<div class="relative z-10 text-center md:text-left">
+<h1 class="font-system-title text-headline-lg text-white mb-2">Cuidado de Zonas Verdes del Colegio</h1>
+<p class="text-white/80 max-w-xl font-body-md">Gestión y supervisión técnica de proyectos ambientales liderados por estudiantes de grado décimo y undécimo. Fomentando la sostenibilidad y el sentido de pertenencia institucional.</p>
+</div>
+<div class="relative z-10 bg-white/10 backdrop-blur-md p-4 rounded-xl border border-white/20">
+<span class="material-symbols-outlined text-white text-5xl" data-icon="eco">eco</span>
+</div>
+</section>
+<!-- Metric Row -->
+<section class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<!-- Metric 1 -->
+<div class="bg-white p-6 rounded-lg card-shadow flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-celeste-accent/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-celeste-accent" data-icon="group">group</span>
+</div>
+<div>
+<p class="text-on-surface-variant font-label-md">Estudiantes Activos</p>
+<h3 class="text-headline-md font-bold text-primary">24</h3>
+</div>
+</div>
+<!-- Metric 2 -->
+<div class="bg-white p-6 rounded-lg card-shadow flex flex-col justify-center">
+<div class="flex justify-between mb-2">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-celeste-accent" data-icon="history">history</span>
+<p class="text-on-surface-variant font-label-md">Horas Acumuladas</p>
+</div>
+<span class="text-primary font-bold">1,420 / 1,920 h</span>
+</div>
+<div class="w-full bg-surface-container rounded-full h-2">
+<div class="bg-celeste-accent h-2 rounded-full" style="width: 74%"></div>
+</div>
+</div>
+<!-- Metric 3 -->
+<div class="bg-white p-6 rounded-lg card-shadow flex items-center justify-between">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-error/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-error" data-icon="assignment_late">assignment_late</span>
+</div>
+<div>
+<p class="text-on-surface-variant font-label-md">Reportes por Aprobar</p>
+<h3 class="text-headline-md font-bold text-primary">8</h3>
+</div>
+</div>
+<span class="bg-error text-white text-[10px] px-2 py-1 rounded-full font-bold animate-pulse">PENDIENTE</span>
+</div>
+</section>
+<!-- Content Grid -->
+<section class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+<!-- Student Table (2/3 width on desktop) -->
+<div class="lg:col-span-2 space-y-4">
+<div class="flex justify-between items-center px-1">
+<h2 class="font-system-title text-headline-sm text-primary">Panel de Estudiantes</h2>
+<button class="text-celeste-accent font-label-md flex items-center gap-1 hover:underline">
+                        Ver todos <span class="material-symbols-outlined text-sm" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+<div class="bg-white rounded-xl card-shadow overflow-hidden">
+<table class="w-full text-left border-collapse">
+<thead class="bg-surface-container-low">
+<tr>
+<th class="p-4 font-label-md text-on-surface-variant">Estudiante</th>
+<th class="p-4 font-label-md text-on-surface-variant">Curso</th>
+<th class="p-4 font-label-md text-on-surface-variant">Progreso (80h)</th>
+<th class="p-4 font-label-md text-on-surface-variant text-right">Acción</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-container">
+<!-- Student Row 1 -->
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="p-4">
+<div class="flex items-center gap-3">
+<img class="w-8 h-8 rounded-full object-cover" data-alt="Close-up portrait of a high school student with a confident and focused expression. The student is in a modern school setting, with soft daylight and clean architectural lines in the background. The visual tone is positive, professional, and consistent with a high-end educational management platform's clean aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAOE7a4j5atWrfgNuxd1Df0NYtNOYr5DxQ9TsD8au9OevGH-lC-TJh4K2mftWuPly9VCFX6bn7AppDKHw_2CglTCyn9UmdCxl4aUxosBBLawF6AcGFInYNmrckBaAJ6RuWo_8g8mgw9UUNynpJi_O9WKckplUkj9beW8l_RDqMipPDBVGwYzePGOa0WucYv7yAxrE-GM2M4S_z5krloCfnV7xi0nStZtXFBbLp2FMFmGe5oWGWDXcHWkKjfYwX8G4a3vAe_vri-J0xL"/>
+<span class="font-label-md text-primary">Mateo Restrepo</span>
+</div>
+</td>
+<td class="p-4 text-on-surface-variant">11-A</td>
+<td class="p-4">
+<div class="flex items-center gap-3">
+<div class="flex-grow bg-surface-container rounded-full h-1.5 overflow-hidden">
+<div class="bg-celeste-accent h-full" style="width: 85%"></div>
+</div>
+<span class="text-xs font-bold text-primary">68h</span>
+</div>
+</td>
+<td class="p-4 text-right">
+<button class="bg-primary text-white text-[12px] px-3 py-1 rounded-lg hover:bg-primary/90 transition-all font-bold">Ver Ficha</button>
+</td>
+</tr>
+<!-- Student Row 2 -->
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="p-4">
+<div class="flex items-center gap-3">
+<img class="w-8 h-8 rounded-full object-cover" data-alt="Portrait of a female high school student with a bright, motivated smile. She is in a brightly lit library setting, conveying a sense of academic achievement and community engagement. The lighting is soft and airy, fitting the modern, light-filled interface of the school management dashboard." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAygUHSF1CDcri9WcMQK6Lz7hQPPvlL4GcjKeRT1Q4tA_-EVFS6dRIFx1TveAA8Zmrd8siFfoScGWFwxPSDiwGa7gkp2gzfkmDGpgFuQ7QARzLL7oFVP1wTQ8TYPHS9vyejkBi5JPQZETE2Ofcb1InleP7CNA804b_7BEweuYhxTVjJEia8qD6wl7jnnsPSrZTvmoQSy3RJdMcANAK-RFewsmtersdt90uWEVPrpYD23YDE-mNKMdGrqV4gosZESZRZ9-0J2-JcryOk"/>
+<span class="font-label-md text-primary">Camila Duque</span>
+</div>
+</td>
+<td class="p-4 text-on-surface-variant">10-B</td>
+<td class="p-4">
+<div class="flex items-center gap-3">
+<div class="flex-grow bg-surface-container rounded-full h-1.5 overflow-hidden">
+<div class="bg-celeste-accent h-full" style="width: 40%"></div>
+</div>
+<span class="text-xs font-bold text-primary">32h</span>
+</div>
+</td>
+<td class="p-4 text-right">
+<button class="bg-primary text-white text-[12px] px-3 py-1 rounded-lg hover:bg-primary/90 transition-all font-bold">Ver Ficha</button>
+</td>
+</tr>
+<!-- Student Row 3 -->
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="p-4">
+<div class="flex items-center gap-3">
+<img class="w-8 h-8 rounded-full object-cover" data-alt="Portrait of a teenage boy with a thoughtful expression, wearing a school uniform sweater. He is positioned in a modern classroom environment with natural light pouring in from large windows. The style is clean, sharp, and focused, aligning with the corporate minimalism of the project's brand identity." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDNVP3o3TWZH16s6I492i60mVMCjazuzyz2HdNe6ZW0whNQ5y0Nv7NpcjiAB8RTrEe8bGTg8JDEhbeJy3seMPv5YtMmldU7QgrBmAAo3uHABGDAWXFf7anri_aJh6WGObYrxSoE0wZQ0uqf5PgGciMUxRpqWRZAtapMeSdkqoIhExkv7rIOPa-ARK08_0JMIPp-vkAfGMC6tSSnbxF8l30HVOtCePcI51-xKUA7Z-sQEq5qKUt9AtsDVRDNJv-ksKWYu10AQuvFaSka"/>
+<span class="font-label-md text-primary">Juan Pablo Rico</span>
+</div>
+</td>
+<td class="p-4 text-on-surface-variant">11-A</td>
+<td class="p-4">
+<div class="flex items-center gap-3">
+<div class="flex-grow bg-surface-container rounded-full h-1.5 overflow-hidden">
+<div class="bg-celeste-accent h-full" style="width: 92%"></div>
+</div>
+<span class="text-xs font-bold text-primary">74h</span>
+</div>
+</td>
+<td class="p-4 text-right">
+<button class="bg-primary text-white text-[12px] px-3 py-1 rounded-lg hover:bg-primary/90 transition-all font-bold">Ver Ficha</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Pending Signatures -->
+<div class="space-y-4">
+<h2 class="font-system-title text-headline-sm text-primary px-1">Firmas Pendientes</h2>
+<div class="space-y-4">
+<!-- Log Card 1 -->
+<div class="bg-white p-5 rounded-xl card-shadow border-l-4 border-celeste-accent">
+<div class="flex justify-between items-start mb-3">
+<div>
+<h4 class="font-bold text-primary">Santi Giraldo</h4>
+<p class="text-[10px] text-on-surface-variant uppercase tracking-wider">Hoy, 09:30 AM</p>
+</div>
+<span class="bg-celeste-accent/10 text-celeste-accent text-xs px-2 py-0.5 rounded font-bold">4.5 h</span>
+</div>
+<p class="text-sm text-on-surface-variant mb-4 leading-relaxed">Poda de setos perimetrales y limpieza de residuos en el jardín principal del bloque B.</p>
+<div class="grid grid-cols-2 gap-3">
+<button class="bg-primary text-white text-[12px] py-2 rounded-lg font-bold hover:bg-primary/90 transition-all flex items-center justify-center gap-1">
+<span class="material-symbols-outlined text-sm" data-icon="check">check</span> Aprobar
+                            </button>
+<button class="border border-outline-variant text-on-surface-variant text-[12px] py-2 rounded-lg font-bold hover:bg-surface-variant transition-all flex items-center justify-center gap-1">
+<span class="material-symbols-outlined text-sm" data-icon="close">close</span> Rechazar
+                            </button>
+</div>
+</div>
+<!-- Log Card 2 -->
+<div class="bg-white p-5 rounded-xl card-shadow border-l-4 border-celeste-accent/30">
+<div class="flex justify-between items-start mb-3">
+<div>
+<h4 class="font-bold text-primary">Valentina Ospina</h4>
+<p class="text-[10px] text-on-surface-variant uppercase tracking-wider">Ayer, 04:15 PM</p>
+</div>
+<span class="bg-celeste-accent/10 text-celeste-accent text-xs px-2 py-0.5 rounded font-bold">3.0 h</span>
+</div>
+<p class="text-sm text-on-surface-variant mb-4 leading-relaxed">Siembra de plantas ornamentales y tutorado de árboles jóvenes en el sendero ecológico.</p>
+<div class="grid grid-cols-2 gap-3">
+<button class="bg-primary text-white text-[12px] py-2 rounded-lg font-bold hover:bg-primary/90 transition-all flex items-center justify-center gap-1">
+<span class="material-symbols-outlined text-sm" data-icon="check">check</span> Aprobar
+                            </button>
+<button class="border border-outline-variant text-on-surface-variant text-[12px] py-2 rounded-lg font-bold hover:bg-surface-variant transition-all flex items-center justify-center gap-1">
+<span class="material-symbols-outlined text-sm" data-icon="close">close</span> Rechazar
+                            </button>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Navigation Bar (BottomNavBar) -->
+<nav class="fixed bottom-0 w-full z-50 flex justify-around items-center h-20 bg-surface border-t border-outline-variant px-4">
+<!-- Dashboard -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:bg-surface-variant rounded-xl transition-all scale-95" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label-sm text-[10px] mt-1">Dashboard</span>
+</a>
+<!-- Students -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:bg-surface-variant rounded-xl transition-all scale-95" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+<span class="font-label-sm text-[10px] mt-1">Estudiantes</span>
+</a>
+<!-- Technical (ACTIVE) -->
+<a class="flex flex-col items-center justify-center bg-celeste-accent/10 text-celeste-accent border-2 border-dashed border-celeste-accent rounded-xl px-4 py-1 transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="engineering" style="font-variation-settings: 'FILL' 1;">engineering</span>
+<span class="font-label-sm text-[10px] mt-1 font-bold">Gestión Técnica</span>
+</a>
+<!-- Messages -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:bg-surface-variant rounded-xl transition-all scale-95" href="#">
+<div class="relative">
+<span class="material-symbols-outlined" data-icon="mail">mail</span>
+<span class="absolute -top-1 -right-1 w-2 h-2 bg-error rounded-full"></span>
+</div>
+<span class="font-label-sm text-[10px] mt-1">Mensajes</span>
+</a>
+</nav>
+<script>
+        // Simple micro-interaction for buttons
+        document.querySelectorAll('button').forEach(button => {
+            button.addEventListener('click', function() {
+                this.classList.add('scale-95');
+                setTimeout(() => this.classList.remove('scale-95'), 150);
+            });
+        });
+    </script>
+</body></html>

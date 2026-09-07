@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>About - HORASOCIAL PRO</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "secondary-fixed-dim": "#89ceff",
+                    "tertiary": "#000000",
+                    "tertiary-fixed": "#c4e7ff",
+                    "surface-container-highest": "#e0e3e5",
+                    "inverse-on-surface": "#eff1f3",
+                    "on-secondary-container": "#004666",
+                    "on-surface-variant": "#45464d",
+                    "on-secondary-fixed-variant": "#004c6e",
+                    "inverse-primary": "#bec6e0",
+                    "error-container": "#ffdad6",
+                    "on-primary-container": "#7c839b",
+                    "on-tertiary-fixed-variant": "#004c69",
+                    "tertiary-fixed-dim": "#7bd0ff",
+                    "surface-container": "#eceef0",
+                    "on-primary-fixed": "#131b2e",
+                    "on-secondary": "#ffffff",
+                    "surface-container-lowest": "#ffffff",
+                    "on-tertiary-container": "#008ebf",
+                    "surface-dim": "#d8dadc",
+                    "primary-fixed-dim": "#bec6e0",
+                    "on-error-container": "#93000a",
+                    "primary-fixed": "#dae2fd",
+                    "primary": "#000000",
+                    "surface-container-low": "#f2f4f6",
+                    "on-secondary-fixed": "#001e2f",
+                    "on-error": "#ffffff",
+                    "on-primary-fixed-variant": "#3f465c",
+                    "surface-variant": "#e0e3e5",
+                    "outline": "#76777d",
+                    "on-primary": "#ffffff",
+                    "surface": "#f7f9fb",
+                    "secondary": "#006591",
+                    "on-tertiary": "#ffffff",
+                    "error": "#ba1a1a",
+                    "outline-variant": "#c6c6cd",
+                    "on-background": "#191c1e",
+                    "surface-container-high": "#e6e8ea",
+                    "tertiary-container": "#001e2c",
+                    "on-tertiary-fixed": "#001e2c",
+                    "primary-container": "#131b2e",
+                    "background": "#f7f9fb",
+                    "inverse-surface": "#2d3133",
+                    "on-surface": "#191c1e",
+                    "surface-tint": "#565e74",
+                    "surface-bright": "#f7f9fb",
+                    "secondary-fixed": "#c9e6ff",
+                    "secondary-container": "#39b8fd"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "1rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "xl": "32px",
+                    "margin-mobile": "16px",
+                    "xs": "4px",
+                    "sm": "8px",
+                    "margin-desktop": "48px",
+                    "gutter": "24px",
+                    "lg": "24px",
+                    "md": "16px",
+                    "unit": "4px"
+            },
+            "fontFamily": {
+                    "body-md": ["Inter"],
+                    "display-lg": ["Plus Jakarta Sans"],
+                    "body-lg": ["Inter"],
+                    "headline-md": ["Plus Jakarta Sans"],
+                    "label-sm": ["Inter"],
+                    "label-md": ["Inter"],
+                    "headline-lg-mobile": ["Plus Jakarta Sans"],
+                    "headline-lg": ["Plus Jakarta Sans"],
+                    "headline-sm": ["Plus Jakarta Sans"]
+            },
+            "fontSize": {
+                    "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                    "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "headline-md": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                    "label-sm": ["12px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                    "label-md": ["14px", {"lineHeight": "1.4", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                    "headline-lg-mobile": ["28px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                    "headline-lg": ["32px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                    "headline-sm": ["20px", {"lineHeight": "1.4", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .backdrop-blur-custom {
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+        .gear-watermark {
+            background-image: radial-gradient(circle at 2px 2px, rgba(15, 23, 42, 0.03) 1px, transparent 0);
+            background-size: 24px 24px;
+        }
+        .card-shadow {
+            box-shadow: 0px 4px 20px rgba(15, 23, 42, 0.05);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface font-body-md text-on-surface selection:bg-secondary-container/30">
+<!-- TopAppBar -->
+<header class="flex justify-between items-center w-full px-md md:px-margin-desktop py-sm sticky top-0 z-50 bg-surface/80 backdrop-blur-md shadow-sm">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-secondary" data-icon="school">school</span>
+<span class="text-headline-sm font-headline-sm font-bold text-primary">HORASOCIAL PRO</span>
+</div>
+<nav class="hidden md:flex items-center gap-lg">
+<a class="text-on-surface-variant hover:text-secondary font-label-md transition-colors" href="#">Inicio</a>
+<a class="text-secondary font-semibold border-b-2 border-secondary font-label-md py-xs" href="#">Sobre Nosotros</a>
+<a class="text-on-surface-variant hover:text-secondary font-label-md transition-colors" href="#">Servicios</a>
+</nav>
+<button class="bg-primary-container text-on-primary-container px-lg py-sm rounded-lg font-label-md hover:opacity-90 active:scale-95 transition-all">
+            Get Started
+        </button>
+</header>
+<main class="flex flex-col min-h-screen">
+<!-- Hero Section -->
+<section class="relative overflow-hidden px-md md:px-margin-desktop py-xl md:py-[120px] flex flex-col items-center text-center">
+<!-- Background Decorative Element -->
+<div class="absolute inset-0 -z-10 gear-watermark opacity-40"></div>
+<div class="absolute -top-24 -right-24 w-96 h-96 bg-secondary-container/10 rounded-full blur-[100px]"></div>
+<div class="absolute -bottom-24 -left-24 w-96 h-96 bg-primary-container/5 rounded-full blur-[100px]"></div>
+<div class="max-w-4xl space-y-md animate-fade-in">
+<h1 class="text-headline-lg-mobile md:text-display-lg font-display-lg text-primary leading-tight">
+                    Formando líderes. <span class="text-secondary">Trackeando tu impacto.</span>
+</h1>
+<p class="text-body-lg font-body-lg text-on-surface-variant max-w-2xl mx-auto">
+                    HORASOCIAL PRO es la plataforma líder para la gestión y seguimiento del servicio social escolar, diseñada para conectar estudiantes con impacto real.
+                </p>
+<div class="pt-lg flex flex-col sm:flex-row gap-md justify-center items-center">
+<button class="w-full sm:w-auto bg-[#0F172A] text-white px-xl py-md rounded-lg font-label-md hover:shadow-lg hover:shadow-primary/20 transition-all flex items-center justify-center gap-sm">
+<span>Saber más</span>
+<span class="material-symbols-outlined text-[18px]" data-icon="arrow_forward">arrow_forward</span>
+</button>
+<button class="w-full sm:w-auto border border-[#0F172A] text-[#0F172A] px-xl py-md rounded-lg font-label-md hover:bg-[#0F172A]/5 transition-all">
+                        Unirse a la red
+                    </button>
+</div>
+</div>
+</section>
+<!-- Values/Features Grid -->
+<section class="px-md md:px-margin-desktop py-xl bg-surface-container-low">
+<div class="max-w-7xl mx-auto">
+<div class="flex flex-col md:flex-row justify-between items-end mb-xl gap-md">
+<div class="space-y-xs">
+<span class="text-secondary font-label-md uppercase tracking-widest">Excelencia Operativa</span>
+<h2 class="text-headline-lg font-headline-lg text-primary">Nuestros Pilares</h2>
+</div>
+<p class="text-body-md font-body-md text-on-surface-variant max-w-md">
+                        Optimizamos cada interacción para que el impacto social sea la única prioridad de la institución.
+                    </p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+<!-- Transparencia Card -->
+<div class="bg-surface-container-lowest p-lg rounded-lg card-shadow border border-outline-variant/30 flex flex-col group hover:-translate-y-1 transition-transform duration-300 relative overflow-hidden">
+<div class="mb-lg w-12 h-12 bg-secondary/10 text-secondary rounded-lg flex items-center justify-center group-hover:bg-secondary group-hover:text-white transition-colors">
+<span class="material-symbols-outlined text-[28px]" data-icon="history">history</span>
+</div>
+<h3 class="text-headline-sm font-headline-sm text-primary mb-sm">Transparencia</h3>
+<p class="text-body-md font-body-md text-on-surface-variant">
+                            Tracking in real-time de cada hora de servicio, asegurando la validez y el cumplimiento de los requisitos académicos.
+                        </p>
+<span class="material-symbols-outlined absolute bottom-4 right-4 text-on-surface/5 text-[64px]" data-icon="schedule">schedule</span>
+</div>
+<!-- Eficiencia Card -->
+<div class="bg-surface-container-lowest p-lg rounded-lg card-shadow border border-outline-variant/30 flex flex-col group hover:-translate-y-1 transition-transform duration-300 relative overflow-hidden">
+<div class="mb-lg w-12 h-12 bg-secondary/10 text-secondary rounded-lg flex items-center justify-center group-hover:bg-secondary group-hover:text-white transition-colors">
+<span class="material-symbols-outlined text-[28px]" data-icon="school">school</span>
+</div>
+<h3 class="text-headline-sm font-headline-sm text-primary mb-sm">Eficiencia</h3>
+<p class="text-body-md font-body-md text-on-surface-variant">
+                            Simplified digital documentation. Olvídate del papeleo excesivo; automatizamos la generación de reportes y certificados oficiales.
+                        </p>
+<span class="material-symbols-outlined absolute bottom-4 right-4 text-on-surface/5 text-[64px]" data-icon="description">description</span>
+</div>
+<!-- Impacto Card -->
+<div class="bg-surface-container-lowest p-lg rounded-lg card-shadow border border-outline-variant/30 flex flex-col group hover:-translate-y-1 transition-transform duration-300 relative overflow-hidden">
+<div class="mb-lg w-12 h-12 bg-secondary/10 text-secondary rounded-lg flex items-center justify-center group-hover:bg-secondary group-hover:text-white transition-colors">
+<span class="material-symbols-outlined text-[28px]" data-icon="bar_chart">bar_chart</span>
+</div>
+<h3 class="text-headline-sm font-headline-sm text-primary mb-sm">Impacto</h3>
+<p class="text-body-md font-body-md text-on-surface-variant">
+                            Visualizing the social change created. Dashboards interactivos que muestran el valor tangible generado en la comunidad.
+                        </p>
+<span class="material-symbols-outlined absolute bottom-4 right-4 text-on-surface/5 text-[64px]" data-icon="public">public</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Contextual Hero Image/CTA Section -->
+<section class="px-md md:px-margin-desktop py-xl">
+<div class="max-w-7xl mx-auto bg-primary-container rounded-[2rem] p-lg md:p-xl flex flex-col md:flex-row items-center gap-xl overflow-hidden relative">
+<!-- Abstract Texture -->
+<div class="absolute inset-0 opacity-10 pointer-events-none">
+<div class="w-full h-full gear-watermark"></div>
+</div>
+<div class="flex-1 space-y-md z-10 text-center md:text-left">
+<h2 class="text-headline-lg font-headline-lg text-white">¿Listo para transformar el servicio social?</h2>
+<p class="text-body-lg font-body-lg text-on-primary-container/80">Únete a cientos de instituciones que ya están digitalizando su impacto social con HORASOCIAL PRO.</p>
+<div class="flex flex-col sm:flex-row gap-md justify-center md:justify-start">
+<button class="bg-secondary-container text-on-secondary-container px-xl py-md rounded-lg font-label-md hover:scale-105 active:scale-95 transition-all">
+                            Agendar Demo
+                        </button>
+</div>
+</div>
+<div class="flex-1 w-full max-w-md z-10">
+<img alt="Academic Collaboration" class="rounded-xl shadow-2xl object-cover aspect-video md:aspect-square" data-alt="A modern, high-key photograph of diverse university students collaborating in a bright, minimalist glass-walled common area. The lighting is soft and natural, reflecting a professional academic environment. The scene emphasizes focus, teamwork, and modern educational technology, using a clean color palette of navy blues, slate grays, and crisp whites to match the corporate minimalist UI aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCRzsweJm50oGWNRjeObbQmYnavbI7KB9Vm1VbRjyYIqCqR_LMZucloPYdLMjb_BtTb79X6UbBZqnscDh3eDEwjLpEypceWCyzZJZt8Dp2s841HOHiXIP_UIakdKh18DjEIaRyYaLjD1uPWUCwvC2G_IXqWQINuHlTSY1vNGGgq3oudmawHhLP-rG19VL_KpIqUvBa40VHt2xzTsgWMZMSlOzaOP2em3tBoogRWVI2J_obzwQXgoEp2sU6kCH1IQmKDYdLZQBl6eahq"/>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="flex flex-col md:flex-row justify-between items-center w-full px-md md:px-margin-desktop py-xl gap-md bg-primary-container text-on-primary-container">
+<div class="flex flex-col items-center md:items-start gap-xs">
+<span class="text-headline-sm font-headline-sm font-bold text-on-primary-container">HORASOCIAL PRO</span>
+<p class="text-body-md font-body-md text-on-primary-container/80">© 2024 HORASOCIAL PRO. Academic Integrity &amp; Social Progress.</p>
+</div>
+<div class="flex flex-wrap justify-center gap-lg">
+<a class="text-label-md font-label-md text-on-primary-container/80 hover:text-on-primary-container hover:underline decoration-secondary-container transition-all" href="#">Support</a>
+<a class="text-label-md font-label-md text-on-primary-container/80 hover:text-on-primary-container hover:underline decoration-secondary-container transition-all" href="#">Privacy Policy</a>
+<a class="text-label-md font-label-md text-on-primary-container/80 hover:text-on-primary-container hover:underline decoration-secondary-container transition-all" href="#">Terms of Service</a>
+<a class="text-label-md font-label-md text-on-primary-container/80 hover:text-on-primary-container hover:underline decoration-secondary-container transition-all" href="#">Contact Us</a>
+</div>
+<div class="flex gap-md">
+<span class="material-symbols-outlined text-[24px] cursor-pointer hover:text-secondary-container transition-colors" data-icon="language">language</span>
+<span class="material-symbols-outlined text-[24px] cursor-pointer hover:text-secondary-container transition-colors" data-icon="diversity_3">diversity_3</span>
+</div>
+</footer>
+<script>
+        // Subtle scroll reveal effect
+        document.addEventListener('DOMContentLoaded', () => {
+            const observerOptions = {
+                threshold: 0.1
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('opacity-100', 'translate-y-0');
+                        entry.target.classList.remove('opacity-0', 'translate-y-4');
+                    }
+                });
+            }, observerOptions);
+
+            // Applying initial states for fade-in elements
+            document.querySelectorAll('section > div > div').forEach(el => {
+                el.classList.add('transition-all', 'duration-700', 'opacity-0', 'translate-y-4');
+                observer.observe(el);
+            });
+        });
+    </script>
+</body></html>

@@ -1,0 +1,284 @@
+<!DOCTYPE html><html lang="es"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>HORASOCIAL PRO - Gestión Estudiantes</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container": "#eceef0",
+                    "on-surface": "#191c1e",
+                    "inverse-primary": "#bec6e0",
+                    "inverse-on-surface": "#eff1f3",
+                    "on-primary": "#ffffff",
+                    "on-error-container": "#93000a",
+                    "tertiary": "#000000",
+                    "on-primary-fixed-variant": "#3f465c",
+                    "error-container": "#ffdad6",
+                    "on-background": "#191c1e",
+                    "surface-tint": "#565e74",
+                    "on-tertiary-fixed": "#001e2c",
+                    "outline-variant": "#c6c6cd",
+                    "on-secondary-container": "#004666",
+                    "surface-container-highest": "#e0e3e5",
+                    "on-secondary": "#ffffff",
+                    "secondary": "#006591",
+                    "surface-container-low": "#f2f4f6",
+                    "primary-container": "#131b2e",
+                    "secondary-fixed": "#c9e6ff",
+                    "on-surface-variant": "#45464d",
+                    "surface-variant": "#e0e3e5",
+                    "secondary-container": "#39b8fd",
+                    "primary": "#000000",
+                    "on-secondary-fixed-variant": "#004c6e",
+                    "on-secondary-fixed": "#001e2f",
+                    "tertiary-fixed": "#c4e7ff",
+                    "on-tertiary-fixed-variant": "#004c69",
+                    "surface-container-lowest": "#ffffff",
+                    "inverse-surface": "#2d3133",
+                    "primary-fixed": "#dae2fd",
+                    "error": "#ba1a1a",
+                    "outline": "#76777d",
+                    "primary-fixed-dim": "#bec6e0",
+                    "surface-bright": "#f7f9fb",
+                    "on-primary-fixed": "#131b2e",
+                    "surface": "#f7f9fb",
+                    "surface-dim": "#d8dadc",
+                    "surface-container-high": "#e6e8ea",
+                    "tertiary-fixed-dim": "#7bd0ff",
+                    "on-tertiary": "#ffffff",
+                    "secondary-fixed-dim": "#89ceff",
+                    "on-error": "#ffffff",
+                    "tertiary-container": "#001e2c",
+                    "on-tertiary-container": "#008ebf",
+                    "on-primary-container": "#7c839b",
+                    "background": "#f7f9fb"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "3xl": "1.5rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "sm": "8px",
+                    "xl": "32px",
+                    "unit": "4px",
+                    "margin-mobile": "16px",
+                    "md": "16px",
+                    "gutter": "24px",
+                    "lg": "24px",
+                    "xs": "4px",
+                    "margin-desktop": "48px"
+            },
+            "fontFamily": {
+                    "headline-sm": ["Plus Jakarta Sans"],
+                    "headline-md": ["Plus Jakarta Sans"],
+                    "label-md": ["Inter"],
+                    "headline-lg": ["Plus Jakarta Sans"],
+                    "headline-lg-mobile": ["Plus Jakarta Sans"],
+                    "body-lg": ["Inter"],
+                    "label-sm": ["Inter"],
+                    "body-md": ["Inter"],
+                    "display-lg": ["Plus Jakarta Sans"]
+            },
+            "fontSize": {
+                    "headline-sm": ["20px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                    "headline-md": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                    "label-md": ["14px", {"lineHeight": "1.4", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                    "headline-lg": ["32px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                    "headline-lg-mobile": ["28px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "label-sm": ["12px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                    "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+      .blur-blob {
+        position: fixed;
+        width: 300px;
+        height: 300px;
+        border-radius: 50%;
+        filter: blur(80px);
+        z-index: -1;
+        opacity: 0.4;
+      }
+      .blob-sky { background-color: #39b8fd; top: 10%; right: -5%; }
+      .blob-rose { background-color: #fda4af; bottom: 20%; left: -5%; }
+      
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      }
+
+      .active-chat-shadow {
+        box-shadow: 0 4px 14px 0 rgba(14, 165, 233, 0.39);
+      }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen font-body-md overflow-x-hidden">
+<!-- Blur Background Blobs -->
+<div class="blur-blob blob-sky"></div>
+<div class="blur-blob blob-rose"></div>
+<!-- TopAppBar -->
+<nav class="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-md shadow-sm flex items-center justify-between px-margin-mobile h-16">
+<div class="flex items-center gap-3">
+<div class="bg-[#1E293B] w-10 h-10 rounded-lg flex items-center justify-center shadow-md">
+<span class="material-symbols-outlined text-white" style="font-variation-settings: 'FILL' 1;">school</span>
+</div>
+<span class="font-headline-sm-mobile text-headline-sm-mobile font-bold text-on-surface">HORASOCIAL PRO</span>
+</div>
+<button class="w-10 h-10 flex items-center justify-center rounded-full active:scale-95 transition-transform hover:bg-surface-variant/50">
+<span class="material-symbols-outlined text-on-surface-variant">search</span>
+</button>
+</nav>
+<!-- Main Content Canvas -->
+<main class="pt-24 pb-32 px-margin-mobile max-w-2xl mx-auto">
+<!-- Section Header -->
+<header class="mb-8">
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface mb-2">Gestión Estudiantes</h1>
+<p class="text-on-surface-variant font-body-md">Supervisión de avance y contacto directo con alumnos asignados.</p>
+</header>
+<!-- Students List (Vertical Cards) -->
+<section class="space-y-4">
+<!-- Student Card 1 -->
+<div class="bg-surface-container-lowest p-6 rounded-3xl shadow-[0px_4px_20px_rgba(15,23,42,0.05)] flex items-center gap-4 transition-all hover:translate-y-[-2px]">
+<img class="w-14 h-14 rounded-full object-cover border-2 border-secondary-container/20" data-alt="A professional close-up portrait of a young male student in a bright educational setting. The lighting is soft and natural, emphasizing a modern academic environment. He wears a clean white collared shirt, and the background features a soft bokeh of a library. The aesthetic is clean, minimalist, and trustworthy, perfectly matching a professional school management platform." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDRpu3bD-TnijIpCNij0p7usXMryWvkNrD35nh533FGa7_P0de5g0DgLcx05tZvi6wlmf1TXqyHRdFeokiLq3NQ_UTzvE4-KNa-cw9jyoGlSPV98Nf5lqpA-FoAnQgsoh9XINCQfPzNcONXTSYUiEDn4G4wgE8PzyNyXwSmFQqU_vU4IQ06FSqksewXyf-wNh8ul3S7aSkOQvUVgpiV5I_0hUI51WNHPIcP-Afv2jCFrc2rs4y0NsaMXbHX6Z6WJIyMYlISIs9lEsV2">
+<div class="flex-1 min-w-0">
+<h3 class="font-headline-sm text-headline-sm text-on-surface truncate">Alejandro Mendoza</h3>
+<div class="mt-2">
+<div class="flex justify-between text-label-sm text-on-surface-variant mb-1">
+<span class="">Progreso</span>
+<span class="font-bold text-secondary">64 de 80 Horas</span>
+</div>
+<div class="w-full bg-surface-container-high h-2 rounded-full overflow-hidden">
+<div class="bg-secondary-container h-full w-[80%] rounded-full"></div>
+</div>
+</div>
+</div>
+<button class="w-12 h-12 rounded-2xl bg-[#0EA5E9] text-white flex items-center justify-center active:scale-90 transition-all active-chat-shadow">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">chat_bubble</span>
+</button>
+</div>
+<!-- Student Card 2 -->
+<div class="bg-surface-container-lowest p-6 rounded-3xl shadow-[0px_4px_20px_rgba(15,23,42,0.05)] flex items-center gap-4 transition-all hover:translate-y-[-2px]">
+<img class="w-14 h-14 rounded-full object-cover border-2 border-secondary-container/20" data-alt="A detailed portrait of a focused female student in a modern workspace. The lighting is bright and high-key, creating a light-mode corporate minimalism atmosphere. She has a confident expression, and the background is a blurred minimalist office with pale blue accents. The visual style is high-end, clean, and organized, representing a seamless educational software experience." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCuazqL3fs8BZGGw29zs5oikE_bktHzSzxZazN4aikZ51vioU9sinuWgfS8dfNWozITsSThM1Me5uJJpPFrA-KSlgg5pSV5Pld2-psg-WiMRdZ1U9-jsHpxTYngpqCUYMOmCUe-hnATkpcLMkKmVTq1wtiSzVwqTszP7N6muKsksCdHeY_I4-zNV1s1tW4N8CsYyhzdiPiqr6y2ehzdrtstKz5TW9HwqWv_7uZ05NVILSFtf_FC2xuCB6DOoR38K4KdJVjikzZx36nA">
+<div class="flex-1 min-w-0">
+<h3 class="font-headline-sm text-headline-sm text-on-surface truncate">Valeria Castillo</h3>
+<div class="mt-2">
+<div class="flex justify-between text-label-sm text-on-surface-variant mb-1">
+<span class="">Progreso</span>
+<span class="font-bold text-secondary">20 de 80 Horas</span>
+</div>
+<div class="w-full bg-surface-container-high h-2 rounded-full overflow-hidden">
+<div class="bg-secondary-container h-full w-[25%] rounded-full"></div>
+</div>
+</div>
+</div>
+<button class="w-12 h-12 rounded-2xl bg-[#0EA5E9] text-white flex items-center justify-center active:scale-90 transition-all active-chat-shadow">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">chat_bubble</span>
+</button>
+</div>
+<!-- Student Card 3 -->
+<div class="bg-surface-container-lowest p-6 rounded-3xl shadow-[0px_4px_20px_rgba(15,23,42,0.05)] flex items-center gap-4 transition-all hover:translate-y-[-2px]">
+<img class="w-14 h-14 rounded-full object-cover border-2 border-secondary-container/20" data-alt="A professional headshot of a student in a bright, minimalist environment. The background shows subtle textures of an academic hall with high-key lighting. The overall color palette is dominated by whites and soft grays with vibrant blue accents. The student has a professional yet friendly look, suitable for an administrative management dashboard. The mood is efficient and facilitative." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAaUbQrTAqNmAAfIOXCKs8N8pOBk46jm5ceuEG6hvXnNKAP0rXmS_AkOclqjGKChMoyNnh-7oM8y0kz_CbZf7BqQkp4xiycJxncVplCrTMs6j31jPl6KfS5FfM0Ft0X5w3RvVd9XkisgrLW_KjGt8IYHyzLqpemj91f3FTb9v5QqDn_YqaxH2IKmQPieDcAA3HtR3qUcXOn-6DKEZuT5-w502-IwVIs0_VbQeE0RdKX5_5DPDc7i5X2QIBfpYsjhDtbpK3lBmPeVP7J">
+<div class="flex-1 min-w-0">
+<h3 class="font-headline-sm text-headline-sm text-on-surface truncate">Roberto Ortiz</h3>
+<div class="mt-2">
+<div class="flex justify-between text-label-sm text-on-surface-variant mb-1">
+<span class="">Progreso</span>
+<span class="font-bold text-secondary">80 de 80 Horas</span>
+</div>
+<div class="w-full bg-surface-container-high h-2 rounded-full overflow-hidden">
+<div class="bg-[#10B981] h-full w-full rounded-full"></div>
+</div>
+</div>
+</div>
+<button class="w-12 h-12 rounded-2xl bg-[#0EA5E9] text-white flex items-center justify-center active:scale-90 transition-all active-chat-shadow">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">chat_bubble</span>
+</button>
+</div>
+<!-- Student Card 4 -->
+<div class="bg-surface-container-lowest p-6 rounded-3xl shadow-[0px_4px_20px_rgba(15,23,42,0.05)] flex items-center gap-4 transition-all hover:translate-y-[-2px]">
+<img class="w-14 h-14 rounded-full object-cover border-2 border-secondary-container/20" data-alt="A portrait of a young female student in a contemporary school setting. The image is bright with high contrast, following a professional corporate minimalism aesthetic. The colors are crisp, with soft blue and white tones throughout. She looks directly at the camera with an engaged expression. The background is softly out of focus, showcasing a modern, light-filled educational institution." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA0vZ3zaR6ZnDPgGaQh8Rl10TD4pO0LOv8yasAeEPF_zbq9JCGo9VO2AlzvxVpSRk21Vz5BUD1awD2UnuoQ9IaHK_2HjAoVNj1EpJUJV6NVzLTWKQ1Lk4IAf01nEfs4Ig8wRMEyckY48BgrtYFv30Ib0dASo-dpD4o1gP5FFE5nMoYwnt18ZA9i4Vh7C4E19ydlOohjkXECQRSeG_4zePWa4fs49iGShVTLcvqCBcQXvqsfIutroFWImxQ5YXgi-GKRUhqUz9T0V2x9">
+<div class="flex-1 min-w-0">
+<h3 class="font-headline-sm text-headline-sm text-on-surface truncate">Elena Martínez</h3>
+<div class="mt-2">
+<div class="flex justify-between text-label-sm text-on-surface-variant mb-1">
+<span class="">Progreso</span>
+<span class="font-bold text-secondary">42 de 80 Horas</span>
+</div>
+<div class="w-full bg-surface-container-high h-2 rounded-full overflow-hidden">
+<div class="bg-secondary-container h-full w-[52%] rounded-full"></div>
+</div>
+</div>
+</div>
+<button class="w-12 h-12 rounded-2xl bg-[#0EA5E9] text-white flex items-center justify-center active:scale-90 transition-all active-chat-shadow">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">chat_bubble</span>
+</button>
+</div>
+</section>
+<!-- Spacer for FAB/Nav -->
+<div class="h-12"></div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full h-20 flex justify-around items-center px-4 pb-safe bg-surface/90 backdrop-blur-xl z-50 rounded-t-xl shadow-[0px_-4px_20px_rgba(15,23,42,0.05)]">
+<!-- Dashboard -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-secondary-container/10 rounded-xl px-2 py-1 active:scale-90 transition-all duration-200" href="#">
+<span class="material-symbols-outlined mb-1">dashboard</span>
+<span class="font-label-sm text-label-sm">Dashboard</span>
+</a>
+<!-- Gestión Estudiante (Active) -->
+<a class="flex flex-col items-center justify-center text-secondary font-bold hover:bg-secondary-container/10 rounded-xl px-2 py-1 active:scale-90 transition-all duration-200" href="#">
+<span class="material-symbols-outlined mb-1 text-[#39b8fd]" style="font-variation-settings: 'FILL' 1;">group</span>
+<span class="font-label-sm text-label-sm">Estudiantes</span>
+</a>
+<!-- Gestión Técnico -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-secondary-container/10 rounded-xl px-2 py-1 active:scale-90 transition-all duration-200" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="engineering">engineering</span>
+<span class="font-label-sm text-label-sm whitespace-nowrap">Gestión Técnico</span>
+</a>
+<!-- Mensajes -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-secondary-container/10 rounded-xl px-2 py-1 active:scale-90 transition-all duration-200" href="#">
+<div class="relative">
+<span class="material-symbols-outlined mb-1">mail</span>
+<span class="absolute -top-1 -right-1 w-2 h-2 bg-error rounded-full"></span>
+</div>
+<span class="font-label-sm text-label-sm">Mensajes</span>
+</a>
+</nav>
+<!-- Floating Action Button (Optional for Context) -->
+<button class="fixed bottom-24 right-6 w-14 h-14 bg-[#1E293B] text-white rounded-full shadow-lg flex items-center justify-center active:scale-95 transition-transform z-40">
+<span class="material-symbols-outlined">person_add</span>
+</button>
+<script>
+        // Simple micro-interaction for card hover
+        document.querySelectorAll('section > div').forEach(card => {
+            card.addEventListener('touchstart', () => {
+                card.classList.add('scale-[0.98]');
+            });
+            card.addEventListener('touchend', () => {
+                card.classList.remove('scale-[0.98]');
+            });
+        });
+    </script>
+
+
+
+
+</body></html>

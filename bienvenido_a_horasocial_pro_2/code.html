@@ -1,0 +1,218 @@
+<!DOCTYPE html><html class="light" lang="es"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>HORASOCIAL PRO - Bienvenido</title>
+<!-- Tailwind CSS with plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Google Fonts: Plus Jakarta Sans & Inter -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Tailwind Theme Configuration -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-tertiary-fixed": "#001e2c",
+                    "on-tertiary-fixed-variant": "#004c69",
+                    "on-error": "#ffffff",
+                    "surface-variant": "#e0e3e5",
+                    "outline": "#76777d",
+                    "secondary-fixed": "#c9e6ff",
+                    "surface-tint": "#565e74",
+                    "secondary": "#006591",
+                    "surface-container-high": "#e6e8ea",
+                    "surface-bright": "#f7f9fb",
+                    "surface-container": "#eceef0",
+                    "on-surface-variant": "#45464d",
+                    "on-surface": "#191c1e",
+                    "on-error-container": "#93000a",
+                    "tertiary-container": "#001e2c",
+                    "inverse-surface": "#2d3133",
+                    "tertiary": "#000000",
+                    "on-secondary": "#ffffff",
+                    "on-secondary-fixed-variant": "#004c6e",
+                    "on-primary-fixed": "#131b2e",
+                    "secondary-fixed-dim": "#89ceff",
+                    "on-primary-fixed-variant": "#3f465c",
+                    "secondary-container": "#39b8fd",
+                    "tertiary-fixed-dim": "#7bd0ff",
+                    "on-secondary-fixed": "#001e2f",
+                    "inverse-on-surface": "#eff1f3",
+                    "surface": "#f7f9fb",
+                    "on-tertiary-container": "#008ebf",
+                    "primary-container": "#131b2e",
+                    "tertiary-fixed": "#c4e7ff",
+                    "surface-container-lowest": "#ffffff",
+                    "on-secondary-container": "#004666",
+                    "error-container": "#ffdad6",
+                    "background": "#f7f9fb",
+                    "outline-variant": "#c6c6cd",
+                    "on-tertiary": "#ffffff",
+                    "surface-dim": "#d8dadc",
+                    "primary-fixed": "#dae2fd",
+                    "on-primary-container": "#7c839b",
+                    "error": "#ba1a1a",
+                    "on-background": "#191c1e",
+                    "primary-fixed-dim": "#bec6e0",
+                    "surface-container-low": "#f2f4f6",
+                    "inverse-primary": "#bec6e0",
+                    "surface-container-highest": "#e0e3e5",
+                    "on-primary": "#ffffff",
+                    "primary": "#000000"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "1rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "margin-desktop": "48px",
+                    "xs": "4px",
+                    "sm": "8px",
+                    "xl": "32px",
+                    "md": "16px",
+                    "margin-mobile": "16px",
+                    "lg": "24px",
+                    "gutter": "24px",
+                    "unit": "4px"
+            },
+            "fontFamily": {
+                    "headline-sm": ["Plus Jakarta Sans"],
+                    "label-md": ["Inter"],
+                    "body-md": ["Inter"],
+                    "label-sm": ["Inter"],
+                    "headline-md": ["Plus Jakarta Sans"],
+                    "headline-lg": ["Plus Jakarta Sans"],
+                    "display-lg": ["Plus Jakarta Sans"],
+                    "body-lg": ["Inter"],
+                    "headline-lg-mobile": ["Plus Jakarta Sans"]
+            },
+            "fontSize": {
+                    "headline-sm": ["20px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                    "label-md": ["14px", {"lineHeight": "1.4", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                    "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                    "label-sm": ["12px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                    "headline-md": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                    "headline-lg": ["32px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                    "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "headline-lg-mobile": ["28px", {"lineHeight": "1.2", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 48;
+        }
+        
+        .bg-pattern {
+            background-color: #f7f9fb;
+            background-image: 
+                radial-gradient(circle at 10% 10%, rgba(15, 23, 42, 0.02) 0%, transparent 10%),
+                radial-gradient(circle at 90% 90%, rgba(15, 23, 42, 0.02) 0%, transparent 10%);
+            position: relative;
+        }
+
+        .floating-icon {
+            position: absolute;
+            opacity: 0.03;
+            user-select: none;
+            pointer-events: none;
+        }
+
+        .btn-glow:active {
+            box-shadow: 0 0 15px rgba(56, 189, 248, 0.4);
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        .animate-float {
+            animation: float 6s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body class="bg-surface font-body-md text-on-surface overflow-hidden">
+<!-- Atmospheric Watermarks -->
+<div class="floating-icon top-10 left-10 text-[120px] material-symbols-outlined">settings</div>
+<div class="floating-icon bottom-10 right-10 text-[120px] material-symbols-outlined">school</div>
+<div class="floating-icon top-1/4 right-5 text-[80px] material-symbols-outlined">history_edu</div>
+<div class="floating-icon bottom-1/4 left-5 text-[80px] material-symbols-outlined">assignment_turned_in</div>
+<!-- Main Container -->
+<main class="flex flex-col items-center justify-between min-h-screen w-full px-margin-mobile py-xl md:px-margin-desktop bg-pattern">
+<!-- Top Section: Logo -->
+<header class="flex-1 flex items-center justify-center w-full max-w-md animate-float">
+<div class="relative group">
+<!-- Subtle background glow for logo -->
+<div class="absolute -inset-4 bg-secondary-container opacity-10 blur-2xl rounded-full group-hover:opacity-20 transition-opacity duration-700"></div>
+<img alt="HORASOCIAL PRO Logo" class="relative w-full max-w-[280px] h-auto object-contain drop-shadow-sm transition-transform duration-500 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBwMhl_DdmeafGOmiL2QLqeQV_Ut8aNvKKYwKjKUtrAMBSjpyGc1Acc5TCQm084EODuuIAA3GiusiDfLdXgW3DAC8tdYPa8R-TEraz_hHglTpuTQJRtfOJfW_OyF25795_lzWR3g1wKtd_0fCPC6QxHfyblbvKAQVJNcggVB3k8TYcOAOsA0lTgC8lQz0E1YRlDIn1zQ0vALf8l_40TC_X6xkuWE-o1qr0sdsv2THdAcTxAM9txnjL8N_7oSnlqsHLnXkvvL7tImO-s" style="aspect-ratio: 16/9;">
+</div>
+</header>
+<!-- Middle Section: Slogan -->
+<section class="flex-1 flex flex-col items-center justify-center text-center space-y-md w-full max-w-lg">
+<h1 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-primary-container leading-tight tracking-tight">
+                Formando tu futuro,<br>
+<span class="text-secondary">una hora a la vez.</span>
+</h1>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-[280px] opacity-80">
+                La gestión inteligente de tu servicio social escolar comienza aquí.
+            </p>
+</section>
+<!-- Bottom Section: Actions -->
+<footer class="w-full max-w-md mt-xl">
+<div class="flex flex-col items-center space-y-lg w-full">
+<!-- Primary Button -->
+<button class="group relative w-full py-md px-xl bg-primary-container text-on-primary rounded-lg font-headline-sm flex items-center justify-center gap-sm overflow-hidden transition-all duration-300 hover:scale-[1.02] active:scale-95 btn-glow shadow-lg shadow-primary-container/10" onclick="handleNavigation()">
+<!-- Accent Glow Layer -->
+<div class="absolute inset-0 bg-secondary-container opacity-0 group-hover:opacity-10 transition-opacity"></div>
+<span class="relative z-10">Siguiente</span>
+<span class="relative z-10 material-symbols-outlined text-[20px]">arrow_forward</span>
+</button>
+<!-- Small Copyright/Version Info -->
+<div class="flex flex-col items-center space-y-xs">
+<span class="font-label-sm text-label-sm text-outline opacity-60">© 2024 HORASOCIAL PRO</span>
+<div class="h-1 w-12 bg-outline-variant rounded-full opacity-30"></div>
+</div>
+</div>
+</footer>
+</main>
+<!-- Micro-interaction Script -->
+<script>
+        function handleNavigation() {
+            // Simple visual feedback before navigation intent
+            const btn = document.querySelector('button');
+            btn.innerHTML = '<span class="material-symbols-outlined animate-spin">progress_activity</span>';
+            
+            setTimeout(() => {
+                console.log("Navigating to next screen...");
+                // In a real app, this would be window.location.href or a router push
+            }, 800);
+        }
+
+        // Add a parallax-like effect to watermarks on mouse move (Desktop Only)
+        if (window.innerWidth > 768) {
+            document.addEventListener('mousemove', (e) => {
+                const icons = document.querySelectorAll('.floating-icon');
+                const x = e.clientX / window.innerWidth;
+                const y = e.clientY / window.innerHeight;
+                
+                icons.forEach((icon, index) => {
+                    const speed = (index + 1) * 10;
+                    const xOffset = (x - 0.5) * speed;
+                    const yOffset = (y - 0.5) * speed;
+                    icon.style.transform = `translate(${xOffset}px, ${yOffset}px)`;
+                });
+            });
+        }
+    </script>
+</body></html>

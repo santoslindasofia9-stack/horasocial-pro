@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+
+<html lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Bandeja de Entrada - Servicio Social</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container-low": "#f2f4f6",
+                    "primary-fixed": "#dae2fd",
+                    "primary-fixed-dim": "#bec6e0",
+                    "on-background": "#191c1e",
+                    "secondary-fixed-dim": "#89ceff",
+                    "on-tertiary-container": "#008ebf",
+                    "inverse-on-surface": "#eff1f3",
+                    "surface-bright": "#f7f9fb",
+                    "secondary-fixed": "#c9e6ff",
+                    "on-tertiary": "#ffffff",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-container-high": "#e6e8ea",
+                    "on-secondary-fixed-variant": "#004c6e",
+                    "on-primary-fixed": "#131b2e",
+                    "inverse-surface": "#2d3133",
+                    "background": "#f7f9fb",
+                    "tertiary-fixed": "#c4e7ff",
+                    "tertiary-container": "#001e2c",
+                    "surface": "#f7f9fb",
+                    "secondary": "#006591",
+                    "on-tertiary-fixed-variant": "#004c69",
+                    "on-primary": "#ffffff",
+                    "primary": "#000000",
+                    "on-secondary": "#ffffff",
+                    "surface-tint": "#565e74",
+                    "on-tertiary-fixed": "#001e2c",
+                    "primary-container": "#131b2e",
+                    "on-surface-variant": "#45464d",
+                    "secondary-container": "#39b8fd",
+                    "outline": "#76777d",
+                    "on-surface": "#191c1e",
+                    "on-error": "#ffffff",
+                    "inverse-primary": "#bec6e0",
+                    "tertiary-fixed-dim": "#7bd0ff",
+                    "surface-container": "#eceef0",
+                    "error-container": "#ffdad6",
+                    "surface-variant": "#e0e3e5",
+                    "surface-container-highest": "#e0e3e5",
+                    "on-secondary-container": "#004666",
+                    "on-secondary-fixed": "#001e2f",
+                    "on-primary-container": "#7c839b",
+                    "error": "#ba1a1a",
+                    "tertiary": "#000000",
+                    "surface-dim": "#d8dadc",
+                    "outline-variant": "#c6c6cd",
+                    "on-primary-fixed-variant": "#3f465c",
+                    "on-error-container": "#93000a"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "xs": "4px",
+                    "margin-desktop": "48px",
+                    "sm": "8px",
+                    "md": "16px",
+                    "xl": "32px",
+                    "gutter": "24px",
+                    "unit": "4px",
+                    "lg": "24px",
+                    "margin-mobile": "16px"
+            },
+            "fontFamily": {
+                    "body-md": ["Inter"],
+                    "label-sm": ["Inter"],
+                    "headline-lg-mobile": ["Plus Jakarta Sans"],
+                    "body-lg": ["Inter"],
+                    "label-md": ["Inter"],
+                    "headline-md": ["Plus Jakarta Sans"],
+                    "headline-sm": ["Plus Jakarta Sans"],
+                    "display-lg": ["Plus Jakarta Sans"],
+                    "headline-lg": ["Plus Jakarta Sans"]
+            },
+            "fontSize": {
+                    "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                    "label-sm": ["12px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                    "headline-lg-mobile": ["28px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "label-md": ["14px", {"lineHeight": "1.4", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                    "headline-md": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                    "headline-sm": ["20px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                    "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-lg": ["32px", {"lineHeight": "1.2", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .glass-nav { backdrop-filter: blur(12px); }
+        .custom-shadow { shadow: 0px 4px 20px rgba(15, 23, 42, 0.05); }
+        .gradient-sphere {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: -1;
+            opacity: 0.4;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface min-h-screen flex items-center justify-center p-4">
+<!-- Mobile Container (360x740px) -->
+<div class="relative w-[360px] h-[740px] bg-white rounded-[32px] shadow-2xl overflow-hidden flex flex-col border border-outline-variant/20">
+<!-- Ambient Background Spheres -->
+<div class="gradient-sphere w-48 h-48 bg-secondary-container top-10 -left-20"></div>
+<div class="gradient-sphere w-64 h-64 bg-tertiary-fixed-dim -bottom-20 -right-20"></div>
+<!-- TopAppBar Shared Component -->
+<header class="bg-surface/95 dark:bg-surface/95 flex justify-between items-center px-margin-mobile py-sm w-full sticky top-0 z-50 backdrop-blur-md bg-surface/90 shadow-sm">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-primary dark:text-on-background" data-icon="menu">menu</span>
+<h1 class="font-headline-sm text-headline-sm font-bold text-primary dark:text-on-background">Mis Mensajes</h1>
+</div>
+<button class="w-10 h-10 flex items-center justify-center rounded-full bg-secondary-container/20 text-secondary hover:bg-surface-container-high transition-colors active:scale-95 duration-100">
+<span class="material-symbols-outlined" data-icon="edit_square">edit_square</span>
+</button>
+</header>
+<!-- Main Content Area -->
+<main class="flex-1 overflow-y-auto px-margin-mobile pb-24">
+<!-- Search Bar -->
+<div class="mt-md mb-lg">
+<div class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-md text-outline" data-icon="search">search</span>
+<input class="w-full pl-11 pr-md py-sm bg-surface-container-lowest border border-outline-variant rounded-xl focus:ring-2 focus:ring-secondary-container focus:border-secondary outline-none transition-all font-label-md text-label-md" placeholder="Buscar mensajes o docentes..." type="text"/>
+</div>
+</div>
+<!-- Chat List -->
+<div class="space-y-sm">
+<!-- Active Chat (Selected) -->
+<div class="group relative flex items-center p-md bg-white rounded-xl border border-outline-variant hover:bg-surface-container-low transition-colors cursor-pointer border-l-4 border-l-secondary-container shadow-sm">
+<div class="w-12 h-12 rounded-full bg-primary-container text-on-primary-fixed flex items-center justify-center font-bold text-lg mr-md">
+                        JD
+                    </div>
+<div class="flex-1 min-w-0">
+<div class="flex justify-between items-baseline mb-xs">
+<h3 class="font-label-md text-label-md font-bold text-on-surface truncate">Prof. Javier Domínguez</h3>
+<span class="text-[10px] text-outline font-medium">10:45 AM</span>
+</div>
+<p class="text-label-md text-on-surface-variant truncate">Tu reporte de servicio social ha sido revisado con éxito...</p>
+</div>
+<div class="ml-sm flex flex-col items-end gap-1">
+<span class="bg-secondary text-white text-[10px] px-1.5 py-0.5 rounded-full font-bold">2</span>
+</div>
+</div>
+<!-- Chat Item 2 -->
+<div class="group relative flex items-center p-md bg-white rounded-xl border border-outline-variant hover:bg-surface-container-low transition-colors cursor-pointer">
+<div class="w-12 h-12 rounded-full bg-secondary-fixed text-on-secondary-fixed flex items-center justify-center font-bold text-lg mr-md">
+                        AM
+                    </div>
+<div class="flex-1 min-w-0">
+<div class="flex justify-between items-baseline mb-xs">
+<h3 class="font-label-md text-label-md font-bold text-on-surface truncate">Dra. Ana Martínez</h3>
+<span class="text-[10px] text-outline font-medium">Ayer</span>
+</div>
+<p class="text-label-md text-outline truncate">Recuerda entregar la carta de liberación el viernes.</p>
+</div>
+</div>
+<!-- Chat Item 3 -->
+<div class="group relative flex items-center p-md bg-white rounded-xl border border-outline-variant hover:bg-surface-container-low transition-colors cursor-pointer">
+<div class="w-12 h-12 rounded-full bg-tertiary-fixed text-on-tertiary-fixed flex items-center justify-center font-bold text-lg mr-md">
+                        RC
+                    </div>
+<div class="flex-1 min-w-0">
+<div class="flex justify-between items-baseline mb-xs">
+<h3 class="font-label-md text-label-md font-bold text-on-surface truncate">Lic. Ricardo Castro</h3>
+<span class="text-[10px] text-outline font-medium">Lun</span>
+</div>
+<p class="text-label-md text-outline truncate">Se ha habilitado la nueva convocatoria para el DIF.</p>
+</div>
+</div>
+<!-- Chat Item 4 -->
+<div class="group relative flex items-center p-md bg-white rounded-xl border border-outline-variant hover:bg-surface-container-low transition-colors cursor-pointer">
+<div class="w-12 h-12 rounded-full bg-primary-fixed text-on-primary-fixed flex items-center justify-center font-bold text-lg mr-md">
+                        SG
+                    </div>
+<div class="flex-1 min-w-0">
+<div class="flex justify-between items-baseline mb-xs">
+<h3 class="font-label-md text-label-md font-bold text-on-surface truncate">Servicios Generales</h3>
+<span class="text-[10px] text-outline font-medium">12 Oct</span>
+</div>
+<p class="text-label-md text-outline truncate">Confirmamos la recepción de tu firma digital.</p>
+</div>
+</div>
+<!-- Chat Item 5 -->
+<div class="group relative flex items-center p-md bg-white rounded-xl border border-outline-variant hover:bg-surface-container-low transition-colors cursor-pointer">
+<div class="w-12 h-12 rounded-full bg-surface-variant text-on-surface-variant flex items-center justify-center font-bold text-lg mr-md">
+                        LC
+                    </div>
+<div class="flex-1 min-w-0">
+<div class="flex justify-between items-baseline mb-xs">
+<h3 class="font-label-md text-label-md font-bold text-on-surface truncate">Laura Caballero</h3>
+<span class="text-[10px] text-outline font-medium">10 Oct</span>
+</div>
+<p class="text-label-md text-outline truncate">Hola, ¿ya tienes el formato de horas acumuladas?</p>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar Shared Component -->
+<nav class="fixed bottom-0 w-[360px] z-50 flex justify-around items-center px-4 pb-4 pt-2 bg-surface/95 dark:bg-surface/95 docked full-width rounded-t-xl backdrop-blur-md border-t border-outline-variant/30 shadow-[0_-4px_20px_rgba(15,23,42,0.05)]">
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline hover:text-secondary/80 transition-opacity active:opacity-70 active:scale-95 duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="font-label-sm text-label-sm">Inicio</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline hover:text-secondary/80 transition-opacity active:opacity-70 active:scale-95 duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="calendar_month">calendar_month</span>
+<span class="font-label-sm text-label-sm">Agenda</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline hover:text-secondary/80 transition-opacity active:opacity-70 active:scale-95 duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="assignment">assignment</span>
+<span class="font-label-sm text-label-sm">Registro</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed font-bold hover:text-secondary/80 transition-opacity active:opacity-70 active:scale-95 duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="chat_bubble" style="font-variation-settings: 'FILL' 1;">chat_bubble</span>
+<span class="font-label-sm text-label-sm">Mensajes</span>
+</a>
+</nav>
+</div>
+<!-- Decorative Image Context (Hidden but providing style signals) -->
+<div class="hidden">
+<img data-alt="A clean and professional administrative dashboard interface for a school social service department. The background is a soft white with subtle, low-opacity geometric gear icons scattered artistically. The lighting is bright and airy, suggesting a modern SaaS experience. The color palette is dominated by professional navy blue and crisp white, creating a reliable and facilitative academic environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBM_baUbP7uaueaSLJFpMYHJ0F4n2xClr_BTaEV5gAZMFY3Rh8yeT51trVsVa4VgY5gsPXxIFoQOzww-GnfVT34swR4J-HQ36vdkF5zHVqFt08sgBGzv94Jq6jELdg5PSbab5Ofi_e0kwTxIsyFe9XPaEk83bFMdmBvjdGFUZI_HBVN_i7oZD1i0RYUJUFgiPVvxLJ8jioisKYk3ph-F_hWaVYImc3xZknu8XZEzuOhr9aPIXVpzx_y0xPkXAT1ryLSEYwzDfiQrzEt"/>
+</div>
+</body></html>

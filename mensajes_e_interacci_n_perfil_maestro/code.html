@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;family=Comfortaa:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "secondary": "#006591",
+                      "on-primary-container": "#7c839b",
+                      "background": "#f7f9fb",
+                      "surface-bright": "#f7f9fb",
+                      "surface-container": "#eceef0",
+                      "on-error-container": "#93000a",
+                      "primary-container": "#131b2e",
+                      "surface-container-lowest": "#ffffff",
+                      "outline": "#76777d",
+                      "on-background": "#191c1e",
+                      "tertiary-fixed": "#c4e7ff",
+                      "primary": "#000000",
+                      "on-tertiary-container": "#008ebf",
+                      "on-secondary-fixed-variant": "#004c6e",
+                      "on-primary": "#ffffff",
+                      "on-primary-fixed": "#131b2e",
+                      "surface-tint": "#565e74",
+                      "surface-container-low": "#f2f4f6",
+                      "on-error": "#ffffff",
+                      "inverse-primary": "#bec6e0",
+                      "error": "#ba1a1a",
+                      "secondary-fixed-dim": "#89ceff",
+                      "on-secondary": "#ffffff",
+                      "tertiary-container": "#001e2c",
+                      "surface-dim": "#d8dadc",
+                      "surface": "#f7f9fb",
+                      "on-tertiary-fixed-variant": "#004c69",
+                      "on-secondary-container": "#004666",
+                      "inverse-on-surface": "#eff1f3",
+                      "tertiary-fixed-dim": "#7bd0ff",
+                      "inverse-surface": "#2d3133",
+                      "tertiary": "#000000",
+                      "outline-variant": "#c6c6cd",
+                      "error-container": "#ffdad6",
+                      "surface-container-highest": "#e0e3e5",
+                      "on-primary-fixed-variant": "#3f465c",
+                      "on-surface": "#191c1e",
+                      "surface-variant": "#e0e3e5",
+                      "secondary-fixed": "#c9e6ff",
+                      "primary-fixed-dim": "#bec6e0",
+                      "primary-fixed": "#dae2fd",
+                      "on-tertiary-fixed": "#001e2c",
+                      "on-surface-variant": "#45464d",
+                      "secondary-container": "#39b8fd",
+                      "on-tertiary": "#ffffff",
+                      "surface-container-high": "#e6e8ea",
+                      "on-secondary-fixed": "#001e2f"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "md": "16px",
+                      "margin-mobile": "16px",
+                      "lg": "24px",
+                      "gutter": "24px",
+                      "sm": "8px",
+                      "xl": "32px",
+                      "xs": "4px",
+                      "unit": "4px",
+                      "margin-desktop": "48px"
+              },
+              "fontFamily": {
+                      "body-md": ["Inter"],
+                      "headline-sm": ["Plus Jakarta Sans"],
+                      "headline-lg": ["Plus Jakarta Sans"],
+                      "headline-lg-mobile": ["Plus Jakarta Sans"],
+                      "label-sm": ["Inter"],
+                      "headline-md": ["Plus Jakarta Sans"],
+                      "label-md": ["Inter"],
+                      "display-lg": ["Plus Jakarta Sans"],
+                      "body-lg": ["Inter"],
+                      "comfortaa": ["Comfortaa"]
+              },
+              "fontSize": {
+                      "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                      "headline-sm": ["20px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                      "headline-lg": ["32px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                      "headline-lg-mobile": ["28px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                      "label-sm": ["12px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                      "headline-md": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                      "label-md": ["14px", {"lineHeight": "1.4", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                      "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}]
+              }
+            },
+          },
+        }
+    </script>
+<style>
+        body { background-color: #F8FAFC; overflow: hidden; }
+        .blur-blob {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: -1;
+            opacity: 0.15;
+        }
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+        .chat-bubble-received { border-radius: 4px 20px 20px 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.02); }
+        .chat-bubble-sent { border-radius: 20px 20px 4px 20px; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-body-md text-on-surface h-screen flex flex-col relative">
+<!-- Atmospheric Blobs -->
+<div class="blur-blob bg-secondary-container top-[-100px] left-[-100px]"></div>
+<div class="blur-blob bg-error top-[40%] right-[-100px]"></div>
+<!-- Header Section -->
+<header class="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-md shadow-sm h-16 flex items-center justify-between px-margin-mobile">
+<div class="flex items-center gap-2 text-headline-sm-mobile font-bold text-on-surface">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">school</span>
+<span class="font-headline-sm-mobile">HORASOCIAL PRO</span>
+</div>
+<div class="flex items-center gap-3">
+<div class="text-right hidden sm:block">
+<p class="text-label-md font-bold text-on-surface">Prof. Alejandro Gómez</p>
+<p class="text-[10px] text-on-surface-variant">Docente de Enlace</p>
+</div>
+<img alt="Profile" class="w-10 h-10 rounded-full border-2 border-secondary-container" data-alt="A professional headshot of a friendly Latin American male teacher in his late 30s, wearing a crisp white shirt and navy blazer. The lighting is soft and natural, coming from a large window. The background is a blurred academic setting with bookshelves and soft blue and white tones, matching a clean professional UI aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD6en-C07MYsJ4b-embtzw5c56ajf8OKv5GF1I1fzh-f7voZ6_92_QKbGtF9I50xepJOV1zUGwkGQc3eLZjsevKdPLX21jh0eC74DlyX198ttf0wvfmG_3MCNSNIfvHBEvhz-MajCV2UAkRGaEYKTrblfAKwg7u1_5IJYdf1GrJNXm3Rdyasl9dmeJu94D-Ymdpz-vGQYbO07t-zFL7WQUIf5MYtVo1ji_n5GH7ODvi29_lh8hgLt4hl65RwP3XnOSjnGAh5N9SK82r"/>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-1 flex flex-col pt-16 pb-20 overflow-hidden">
+<!-- Chat Contacts Section (30% Height) -->
+<section class="h-[35%] flex flex-col border-b border-outline-variant/30 bg-white/40 backdrop-blur-sm">
+<div class="px-4 pt-4 pb-2">
+<h1 class="font-comfortaa text-headline-md font-bold text-primary mb-3">Mensajes</h1>
+<!-- Search and Filters -->
+<div class="flex flex-col gap-3">
+<div class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-3 text-outline text-[20px]">search</span>
+<input class="w-full bg-surface-container-low border-none rounded-xl py-2 pl-10 pr-4 text-label-md focus:ring-2 focus:ring-secondary/50" placeholder="Buscar conversaciones..." type="text"/>
+</div>
+<div class="flex gap-2 overflow-x-auto pb-2 no-scrollbar">
+<button class="px-4 py-1.5 bg-primary text-white rounded-full text-[12px] font-semibold whitespace-nowrap">Todos</button>
+<button class="px-4 py-1.5 bg-white border border-outline-variant text-on-surface-variant rounded-full text-[12px] font-semibold whitespace-nowrap">Admins</button>
+<button class="px-4 py-1.5 bg-white border border-outline-variant text-on-surface-variant rounded-full text-[12px] font-semibold whitespace-nowrap">Profesores</button>
+<button class="px-4 py-1.5 bg-white border border-outline-variant text-on-surface-variant rounded-full text-[12px] font-semibold whitespace-nowrap">Estudiantes</button>
+</div>
+</div>
+</div>
+<!-- Contacts Scrollable List -->
+<div class="flex-1 overflow-y-auto custom-scrollbar px-2">
+<!-- Contact 1 (Active) -->
+<div class="flex items-center gap-3 p-3 bg-secondary/10 rounded-2xl mb-1 cursor-pointer">
+<div class="relative">
+<img alt="Student" class="w-12 h-12 rounded-xl" data-alt="Close up portrait of a young college student with glasses, smiling warmly. Professional lighting with soft highlights on the face. The background is a clean white studio setting with subtle blue bokeh elements, maintaining the high-end corporate minimalist aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAoD-Qt565N6bWfmkv3FJ3fD4OPXXAERVCn2vQzX8IjLzz5DFQG8ktD4BSjnoKFL2SgA2nEvPfWSJv7GBs0FY1ob9JsiOE3j7QxxkxWR5IizH0vUrpiJd0XM5W-GCjq7Se6ODD7BNoPjhwsY_IsqhjkpOxOIsfLo6KkjCzzmFPS9IAqadJ8DMNMlZ79GN2bYb0r4FgtHIrkG32I-1kPmvfSLTcurZaABkRaucMtwAcNiM4GjWxPmrhVQ3mMWVq74ZVDd68VAFTSSYiP"/>
+<span class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex justify-between items-start">
+<h3 class="font-bold text-label-md truncate">Valentina Torres</h3>
+<span class="text-[10px] text-secondary font-bold">14:20</span>
+</div>
+<p class="text-[12px] text-on-surface-variant truncate">Profe, ya subí el reporte final...</p>
+<span class="inline-block mt-1 px-2 py-0.5 bg-secondary-container/20 text-secondary text-[9px] font-bold rounded-md uppercase">Estudiante</span>
+</div>
+</div>
+<!-- Contact 2 -->
+<div class="flex items-center gap-3 p-3 hover:bg-surface-container-low transition-colors rounded-2xl mb-1 cursor-pointer">
+<div class="relative">
+<img alt="Admin" class="w-12 h-12 rounded-xl" data-alt="A portrait of a senior academic administrator, a woman with a confident expression, wearing professional attire. Bright, airy office environment with soft focus. The color palette is composed of soft greys, navy blues, and bright whites, reflecting professional reliability and administrative integrity." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBuE6Y8vq9NwAHD9SQPMuJuq-qbP6f_nmVHRcZ2cRbtQTpuuH9HXP5VW4qyOh02bE4p94XyBXvOGQu0Z0o4kSJ7ts2A34U9Nr6fNIbM2xJQNp6iU_pcaJSduhXZGn6kSqTslYFuANO_4G2Rc48xXDsHAnzT8GWAhaJuTpIRtEIjRTl_fiOD2VjU9xwOd1BtVBqPiqW9NNYcGi_8ibYWIIY72u40htCL58Z8WT0cuwZACy_bcwNgB4zXQCcDnrfkCp--HvaPtGi0pMvB"/>
+<span class="absolute bottom-0 right-0 w-3 h-3 bg-gray-300 border-2 border-white rounded-full"></span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex justify-between items-start">
+<h3 class="font-bold text-label-md truncate">Lic. Mario Casas</h3>
+<span class="text-[10px] text-outline">Ayer</span>
+</div>
+<p class="text-[12px] text-outline truncate">Reunión de coordinación el lunes.</p>
+<span class="inline-block mt-1 px-2 py-0.5 bg-primary-container text-white text-[9px] font-bold rounded-md uppercase">Admin</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Chat Window Section (70% Height) -->
+<section class="h-[65%] flex flex-col bg-transparent relative">
+<!-- Chat Header -->
+<div class="px-4 py-3 bg-white/60 backdrop-blur-md flex items-center justify-between border-b border-outline-variant/20 shadow-sm">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-secondary/10 flex items-center justify-center font-bold text-secondary">VT</div>
+<div>
+<h2 class="font-bold text-label-md">Valentina Torres</h2>
+<p class="text-[10px] text-green-600 font-medium">En línea</p>
+</div>
+</div>
+<div class="flex gap-4">
+<button class="text-on-surface-variant active:scale-90 transition-transform"><span class="material-symbols-outlined">call</span></button>
+<button class="text-on-surface-variant active:scale-90 transition-transform"><span class="material-symbols-outlined">info</span></button>
+</div>
+</div>
+<!-- Messages Area -->
+<div class="flex-1 overflow-y-auto p-4 flex flex-col gap-4 custom-scrollbar" id="message-container">
+<!-- Received -->
+<div class="flex gap-2 max-w-[85%]">
+<img alt="Avatar" class="w-8 h-8 rounded-full self-end" data-alt="Small avatar icon of a young female student, clean and minimalist design, matching the app's corporate light-mode style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCPtvz0uZKOPw48xscSNW0avYVsKu_ArGvP4Xu2flxSehx4LofjK6Tbv42MB8QpH6DxS8DF_eT8dY2ok4DboNV_Du7Kr1RfOvqzWiS810aEoBjAkTaedZ6I9LqH546GuoPcYNOHfMUwST6m7zWu_Y4H7WZxJ2jwxSgrOscp5MGeKb3BzBdmQ2g0WWS49Q2mP2S4jbm2G3_V19eOd9u2px9rJPbFXqNG0aeskC8KtZuulV1LnYTu5elmwZLZlFpcjhalN8f8x9rToMo4"/>
+<div class="chat-bubble-received bg-white p-3 text-[14px] leading-relaxed">
+                        ¡Hola Profe! Una consulta sobre las horas de servicio en la fundación. ¿Cuentan las horas de capacitación previa?
+                        <div class="text-[10px] text-outline mt-1 text-right">14:15</div>
+</div>
+</div>
+<!-- Sent -->
+<div class="flex flex-col items-end gap-1 max-w-[85%] self-end">
+<div class="chat-bubble-sent bg-primary text-white p-3 text-[14px] leading-relaxed">
+                        Hola Valentina. Sí, las horas de inducción y capacitación técnica se contabilizan hasta un máximo de 10 horas del total.
+                        <div class="flex items-center justify-end gap-1 text-[10px] text-secondary-fixed mt-1">
+                            14:18 <span class="material-symbols-outlined text-[14px]">done_all</span>
+</div>
+</div>
+</div>
+<!-- Received -->
+<div class="flex gap-2 max-w-[85%]">
+<img alt="Avatar" class="w-8 h-8 rounded-full self-end" data-alt="Small avatar icon of a young female student." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDjopVPlh7ce3iUZQQd1m52Q4Zs_kX6gNMJhxvnIJanIFSu1qt9gG7hWhDjoJp_AXs_97LR22CDzQYah-aoUNTYH4276CEgLNp_8Wuacl5QFbPDw_PLqPQfxrZceNaQptBKOzaH9Ky9ikJ7DASe8eFZ9qCSYpc8QcV7gfSgoHejgbtzTPJNPuECzqaEsfpXWxtfZ8ZnjigdcNGCmnd4x5a1ZU6IaMDl1849sDhzvlXniTHkg4cY5Js2brYQ2SisvrHL63oRDL2QMx5c"/>
+<div class="chat-bubble-received bg-white p-3 text-[14px] leading-relaxed">
+                        ¡Excelente! Entonces ya casi termino mis 80 horas. Le adjunto el reporte de asistencia de esta semana para que le eche un ojo.
+                        <div class="text-[10px] text-outline mt-1 text-right">14:20</div>
+</div>
+</div>
+</div>
+<!-- Input Area -->
+<div class="px-4 py-3 bg-white border-t border-outline-variant/30 flex items-center gap-3">
+<button class="w-10 h-10 flex items-center justify-center text-outline hover:bg-surface-container rounded-full transition-colors">
+<span class="material-symbols-outlined">attach_file</span>
+</button>
+<div class="flex-1 bg-surface-container-low rounded-2xl px-4 py-2">
+<input class="w-full bg-transparent border-none focus:ring-0 text-label-md" placeholder="Escribe un mensaje..." type="text"/>
+</div>
+<button class="w-10 h-10 bg-primary text-white rounded-full flex items-center justify-center shadow-md active:scale-95 transition-transform">
+<span class="material-symbols-outlined">send</span>
+</button>
+</div>
+</section>
+</main>
+<!-- Unified Navigation Shell (BottomNavBar) -->
+<nav class="fixed bottom-0 left-0 w-full h-20 bg-surface/90 backdrop-blur-xl flex justify-around items-center px-4 pb-safe shadow-[0px_-4px_20px_rgba(15,23,42,0.05)] rounded-t-xl z-50">
+<button class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-secondary-container/10 rounded-xl px-4 py-2 transition-all duration-200 active:scale-90">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label-sm text-label-sm">Dashboard</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-secondary-container/10 rounded-xl px-4 py-2 transition-all duration-200 active:scale-90">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+<span class="font-label-sm text-label-sm">Estudiantes</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-secondary-container/10 rounded-xl px-4 py-2 transition-all duration-200 active:scale-90">
+<span class="material-symbols-outlined" data-icon="engineering">engineering</span>
+<span class="font-label-sm text-label-sm">Gestión</span>
+</button>
+<button class="flex flex-col items-center justify-center text-secondary font-bold bg-secondary/10 border-t-2 border-dotted border-secondary rounded-xl px-4 py-2 transition-all duration-200 active:scale-90">
+<span class="material-symbols-outlined" data-icon="mail" style="font-variation-settings: 'FILL' 1;">mail</span>
+<span class="font-label-sm text-label-sm">Mensajes</span>
+</button>
+</nav>
+<script>
+        // Micro-interaction for message scrolling
+        const container = document.getElementById('message-container');
+        container.scrollTop = container.scrollHeight;
+
+        // Visual depth effect on scroll
+        container.addEventListener('scroll', () => {
+            const blobs = document.querySelectorAll('.blur-blob');
+            const scrollVal = container.scrollTop * 0.1;
+            blobs[0].style.transform = `translateY(${scrollVal}px)`;
+            blobs[1].style.transform = `translateY(-${scrollVal}px)`;
+        });
+    </script>
+</body></html>
