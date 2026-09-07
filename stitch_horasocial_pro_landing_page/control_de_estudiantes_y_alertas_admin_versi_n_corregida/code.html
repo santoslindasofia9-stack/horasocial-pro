@@ -1,1018 +1,276 @@
 <!DOCTYPE html>
-<html lang="es">
-<head>
+
+<html lang="es"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Control de Estudiantes | EduServe Pro</title>
-<link href="https://fonts.googleapis.com" rel="preconnect"/>
-<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&family=Comfortaa:wght@400;700&display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<title>Control de Estudiantes - HORASOCIAL PRO</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<script id="tailwind-config">
-    tailwind.config = {
-        darkMode: "class",
-        theme: {
-            extend: {
-                colors: {
-                    primary: "#0F172A",
-                    secondary: "#0EA5E9",
-                    error: "#EF4444",
-                    success: "#22C55E",
-                    warning: "#F59E0B",
-                    background: "#F8FAFC",
-                    surface: "#FFFFFF",
-                    "surface-bright": "#f7f9fb",
-                    "surface-low": "#F2F4F6",
-                    "on-surface": "#191C1E",
-                    "on-surface-variant": "#64748B",
-                    "outline-variant": "#E2E8F0",
-                    "secondary-container": "#E0F2FE",
-                    "on-secondary-container": "#004666",
-                    "error-container": "#FEE2E2",
-                    "on-error-container": "#991B1B",
-                    "success-container": "#DCFCE7",
-                    "on-success-container": "#166534",
-                    outline: "#CBD5E1",
-                },
-                borderRadius: {
-                    DEFAULT: "0.5rem",
-                    lg: "1rem",
-                    xl: "1.25rem",
-                    "2xl": "1.5rem",
-                    full: "9999px"
-                },
-                spacing: {
-                    sm: "8px",
-                    md: "16px",
-                    lg: "24px",
-                    xl: "32px",
-                    gutter: "24px",
-                    "margin-mobile": "16px",
-                    "margin-desktop": "48px"
-                },
-                fontFamily: {
-                    sans: ["Inter", "sans-serif"],
-                    headline: ["Plus Jakarta Sans", "sans-serif"],
-                    comfortaa: ["Comfortaa", "cursive"],
-                }
-            },
-        },
-    }
-</script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;family=Comfortaa:wght@400;600;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <style>
-    .material-symbols-outlined {
-        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-        vertical-align: middle;
-    }
-    
-    /* ============================================
-       BOTTOM NAVBAR FIJA - Estilo identico al Dashboard
-       ============================================ */
-    .bottom-navbar {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        z-index: 50;
-        background: #ffffff;
-        padding: 8px 0 16px;
-        display: flex;
-        justify-content: space-around;
-        align-items: center;
-        box-shadow: 0 -4px 20px rgba(15, 23, 42, 0.06);
-        border-radius: 24px 24px 0 0;
-    }
-    .bottom-nav-item {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        padding: 6px 16px;
-        border-radius: 12px;
-        text-decoration: none;
-        color: #94a3b8;
-        transition: all 0.2s ease;
-        position: relative;
-        min-width: 64px;
-    }
-    .bottom-nav-item.active {
-        color: #0ea5e9;
-    }
-    .bottom-nav-item.active .nav-icon {
-        font-variation-settings: 'FILL' 1, 'wght' 400;
-    }
-    .bottom-nav-item.active::after {
-        content: '';
-        position: absolute;
-        bottom: -8px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 24px;
-        height: 3px;
-        background: #0ea5e9;
-        border-radius: 2px;
-    }
-    .bottom-nav-item:hover:not(.active) { color: #64748b; }
-    .nav-icon { font-size: 26px; margin-bottom: 2px; }
-    .nav-label { font-size: 11px; font-weight: 600; letter-spacing: 0.01em; }
-    .nav-badge {
-        position: absolute;
-        top: 2px;
-        right: 12px;
-        width: 8px;
-        height: 8px;
-        background: #ef4444;
-        border-radius: 50%;
-        border: 2px solid #ffffff;
-    }
-    
-    /* Animations */
-    @keyframes fadeInUp {
-        from { opacity: 0; transform: translateY(16px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-    .animate-fade-in { animation: fadeInUp 0.5s ease forwards; opacity: 0; }
-    
-    /* Card hover */
-    .card-hover {
-        transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-    .card-hover:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 12px 30px rgba(0,0,0,0.08);
-    }
-    
-    /* Table row hover */
-    .table-row {
-        transition: all 0.2s ease;
-    }
-    .table-row:hover {
-        background: #F8FAFC;
-    }
-    
-    /* Custom scrollbar */
-    .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
-    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-    .custom-scrollbar::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 10px; }
-    .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
-    
-    /* Modal */
-    .modal-overlay {
-        position: fixed;
-        inset: 0;
-        background: rgba(15, 23, 42, 0.5);
-        backdrop-filter: blur(10px);
-        z-index: 100;
-        display: none;
-        align-items: center;
-        justify-content: center;
-        opacity: 0;
-        transition: opacity 0.3s ease;
-        padding: 16px;
-    }
-    .modal-overlay.show {
-        display: flex;
-        opacity: 1;
-    }
-    .modal-content {
-        background: white;
-        border-radius: 24px;
-        padding: 28px;
-        max-width: 520px;
-        width: 100%;
-        max-height: 85vh;
-        overflow-y: auto;
-        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-        transform: translateY(20px) scale(0.98);
-        transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-    .modal-overlay.show .modal-content {
-        transform: translateY(0) scale(1);
-    }
-    
-    /* Toast */
-    .toast {
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        z-index: 200;
-        padding: 14px 22px;
-        border-radius: 14px;
-        font-weight: 600;
-        font-size: 14px;
-        display: none;
-        align-items: center;
-        gap: 10px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.12);
-    }
-    .toast.success { background: #DCFCE7; color: #166534; }
-    .toast.error { background: #FEE2E2; color: #991B1B; }
-    .toast.warning { background: #FEF3C7; color: #92400E; }
-    .toast.info { background: #E0F2FE; color: #004666; }
-    
-    /* Button press */
-    .btn-press:active { transform: scale(0.97); }
-    
-    /* Excusa card */
-    .excusa-card {
-        transition: all 0.3s ease;
-    }
-    .excusa-card:hover {
-        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-    }
-    
-    /* Excusa status */
-    .excusa-status {
-        padding: 10px 16px;
-        border-radius: 10px;
-        font-size: 13px;
-        font-weight: 700;
-        text-align: center;
-        width: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 6px;
-    }
-    .excusa-status.aceptada {
-        background: #dcfce7;
-        color: #166534;
-    }
-    .excusa-status.rechazada {
-        background: #fee2e2;
-        color: #991b1b;
-    }
-    
-    /* Alert card */
-    .alert-card {
-        transition: all 0.2s ease;
-        border-left: 4px solid transparent;
-    }
-    .alert-card:hover {
-        background: #f8fafc;
-        transform: translateX(2px);
-    }
-    
-    /* Search highlight */
-    .search-highlight {
-        background: #FEF3C7;
-        padding: 0 2px;
-        border-radius: 2px;
-    }
-    
-    /* No results */
-    .no-results {
-        text-align: center;
-        padding: 40px 20px;
-        color: #94a3b8;
-    }
-    
-    /* Tab pills */
-    .tab-pill {
-        transition: all 0.25s ease;
-        position: relative;
-    }
-    .tab-pill.active {
-        background: white;
-        box-shadow: 0 1px 4px rgba(0,0,0,0.08);
-        color: #0f172a;
-    }
-</style>
+        .font-comfortaa { font-family: 'Comfortaa', cursive; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        body { background-color: #F8FAFC; }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0F172A",
+                        "accent": "#0EA5E9",
+                        "background": "#F8FAFC",
+                        "surface": "#FFFFFF",
+                        "on-surface": "#191c1e",
+                        "on-surface-variant": "#45464d",
+                        "outline-variant": "#c6c6cd"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "1rem",
+                        "xl": "1.25rem",
+                        "full": "9999px"
+                    },
+                    fontFamily: {
+                        "body": ["Inter", "sans-serif"],
+                        "headline": ["Plus Jakarta Sans", "sans-serif"]
+                    }
+                }
+            }
+        }
+    </script>
 </head>
-<body class="bg-background text-on-surface font-sans min-h-screen pb-24">
-
-<!-- Toast -->
-<div id="toast" class="toast"></div>
-
-<!-- ============================================
-     MODALES
-     ============================================ -->
-
-<!-- Modal Detalle Excusa -->
-<div id="excusaDetailModal" class="modal-overlay" onclick="closeModal(event, 'excusaDetailModal')">
-    <div class="modal-content" onclick="event.stopPropagation()">
-        <div class="flex justify-between items-start mb-5">
-            <div>
-                <h3 class="font-headline text-xl font-bold text-primary">Detalle de Excusa</h3>
-                <p class="text-xs text-on-surface-variant mt-1" id="excusaModalSubtitle">Solicitud de justificación</p>
-            </div>
-            <button onclick="closeModal(null, 'excusaDetailModal')" class="w-9 h-9 rounded-full flex items-center justify-center hover:bg-surface-low transition-colors">
-                <span class="material-symbols-outlined">close</span>
-            </button>
-        </div>
-        <div id="excusaModalContent" class="space-y-4"></div>
-    </div>
+<body class="font-body text-on-surface min-h-screen pb-32">
+<!-- Header -->
+<header class="fixed top-0 w-full z-50 bg-white/90 backdrop-blur-md border-b border-slate-200 px-4 md:px-lg py-md flex justify-between items-center h-20">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 bg-primary rounded-lg flex items-center justify-center text-white">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">school</span>
 </div>
-
-<!-- Modal Detalle Alerta -->
-<div id="alertaDetailModal" class="modal-overlay" onclick="closeModal(event, 'alertaDetailModal')">
-    <div class="modal-content" onclick="event.stopPropagation()">
-        <div class="flex justify-between items-start mb-5">
-            <h3 class="font-headline text-xl font-bold text-primary" id="alertaDetailTitle">Detalle de Alerta</h3>
-            <button onclick="closeModal(null, 'alertaDetailModal')" class="w-9 h-9 rounded-full flex items-center justify-center hover:bg-surface-low transition-colors">
-                <span class="material-symbols-outlined">close</span>
-            </button>
-        </div>
-        <div id="alertaDetailContent" class="space-y-4"></div>
-    </div>
+<h1 class="font-headline text-xl font-bold text-primary tracking-tight">HORASOCIAL PRO</h1>
 </div>
-
-<!-- ============================================
-     HEADER
-     ============================================ -->
-<header class="fixed top-0 w-full z-40 bg-white/80 backdrop-blur-xl shadow-sm flex justify-between items-center px-4 md:px-8 py-3">
-    <div class="flex items-center gap-2">
-        <span class="material-symbols-outlined text-secondary text-[28px]">school</span>
-        <span class="font-headline text-lg font-extrabold tracking-tight text-primary">EduServe Pro</span>
-    </div>
-    <div class="flex items-center gap-3 bg-surface-low px-4 py-2 rounded-full border border-outline-variant/30">
-        <div class="text-right hidden sm:block">
-            <p class="text-sm font-bold text-primary">Carolina Rojas</p>
-            <p class="text-[10px] text-on-surface-variant uppercase tracking-widest">Administrador</p>
-        </div>
-        <div class="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center border-2 border-secondary">
-            <span class="text-secondary font-bold text-sm">CR</span>
-        </div>
-    </div>
+<div class="flex items-center gap-4 px-3 py-1.5 rounded-full bg-slate-50 border border-slate-100">
+<div class="text-right hidden sm:block">
+<p class="text-sm font-bold text-primary leading-tight">Coordinadora Carolina Rojas</p>
+<p class="text-[11px] text-on-surface-variant font-medium">Administrador</p>
+</div>
+<div class="relative">
+<img alt="Profile" class="w-10 h-10 rounded-full border-2 border-primary object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD-jEaB1rRyiv-PFoHJYSYVflUphAJutNcW0ho3QJG2K8su-qgH2W2g609ldMcSycw7sYsVDxvgXEh8r07r3VlJxUVifGqFjwKtfg0ZBok1rdZHXJxitVGwIUD-smAwVcdHDfaKgoNGMFvkI-7RQJY87LuDRhKUwQELFPGRcJ6Ac4FuJlXsjOV2LlujosUbzrs7MX4AhqdNV9HekG47FckN51Rjsm7sX9lVJp1tOsYsOaaIh3EQkZzDcNaqN5JKFFvS2UPJ69jNx6J2"/>
+<div class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></div>
+</div>
+</div>
 </header>
-
-<!-- ============================================
-     MAIN CONTENT
-     ============================================ -->
-<main class="mt-20 px-4 md:px-8 max-w-6xl mx-auto space-y-6">
-
-<!-- Banner Hero -->
-<section class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-primary via-slate-800 to-slate-700 p-6 md:p-8 text-white shadow-lg animate-fade-in">
-    <div class="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-        <div class="space-y-2">
-            <h1 class="font-comfortaa text-2xl md:text-3xl font-bold tracking-tight">Monitoreo de Estudiantes</h1>
-            <p class="text-slate-300 max-w-xl text-sm md:text-base leading-relaxed">
-                Supervisión centralizada de excusas, alertas de convivencia y control de actividades del periodo académico 2026.
-            </p>
-        </div>
-        <div class="hidden md:block opacity-20">
-            <span class="material-symbols-outlined text-[100px]">monitoring</span>
-        </div>
-    </div>
-    <div class="absolute top-0 right-0 w-64 h-64 bg-secondary/10 rounded-full blur-3xl"></div>
-    <div class="absolute bottom-0 left-0 w-48 h-48 bg-white/5 rounded-full blur-2xl"></div>
-</section>
-
-<!-- Métricas -->
-<section class="grid grid-cols-1 md:grid-cols-3 gap-4">
-    <div class="bg-white rounded-2xl p-5 shadow-sm border border-outline-variant/50 card-hover animate-fade-in" style="animation-delay: 0.05s">
-        <div class="flex justify-between items-start">
-            <p class="text-xs font-bold text-on-surface-variant uppercase tracking-wider">Excusas Pendientes</p>
-            <div class="w-10 h-10 bg-secondary-container rounded-xl flex items-center justify-center">
-                <span class="material-symbols-outlined text-secondary text-xl">assignment_late</span>
-            </div>
-        </div>
-        <h2 class="text-3xl font-bold text-primary mt-2" id="statExcusas">4</h2>
-        <div class="mt-3 flex items-center text-xs text-success font-semibold">
-            <span class="material-symbols-outlined text-sm mr-1">trending_up</span>
-            +3 esta semana
-        </div>
-    </div>
-    
-    <div class="bg-white rounded-2xl p-5 shadow-sm border border-outline-variant/50 card-hover animate-fade-in" style="animation-delay: 0.1s">
-        <div class="flex justify-between items-start">
-            <p class="text-xs font-bold text-on-surface-variant uppercase tracking-wider">Alertas Activas</p>
-            <div class="w-10 h-10 bg-error-container rounded-xl flex items-center justify-center">
-                <span class="material-symbols-outlined text-error text-xl">warning</span>
-            </div>
-        </div>
-        <h2 class="text-3xl font-bold text-error mt-2">8</h2>
-        <div class="mt-3 flex items-center text-xs text-error font-semibold">
-            <span class="material-symbols-outlined text-sm mr-1">notification_important</span>
-            2 requieren acción
-        </div>
-    </div>
-    
-    <div class="bg-white rounded-2xl p-5 shadow-sm border border-outline-variant/50 card-hover animate-fade-in" style="animation-delay: 0.15s">
-        <div class="flex justify-between items-start">
-            <p class="text-xs font-bold text-on-surface-variant uppercase tracking-wider">Estudiantes Activos</p>
-            <div class="w-10 h-10 bg-success-container rounded-xl flex items-center justify-center">
-                <span class="material-symbols-outlined text-success text-xl">group</span>
-            </div>
-        </div>
-        <h2 class="text-3xl font-bold text-primary mt-2">1,240</h2>
-        <div class="mt-3 flex items-center text-xs text-success font-semibold">
-            <span class="material-symbols-outlined text-sm mr-1">trending_up</span>
-            +45 este mes
-        </div>
-    </div>
-</section>
-
-<!-- Tabs de navegación -->
-<section class="bg-white rounded-2xl shadow-sm border border-outline-variant/50 p-2 animate-fade-in" style="animation-delay: 0.2s">
-    <div class="flex bg-surface-container p-1 rounded-xl">
-        <button class="flex-1 px-4 py-3 rounded-lg text-xs font-bold bg-white shadow-sm text-primary tab-pill active flex items-center justify-center gap-2" onclick="switchTab('excusas', this)" id="tab-excusas">
-            <span class="material-symbols-outlined text-[16px]">assignment_late</span>
-            Excusas
-        </button>
-        <button class="flex-1 px-4 py-3 rounded-lg text-xs font-medium text-on-surface-variant tab-pill flex items-center justify-center gap-2" onclick="switchTab('alertas', this)" id="tab-alertas">
-            <span class="material-symbols-outlined text-[16px]">warning</span>
-            Alertas de Convivencia
-        </button>
-    </div>
-</section><!-- ============================================
-     TAB: EXCUSAS
-     ============================================ -->
-<div id="panel-excusas" class="space-y-6">
-    <div class="bg-white rounded-2xl shadow-sm border border-outline-variant/50 overflow-hidden animate-fade-in" style="animation-delay: 0.25s">
-        <div class="p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-outline-variant/30">
-            <div>
-                <h3 class="font-headline text-lg font-bold text-primary">Bitácora de Excusas</h3>
-                <p class="text-xs text-on-surface-variant mt-1">Gestione las justificaciones enviadas por los estudiantes</p>
-            </div>
-            <div class="relative max-w-xs w-full">
-                <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-lg">search</span>
-                <input type="text" id="searchExcusas" placeholder="Buscar estudiante o motivo..." onkeyup="searchExcusas()" 
-                    class="w-full pl-10 pr-4 py-2.5 bg-surface-low border border-outline rounded-xl text-sm focus:ring-2 focus:ring-secondary/30 focus:border-secondary outline-none transition-all"/>
-            </div>
-        </div>
-        
-        <div class="overflow-x-auto custom-scrollbar">
-            <table class="w-full text-left" id="tablaExcusas">
-                <thead>
-                    <tr class="bg-surface-low/70">
-                        <th class="px-5 py-4 text-xs font-bold text-on-surface-variant uppercase tracking-wider">Estudiante</th>
-                        <th class="px-5 py-4 text-xs font-bold text-on-surface-variant uppercase tracking-wider">Grado</th>
-                        <th class="px-5 py-4 text-xs font-bold text-on-surface-variant uppercase tracking-wider">Fecha</th>
-                        <th class="px-5 py-4 text-xs font-bold text-on-surface-variant uppercase tracking-wider">Motivo</th>
-                        <th class="px-5 py-4 text-xs font-bold text-on-surface-variant uppercase tracking-wider text-center">Estado</th>
-                        <th class="px-5 py-4 text-xs font-bold text-on-surface-variant uppercase tracking-wider text-center">Acción</th>
-                    </tr>
-                </thead>
-                <tbody class="divide-y divide-outline-variant/30" id="tbodyExcusas">
-                    <tr class="table-row group" data-search="mateo arboleda 11-a medico cita odontologica" id="excusa-row-1">
-                        <td class="px-5 py-4">
-                            <div class="flex items-center gap-3">
-                                <div class="w-9 h-9 rounded-full bg-secondary-container flex items-center justify-center text-secondary font-bold text-xs">MA</div>
-                                <div>
-                                    <p class="font-semibold text-sm text-primary">Mateo Arboleda</p>
-                                    <p class="text-xs text-on-surface-variant">ID: 4520-22</p>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="px-5 py-4 text-sm text-on-surface-variant">11º A</td>
-                        <td class="px-5 py-4 text-sm text-on-surface-variant">24 Oct 2023</td>
-                        <td class="px-5 py-4">
-                            <span class="px-2.5 py-1 bg-secondary-container text-on-secondary-container text-[10px] font-bold rounded-full">Médico</span>
-                        </td>
-                        <td class="px-5 py-4 text-center">
-                            <span class="px-2.5 py-1 bg-warning/10 text-warning text-[10px] font-bold rounded-full" id="estado-1">Pendiente</span>
-                        </td>
-                        <td class="px-5 py-4 text-center">
-                            <div class="flex gap-2 justify-center" id="buttons-1">
-                                <button onclick="verDetalleExcusa(1)" class="text-secondary hover:bg-secondary-container p-2 rounded-lg transition-all btn-press" title="Ver detalle">
-                                    <span class="material-symbols-outlined text-lg">visibility</span>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr class="table-row group" data-search="lucia mendez 10-b familiar compromiso familiar" id="excusa-row-2">
-                        <td class="px-5 py-4">
-                            <div class="flex items-center gap-3">
-                                <div class="w-9 h-9 rounded-full bg-warning/20 flex items-center justify-center text-warning font-bold text-xs">LM</div>
-                                <div>
-                                    <p class="font-semibold text-sm text-primary">Lucía Mendez</p>
-                                    <p class="text-xs text-on-surface-variant">ID: 4520-25</p>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="px-5 py-4 text-sm text-on-surface-variant">10º B</td>
-                        <td class="px-5 py-4 text-sm text-on-surface-variant">23 Oct 2023</td>
-                        <td class="px-5 py-4">
-                            <span class="px-2.5 py-1 bg-warning/10 text-warning text-[10px] font-bold rounded-full">Familiar</span>
-                        </td>
-                        <td class="px-5 py-4 text-center">
-                            <span class="px-2.5 py-1 bg-warning/10 text-warning text-[10px] font-bold rounded-full" id="estado-2">Pendiente</span>
-                        </td>
-                        <td class="px-5 py-4 text-center">
-                            <div class="flex gap-2 justify-center" id="buttons-2">
-                                <button onclick="verDetalleExcusa(2)" class="text-secondary hover:bg-secondary-container p-2 rounded-lg transition-all btn-press" title="Ver detalle">
-                                    <span class="material-symbols-outlined text-lg">visibility</span>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr class="table-row group" data-search="carlos ruiz 10-a medico incapacidad" id="excusa-row-3">
-                        <td class="px-5 py-4">
-                            <div class="flex items-center gap-3">
-                                <div class="w-9 h-9 rounded-full bg-success-container flex items-center justify-center text-success font-bold text-xs">CR</div>
-                                <div>
-                                    <p class="font-semibold text-sm text-primary">Carlos Ruiz</p>
-                                    <p class="text-xs text-on-surface-variant">ID: 4520-18</p>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="px-5 py-4 text-sm text-on-surface-variant">10º A</td>
-                        <td class="px-5 py-4 text-sm text-on-surface-variant">22 Oct 2023</td>
-                        <td class="px-5 py-4">
-                            <span class="px-2.5 py-1 bg-secondary-container text-on-secondary-container text-[10px] font-bold rounded-full">Médico</span>
-                        </td>
-                        <td class="px-5 py-4 text-center">
-                            <span class="px-2.5 py-1 bg-warning/10 text-warning text-[10px] font-bold rounded-full" id="estado-3">Pendiente</span>
-                        </td>
-                        <td class="px-5 py-4 text-center">
-                            <div class="flex gap-2 justify-center" id="buttons-3">
-                                <button onclick="verDetalleExcusa(3)" class="text-secondary hover:bg-secondary-container p-2 rounded-lg transition-all btn-press" title="Ver detalle">
-                                    <span class="material-symbols-outlined text-lg">visibility</span>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr class="table-row group" data-search="ana torres 11-b familiar transporte" id="excusa-row-4">
-                        <td class="px-5 py-4">
-                            <div class="flex items-center gap-3">
-                                <div class="w-9 h-9 rounded-full bg-error-container flex items-center justify-center text-error font-bold text-xs">AT</div>
-                                <div>
-                                    <p class="font-semibold text-sm text-primary">Ana Torres</p>
-                                    <p class="text-xs text-on-surface-variant">ID: 4520-31</p>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="px-5 py-4 text-sm text-on-surface-variant">11º B</td>
-                        <td class="px-5 py-4 text-sm text-on-surface-variant">21 Oct 2023</td>
-                        <td class="px-5 py-4">
-                            <span class="px-2.5 py-1 bg-warning/10 text-warning text-[10px] font-bold rounded-full">Familiar</span>
-                        </td>
-                        <td class="px-5 py-4 text-center">
-                            <span class="px-2.5 py-1 bg-warning/10 text-warning text-[10px] font-bold rounded-full" id="estado-4">Pendiente</span>
-                        </td>
-                        <td class="px-5 py-4 text-center">
-                            <div class="flex gap-2 justify-center" id="buttons-4">
-                                <button onclick="verDetalleExcusa(4)" class="text-secondary hover:bg-secondary-container p-2 rounded-lg transition-all btn-press" title="Ver detalle">
-                                    <span class="material-symbols-outlined text-lg">visibility</span>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            <div id="noResultsExcusas" class="no-results hidden">
-                <span class="material-symbols-outlined text-[48px] opacity-30">search_off</span>
-                <p class="mt-3 text-sm font-medium">No se encontraron excusas</p>
-                <p class="text-xs text-on-surface-variant mt-1">Intenta con otro término de búsqueda</p>
-            </div>
-        </div>
-    </div>
+<main class="relative z-10 pt-24 px-4 md:px-8 max-w-[1440px] mx-auto">
+<!-- Banner -->
+<section class="mt-6 mb-8 rounded-2xl overflow-hidden relative h-44 flex items-center shadow-md">
+<div class="absolute inset-0 bg-gradient-to-r from-[#0F172A] via-[#1E293B] to-[#334155]"></div>
+<div class="absolute right-8 opacity-10">
+<span class="material-symbols-outlined text-[160px] text-white">settings_suggest</span>
 </div>
-
-<!-- ============================================
-     TAB: ALERTAS DE CONVIVENCIA
-     ============================================ -->
-<div id="panel-alertas" class="hidden space-y-6">
-    <div class="bg-white rounded-2xl shadow-sm border border-outline-variant/50 p-6 animate-fade-in" style="animation-delay: 0.25s">
-        <div class="flex items-center justify-between mb-6">
-            <div>
-                <h3 class="font-headline text-lg font-bold text-primary">Alertas de Convivencia</h3>
-                <p class="text-xs text-on-surface-variant mt-1">Reportes de comportamiento y situaciones que requieren atención</p>
-            </div>
-            <div class="flex items-center gap-2">
-                <span class="px-3 py-1 bg-error-container text-on-error-container text-xs font-bold rounded-full">8 activas</span>
-            </div>
-        </div>
-        
-        <div class="space-y-4" id="alertasContainer">
-            <!-- Alerta Crítica 1 -->
-            <div class="alert-card p-5 rounded-xl bg-surface-low border-l-4 border-error shadow-sm relative group cursor-pointer" id="alerta-1">
-                <div class="flex justify-between items-start mb-2">
-                    <div class="flex items-center gap-2">
-                        <span class="text-[9px] font-bold uppercase tracking-wider bg-error text-white px-2 py-0.5 rounded">Crítico</span>
-                        <span class="text-[10px] text-on-surface-variant">Hace 15 min</span>
-                    </div>
-                    <button onclick="verDetalleAlerta(1)" class="text-secondary hover:bg-secondary-container p-1 rounded-lg transition-all">
-                        <span class="material-symbols-outlined text-lg">visibility</span>
-                    </button>
-                </div>
-                <p class="text-sm font-bold text-primary mb-1">Vocabulario inapropiado</p>
-                <p class="text-xs text-on-surface-variant mb-1">Estudiante: <span class="font-semibold">Juan Pérez</span> - Grado 10-A</p>
-                <p class="text-[11px] text-on-surface-variant mb-4 italic">Chat grupal: "Fundación Caminos" - Uso de lenguaje ofensivo hacia compañeros</p>
-                <div class="grid grid-cols-2 gap-2" id="alerta-buttons-1">
-                    <button onclick="sancionarAlerta(1)" class="py-2.5 bg-primary text-white rounded-xl text-xs font-bold hover:bg-slate-800 transition-colors btn-press">Sanción</button>
-                    <button onclick="llamadoAlerta(1)" class="py-2.5 bg-white border border-outline-variant text-on-surface-variant rounded-xl text-xs font-bold hover:bg-surface-low transition-colors btn-press">Llamado de atención</button>
-                </div>
-            </div>
-            
-            <!-- Alerta Moderada 2 -->
-            <div class="alert-card p-5 rounded-xl bg-surface-low border-l-4 border-warning shadow-sm relative group cursor-pointer" id="alerta-2">
-                <div class="flex justify-between items-start mb-2">
-                    <div class="flex items-center gap-2">
-                        <span class="text-[9px] font-bold uppercase tracking-wider bg-warning text-white px-2 py-0.5 rounded">Moderado</span>
-                        <span class="text-[10px] text-on-surface-variant">Hace 2 horas</span>
-                    </div>
-                    <button onclick="verDetalleAlerta(2)" class="text-secondary hover:bg-secondary-container p-1 rounded-lg transition-all">
-                        <span class="material-symbols-outlined text-lg">visibility</span>
-                    </button>
-                </div>
-                <p class="text-sm font-bold text-primary mb-1">Inasistencia injustificada</p>
-                <p class="text-xs text-on-surface-variant mb-1">Estudiante: <span class="font-semibold">María Fernández</span> - Grado 11-B</p>
-                <p class="text-[11px] text-on-surface-variant mb-4 italic">Hospital Regional: 3 días consecutivos sin justificación</p>
-                <div class="grid grid-cols-2 gap-2" id="alerta-buttons-2">
-                    <button onclick="sancionarAlerta(2)" class="py-2.5 bg-primary text-white rounded-xl text-xs font-bold hover:bg-slate-800 transition-colors btn-press">Sanción</button>
-                    <button onclick="llamadoAlerta(2)" class="py-2.5 bg-white border border-outline-variant text-on-surface-variant rounded-xl text-xs font-bold hover:bg-surface-low transition-colors btn-press">Llamado de atención</button>
-                </div>
-            </div>
-            
-            <!-- Alerta Leve 3 -->
-            <div class="alert-card p-5 rounded-xl bg-surface-low border-l-4 border-secondary shadow-sm relative group cursor-pointer" id="alerta-3">
-                <div class="flex justify-between items-start mb-2">
-                    <div class="flex items-center gap-2">
-                        <span class="text-[9px] font-bold uppercase tracking-wider bg-secondary text-white px-2 py-0.5 rounded">Leve</span>
-                        <span class="text-[10px] text-on-surface-variant">Hace 5 horas</span>
-                    </div>
-                    <button onclick="verDetalleAlerta(3)" class="text-secondary hover:bg-secondary-container p-1 rounded-lg transition-all">
-                        <span class="material-symbols-outlined text-lg">visibility</span>
-                    </button>
-                </div>
-                <p class="text-sm font-bold text-primary mb-1">Retraso recurrente</p>
-                <p class="text-xs text-on-surface-variant mb-1">Estudiante: <span class="font-semibold">Pedro Gómez</span> - Grado 10-C</p>
-                <p class="text-[11px] text-on-surface-variant mb-4 italic">Llegada tarde al área de Biblioteca 4 veces esta semana</p>
-                <div class="grid grid-cols-2 gap-2" id="alerta-buttons-3">
-                    <button onclick="sancionarAlerta(3)" class="py-2.5 bg-primary text-white rounded-xl text-xs font-bold hover:bg-slate-800 transition-colors btn-press">Sanción</button>
-                    <button onclick="llamadoAlerta(3)" class="py-2.5 bg-white border border-outline-variant text-on-surface-variant rounded-xl text-xs font-bold hover:bg-surface-low transition-colors btn-press">Llamado de atención</button>
-                </div>
-            </div>
-            
-            <!-- Alerta Crítica 4 -->
-            <div class="alert-card p-5 rounded-xl bg-surface-low border-l-4 border-error shadow-sm relative group cursor-pointer" id="alerta-4">
-                <div class="flex justify-between items-start mb-2">
-                    <div class="flex items-center gap-2">
-                        <span class="text-[9px] font-bold uppercase tracking-wider bg-error text-white px-2 py-0.5 rounded">Crítico</span>
-                        <span class="text-[10px] text-on-surface-variant">Hace 1 día</span>
-                    </div>
-                    <button onclick="verDetalleAlerta(4)" class="text-secondary hover:bg-secondary-container p-1 rounded-lg transition-all">
-                        <span class="material-symbols-outlined text-lg">visibility</span>
-                    </button>
-                </div>
-                <p class="text-sm font-bold text-primary mb-1">Conflicto físico</p>
-                <p class="text-xs text-on-surface-variant mb-1">Estudiantes: <span class="font-semibold">Luis Herrera vs Diego Fernández</span> - Grado 11-A</p>
-                <p class="text-[11px] text-on-surface-variant mb-4 italic">Área de Comedor: Altercado durante hora de almuerzo</p>
-                <div class="grid grid-cols-2 gap-2" id="alerta-buttons-4">
-                    <button onclick="sancionarAlerta(4)" class="py-2.5 bg-primary text-white rounded-xl text-xs font-bold hover:bg-slate-800 transition-colors btn-press">Sanción</button>
-                    <button onclick="llamadoAlerta(4)" class="py-2.5 bg-white border border-outline-variant text-on-surface-variant rounded-xl text-xs font-bold hover:bg-surface-low transition-colors btn-press">Llamado de atención</button>
-                </div>
-            </div>
-        </div>
-    </div>
+<div class="relative z-10 px-8">
+<h2 class="font-comfortaa text-3xl md:text-4xl text-white font-bold mb-2">Monitoreo de Actividad y Normas</h2>
+<p class="text-slate-300 text-sm md:text-base max-w-xl">Supervisión centralizada de compromisos sociales, excusas médicas y alertas de convivencia para el periodo académico 2024.</p>
 </div>
-
+</section>
+<!-- Metrics Section -->
+<section class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+<!-- Metric 1 -->
+<div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col justify-between">
+<div class="flex justify-between items-start">
+<div class="bg-blue-50 p-2.5 rounded-xl text-accent">
+<span class="material-symbols-outlined">assignment_late</span>
+</div>
+<span class="text-xs font-bold text-green-600 bg-green-50 px-2.5 py-1 rounded-full">+12% este mes</span>
+</div>
+<div class="mt-4">
+<h3 class="text-slate-500 text-xs font-bold uppercase tracking-widest mb-1">Excusas Enviadas</h3>
+<p class="text-4xl font-headline font-extrabold text-primary">142</p>
+</div>
+</div>
+<!-- Metric 2 (Alerts) -->
+<div class="bg-white p-6 rounded-2xl shadow-sm border-2 border-red-50 flex flex-col justify-between">
+<div class="flex justify-between items-start">
+<div class="bg-red-50 p-2.5 rounded-xl text-red-600">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">warning</span>
+</div>
+<span class="text-xs font-bold text-red-600 bg-red-50 px-2.5 py-1 rounded-full uppercase tracking-tight">Acción Requerida</span>
+</div>
+<div class="mt-4">
+<h3 class="text-red-700 text-xs font-bold uppercase tracking-widest mb-1">Alertas de Convivencia</h3>
+<p class="text-4xl font-headline font-extrabold text-red-600">08</p>
+</div>
+</div>
+<!-- Metric 3 -->
+<div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col justify-between">
+<div class="flex justify-between items-start">
+<div class="bg-indigo-50 p-2.5 rounded-xl text-indigo-600">
+<span class="material-symbols-outlined">group</span>
+</div>
+</div>
+<div class="mt-4">
+<h3 class="text-slate-500 text-xs font-bold uppercase tracking-widest mb-1">Estudiantes Registrados</h3>
+<p class="text-4xl font-headline font-extrabold text-primary">1,240</p>
+</div>
+</div>
+</section>
+<!-- Main Content Grid -->
+<section class="grid grid-cols-1 lg:grid-cols-10 gap-8 mb-12">
+<!-- Bitácora (70%) -->
+<div class="lg:col-span-7 space-y-6">
+<div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+<div class="p-6 border-b border-slate-100 flex flex-col md:flex-row md:items-center justify-between gap-4">
+<div>
+<h3 class="font-comfortaa text-xl text-primary font-bold">Bitácora de Actividad y Excusas</h3>
+<p class="text-slate-500 text-sm">Historial reciente de novedades y justificaciones.</p>
+</div>
+<div class="flex items-center gap-3">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">search</span>
+<input class="pl-9 pr-4 py-2 border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-accent focus:border-accent outline-none w-48 md:w-64" placeholder="Buscar estudiante..." type="text"/>
+</div>
+<button class="bg-primary text-white px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-2 hover:bg-slate-800 transition-colors">
+<span class="material-symbols-outlined text-sm">download</span> Exportar
+                        </button>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead class="bg-slate-50">
+<tr>
+<th class="px-6 py-4 text-[11px] font-bold text-slate-400 uppercase">Estudiante</th>
+<th class="px-6 py-4 text-[11px] font-bold text-slate-400 uppercase">Grado</th>
+<th class="px-6 py-4 text-[11px] font-bold text-slate-400 uppercase">Fecha</th>
+<th class="px-6 py-4 text-[11px] font-bold text-slate-400 uppercase">Motivo</th>
+<th class="px-6 py-4 text-right"></th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-50">
+<tr class="hover:bg-slate-50/50 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-accent/20 flex items-center justify-center text-accent font-bold text-[10px]">MA</div>
+<div>
+<p class="text-sm font-bold text-primary">Mateo Arboleda</p>
+<p class="text-[10px] text-slate-400 font-medium">ID: 4520-22</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 text-sm text-slate-600">11º A</td>
+<td class="px-6 py-4 text-sm text-slate-500">Oct 24, 2023</td>
+<td class="px-6 py-4">
+<span class="px-3 py-1 rounded-full text-[10px] font-bold bg-blue-50 text-blue-700">Médico</span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-accent hover:text-accent/80 transition-colors">
+<span class="material-symbols-outlined text-lg">visibility</span>
+</button>
+</td>
+</tr>
+<tr class="hover:bg-slate-50/50 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<img alt="Student" class="w-8 h-8 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAmqLc-tg1IljOnKI3gr_bUu_A-sGgo4yRtZVyjToCqfPdiWcw34cwdcOaOao6s-y05gZY2e5aIX26mMxFNdHD6baJbRvxAu5ww2e-Xm7F5uaRY-mrCO9lwrHe6WchDAiTeSlkhOo88T2RWOlOQjKpryO9eZdkC4qmEpLzcfekjXbHGbNLL06wV1UvOJacQPo52KdmOLlZG7NFQ-YGvt8O9eh36H1oREIkYeNl5cX3RjcXS6RbYlCIrs5d2sL2YFBALORXMvfp2pvwJ"/>
+<div>
+<p class="text-sm font-bold text-primary">Lucía Mendez</p>
+<p class="text-[10px] text-slate-400 font-medium">ID: 4520-25</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 text-sm text-slate-600">10º B</td>
+<td class="px-6 py-4 text-sm text-slate-500">Oct 23, 2023</td>
+<td class="px-6 py-4">
+<span class="px-3 py-1 rounded-full text-[10px] font-bold bg-amber-50 text-amber-700">Familiar</span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-accent hover:text-accent/80 transition-colors">
+<span class="material-symbols-outlined text-lg">visibility</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="p-4 bg-slate-50 flex justify-center">
+<button class="text-xs font-bold text-slate-500 hover:text-primary transition-colors">Ver todos los registros</button>
+</div>
+</div>
+</div>
+<!-- Alertas (30%) -->
+<div class="lg:col-span-3">
+<div class="bg-white rounded-2xl border border-red-100 shadow-sm flex flex-col h-full">
+<div class="p-6 bg-red-50/30 border-b border-red-100 rounded-t-2xl">
+<h3 class="font-comfortaa text-lg text-red-800 font-bold flex items-center gap-2">
+<span class="material-symbols-outlined text-red-600">emergency_home</span>
+                        Alertas Recientes
+                    </h3>
+</div>
+<div class="p-4 space-y-4 overflow-y-auto max-h-[600px]">
+<!-- Card 1 -->
+<div class="p-5 rounded-xl bg-slate-50 border-l-4 border-red-500 shadow-sm relative group cursor-pointer hover:bg-white transition-all">
+<div class="flex justify-between items-start mb-2">
+<span class="text-[9px] font-bold uppercase tracking-wider bg-red-600 text-white px-2 py-0.5 rounded">Crítico</span>
+<span class="text-[10px] text-slate-400">Hace 15 min</span>
+</div>
+<p class="text-sm font-bold text-primary mb-1">Vocabulario inapropiado</p>
+<p class="text-[11px] text-slate-500 mb-4 italic">Chat grupal: "Fundación Caminos"</p>
+<div class="grid grid-cols-2 gap-2">
+<button class="py-2 bg-red-600 text-white rounded-lg text-[10px] font-bold hover:bg-red-700 transition-colors">Sanción</button>
+<button class="py-2 bg-white border border-slate-200 text-primary rounded-lg text-[10px] font-bold hover:bg-slate-50 transition-colors">Llamado</button>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="p-5 rounded-xl bg-slate-50 border-l-4 border-amber-500 shadow-sm relative group cursor-pointer hover:bg-white transition-all">
+<div class="flex justify-between items-start mb-2">
+<span class="text-[9px] font-bold uppercase tracking-wider bg-amber-500 text-white px-2 py-0.5 rounded">Moderado</span>
+<span class="text-[10px] text-slate-400">Hace 2 horas</span>
+</div>
+<p class="text-sm font-bold text-primary mb-1">Inasistencia injustificada</p>
+<p class="text-[11px] text-slate-500 mb-4 italic">Hospital Regional: Maria F. V.</p>
+<button class="w-full py-2 bg-white border border-amber-200 text-amber-700 rounded-lg text-[10px] font-bold hover:bg-amber-50 transition-colors">Llamado de atención</button>
+</div>
+</div>
+</div>
+</div>
+</section>
 </main>
-
-<!-- ============================================
-     BOTTOM NAVBAR - Estilo identico al Dashboard
-     ============================================ -->
-<nav class="bottom-navbar">
-    <a href="/admin/dashboard" class="bottom-nav-item" onclick="setActiveNav(this)">
-        <span class="material-symbols-outlined nav-icon">dashboard</span>
-        <span class="nav-label">Dashboard</span>
-    </a>
-    <a href="/admin/docentes" class="bottom-nav-item" onclick="setActiveNav(this)">
-        <span class="material-symbols-outlined nav-icon">group</span>
-        <span class="nav-label">Docentes</span>
-    </a>
-    <a href="/admin/alertas" class="bottom-nav-item active" onclick="setActiveNav(this)">
-        <span class="material-symbols-outlined nav-icon">school</span>
-        <span class="nav-label">Estudiantes</span>
-    </a>
-    <a href="/admin/mensajes" class="bottom-nav-item relative" onclick="setActiveNav(this)">
-        <span class="material-symbols-outlined nav-icon">mail</span>
-        <span class="nav-label">Mensajes</span>
-        <span class="nav-badge"></span>
-    </a>
+<!-- Footer Navigation -->
+<nav class="fixed bottom-0 left-0 w-full z-50 bg-white border-t border-slate-100 shadow-[0_-10px_30px_rgba(0,0,0,0.04)] px-4 pb-safe h-24 flex items-center">
+<div class="max-w-4xl mx-auto w-full grid grid-cols-4 gap-3">
+<!-- Dashboard -->
+<div class="border border-dashed border-accent/40 rounded-xl p-1">
+<a class="flex flex-col items-center justify-center py-2 text-slate-400 hover:text-primary transition-colors group" href="#">
+<span class="material-symbols-outlined text-2xl group-hover:scale-110 transition-transform">dashboard</span>
+<span class="text-[11px] font-bold mt-0.5">Dashboard</span>
+</a>
+</div>
+<!-- Docentes -->
+<div class="border border-dashed border-accent/40 rounded-xl p-1">
+<a class="flex flex-col items-center justify-center py-2 text-slate-400 hover:text-primary transition-colors group" href="#">
+<span class="material-symbols-outlined text-2xl group-hover:scale-110 transition-transform">badge</span>
+<span class="text-[11px] font-bold mt-0.5">Docentes</span>
+</a>
+</div>
+<!-- Estudiantes (ACTIVE) -->
+<div class="border border-dashed border-accent/60 rounded-xl p-1 bg-accent/5">
+<a class="flex flex-col items-center justify-center py-2 px-3 bg-accent/15 rounded-lg text-accent" href="#">
+<span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 1;">school</span>
+<span class="text-[11px] font-extrabold mt-0.5">Estudiantes</span>
+</a>
+</div>
+<!-- Mensajes -->
+<div class="border border-dashed border-accent/40 rounded-xl p-1">
+<a class="flex flex-col items-center justify-center py-2 text-slate-400 hover:text-primary transition-colors group overflow-hidden" href="#">
+<span class="material-symbols-outlined text-2xl group-hover:scale-110 transition-transform">chat_bubble</span>
+<span class="text-[11px] font-bold mt-0.5 whitespace-nowrap">Mensajes</span>
+</a>
+</div>
+</div>
 </nav>
-
 <script>
-    // ============================================
-    // DATOS
-    // ============================================
-    const excusasData = [
-        { id: 1, nombre: 'Mateo Arboleda', grado: '11º A', id_est: '4520-22', fecha: '24 Oct 2023', tipo: 'Médico', motivo: 'Cita odontológica programada de urgencia.', detalle: 'El estudiante tiene una cita odontológica programada desde hace 2 semanas. Adjunta constancia del consultorio.', estado: 'pendiente' },
-        { id: 2, nombre: 'Lucía Mendez', grado: '10º B', id_est: '4520-25', fecha: '23 Oct 2023', tipo: 'Familiar', motivo: 'Compromiso familiar de última hora.', detalle: 'Asistencia obligatoria a reunión familiar por fallecimiento de abuelo paterno.', estado: 'pendiente' },
-        { id: 3, nombre: 'Carlos Ruiz', grado: '10º A', id_est: '4520-18', fecha: '22 Oct 2023', tipo: 'Médico', motivo: 'Incapacidad médica por cuadro viral.', detalle: 'Presenta fiebre y malestar general. Médico recomienda reposo por 3 días.', estado: 'pendiente' },
-        { id: 4, nombre: 'Ana Torres', grado: '11º B', id_est: '4520-31', fecha: '21 Oct 2023', tipo: 'Familiar', motivo: 'Transporte público en huelga.', detalle: 'No hay servicio de transporte público hacia la institución. Imposible llegar.', estado: 'pendiente' }
-    ];
-    
-    const alertasData = {
-        1: { tipo: 'Crítico', color: 'border-error', bg: 'bg-error', estudiante: 'Juan Pérez', grado: '10-A', descripcion: 'Uso de lenguaje ofensivo y vulgar en chat grupal de la técnica "Fundación Caminos". Mensajes dirigidos a compañeros con insultos y amenazas.', area: 'Chat grupal', fecha: '24 Oct 2023, 14:30', reportado: 'Prof. Ana García' },
-        2: { tipo: 'Moderado', color: 'border-warning', bg: 'bg-warning', estudiante: 'María Fernández', grado: '11-B', descripcion: '3 días consecutivos de inasistencia al área de Hospital Regional sin presentar excusa médica ni justificación.', area: 'Hospital Regional', fecha: '23 Oct 2023, 08:00', reportado: 'Prof. Ricardo Méndez' },
-        3: { tipo: 'Leve', color: 'border-secondary', bg: 'bg-secondary', estudiante: 'Pedro Gómez', grado: '10-C', descripcion: 'Llegada tarde al área de Biblioteca en 4 ocasiones esta semana. No presenta justificación.', area: 'Biblioteca Central', fecha: '23 Oct 2023, 09:15', reportado: 'Prof. Lucía Peña' },
-        4: { tipo: 'Crítico', color: 'border-error', bg: 'bg-error', estudiante: 'Luis Herrera vs Diego Fernández', grado: '11-A', descripcion: 'Altercado físico durante hora de almuerzo en el comedor. Ambos estudiantes se agredieron verbal y físicamente.', area: 'Comedor Estudiantil', fecha: '22 Oct 2023, 12:45', reportado: 'Prof. Jairo Sánchez' }
-    };
-    
-    let excusasCount = 4;
-    
-    // ============================================
-    // NAVBAR ACTIVO
-    // ============================================
-    function setActiveNav(element) {
-        document.querySelectorAll('.bottom-nav-item').forEach(item => {
-            item.classList.remove('active');
-        });
-        element.classList.add('active');
-    }
-    
-    // ============================================
-    // TABS
-    // ============================================
-    function switchTab(tab, btn) {
-        document.querySelectorAll('.tab-pill').forEach(b => {
-            b.classList.remove('bg-white', 'shadow-sm', 'text-primary', 'active', 'font-bold');
-            b.classList.add('text-on-surface-variant', 'font-medium');
-        });
-        btn.classList.add('bg-white', 'shadow-sm', 'text-primary', 'active', 'font-bold');
-        btn.classList.remove('text-on-surface-variant', 'font-medium');
-        
-        if (tab === 'excusas') {
-            document.getElementById('panel-excusas').classList.remove('hidden');
-            document.getElementById('panel-alertas').classList.add('hidden');
-        } else {
-            document.getElementById('panel-excusas').classList.add('hidden');
-            document.getElementById('panel-alertas').classList.remove('hidden');
-        }
-    }
-    
-    // ============================================
-    // BÚSQUEDA DE EXCUSAS
-    // ============================================
-    function searchExcusas() {
-        const input = document.getElementById('searchExcusas');
-        const filter = input.value.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-        const rows = document.querySelectorAll('#tbodyExcusas tr');
-        const noResults = document.getElementById('noResultsExcusas');
-        let visibleCount = 0;
-        
-        rows.forEach(row => {
-            const searchData = row.getAttribute('data-search').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-            if (searchData.includes(filter)) {
-                row.style.display = '';
-                visibleCount++;
-            } else {
-                row.style.display = 'none';
-            }
-        });
-        
-        if (visibleCount === 0 && filter.length > 0) {
-            noResults.classList.remove('hidden');
-        } else {
-            noResults.classList.add('hidden');
-        }
-    }
-    
-    // ============================================
-    // DETALLE Y GESTIÓN DE EXCUSAS
-    // ============================================
-    function verDetalleExcusa(id) {
-        const excusa = excusasData.find(e => e.id === id);
-        if (!excusa) return;
-        
-        const modal = document.getElementById('excusaDetailModal');
-        const subtitle = document.getElementById('excusaModalSubtitle');
-        const content = document.getElementById('excusaModalContent');
-        
-        subtitle.textContent = excusa.nombre + ' • ' + excusa.grado + ' • ' + excusa.fecha;
-        
-        const tipoColor = excusa.tipo === 'Médico' ? 'bg-secondary-container text-on-secondary-container' : 'bg-warning/10 text-warning';
-        
-        content.innerHTML = `
-            <div class="bg-surface-low rounded-xl p-4 mb-4">
-                <div class="flex items-center gap-2 mb-3">
-                    <span class="px-2.5 py-1 ${tipoColor} text-[10px] font-bold rounded-full">${excusa.tipo}</span>
-                    <span class="text-xs text-on-surface-variant">ID: ${excusa.id_est}</span>
-                </div>
-                <div class="bg-white p-4 rounded-lg border-l-4 border-secondary italic text-sm text-on-surface-variant mb-3">
-                    "${excusa.motivo}"
-                </div>
-                <p class="text-xs text-on-surface-variant leading-relaxed">${excusa.detalle}</p>
-            </div>
-            
-            <div class="bg-secondary-container/30 rounded-xl p-4 border border-secondary/10 mb-4">
-                <div class="flex items-center gap-2 mb-2">
-                    <span class="material-symbols-outlined text-secondary text-sm">attach_file</span>
-                    <span class="text-sm font-bold text-primary">Documentos adjuntos</span>
-                </div>
-                <div class="flex items-center gap-3 p-3 bg-white rounded-lg">
-                    <span class="material-symbols-outlined text-error text-xl">picture_as_pdf</span>
-                    <div class="flex-grow">
-                        <p class="text-xs font-bold text-primary">Constancia_${excusa.id_est}.pdf</p>
-                        <p class="text-[10px] text-on-surface-variant">245 KB • Subido el ${excusa.fecha}</p>
-                    </div>
-                    <span class="material-symbols-outlined text-secondary cursor-pointer hover:scale-110 transition-transform">download</span>
-                </div>
-            </div>
-            
-            <div class="grid grid-cols-2 gap-3" id="modal-excusa-buttons-${id}">
-                <button onclick="aceptarExcusa(${id})" class="py-3 bg-primary text-white rounded-xl text-sm font-bold hover:bg-slate-800 transition-colors btn-press flex items-center justify-center gap-2">
-                    <span class="material-symbols-outlined text-[16px]">check_circle</span>
-                    Aceptar
-                </button>
-                <button onclick="rechazarExcusa(${id})" class="py-3 bg-white border border-outline-variant text-on-surface-variant rounded-xl text-sm font-bold hover:bg-surface-low transition-colors btn-press flex items-center justify-center gap-2">
-                    <span class="material-symbols-outlined text-[16px]">cancel</span>
-                    Rechazar
-                </button>
-            </div>
-        `;
-        
-        modal.classList.add('show');
-    }
-    
-    function aceptarExcusa(id) {
-        const row = document.getElementById('excusa-row-' + id);
-        const estado = document.getElementById('estado-' + id);
-        const buttons = document.getElementById('buttons-' + id);
-        
-        estado.textContent = 'Aceptada';
-        estado.className = 'px-2.5 py-1 bg-success-container text-on-success-container text-[10px] font-bold rounded-full';
-        buttons.innerHTML = `
-            <div class="excusa-status aceptada">
-                <span class="material-symbols-outlined text-[16px]">check_circle</span>
-                Aceptada
-            </div>
-        `;
-        
-        const modalButtons = document.getElementById('modal-excusa-buttons-' + id);
-        if (modalButtons) {
-            modalButtons.innerHTML = `
-                <div class="col-span-2 excusa-status aceptada">
-                    <span class="material-symbols-outlined text-[16px]">check_circle</span>
-                    Excusa Aceptada
-                </div>
-            `;
-        }
-        
-        showToast('Excusa de ' + excusasData.find(e => e.id === id).nombre + ' aceptada correctamente', 'success');
-        
-        excusasCount--;
-        document.getElementById('statExcusas').textContent = excusasCount;
-        
-        setTimeout(() => {
-            if (excusasCount === 0) {
-                document.getElementById('tbodyExcusas').innerHTML = `
-                    <tr>
-                        <td colspan="6" class="text-center py-10 text-on-surface-variant">
-                            <span class="material-symbols-outlined text-[56px] opacity-20">inbox</span>
-                            <p class="mt-3 text-sm font-medium">No hay excusas pendientes</p>
-                            <p class="text-xs text-on-surface-variant mt-1">Todas las solicitudes han sido atendidas</p>
-                        </td>
-                    </tr>
-                `;
-            }
-            closeModal(null, 'excusaDetailModal');
-        }, 1000);
-    }
-    
-    function rechazarExcusa(id) {
-        const row = document.getElementById('excusa-row-' + id);
-        const estado = document.getElementById('estado-' + id);
-        const buttons = document.getElementById('buttons-' + id);
-        
-        estado.textContent = 'Rechazada';
-        estado.className = 'px-2.5 py-1 bg-error-container text-on-error-container text-[10px] font-bold rounded-full';
-        buttons.innerHTML = `
-            <div class="excusa-status rechazada">
-                <span class="material-symbols-outlined text-[16px]">cancel</span>
-                Rechazada
-            </div>
-        `;
-        
-        const modalButtons = document.getElementById('modal-excusa-buttons-' + id);
-        if (modalButtons) {
-            modalButtons.innerHTML = `
-                <div class="col-span-2 excusa-status rechazada">
-                    <span class="material-symbols-outlined text-[16px]">cancel</span>
-                    Excusa Rechazada
-                </div>
-            `;
-        }
-        
-        showToast('Excusa de ' + excusasData.find(e => e.id === id).nombre + ' rechazada', 'error');
-        
-        excusasCount--;
-        document.getElementById('statExcusas').textContent = excusasCount;
-        
-        setTimeout(() => {
-            if (excusasCount === 0) {
-                document.getElementById('tbodyExcusas').innerHTML = `
-                    <tr>
-                        <td colspan="6" class="text-center py-10 text-on-surface-variant">
-                            <span class="material-symbols-outlined text-[56px] opacity-20">inbox</span>
-                            <p class="mt-3 text-sm font-medium">No hay excusas pendientes</p>
-                            <p class="text-xs text-on-surface-variant mt-1">Todas las solicitudes han sido atendidas</p>
-                        </td>
-                    </tr>
-                `;
-            }
-            closeModal(null, 'excusaDetailModal');
-        }, 1000);
-    }
-    
-    // ============================================
-    // ALERTAS DE CONVIVENCIA
-    // ============================================
-    function verDetalleAlerta(id) {
-        const alerta = alertasData[id];
-        if (!alerta) return;
-        
-        const modal = document.getElementById('alertaDetailModal');
-        const title = document.getElementById('alertaDetailTitle');
-        const content = document.getElementById('alertaDetailContent');
-        
-        title.textContent = 'Detalle de Alerta - ' + alerta.tipo;
-        
-        content.innerHTML = `
-            <div class="bg-surface-low rounded-xl p-4 mb-4 border-l-4 ${alerta.color}">
-                <div class="flex items-center gap-2 mb-3">
-                    <span class="px-2.5 py-1 ${alerta.bg} text-white text-[10px] font-bold rounded-full">${alerta.tipo}</span>
-                    <span class="text-xs text-on-surface-variant">${alerta.fecha}</span>
-                </div>
-                <p class="text-sm font-bold text-primary mb-2">${alerta.estudiante}</p>
-                <p class="text-xs text-on-surface-variant mb-1">Grado: <span class="font-semibold">${alerta.grado}</span></p>
-                <p class="text-xs text-on-surface-variant mb-1">Área: <span class="font-semibold">${alerta.area}</span></p>
-                <p class="text-xs text-on-surface-variant mb-1">Reportado por: <span class="font-semibold">${alerta.reportado}</span></p>
-                <div class="bg-white p-3 rounded-lg mt-3">
-                    <p class="text-xs text-on-surface-variant leading-relaxed">${alerta.descripcion}</p>
-                </div>
-            </div>
-            
-            <div class="grid grid-cols-2 gap-3">
-                <button onclick="sancionarAlerta(${id}); closeModal(null, 'alertaDetailModal')" class="py-3 bg-primary text-white rounded-xl text-sm font-bold hover:bg-slate-800 transition-colors btn-press flex items-center justify-center gap-2">
-                    <span class="material-symbols-outlined text-[16px]">gavel</span>
-                    Aplicar Sanción
-                </button>
-                <button onclick="llamadoAlerta(${id}); closeModal(null, 'alertaDetailModal')" class="py-3 bg-white border border-outline-variant text-on-surface-variant rounded-xl text-sm font-bold hover:bg-surface-low transition-colors btn-press flex items-center justify-center gap-2">
-                    <span class="material-symbols-outlined text-[16px]">campaign</span>
-                    Llamado de Atención
-                </button>
-            </div>
-        `;
-        
-        modal.classList.add('show');
-    }
-    
-    function sancionarAlerta(id) {
-        const card = document.getElementById('alerta-' + id);
-        const buttons = document.getElementById('alerta-buttons-' + id);
-        
-        buttons.innerHTML = `
-            <div class="col-span-2 excusa-status aceptada">
-                <span class="material-symbols-outlined text-[16px]">gavel</span>
-                Sanción Aplicada
-            </div>
-        `;
-        
-        card.style.opacity = '0.5';
-        showToast('Sanción aplicada correctamente', 'success');
-    }
-    
-    function llamadoAlerta(id) {
-        const card = document.getElementById('alerta-' + id);
-        const buttons = document.getElementById('alerta-buttons-' + id);
-        
-        buttons.innerHTML = `
-            <div class="col-span-2 p-2 bg-secondary-container text-on-secondary-container rounded-lg text-xs font-bold text-center">
-                <span class="material-symbols-outlined text-[16px] inline-block mr-1">campaign</span>
-                Llamado registrado
-            </div>
-        `;
-        
-        showToast('Llamado de atención registrado', 'info');
-    }
-    
-    // ============================================
-    // UTILIDADES
-    // ============================================
-    function closeModal(event, modalId) {
-        if (!event || event.target.id === modalId) {
-            document.getElementById(modalId).classList.remove('show');
-        }
-    }
-    
-    function showToast(message, type) {
-        const toast = document.getElementById('toast');
-        const icons = { success: 'check_circle', error: 'cancel', warning: 'warning', info: 'info' };
-        toast.innerHTML = `<span class="material-symbols-outlined text-[20px]">${icons[type]}</span> ${message}`;
-        toast.className = `toast ${type}`;
-        toast.style.display = 'flex';
-        toast.style.opacity = '1';
-        setTimeout(() => {
-            toast.style.transition = 'opacity 0.3s ease';
-            toast.style.opacity = '0';
-            setTimeout(() => {
-                toast.style.display = 'none';
-                toast.style.opacity = '1';
-                toast.style.transition = '';
-            }, 300);
-        }, 3000);
-    }
-    
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') {
-            document.querySelectorAll('.modal-overlay.show').forEach(modal => modal.classList.remove('show'));
-        }
+    // Subtle hover effect logic for action buttons
+    document.querySelectorAll('button').forEach(btn => {
+        btn.addEventListener('mousedown', () => btn.classList.add('scale-95'));
+        btn.addEventListener('mouseup', () => btn.classList.remove('scale-95'));
     });
 </script>
-</body>
-</html>
+</body></html>

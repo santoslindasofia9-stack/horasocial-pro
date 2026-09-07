@@ -1,1160 +1,390 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HORASOCIAL PRO - Dashboard Maestro</title>
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
-    <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        
+<!DOCTYPE html><html class="light" lang="es"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>HORASOCIAL PRO - Teacher Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;family=Inter:wght@400;500;600&amp;family=Poppins:wght@600;700&amp;family=Lato:wght@400;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary-fixed": "#c9e6ff",
+                        "tertiary-fixed-dim": "#7bd0ff",
+                        "on-secondary-fixed": "#001e2f",
+                        "primary-fixed-dim": "#bec6e0",
+                        "on-surface-variant": "#45464d",
+                        "outline": "#76777d",
+                        "on-tertiary": "#ffffff",
+                        "primary-fixed": "#dae2fd",
+                        "surface-bright": "#f7f9fb",
+                        "on-error-container": "#93000a",
+                        "inverse-primary": "#bec6e0",
+                        "surface-dim": "#d8dadc",
+                        "inverse-on-surface": "#eff1f3",
+                        "tertiary-fixed": "#c4e7ff",
+                        "primary-container": "#131b2e",
+                        "on-primary-fixed-variant": "#3f465c",
+                        "on-primary": "#ffffff",
+                        "surface-container-lowest": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "primary": "#000000",
+                        "on-secondary-container": "#004666",
+                        "on-tertiary-container": "#008ebf",
+                        "surface-container-high": "#e6e8ea",
+                        "surface-container": "#eceef0",
+                        "secondary-fixed-dim": "#89ceff",
+                        "error": "#ba1a1a",
+                        "background": "#f7f9fb",
+                        "tertiary": "#000000",
+                        "on-error": "#ffffff",
+                        "surface-container-highest": "#e0e3e5",
+                        "surface": "#f7f9fb",
+                        "inverse-surface": "#2d3133",
+                        "secondary": "#006591",
+                        "on-tertiary-fixed": "#001e2c",
+                        "on-primary-container": "#7c839b",
+                        "tertiary-container": "#001e2c",
+                        "on-secondary": "#ffffff",
+                        "on-background": "#191c1e",
+                        "on-tertiary-fixed-variant": "#004c69",
+                        "surface-container-low": "#f2f4f6",
+                        "on-primary-fixed": "#131b2e",
+                        "surface-tint": "#565e74",
+                        "outline-variant": "#c6c6cd",
+                        "on-secondary-fixed-variant": "#004c6e",
+                        "secondary-container": "#39b8fd",
+                        "on-surface": "#191c1e",
+                        "surface-variant": "#e0e3e5",
+                        "neutral-gray": "#64748B",
+                        "celeste": "#0EA5E9",
+                        "navy-blue": "#1E293B"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "3xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "24px",
+                        "margin-desktop": "48px",
+                        "md": "16px",
+                        "lg": "24px",
+                        "xs": "4px",
+                        "margin-mobile": "16px",
+                        "xl": "32px",
+                        "unit": "4px",
+                        "sm": "8px"
+                    },
+                    "fontFamily": {
+                        "poppins": ["Poppins", "sans-serif"],
+                        "lato": ["Lato", "sans-serif"],
+                        "headline-md": ["Plus Jakarta Sans"],
+                        "headline-lg-mobile": ["Plus Jakarta Sans"],
+                        "label-md": ["Inter"],
+                        "display-lg": ["Plus Jakarta Sans"],
+                        "body-lg": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "headline-lg": ["Plus Jakarta Sans"],
+                        "headline-sm": ["Plus Jakarta Sans"],
+                        "body-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                        "headline-lg-mobile": ["28px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                        "label-md": ["14px", {"lineHeight": "1.4", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                        "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "label-sm": ["12px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                        "headline-lg": ["32px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                        "headline-sm": ["20px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
         body {
-            background: linear-gradient(180deg, #e0f7ff 0%, #f0f9ff 30%, #f8fcff 60%, #ffffff 100%);
-            font-family: 'Inter', sans-serif;
-            color: #1e293b;
+            background-color: #f7f9fb;
             min-height: 100vh;
-            -webkit-font-smoothing: antialiased;
-            padding-bottom: 80px;
-            position: relative;
             overflow-x: hidden;
+            font-family: 'Inter', sans-serif;
         }
 
-        .bg-waves {
+        .blob-bg {
             position: fixed;
-            inset: 0;
-            z-index: 0;
-            pointer-events: none;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
             overflow: hidden;
+            background: linear-gradient(135deg, #f0f4ff 0%, #fff0f5 100%);
         }
 
-        .wave {
+        .blob {
             position: absolute;
             border-radius: 50%;
             filter: blur(80px);
-            opacity: 0.5;
-            animation: wave-float 15s ease-in-out infinite;
+            opacity: 0.4;
+            animation: move 20s infinite alternate;
         }
 
-        .wave-1 {
-            width: 600px;
-            height: 600px;
-            background: radial-gradient(circle, rgba(56, 189, 248, 0.4) 0%, rgba(14, 165, 233, 0.1) 50%, transparent 70%);
-            top: -200px;
-            right: -150px;
-            animation-delay: 0s;
+        @keyframes move {
+            from { transform: translate(0, 0) scale(1); }
+            to { transform: translate(100px, 50px) scale(1.1); }
         }
 
-        .wave-2 {
-            width: 500px;
-            height: 500px;
-            background: radial-gradient(circle, rgba(125, 211, 252, 0.35) 0%, rgba(56, 189, 248, 0.08) 50%, transparent 70%);
-            bottom: 100px;
-            left: -200px;
-            animation-delay: -5s;
-            animation-duration: 18s;
-        }
-
-        .wave-3 {
-            width: 400px;
-            height: 400px;
-            background: radial-gradient(circle, rgba(186, 230, 253, 0.4) 0%, rgba(125, 211, 252, 0.1) 50%, transparent 70%);
-            top: 40%;
-            right: -100px;
-            animation-delay: -10s;
-            animation-duration: 20s;
-        }
-
-        .wave-4 {
-            width: 350px;
-            height: 350px;
-            background: radial-gradient(circle, rgba(14, 165, 233, 0.25) 0%, rgba(56, 189, 248, 0.05) 50%, transparent 70%);
-            bottom: -50px;
-            left: 20%;
-            animation-delay: -15s;
-            animation-duration: 22s;
-        }
-
-        .wave-5 {
-            width: 300px;
-            height: 300px;
-            background: radial-gradient(circle, rgba(224, 242, 254, 0.5) 0%, rgba(186, 230, 253, 0.1) 50%, transparent 70%);
-            top: 20%;
-            left: -50px;
-            animation-delay: -8s;
-            animation-duration: 16s;
-        }
-
-        @keyframes wave-float {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            25% { transform: translate(20px, -30px) scale(1.05); }
-            50% { transform: translate(-15px, 20px) scale(0.98); }
-            75% { transform: translate(25px, 10px) scale(1.02); }
-        }
-
-        .bg-lines {
-            position: fixed;
-            inset: 0;
-            z-index: 0;
-            pointer-events: none;
-            opacity: 0.03;
-            background-image: 
-                linear-gradient(90deg, #0284c7 1px, transparent 1px),
-                linear-gradient(180deg, #0284c7 1px, transparent 1px);
-            background-size: 80px 80px;
-        }
-
-        .material-symbols-outlined { font-variation-settings: 'FILL' 1, 'wght' 400; }
-
-        .top-header {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(226, 232, 240, 0.6);
-            padding: 0 24px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            height: 60px;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .header-left { display: flex; align-items: center; gap: 12px; }
-        .logo-small { display: flex; align-items: center; gap: 10px; }
-        .logo-small img { width: 32px; height: 32px; border-radius: 8px; object-fit: cover; }
-        .logo-small span {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            font-size: 16px;
-            font-weight: 700;
-            color: #0f172a;
-        }
-
-        .header-right { display: flex; align-items: center; gap: 12px; }
-
-        .user-avatar {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #38bdf8, #0284c7);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            font-size: 13px;
-            font-weight: 700;
-            color: #ffffff;
-            border: 2px solid #ffffff;
-            box-shadow: 0 2px 8px rgba(2, 132, 199, 0.3);
-        }
-
-        .btn-icon {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            border: none;
-            background: #f1f5f9;
-            color: #64748b;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .btn-icon:hover { background: #e2e8f0; color: #0f172a; }
-
-        .main-content {
-            padding: 20px 24px;
-            max-width: 600px;
-            margin: 0 auto;
-            position: relative;
-            z-index: 1;
-        }
-
-        .welcome-section { margin-bottom: 24px; }
-        .welcome-section h1 {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            font-size: 24px;
-            font-weight: 700;
-            color: #0f172a;
-            line-height: 1.3;
-            margin-bottom: 8px;
-        }
-        .welcome-section h1 span { color: #0284c7; }
-        .welcome-section p {
-            font-size: 14px;
-            color: #64748b;
-            line-height: 1.5;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            margin-bottom: 24px;
-        }
-
-        .stat-card {
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(10px);
-            border-radius: 16px;
-            padding: 20px;
-            text-align: center;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
-            border: 1px solid rgba(255, 255, 255, 0.8);
-            transition: transform 0.2s;
-        }
-        .stat-card:hover { transform: translateY(-2px); }
-
-        .stat-value {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            font-size: 28px;
-            font-weight: 700;
-            color: #0f172a;
-            margin-bottom: 4px;
-        }
-        .stat-value.blue { color: #0284c7; }
-        .stat-value.red { color: #ef4444; }
-
-        .stat-label {
-            font-size: 13px;
-            color: #64748b;
-            font-weight: 500;
-        }
-
-        .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 16px;
-        }
-
-        .section-title {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            font-size: 18px;
-            font-weight: 700;
-            color: #0f172a;
-        }
-
-        .section-link {
-            font-size: 13px;
-            color: #0284c7;
-            text-decoration: none;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            cursor: pointer;
-            background: none;
-            border: none;
-            font-family: inherit;
-        }
-        .section-link:hover { text-decoration: underline; }
-
-        .brigadas-list {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin-bottom: 24px;
-        }
-
-        .brigada-card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 16px;
-            padding: 16px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
-            border: 1px solid rgba(255, 255, 255, 0.8);
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-            position: relative;
-            transition: transform 0.2s;
-        }
-        .brigada-card:hover { transform: translateX(4px); }
-
-        .brigada-icon {
-            width: 48px;
-            height: 48px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-        }
-        .brigada-icon.green { background: #dcfce7; color: #16a34a; }
-        .brigada-icon.blue { background: #dbeafe; color: #2563eb; }
-        .brigada-icon.purple { background: #f3e8ff; color: #9333ea; }
-
-        .brigada-icon .material-symbols-outlined { font-size: 24px; }
-
-        .brigada-info { flex: 1; }
-        .brigada-info h3 {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            font-size: 15px;
-            font-weight: 700;
-            color: #0f172a;
-            margin-bottom: 2px;
-        }
-        .brigada-info p {
-            font-size: 12px;
-            color: #64748b;
-            margin-bottom: 8px;
-        }
-
-        .brigada-progress {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .brigada-progress-label {
-            font-size: 11px;
-            color: #94a3b8;
-            font-weight: 500;
-            white-space: nowrap;
-        }
-
-        .progress-bar {
-            flex: 1;
-            height: 6px;
-            background: #e2e8f0;
-            border-radius: 9999px;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            height: 100%;
-            border-radius: 9999px;
-            background: linear-gradient(90deg, #38bdf8, #0284c7);
-            transition: width 0.5s ease;
-        }
-
-        .progress-percent {
-            font-size: 12px;
-            font-weight: 700;
-            color: #64748b;
-            min-width: 32px;
-            text-align: right;
-        }
-
-        .brigada-menu {
-            position: absolute;
-            top: 12px;
-            right: 12px;
-            color: #94a3b8;
-            cursor: pointer;
-            background: none;
-            border: none;
-        }
-
-        .actions-list {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin-bottom: 24px;
-        }
-
-        .action-card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 16px;
-            padding: 16px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
-            border: 1px solid rgba(255, 255, 255, 0.8);
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            cursor: pointer;
-            transition: all 0.2s;
-            text-decoration: none;
-            color: inherit;
-        }
-        .action-card:hover {
-            transform: translateX(4px);
-            box-shadow: 0 6px 16px rgba(0,0,0,0.1);
-        }
-
-        .action-icon {
-            width: 44px;
-            height: 44px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-        }
-        .action-icon.orange { background: #ffedd5; color: #ea580c; }
-        .action-icon.green { background: #dcfce7; color: #16a34a; }
-
-        .action-icon .material-symbols-outlined { font-size: 22px; }
-
-        .action-info { flex: 1; }
-        .action-info h3 {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            font-size: 15px;
-            font-weight: 700;
-            color: #0f172a;
-            margin-bottom: 2px;
-        }
-        .action-info p { font-size: 12px; color: #64748b; }
-
-        .action-arrow { color: #94a3b8; }
-
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(4px);
-            z-index: 200;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-        .modal-overlay.active { display: flex; }
-
-        .modal {
-            background: #ffffff;
-            border-radius: 20px;
-            width: 100%;
-            max-width: 500px;
-            max-height: 80vh;
-            overflow-y: auto;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
-            animation: modalIn 0.3s ease;
-        }
-
-        @keyframes modalIn {
-            from { opacity: 0; transform: scale(0.95) translateY(20px); }
-            to { opacity: 1; transform: scale(1) translateY(0); }
-        }
-
-        .modal-header {
-            padding: 20px 24px;
-            border-bottom: 1px solid #e2e8f0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .modal-header h3 {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            font-size: 18px;
-            font-weight: 700;
-            color: #0f172a;
-        }
-
-        .modal-close {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            border: none;
-            background: #f1f5f9;
-            color: #64748b;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .modal-close:hover { background: #e2e8f0; color: #0f172a; }
-
-        .modal-body { padding: 20px 24px; }
-
-        .modal-footer {
-            padding: 16px 24px;
-            border-top: 1px solid #e2e8f0;
-            display: flex;
-            gap: 12px;
-        }
-
-        .btn-primary {
-            flex: 1;
-            padding: 12px;
-            background: #0f172a;
-            color: #ffffff;
-            border: none;
-            border-radius: 12px;
-            font-family: 'Inter', sans-serif;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-        .btn-primary:hover { background: #1e293b; }
-
-        .btn-secondary {
-            flex: 1;
-            padding: 12px;
-            background: #f1f5f9;
-            color: #64748b;
-            border: none;
-            border-radius: 12px;
-            font-family: 'Inter', sans-serif;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .btn-secondary:hover { background: #e2e8f0; }
-
-        .asistencia-list {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .asistencia-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px;
-            border-radius: 12px;
-            background: #f8fafc;
-            transition: background 0.2s;
-        }
-        .asistencia-item:hover { background: #f1f5f9; }
-
-        .asistencia-avatar {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #38bdf8, #0284c7);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-            font-weight: 700;
-            color: #ffffff;
-            flex-shrink: 0;
-        }
-
-        .asistencia-info { flex: 1; }
-        .asistencia-info h4 {
-            font-size: 14px;
-            font-weight: 600;
-            color: #0f172a;
-        }
-        .asistencia-info p { font-size: 12px; color: #64748b; }
-
-        .asistencia-status {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .status-toggle {
-            width: 44px;
-            height: 24px;
-            border-radius: 9999px;
-            background: #e2e8f0;
-            position: relative;
-            cursor: pointer;
-            transition: background 0.2s;
-            border: none;
-            padding: 0;
-        }
-        .status-toggle.active { background: #16a34a; }
-
-        .status-toggle::after {
-            content: '';
-            position: absolute;
-            top: 2px;
-            left: 2px;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: #ffffff;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-            transition: transform 0.2s;
-        }
-        .status-toggle.active::after { transform: translateX(20px); }
-
-        .reporte-card {
-            background: linear-gradient(135deg, #0f172a, #1e293b);
-            border-radius: 20px;
-            padding: 24px;
-            margin-bottom: 20px;
-            color: #ffffff;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .reporte-card::before {
-            content: '';
-            position: absolute;
-            top: -40px;
-            right: -40px;
-            width: 150px;
-            height: 150px;
-            background: rgba(56, 189, 248, 0.1);
-            border-radius: 50%;
-        }
-
-        .reporte-card::after {
-            content: '';
-            position: absolute;
-            bottom: -60px;
-            left: -60px;
-            width: 200px;
-            height: 200px;
-            background: rgba(251, 191, 36, 0.05);
-            border-radius: 50%;
-        }
-
-        .reporte-card h3 {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            font-size: 18px;
-            font-weight: 700;
-            margin-bottom: 8px;
-            position: relative;
-            z-index: 1;
-        }
-
-        .reporte-card p {
-            font-size: 13px;
-            color: #94a3b8;
-            margin-bottom: 16px;
-            line-height: 1.5;
-            position: relative;
-            z-index: 1;
-        }
-
-        .btn-reporte {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 12px 20px;
-            background: #ffffff;
-            color: #0f172a;
-            border: none;
-            border-radius: 12px;
-            font-family: 'Inter', sans-serif;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-            position: relative;
-            z-index: 1;
-        }
-        .btn-reporte:hover {
-            background: #f1f5f9;
-            transform: translateY(-2px);
-        }
-
-        .btn-logout {
-            width: 100%;
-            padding: 14px;
-            background: transparent;
-            border: 2px solid #e2e8f0;
-            border-radius: 14px;
-            color: #64748b;
-            font-family: 'Inter', sans-serif;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            transition: all 0.2s;
-            margin-bottom: 16px;
-        }
-        .btn-logout:hover {
-            border-color: #ef4444;
-            color: #ef4444;
-            background: #fef2f2;
-        }
-
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-top: 1px solid #e2e8f0;
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            height: 70px;
-            z-index: 100;
-            box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
-            padding-bottom: env(safe-area-inset-bottom);
-        }
-
-        .bottom-nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 4px;
-            padding: 8px 12px;
-            color: #94a3b8;
-            text-decoration: none;
-            font-size: 11px;
-            font-weight: 500;
-            transition: all 0.2s ease;
-            cursor: pointer;
-            border: none;
-            background: none;
-            font-family: inherit;
-            flex: 1;
-            position: relative;
-        }
-
-        .bottom-nav-item:hover { color: #0284c7; }
-        .bottom-nav-item.active { color: #0284c7; }
-
-        .bottom-nav-item.active::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 40px;
-            height: 3px;
-            background: #0284c7;
-            border-radius: 0 0 4px 4px;
-        }
-
-        .bottom-nav-item .material-symbols-outlined { font-size: 24px; }
-
-        @media (min-width: 768px) {
-            .main-content {
-                max-width: 800px;
-                padding: 24px 32px;
-            }
-            .stats-grid { gap: 16px; }
-            .stat-card { padding: 24px; }
-            .stat-value { font-size: 32px; }
-        }
-
-        @media (max-width: 480px) {
-            .main-content { padding: 16px; }
-            .welcome-section h1 { font-size: 20px; }
-            .bottom-nav { height: 65px; }
-            .bottom-nav-item { padding: 6px 8px; font-size: 10px; }
-            .bottom-nav-item .material-symbols-outlined { font-size: 22px; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
         }
     </style>
 </head>
-<body>
-
-    <div class="bg-waves">
-        <div class="wave wave-1"></div>
-        <div class="wave wave-2"></div>
-        <div class="wave wave-3"></div>
-        <div class="wave wave-4"></div>
-        <div class="wave wave-5"></div>
-    </div>
-    <div class="bg-lines"></div>
-
-    <header class="top-header">
-        <div class="header-left">
-            <div class="logo-small">
-                <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuBwMhl_DdmeafGOmiL2QLqeQV_Ut8aNvKKYwKjKUtrAMBSjpyGc1Acc5TCQm084EODuuIAA3GiusiDfLdXgW3DAC8tdYPa8R-TEraz_hHglTpuTQJRtfOJfW_OyF25795_lzWR3g1wKtd_0fCPC6QxHfyblbvKAQVJNcggVB3k8TYcOAOsA0lTgC8lQz0E1YRlDIn1zQ0vALf8l_40TC_X6xkuWE-o1qr0sdsv2THdAcTxAM9txnjL8N_7oSnlqsHLnXkvvL7tImO-s" alt="Logo">
-                <span>HORASOCIAL PRO</span>
-            </div>
-        </div>
-        <div class="header-right">
-            <div class="user-avatar">MR</div>
-            <button class="btn-icon" onclick="window.location.href='/seleccion-rol'" title="Cerrar Sesión">
-                <span class="material-symbols-outlined">logout</span>
-            </button>
-        </div>
-    </header>
-
-    <main class="main-content">
-        
-        <div class="welcome-section">
-            <h1>Panel de Control:<br><span>Maestro Ricardo</span></h1>
-            <p>Bienvenido de nuevo. Aquí tienes el resumen de tus brigadas y el progreso de los estudiantes bajo tu supervisión.</p>
-        </div>
-
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-value">15</div>
-                <div class="stat-label">Estudiantes</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-value blue">3</div>
-                <div class="stat-label">Brigadas</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-value">1,240</div>
-                <div class="stat-label">Horas Totales</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-value red">12</div>
-                <div class="stat-label">Pendientes</div>
-            </div>
-        </div>
-
-        <div class="section-header">
-            <h2 class="section-title">Mis Brigadas</h2>
-            <button class="section-link" onclick="window.location.href='/maestro/estudiantes'">
-                Ver todas
-                <span class="material-symbols-outlined" style="font-size:16px;">arrow_forward</span>
-            </button>
-        </div>
-
-        <div class="brigadas-list">
-            <div class="brigada-card">
-                <div class="brigada-icon green">
-                    <span class="material-symbols-outlined">eco</span>
-                </div>
-                <div class="brigada-info">
-                    <h3>Brigada Ambiental</h3>
-                    <p>5 estudiantes activos</p>
-                    <div class="brigada-progress">
-                        <span class="brigada-progress-label">Progreso</span>
-                        <div class="progress-bar">
-                            <div class="progress-fill" style="width: 65%;"></div>
-                        </div>
-                        <span class="progress-percent">65%</span>
-                    </div>
-                </div>
-                <button class="brigada-menu">
-                    <span class="material-symbols-outlined">more_vert</span>
+<body class="text-on-surface">
+<!-- Atmospheric Background Blobs -->
+<div class="blob-bg">
+<div class="blob bg-[#0EA5E9] w-[400px] h-[400px] -top-20 -left-20"></div>
+<div class="blob bg-[#FFC0CB] w-[350px] h-[350px] bottom-10 right-0"></div>
+<div class="blob bg-[#7bd0ff] w-[300px] h-[300px] top-1/2 left-1/3 opacity-20"></div>
+</div>
+<!-- Top App Bar -->
+<header class="fixed top-0 w-full z-50 bg-surface/80 dark:bg-surface-dim/80 backdrop-blur-md shadow-sm flex items-center justify-between px-margin-mobile h-16 md:px-margin-desktop">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg flex items-center justify-center overflow-hidden bg-navy-blue">
+<span class="material-symbols-outlined text-white text-[24px]">school</span>
+</div>
+<h1 class="font-poppins font-bold text-headline-sm text-primary">HORASOCIAL PRO</h1>
+</div>
+<div class="flex items-center gap-4">
+<div class="hidden md:block text-right">
+<p class="font-poppins text-label-md text-primary">Maestro Ricardo</p>
+<p class="font-lato text-[10px] text-on-surface-variant uppercase tracking-wider">Dashboard Principal</p>
+</div>
+<div class="w-10 h-10 rounded-full border-2 border-primary/10 overflow-hidden">
+<img alt="Teacher profile" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAsBKOgiv_kBEGjRdsLDTUZvI71zukRwIm4VDeUz7PNlZXgk-rbjdeD6dqKMmosd3_emj_ICwNW35ohfDVXeRh0Z9qFx0I4Zjb7jNHlals66RqOcXSkQu2MwkkciTFXkC95odUjko8VIPVa493BBrOY-WID8ZzD1PBV9U4Ja2q18Ov24D1q6vN3s3aoYWga0VydSZLaIpkbNGjcKqalA9cPOtjlGkZOSBrs-hPouXz3rf8bOc66iYv3e2gaqSDWmH1zI18tKalUSqva">
+</div>
+<span class="material-symbols-outlined text-on-surface-variant">notifications</span>
+</div>
+</header>
+<!-- Main Content -->
+<main class="pt-24 pb-[120px] px-margin-mobile max-w-5xl mx-auto">
+<!-- Greeting Section -->
+<section class="mb-10">
+<h2 class="font-poppins font-bold text-headline-lg-mobile md:text-headline-lg text-primary mb-2">Panel de Control: Maestro Ricardo</h2>
+<p class="font-body-md text-on-surface-variant max-w-md">Bienvenido de nuevo. Aquí tienes el resumen de tus brigadas y el progreso de los estudiantes bajo tu supervisión.</p>
+</section>
+<!-- Stats Overview (Bento Style) -->
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
+<div class="bg-white/90 backdrop-blur-sm p-5 rounded-3xl shadow-[0_4px_20px_rgba(15,23,42,0.05)] flex flex-col items-center">
+<span class="font-lato font-bold text-headline-md text-primary">75</span>
+<span class="font-label-sm text-on-surface-variant">Estudiantes</span>
+</div>
+<div class="bg-white/90 backdrop-blur-sm p-5 rounded-3xl shadow-[0_4px_20px_rgba(15,23,42,0.05)] flex flex-col items-center">
+<span class="font-lato font-bold text-headline-md text-secondary">3</span>
+<span class="font-label-sm text-on-surface-variant">Brigadas</span>
+</div>
+<div class="bg-white/90 backdrop-blur-sm p-5 rounded-3xl shadow-[0_4px_20px_rgba(15,23,42,0.05)] flex flex-col items-center">
+<span class="font-lato font-bold text-headline-md text-primary">1,240</span>
+<span class="font-label-sm text-on-surface-variant">Horas Totales</span>
+</div>
+<div class="bg-white/90 backdrop-blur-sm p-5 rounded-3xl shadow-[0_4px_20px_rgba(15,23,42,0.05)] flex flex-col items-center">
+<span class="font-lato font-bold text-headline-md text-error">12</span>
+<span class="font-label-sm text-on-surface-variant">Pendientes</span>
+</div>
+</div>
+<!-- Group Management List -->
+<div class="space-y-6">
+<div class="flex items-center justify-between px-2">
+<h3 class="font-poppins font-bold text-headline-sm">Mis Brigadas</h3>
+<button class="text-secondary font-label-md flex items-center gap-1 hover:underline">
+                    Ver todas <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+</div>
+<!-- Card 1 -->
+<div class="group relative bg-white/90 backdrop-blur-sm p-6 rounded-3xl shadow-[0_4px_20px_rgba(15,23,42,0.05)] transition-all hover:translate-y-[-4px] hover:shadow-lg border border-white/20">
+<div class="flex items-start justify-between mb-4">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 bg-green-100 rounded-2xl flex items-center justify-center">
+<span class="material-symbols-outlined text-green-600 text-[28px]">energy_savings_leaf</span>
+</div>
+<div>
+<h4 class="font-poppins font-bold text-headline-sm text-primary">Brigada Ambiental</h4>
+<p class="font-lato text-label-md text-on-surface-variant"><span class="font-bold">25</span> estudiantes activos</p>
+</div>
+</div>
+<button class="w-10 h-10 rounded-full hover:bg-surface-container-high flex items-center justify-center transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant">more_vert</span>
+</button>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-label-sm font-lato">
+<span class="text-on-surface-variant">Progreso de Brigada</span>
+<span class="text-primary font-bold">65%</span>
+</div>
+<div class="h-2 w-full bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-[#0EA5E9] transition-all duration-1000" style="width: 65%"></div>
+</div>
+</div>
+<span class="material-symbols-outlined absolute bottom-4 right-4 text-primary opacity-[0.03] text-[64px] pointer-events-none" style="font-variation-settings: &quot;FILL&quot; 1;">settings</span>
+</div>
+<!-- Card 2 -->
+<div class="group relative bg-white/90 backdrop-blur-sm p-6 rounded-3xl shadow-[0_4px_20px_rgba(15,23,42,0.05)] transition-all hover:translate-y-[-4px] hover:shadow-lg border border-white/20">
+<div class="flex items-start justify-between mb-4">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 bg-blue-100 rounded-2xl flex items-center justify-center">
+<span class="material-symbols-outlined text-blue-600 text-[28px]">school</span>
+</div>
+<div>
+<h4 class="font-poppins font-bold text-headline-sm text-primary">Apoyo Académico</h4>
+<p class="font-lato text-label-md text-on-surface-variant"><span class="font-bold">18</span> estudiantes activos</p>
+</div>
+</div>
+<button class="w-10 h-10 rounded-full hover:bg-surface-container-high flex items-center justify-center transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant">more_vert</span>
+</button>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-label-sm font-lato">
+<span class="text-on-surface-variant">Progreso de Brigada</span>
+<span class="text-primary font-bold">40%</span>
+</div>
+<div class="h-2 w-full bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-[#0EA5E9] transition-all duration-1000" style="width: 40%"></div>
+</div>
+</div>
+<span class="material-symbols-outlined absolute bottom-4 right-4 text-primary opacity-[0.03] text-[64px] pointer-events-none" style="font-variation-settings: &quot;FILL&quot; 1;">settings</span>
+</div>
+<!-- Card 3 -->
+<div class="group relative bg-white/90 backdrop-blur-sm p-6 rounded-3xl shadow-[0_4px_20px_rgba(15,23,42,0.05)] transition-all hover:translate-y-[-4px] hover:shadow-lg border border-white/20">
+<div class="flex items-start justify-between mb-4">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 bg-purple-100 rounded-2xl flex items-center justify-center">
+<span class="material-symbols-outlined text-purple-600 text-[28px]">volunteer_activism</span>
+</div>
+<div>
+<h4 class="font-poppins font-bold text-headline-sm text-primary">Servicios Comunitarios</h4>
+<p class="font-lato text-label-md text-on-surface-variant"><span class="font-bold">32</span> estudiantes activos</p>
+</div>
+</div>
+<button class="w-10 h-10 rounded-full hover:bg-surface-container-high flex items-center justify-center transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant">more_vert</span>
+</button>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-label-sm font-lato">
+<span class="text-on-surface-variant">Progreso de Brigada</span>
+<span class="text-primary font-bold">80%</span>
+</div>
+<div class="h-2 w-full bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-[#0EA5E9] transition-all duration-1000" style="width: 80%"></div>
+</div>
+</div>
+<span class="material-symbols-outlined absolute bottom-4 right-4 text-primary opacity-[0.03] text-[64px] pointer-events-none" style="font-variation-settings: &quot;FILL&quot; 1;">settings</span>
+</div><!-- Card 4 (New) -->
+<div class="group relative bg-white/90 backdrop-blur-sm p-6 rounded-3xl shadow-[0_4px_20px_rgba(15,23,42,0.05)] transition-all hover:translate-y-[-4px] hover:shadow-lg border border-white/20">
+<div class="flex items-start justify-between mb-4">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 bg-orange-100 rounded-2xl flex items-center justify-center">
+<span class="material-symbols-outlined text-orange-600 text-[28px]">how_to_reg</span>
+</div>
+<div>
+<h4 class="font-poppins font-bold text-headline-sm text-primary">Verificar Asistencia</h4>
+<p class="font-lato text-label-md text-on-surface-variant"><span class="font-bold">12</span> pendientes hoy</p>
+</div>
+</div>
+<button class="w-10 h-10 rounded-full hover:bg-surface-container-high flex items-center justify-center transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant">arrow_forward_ios</span>
+</button>
+</div>
+</div>
+<!-- Card 5 (New) -->
+<div class="group relative bg-white/90 backdrop-blur-sm p-6 rounded-3xl shadow-[0_4px_20px_rgba(15,23,42,0.05)] transition-all hover:translate-y-[-4px] hover:shadow-lg border border-white/20">
+<div class="flex items-start justify-between mb-4">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 bg-emerald-100 rounded-2xl flex items-center justify-center">
+<span class="material-symbols-outlined text-emerald-600 text-[28px]">assignment_turned_in</span>
+</div>
+<div>
+<h4 class="font-poppins font-bold text-headline-sm text-primary">Aprobar Reportes</h4>
+<p class="font-lato text-label-md text-on-surface-variant"><span class="font-bold">8</span> reportes nuevos</p>
+</div>
+</div>
+<button class="w-10 h-10 rounded-full hover:bg-surface-container-high flex items-center justify-center transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant">arrow_forward_ios</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Secondary Action Section -->
+<div class="mt-12 p-8 bg-primary-container text-on-primary rounded-3xl relative overflow-hidden">
+<div class="relative z-10">
+<h3 class="font-poppins font-bold text-headline-md mb-2">Reporte Semanal Disponible</h3>
+<p class="font-body-md opacity-80 mb-6 max-w-sm">Ya puedes descargar el resumen detallado de actividades de la última semana académica.</p>
+<button class="bg-white text-primary px-8 py-3 rounded-xl font-poppins font-bold transition-transform active:scale-95 shadow-lg">
+                    Descargar Reporte (PDF)
                 </button>
-            </div>
+</div>
+<!-- Decorative Element -->
+<div class="absolute -right-10 -bottom-10 opacity-10">
+<span class="material-symbols-outlined text-[200px]" style="font-variation-settings: &quot;FILL&quot; 1;">description</span>
+</div>
+</div><div class="mt-12 mb-10 flex justify-center">
+<button class="w-[70%] border-2 border-navy-blue text-navy-blue py-3 rounded-full font-poppins font-bold flex items-center justify-center gap-2 transition-all active:scale-95 hover:bg-navy-blue hover:text-white">
+<span class="material-symbols-outlined">logout</span>
+        Cerrar Sesión
+    </button>
+</div>
+</main>
+<!-- Fixed Bottom Navigation Bar -->
+<nav class="fixed bottom-0 left-0 w-full bg-white/95 backdrop-blur-[8px] z-50 flex justify-between items-center pt-3 pb-8 shadow-[0_-4px_10px_rgba(0,0,0,0.05)]"><a class="flex flex-col items-center justify-center gap-1 w-1/4" href="#">
+<span class="material-symbols-outlined text-[28px] text-celeste" style="font-variation-settings: 'FILL' 1;">grid_view</span>
+<span class="text-[11px] font-medium text-celeste font-lato">Dashboard</span>
+</a>
+<a class="flex flex-col items-center justify-center gap-1 w-1/4" href="#">
+<span class="material-symbols-outlined text-[28px] text-neutral-gray">group</span>
+<span class="text-[11px] font-medium text-neutral-gray font-lato">Gestión Estudiante</span>
+</a>
+<a class="flex flex-col items-center justify-center gap-1 w-1/4" href="#">
+<span class="material-symbols-outlined text-[28px] text-neutral-gray">manage_accounts</span>
+<span class="material-symbols-outlined text-[28px] text-neutral-gray">manage_accounts</span>
+</a>
+<a class="flex flex-col items-center justify-center gap-1 w-1/4" href="#">
+<div class="relative">
+<span class="material-symbols-outlined text-[28px] text-neutral-gray">chat</span>
+<span class="absolute -top-1 -right-1 w-2.5 h-2.5 bg-error rounded-full border-2 border-white"></span>
+</div>
+<span class="text-[11px] font-medium text-neutral-gray font-lato">Mensajes</span>
+</a></nav>
+<!-- Micro-interaction Script -->
+<script>
+        document.querySelectorAll('button, a').forEach(elem => {
+            elem.addEventListener('mousedown', () => {
+                elem.style.transform = 'scale(0.95)';
+            });
+            elem.addEventListener('mouseup', () => {
+                elem.style.transform = 'scale(1)';
+            });
+            elem.addEventListener('mouseleave', () => {
+                elem.style.transform = 'scale(1)';
+            });
+        });
 
-            <div class="brigada-card">
-                <div class="brigada-icon blue">
-                    <span class="material-symbols-outlined">school</span>
-                </div>
-                <div class="brigada-info">
-                    <h3>Apoyo Académico</h3>
-                    <p>6 estudiantes activos</p>
-                    <div class="brigada-progress">
-                        <span class="brigada-progress-label">Progreso</span>
-                        <div class="progress-bar">
-                            <div class="progress-fill" style="width: 40%;"></div>
-                        </div>
-                        <span class="progress-percent">40%</span>
-                    </div>
-                </div>
-                <button class="brigada-menu">
-                    <span class="material-symbols-outlined">more_vert</span>
-                </button>
-            </div>
-
-            <div class="brigada-card">
-                <div class="brigada-icon purple">
-                    <span class="material-symbols-outlined">volunteer_activism</span>
-                </div>
-                <div class="brigada-info">
-                    <h3>Servicios Comunitarios</h3>
-                    <p>4 estudiantes activos</p>
-                    <div class="brigada-progress">
-                        <span class="brigada-progress-label">Progreso</span>
-                        <div class="progress-bar">
-                            <div class="progress-fill" style="width: 80%;"></div>
-                        </div>
-                        <span class="progress-percent">80%</span>
-                    </div>
-                </div>
-                <button class="brigada-menu">
-                    <span class="material-symbols-outlined">more_vert</span>
-                </button>
-            </div>
-        </div>
-
-        <div class="actions-list">
-            <div class="action-card" onclick="openModal('asistencia')">
-                <div class="action-icon orange">
-                    <span class="material-symbols-outlined">how_to_reg</span>
-                </div>
-                <div class="action-info">
-                    <h3>Verificar Asistencia</h3>
-                    <p>12 pendientes hoy</p>
-                </div>
-                <div class="action-arrow">
-                    <span class="material-symbols-outlined">chevron_right</span>
-                </div>
-            </div>
-
-            <div class="action-card" onclick="openModal('reportes')">
-                <div class="action-icon green">
-                    <span class="material-symbols-outlined">check_circle</span>
-                </div>
-                <div class="action-info">
-                    <h3>Aprobar Reportes</h3>
-                    <p>8 reportes nuevos</p>
-                </div>
-                <div class="action-arrow">
-                    <span class="material-symbols-outlined">chevron_right</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="reporte-card">
-            <h3>Reporte Semanal Disponible</h3>
-            <p>Ya puedes descargar el resumen detallado de actividades de la última semana académica.</p>
-            <button class="btn-reporte" onclick="descargarReporte()">
-                <span class="material-symbols-outlined">download</span>
-                Descargar Reporte (PDF)
-            </button>
-        </div>
-
-        <button class="btn-logout" onclick="window.location.href='/seleccion-rol'">
-            <span class="material-symbols-outlined">logout</span>
-            Cerrar Sesión
-        </button>
-
-    </main>
-
-    <div class="modal-overlay" id="modal-asistencia">
-        <div class="modal">
-            <div class="modal-header">
-                <h3>Verificar Asistencia - 20 de junio 2026</h3>
-                <button class="modal-close" onclick="closeModal('asistencia')">
-                    <span class="material-symbols-outlined">close</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="asistencia-list">
-                    <div class="asistencia-item">
-                        <div class="asistencia-avatar">JC</div>
-                        <div class="asistencia-info">
-                            <h4>Juan Carlos Rodríguez</h4>
-                            <p>Brigada Ambiental</p>
-                        </div>
-                        <div class="asistencia-status">
-                            <button class="status-toggle active" onclick="toggleAsistencia(this)"></button>
-                        </div>
-                    </div>
-                    <div class="asistencia-item">
-                        <div class="asistencia-avatar" style="background:linear-gradient(135deg,#c084fc,#7e22ce);">AL</div>
-                        <div class="asistencia-info">
-                            <h4>Ana Lucía Martínez</h4>
-                            <p>Apoyo Académico</p>
-                        </div>
-                        <div class="asistencia-status">
-                            <button class="status-toggle active" onclick="toggleAsistencia(this)"></button>
-                        </div>
-                    </div>
-                    <div class="asistencia-item">
-                        <div class="asistencia-avatar" style="background:linear-gradient(135deg,#34d399,#047857);">DG</div>
-                        <div class="asistencia-info">
-                            <h4>Diego Gómez</h4>
-                            <p>Servicios Comunitarios</p>
-                        </div>
-                        <div class="asistencia-status">
-                            <button class="status-toggle" onclick="toggleAsistencia(this)"></button>
-                        </div>
-                    </div>
-                    <div class="asistencia-item">
-                        <div class="asistencia-avatar" style="background:linear-gradient(135deg,#fbbf24,#d97706);">SF</div>
-                        <div class="asistencia-info">
-                            <h4>Sofía Fernández</h4>
-                            <p>Brigada Ambiental</p>
-                        </div>
-                        <div class="asistencia-status">
-                            <button class="status-toggle active" onclick="toggleAsistencia(this)"></button>
-                        </div>
-                    </div>
-                    <div class="asistencia-item">
-                        <div class="asistencia-avatar" style="background:linear-gradient(135deg,#f472b6,#db2777);">CM</div>
-                        <div class="asistencia-info">
-                            <h4>Carlos Mendoza</h4>
-                            <p>Apoyo Académico</p>
-                        </div>
-                        <div class="asistencia-status">
-                            <button class="status-toggle active" onclick="toggleAsistencia(this)"></button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn-primary" onclick="guardarAsistencia()">
-                    <span class="material-symbols-outlined">save</span>
-                    Guardar Asistencia
-                </button>
-                <button class="btn-secondary" onclick="closeModal('asistencia')">Cancelar</button>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal-overlay" id="modal-reportes">
-        <div class="modal">
-            <div class="modal-header">
-                <h3>Aprobar Reportes de Horas</h3>
-                <button class="modal-close" onclick="closeModal('reportes')">
-                    <span class="material-symbols-outlined">close</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="asistencia-list">
-                    <div class="asistencia-item">
-                        <div class="asistencia-avatar">JC</div>
-                        <div class="asistencia-info">
-                            <h4>Juan Carlos Rodríguez</h4>
-                            <p>8 horas - Brigada Ambiental</p>
-                        </div>
-                        <div class="asistencia-status">
-                            <button class="btn-icon" style="width:32px;height:32px;background:#dcfce7;color:#16a34a;" onclick="aprobarReporte(this)">
-                                <span class="material-symbols-outlined">check</span>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="asistencia-item">
-                        <div class="asistencia-avatar" style="background:linear-gradient(135deg,#c084fc,#7e22ce);">AL</div>
-                        <div class="asistencia-info">
-                            <h4>Ana Lucía Martínez</h4>
-                            <p>6 horas - Apoyo Académico</p>
-                        </div>
-                        <div class="asistencia-status">
-                            <button class="btn-icon" style="width:32px;height:32px;background:#dcfce7;color:#16a34a;" onclick="aprobarReporte(this)">
-                                <span class="material-symbols-outlined">check</span>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="asistencia-item">
-                        <div class="asistencia-avatar" style="background:linear-gradient(135deg,#34d399,#047857);">DG</div>
-                        <div class="asistencia-info">
-                            <h4>Diego Gómez</h4>
-                            <p>4 horas - Servicios Comunitarios</p>
-                        </div>
-                        <div class="asistencia-status">
-                            <button class="btn-icon" style="width:32px;height:32px;background:#dcfce7;color:#16a34a;" onclick="aprobarReporte(this)">
-                                <span class="material-symbols-outlined">check</span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn-primary" onclick="aprobarTodos()">
-                    <span class="material-symbols-outlined">done_all</span>
-                    Aprobar Todos
-                </button>
-                <button class="btn-secondary" onclick="closeModal('reportes')">Cancelar</button>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal-overlay" id="modal-descarga">
-        <div class="modal">
-            <div class="modal-header">
-                <h3>Descargar Reporte</h3>
-                <button class="modal-close" onclick="closeModal('descarga')">
-                    <span class="material-symbols-outlined">close</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p style="font-size:14px;color:#64748b;line-height:1.6;margin-bottom:16px;">
-                    Este reporte incluye el detalle de asistencias, horas validadas y observaciones de la semana académica.
-                </p>
-            </div>
-            <div class="modal-footer">
-                <button class="btn-primary" onclick="confirmarDescarga()">
-                    <span class="material-symbols-outlined">download</span>
-                    Descargar PDF
-                </button>
-                <button class="btn-secondary" onclick="closeModal('descarga')">Cancelar</button>
-            </div>
-        </div>
-    </div>
-
-    <nav class="bottom-nav">
-        <button class="bottom-nav-item active" onclick="window.location.href='/maestro/dashboard'">
-            <span class="material-symbols-outlined">dashboard</span>
-            Dashboard
-        </button>
-        <button class="bottom-nav-item" onclick="window.location.href='/maestro/estudiantes'">
-            <span class="material-symbols-outlined">groups</span>
-            Estudiantes
-        </button>
-        <button class="bottom-nav-item" onclick="window.location.href='/maestro/tecnico'">
-            <span class="material-symbols-outlined">engineering</span>
-            Técnico
-        </button>
-        <button class="bottom-nav-item" onclick="window.location.href='/maestro/mensajes'">
-            <span class="material-symbols-outlined">chat</span>
-            Mensajes
-        </button>
-    </nav>
-
-    <script>
-        function openModal(tipo) {
-            document.getElementById('modal-' + tipo).classList.add('active');
-        }
-
-        function closeModal(tipo) {
-            document.getElementById('modal-' + tipo).classList.remove('active');
-        }
-
-        function toggleAsistencia(btn) {
-            btn.classList.toggle('active');
-        }
-
-        function guardarAsistencia() {
-            alert('✅ Asistencia guardada correctamente');
-            closeModal('asistencia');
-        }
-
-        function aprobarReporte(btn) {
-            btn.style.background = '#bbf7d0';
-            btn.innerHTML = '<span class="material-symbols-outlined">done</span>';
-            setTimeout(() => { alert('✅ Reporte aprobado'); }, 200);
-        }
-
-        function aprobarTodos() {
-            alert('✅ Todos los reportes han sido aprobados');
-            closeModal('reportes');
-        }
-
-        function descargarReporte() {
-            openModal('descarga');
-        }
-
-        function confirmarDescarga() {
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
-            doc.setFontSize(20);
-            doc.text('HORASOCIAL PRO', 20, 20);
-            doc.setFontSize(14);
-            doc.text('Reporte Semanal - 15 al 20 de junio 2026', 20, 35);
-            doc.setDrawColor(2, 132, 199);
-            doc.setLineWidth(0.5);
-            doc.line(20, 40, 190, 40);
-            doc.setFontSize(12);
-            doc.text('RESUMEN GENERAL', 20, 55);
-            doc.setFontSize(11);
-            doc.text('Total de Estudiantes: 15', 20, 70);
-            doc.text('Horas Totales Validadas: 248', 20, 80);
-            doc.text('Brigadas Activas: 3', 20, 90);
-            doc.text('Pendientes de Revisión: 12', 20, 100);
-            doc.setFontSize(12);
-            doc.text('DETALLE POR BRIGADA', 20, 120);
-            doc.setFontSize(10);
-            doc.text('1. Brigada Ambiental - 5 estudiantes - 65% progreso', 20, 135);
-            doc.text('2. Apoyo Académico - 6 estudiantes - 40% progreso', 20, 145);
-            doc.text('3. Servicios Comunitarios - 4 estudiantes - 80% progreso', 20, 155);
-            doc.setFontSize(9);
-            doc.setTextColor(128, 128, 128);
-            doc.text('Generado el: 20 de junio de 2026 - Maestro Ricardo', 20, 280);
-            doc.text('HORASOCIAL PRO - Gestión de Servicio Social Escolar', 20, 285);
-            doc.save('reporte_semanal_20jun2026.pdf');
-            closeModal('descarga');
-        }
-
-        document.querySelectorAll('.modal-overlay').forEach(modal => {
-            modal.addEventListener('click', function(e) {
-                if (e.target === this) {
-                    this.classList.remove('active');
-                }
+        // Simple parallax for blobs based on scroll
+        window.addEventListener('scroll', () => {
+            const scroll = window.scrollY;
+            const blobs = document.querySelectorAll('.blob');
+            
+            blobs.forEach((blob, index) => {
+                const speed = (index + 1) * 0.1;
+                blob.style.transform = `translateY(${scroll * speed}px)`;
             });
         });
     </script>
 
-</body>
-</html>
+
+</body></html>

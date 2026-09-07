@@ -1,1392 +1,269 @@
-<!DOCTYPE html>
-<html class="light" lang="es">
-<head>
-    <meta charset="utf-8">
-    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
-    <title>Registro de Asistencia - Horasocial Pro</title>
-    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet">
-    
-    <script id="tailwind-config">
+<!DOCTYPE html><html class="light" lang="es"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Registro de Asistencia - HORASOCIAL PRO</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;family=Plus+Jakarta+Sans:wght@100..900&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
         tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    colors: {
-                        "hs-primary": "#0f172a",
-                        "hs-secondary": "#39b8fd",
-                        "hs-accent": "#006591",
-                        "hs-surface": "#f8fafc",
-                        "hs-card": "#ffffff",
-                        "hs-muted": "#64748b",
-                        "hs-border": "#e2e8f0",
-                        "hs-success": "#10b981",
-                        "hs-warning": "#f59e0b",
-                        "hs-danger": "#ef4444",
-                    },
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                        display: ['Plus Jakarta Sans', 'sans-serif'],
-                    }
-                }
-            }
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-container-lowest": "#ffffff",
+                      "on-background": "#191c1e",
+                      "secondary-container": "#39b8fd",
+                      "on-secondary-container": "#004666",
+                      "surface-container-low": "#f2f4f6",
+                      "tertiary-container": "#001e2c",
+                      "on-secondary-fixed-variant": "#004c6e",
+                      "on-error": "#ffffff",
+                      "inverse-on-surface": "#eff1f3",
+                      "secondary-fixed": "#c9e6ff",
+                      "on-secondary": "#ffffff",
+                      "on-primary-fixed-variant": "#3f465c",
+                      "inverse-surface": "#2d3133",
+                      "on-tertiary": "#ffffff",
+                      "surface": "#f7f9fb",
+                      "background": "#f7f9fb",
+                      "on-surface-variant": "#45464d",
+                      "surface-container": "#eceef0",
+                      "error": "#ba1a1a",
+                      "error-container": "#ffdad6",
+                      "surface-bright": "#f7f9fb",
+                      "on-primary-fixed": "#131b2e",
+                      "on-primary": "#ffffff",
+                      "primary": "#000000",
+                      "on-tertiary-container": "#008ebf",
+                      "primary-container": "#131b2e",
+                      "tertiary-fixed": "#c4e7ff",
+                      "primary-fixed": "#dae2fd",
+                      "inverse-primary": "#bec6e0",
+                      "on-tertiary-fixed": "#001e2c",
+                      "surface-tint": "#565e74",
+                      "on-secondary-fixed": "#001e2f",
+                      "secondary": "#006591",
+                      "on-error-container": "#93000a",
+                      "tertiary-fixed-dim": "#7bd0ff",
+                      "surface-container-highest": "#e0e3e5",
+                      "primary-fixed-dim": "#bec6e0",
+                      "on-primary-container": "#7c839b",
+                      "tertiary": "#000000",
+                      "on-tertiary-fixed-variant": "#004c69",
+                      "outline-variant": "#c6c6cd",
+                      "outline": "#76777d",
+                      "surface-variant": "#e0e3e5",
+                      "secondary-fixed-dim": "#89ceff",
+                      "on-surface": "#191c1e",
+                      "surface-dim": "#d8dadc",
+                      "surface-container-high": "#e6e8ea"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "margin-mobile": "16px",
+                      "gutter": "24px",
+                      "xl": "32px",
+                      "unit": "4px",
+                      "md": "16px",
+                      "sm": "8px",
+                      "lg": "24px",
+                      "margin-desktop": "48px",
+                      "xs": "4px"
+              },
+              "fontFamily": {
+                      "headline-sm": ["Plus Jakarta Sans"],
+                      "label-md": ["Inter"],
+                      "body-md": ["Inter"],
+                      "display-lg": ["Plus Jakarta Sans"],
+                      "headline-lg-mobile": ["Plus Jakarta Sans"],
+                      "headline-lg": ["Plus Jakarta Sans"],
+                      "body-lg": ["Inter"],
+                      "label-sm": ["Inter"],
+                      "headline-md": ["Plus Jakarta Sans"]
+              },
+              "fontSize": {
+                      "headline-sm": ["20px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                      "label-md": ["14px", {"lineHeight": "1.4", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                      "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                      "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "headline-lg-mobile": ["28px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                      "headline-lg": ["32px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                      "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                      "label-sm": ["12px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                      "headline-md": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}]
+              }
+            },
+          },
         }
     </script>
-    <style>
-        * { -webkit-tap-highlight-color: transparent; }
-        
-        body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #f0f9ff 0%, #f8fafc 50%, #ffffff 100%);
-            min-height: 100vh;
-            color: #0f172a;
-            overflow-x: hidden;
-        }
-
+<style>
+        body { font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; }
+        .font-headline { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .glass-card { backdrop-filter: blur(12px); }
         .material-symbols-outlined {
             font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-            transition: font-variation-settings 0.2s ease;
         }
-        .material-symbols-outlined.filled {
-            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-        }
-
-        /* ===== SERENE BACKGROUND ===== */
-        .serene-bg {
-            position: fixed;
-            inset: 0;
-            z-index: 0;
-            overflow: hidden;
-            pointer-events: none;
-        }
-
-        .aurora-orb {
+        .blob {
             position: absolute;
-            border-radius: 50%;
+            width: 300px;
+            height: 300px;
             filter: blur(80px);
             opacity: 0.4;
-            animation: drift 25s ease-in-out infinite;
-        }
-
-        .aurora-orb-1 {
-            width: 600px;
-            height: 600px;
-            background: radial-gradient(circle, rgba(57, 184, 253, 0.3) 0%, rgba(135, 206, 250, 0.1) 50%, transparent 70%);
-            top: -10%;
-            left: -10%;
-            animation-delay: 0s;
-            animation-duration: 30s;
-        }
-
-        .aurora-orb-2 {
-            width: 500px;
-            height: 500px;
-            background: radial-gradient(circle, rgba(14, 165, 233, 0.25) 0%, rgba(186, 230, 253, 0.1) 50%, transparent 70%);
-            bottom: 10%;
-            right: -5%;
-            animation-delay: -10s;
-            animation-duration: 35s;
-        }
-
-        .aurora-orb-3 {
-            width: 400px;
-            height: 400px;
-            background: radial-gradient(circle, rgba(2, 132, 199, 0.2) 0%, rgba(224, 242, 254, 0.08) 50%, transparent 70%);
-            top: 40%;
-            left: 30%;
-            animation-delay: -20s;
-            animation-duration: 28s;
-        }
-
-        .aurora-orb-4 {
-            width: 350px;
-            height: 350px;
-            background: radial-gradient(circle, rgba(186, 230, 253, 0.25) 0%, rgba(240, 249, 255, 0.1) 50%, transparent 70%);
-            bottom: -5%;
-            left: 20%;
-            animation-delay: -5s;
-            animation-duration: 32s;
-        }
-
-        @keyframes drift {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            25% { transform: translate(40px, -30px) scale(1.1); }
-            50% { transform: translate(-20px, 50px) scale(0.95); }
-            75% { transform: translate(30px, 20px) scale(1.05); }
-        }
-
-        /* Wave Lines */
-        .wave-line {
-            position: absolute;
-            width: 200%;
-            height: 3px;
-            border-radius: 999px;
-            animation: wave-flow 15s linear infinite;
-        }
-
-        .wave-line-1 {
-            top: 20%;
-            background: linear-gradient(90deg, transparent 0%, rgba(57, 184, 253, 0.2) 15%, rgba(57, 184, 253, 0.35) 30%, rgba(57, 184, 253, 0.45) 50%, rgba(57, 184, 253, 0.35) 70%, rgba(57, 184, 253, 0.2) 85%, transparent 100%);
-            box-shadow: 0 0 12px rgba(57, 184, 253, 0.15);
-            animation-delay: 0s;
-        }
-
-        .wave-line-2 {
-            top: 45%;
-            background: linear-gradient(90deg, transparent 0%, rgba(14, 165, 233, 0.15) 20%, rgba(14, 165, 233, 0.3) 40%, rgba(14, 165, 233, 0.4) 50%, rgba(14, 165, 233, 0.3) 60%, rgba(14, 165, 233, 0.15) 80%, transparent 100%);
-            box-shadow: 0 0 10px rgba(14, 165, 233, 0.1);
-            animation-delay: -5s;
-            opacity: 0.85;
-        }
-
-        .wave-line-3 {
-            top: 70%;
-            background: linear-gradient(90deg, transparent 0%, rgba(2, 132, 199, 0.12) 25%, rgba(2, 132, 199, 0.25) 45%, rgba(2, 132, 199, 0.35) 50%, rgba(2, 132, 199, 0.25) 55%, rgba(2, 132, 199, 0.12) 75%, transparent 100%);
-            box-shadow: 0 0 8px rgba(2, 132, 199, 0.08);
-            animation-delay: -10s;
-            opacity: 0.7;
-        }
-
-        .wave-line-4 {
-            top: 35%;
-            background: linear-gradient(90deg, transparent 0%, rgba(135, 206, 250, 0.1) 20%, rgba(135, 206, 250, 0.2) 50%, rgba(135, 206, 250, 0.1) 80%, transparent 100%);
-            box-shadow: 0 0 6px rgba(135, 206, 250, 0.08);
-            animation-delay: -7s;
-            animation-duration: 20s;
-            opacity: 0.6;
-        }
-
-        .wave-line-5 {
-            top: 85%;
-            background: linear-gradient(90deg, transparent 0%, rgba(186, 230, 253, 0.08) 30%, rgba(186, 230, 253, 0.18) 50%, rgba(186, 230, 253, 0.08) 70%, transparent 100%);
-            box-shadow: 0 0 6px rgba(186, 230, 253, 0.06);
-            animation-delay: -12s;
-            animation-duration: 18s;
-            opacity: 0.5;
-        }
-
-        @keyframes wave-flow {
-            0% { transform: translateX(-50%); }
-            100% { transform: translateX(0%); }
-        }
-
-        .glass-panel {
-            background: rgba(255, 255, 255, 0.75);
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border: 1px solid rgba(255, 255, 255, 0.6);
-            box-shadow: 0 2px 15px -3px rgba(15, 23, 42, 0.07), 0 10px 20px -2px rgba(15, 23, 42, 0.04);
-        }
-
-        .glass-card {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(16px) saturate(150%);
-            -webkit-backdrop-filter: blur(16px) saturate(150%);
-            border: 1px solid rgba(226, 232, 240, 0.6);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .glass-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 20px 25px -5px rgba(15, 23, 42, 0.1), 0 8px 10px -6px rgba(15, 23, 42, 0.05);
-            border-color: rgba(57, 184, 253, 0.3);
-        }
-
-        .app-header {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border-bottom: 1px solid rgba(226, 232, 240, 0.6);
-        }
-
-        .nav-item {
-            position: relative;
-            transition: all 0.2s ease;
-            cursor: pointer;
-        }
-
-        .nav-item.active {
-            color: #39b8fd;
-        }
-
-        .nav-item.active::after {
-            content: '';
-            position: absolute;
-            bottom: -4px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 24px;
-            height: 3px;
-            background: #39b8fd;
-            border-radius: 999px;
-        }
-
-        .nav-item:hover:not(.active) {
-            color: #0f172a;
-            transform: translateY(-2px);
-        }
-
-        .stat-card {
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(16px);
-            border: 1px solid rgba(226, 232, 240, 0.6);
-            border-radius: 20px;
-            padding: 20px;
-            transition: all 0.3s ease;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 24px -8px rgba(15, 23, 42, 0.08);
-        }
-
-        .progress-ring {
-            transform: rotate(-90deg);
-        }
-
-        .progress-ring-circle {
-            transition: stroke-dashoffset 0.5s ease;
-        }
-
-        .attendance-card {
-            background: rgba(255, 255, 255, 0.9);
-            border: 1px solid rgba(226, 232, 240, 0.6);
-            border-radius: 16px;
-            padding: 16px;
-            transition: all 0.3s ease;
-        }
-
-        .attendance-card:hover {
-            border-color: rgba(57, 184, 253, 0.3);
-            box-shadow: 0 8px 20px -4px rgba(15, 23, 42, 0.06);
-        }
-
-        .status-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            padding: 4px 10px;
-            border-radius: 999px;
-            font-size: 11px;
-            font-weight: 600;
-            letter-spacing: 0.02em;
-        }
-
-        .status-presente {
-            background: rgba(16, 185, 129, 0.1);
-            color: #059669;
-        }
-
-        .status-falta {
-            background: rgba(239, 68, 68, 0.1);
-            color: #dc2626;
-        }
-
-        .status-justificada {
-            background: rgba(245, 158, 11, 0.1);
-            color: #d97706;
-        }
-
-        .status-pendiente {
-            background: rgba(57, 184, 253, 0.1);
-            color: #0284c7;
-        }
-
-        .filter-btn {
-            padding: 8px 16px;
-            border-radius: 12px;
-            font-size: 13px;
-            font-weight: 500;
-            transition: all 0.2s ease;
-            border: 1.5px solid transparent;
-            cursor: pointer;
-            white-space: nowrap;
-        }
-
-        .filter-btn.active {
-            background: linear-gradient(135deg, #39b8fd, #0ea5e9);
-            color: white;
-            border-color: transparent;
-        }
-
-        .filter-btn:not(.active) {
-            background: rgba(255, 255, 255, 0.7);
-            border-color: #e2e8f0;
-            color: #64748b;
-        }
-
-        .filter-btn:not(.active):hover {
-            border-color: #39b8fd;
-            color: #39b8fd;
-            background: rgba(57, 184, 253, 0.05);
-        }
-
-        .timeline-item {
-            position: relative;
-            padding-left: 28px;
-            padding-bottom: 20px;
-        }
-
-        .timeline-item::before {
-            content: '';
-            position: absolute;
-            left: 8px;
-            top: 8px;
-            bottom: -8px;
-            width: 2px;
-            background: #e2e8f0;
-        }
-
-        .timeline-item:last-child::before {
-            display: none;
-        }
-
-        .timeline-dot {
-            position: absolute;
-            left: 0;
-            top: 6px;
-            width: 18px;
-            height: 18px;
+            z-index: 0;
             border-radius: 50%;
-            border: 3px solid white;
-            box-shadow: 0 0 0 2px currentColor;
         }
-
-        .timeline-dot.presente {
-            background: #10b981;
-            color: #10b981;
-            box-shadow: 0 0 0 2px #10b981;
-        }
-
-        .timeline-dot.falta {
-            background: #ef4444;
-            color: #ef4444;
-            box-shadow: 0 0 0 2px #ef4444;
-        }
-
-        .timeline-dot.justificada {
-            background: #f59e0b;
-            color: #f59e0b;
-            box-shadow: 0 0 0 2px #f59e0b;
-        }
-
-        .modal-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(15, 23, 42, 0.5);
-            backdrop-filter: blur(8px);
-            z-index: 100;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .modal-overlay.active {
-            display: flex;
-            opacity: 1;
-        }
-
-        .modal-container {
-            background: white;
-            border-radius: 24px;
-            width: 100%;
-            max-width: 480px;
-            max-height: 85vh;
-            overflow-y: auto;
-            box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.25);
-            transform: scale(0.95);
-            opacity: 0;
-            transition: all 0.3s ease;
-        }
-
-        .modal-overlay.active .modal-container {
-            transform: scale(1);
-            opacity: 1;
-        }
-
-        .modal-header {
-            padding: 24px 24px 0;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .modal-body {
-            padding: 20px 24px;
-        }
-
-        .modal-footer {
-            padding: 0 24px 24px;
-            display: flex;
-            gap: 12px;
-        }
-
-        .modal-close {
-            width: 36px;
-            height: 36px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: #f1f5f9;
-            color: #64748b;
-            border: none;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .modal-close:hover {
-            background: #e2e8f0;
-            color: #0f172a;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-            color: white;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px -5px rgba(15, 23, 42, 0.3);
-        }
-
-        .btn-secondary {
-            background: linear-gradient(135deg, #39b8fd 0%, #0ea5e9 100%);
-            color: white;
-            transition: all 0.3s ease;
-        }
-
-        .btn-secondary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px -5px rgba(57, 184, 253, 0.4);
-        }
-
-        .btn-outline {
-            border: 1.5px solid #e2e8f0;
-            transition: all 0.3s ease;
-            background: white;
-        }
-
-        .btn-outline:hover {
-            border-color: #39b8fd;
-            color: #39b8fd;
-            background: rgba(57, 184, 253, 0.05);
-        }
-
-        .animate-fade-up {
-            animation: fadeUp 0.6s ease-out forwards;
-        }
-
-        @keyframes fadeUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .animate-delay-100 { animation-delay: 100ms; }
-        .animate-delay-200 { animation-delay: 200ms; }
-        .animate-delay-300 { animation-delay: 300ms; }
-
-        .scroll-hidden::-webkit-scrollbar {
-            display: none;
-        }
-        .scroll-hidden {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
-
-        @media (max-width: 640px) {
-            .modal-container { max-height: 90vh; border-radius: 20px; }
-            .aurora-orb { filter: blur(60px); }
-        }
+        .blob-blue { background-color: #39b8fd; top: 10%; right: -50px; }
+        .blob-pink { background-color: #ffdaeb; bottom: 20%; left: -50px; }
     </style>
 </head>
-<body class="pb-24">
-
-    <!-- ===== SERENE BACKGROUND ===== -->
-    <div class="serene-bg">
-        <div class="aurora-orb aurora-orb-1"></div>
-        <div class="aurora-orb aurora-orb-2"></div>
-        <div class="aurora-orb aurora-orb-3"></div>
-        <div class="aurora-orb aurora-orb-4"></div>
-        <div class="wave-line wave-line-1"></div>
-        <div class="wave-line wave-line-2"></div>
-        <div class="wave-line wave-line-3"></div>
-        <div class="wave-line wave-line-4"></div>
-        <div class="wave-line wave-line-5"></div>
-    </div>
-
-    <!-- Header -->
-    <header class="app-header fixed top-0 w-full z-50 h-16 flex items-center justify-between px-4 sm:px-6 lg:px-8">
-        <div class="flex items-center gap-3">
-            <div class="bg-gradient-to-br from-hs-primary to-hs-accent p-2 rounded-xl shadow-lg shadow-hs-secondary/20">
-                <span class="material-symbols-outlined text-white text-lg">school</span>
-            </div>
-            <div class="flex flex-col">
-                <span class="font-display font-bold text-hs-primary text-sm leading-tight">Horasocial Pro</span>
-                <span class="text-[10px] text-hs-muted font-medium tracking-wider uppercase">Estudiante</span>
-            </div>
-        </div>
-        <div class="flex items-center gap-3">
-            <button class="relative p-2.5 rounded-xl hover:bg-hs-secondary/10 transition-all active:scale-95 group">
-                <span class="material-symbols-outlined text-hs-muted group-hover:text-hs-secondary transition-colors">notifications</span>
-                <span class="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full ring-2 ring-white animate-pulse"></span>
-            </button>
-            <div class="flex items-center gap-2 pl-2 border-l border-hs-border">
-                <div class="w-9 h-9 rounded-full overflow-hidden ring-2 ring-hs-secondary/20 ring-offset-2">
-                    <img alt="Alex" class="w-full h-full object-cover" src="https://ui-avatars.com/api/?name=Alex+Student&background=39b8fd&color=fff">
-                </div>
-            </div>
-        </div>
-    </header>
-
-    <!-- Main Content -->
-    <main class="relative z-10 pt-20 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto space-y-6">
-
-        <!-- Welcome -->
-        <section class="animate-fade-up">
-            <div class="flex items-end justify-between">
-                <div>
-                    <p class="text-hs-muted text-sm font-medium mb-1">Control de asistencia</p>
-                    <h1 class="font-display text-3xl sm:text-4xl font-bold text-hs-primary tracking-tight">
-                        Mi <span class="text-transparent bg-clip-text bg-gradient-to-r from-hs-secondary to-hs-accent">Registro</span>
-                    </h1>
-                </div>
-                <div class="hidden sm:block text-right">
-                    <p class="text-xs text-hs-muted" id="current-date">Junio 2026</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Stats Cards -->
-        <section class="animate-fade-up animate-delay-100">
-            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
-                <!-- Horas Totales -->
-                <div class="stat-card">
-                    <div class="flex items-center justify-between mb-3">
-                        <div class="p-2 rounded-lg bg-hs-secondary/10">
-                            <span class="material-symbols-outlined text-hs-secondary text-lg">timer</span>
-                        </div>
-                        <span class="text-xs font-medium text-hs-success bg-emerald-50 px-2 py-1 rounded-full">+12h este mes</span>
-                    </div>
-                    <p class="text-2xl font-display font-bold text-hs-primary">48<span class="text-sm font-normal text-hs-muted">/120h</span></p>
-                    <p class="text-xs text-hs-muted mt-1">Horas acumuladas</p>
-                    <div class="mt-3 h-1.5 bg-hs-border/50 rounded-full overflow-hidden">
-                        <div class="h-full bg-gradient-to-r from-hs-secondary to-hs-accent rounded-full" style="width: 40%"></div>
-                    </div>
-                </div>
-
-                <!-- Asistencias -->
-                <div class="stat-card">
-                    <div class="flex items-center justify-between mb-3">
-                        <div class="p-2 rounded-lg bg-emerald-50">
-                            <span class="material-symbols-outlined text-emerald-600 text-lg">check_circle</span>
-                        </div>
-                    </div>
-                    <p class="text-2xl font-display font-bold text-hs-primary">24</p>
-                    <p class="text-xs text-hs-muted mt-1">Asistencias totales</p>
-                    <div class="mt-3 flex gap-1">
-                        <div class="h-1.5 flex-1 bg-emerald-500 rounded-full"></div>
-                        <div class="h-1.5 flex-1 bg-emerald-500 rounded-full"></div>
-                        <div class="h-1.5 flex-1 bg-emerald-500 rounded-full"></div>
-                        <div class="h-1.5 flex-1 bg-hs-border/50 rounded-full"></div>
-                    </div>
-                </div>
-
-                <!-- Faltas -->
-                <div class="stat-card">
-                    <div class="flex items-center justify-between mb-3">
-                        <div class="p-2 rounded-lg bg-red-50">
-                            <span class="material-symbols-outlined text-red-500 text-lg">cancel</span>
-                        </div>
-                        <span class="text-xs font-medium text-red-600 bg-red-50 px-2 py-1 rounded-full">2 injustificadas</span>
-                    </div>
-                    <p class="text-2xl font-display font-bold text-hs-primary">5</p>
-                    <p class="text-xs text-hs-muted mt-1">Faltas totales</p>
-                    <div class="mt-3 flex gap-1">
-                        <div class="h-1.5 flex-1 bg-red-500 rounded-full"></div>
-                        <div class="h-1.5 flex-1 bg-amber-500 rounded-full"></div>
-                        <div class="h-1.5 flex-1 bg-hs-border/50 rounded-full"></div>
-                        <div class="h-1.5 flex-1 bg-hs-border/50 rounded-full"></div>
-                    </div>
-                </div>
-
-                <!-- Tasa de asistencia -->
-                <div class="stat-card">
-                    <div class="flex items-center justify-between mb-3">
-                        <div class="p-2 rounded-lg bg-purple-50">
-                            <span class="material-symbols-outlined text-purple-600 text-lg">trending_up</span>
-                        </div>
-                    </div>
-                    <p class="text-2xl font-display font-bold text-hs-primary">82.8%</p>
-                    <p class="text-xs text-hs-muted mt-1">Tasa de asistencia</p>
-                    <div class="mt-3 h-1.5 bg-hs-border/50 rounded-full overflow-hidden">
-                        <div class="h-full bg-gradient-to-r from-purple-500 to-purple-600 rounded-full" style="width: 82.8%"></div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Próximo Registro / Acción Rápida -->
-        <section class="animate-fade-up animate-delay-200">
-            <div class="glass-card rounded-2xl p-6 relative overflow-hidden">
-                <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-hs-secondary/20 to-transparent rounded-full -translate-y-1/2 translate-x-1/2"></div>
-                
-                <div class="relative z-10">
-                    <div class="flex items-center gap-2 mb-4">
-                        <span class="badge badge-blue text-xs font-semibold px-3 py-1 rounded-full bg-hs-secondary/10 text-hs-secondary">EN CURSO</span>
-                        <span class="text-xs text-hs-muted">Faltan 12h para el límite</span>
-                    </div>
-                    
-                    <h3 class="font-display font-bold text-xl text-hs-primary mb-2">Tutoría de Matemáticas</h3>
-                    <p class="text-sm text-hs-muted mb-4">Soporte para estudiantes de primer ingreso en cálculo integral y álgebra lineal.</p>
-                    
-                    <div class="flex items-center gap-4 mb-4 text-sm text-hs-muted">
-                        <span class="flex items-center gap-1">
-                            <span class="material-symbols-outlined text-base text-hs-secondary">calendar_today</span>
-                            Hoy, 18 Jun 2026
-                        </span>
-                        <span class="flex items-center gap-1">
-                            <span class="material-symbols-outlined text-base text-hs-secondary">schedule</span>
-                            15:00 - 17:00
-                        </span>
-                        <span class="flex items-center gap-1 text-hs-secondary font-semibold">
-                            <span class="material-symbols-outlined text-base">timer</span>
-                            2h
-                        </span>
-                    </div>
-                    
-                    <button onclick="openModal('modal-registro')" class="w-full sm:w-auto btn-secondary px-6 py-3 rounded-xl font-semibold text-sm flex items-center justify-center gap-2">
-                        <span class="material-symbols-outlined text-lg">add_circle</span>
-                        Registrar Asistencia
+<body class="bg-surface text-on-surface min-h-screen relative overflow-x-hidden pb-24">
+<!-- Atmospheric Blobs -->
+<div class="blob blob-blue"></div>
+<div class="blob blob-pink"></div>
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-lg py-sm bg-surface/80 backdrop-blur-xl shadow-sm">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full overflow-hidden border-2 border-primary-container shadow-sm">
+<img alt="Student Profile Photo" class="w-full h-full object-cover" data-alt="A close-up professional headshot of a diverse university student smiling warmly. The lighting is bright and natural, reflecting a clean and modern academic atmosphere. The background is a soft, out-of-focus campus environment with light blue tones, aligning with a professional and reliable educational platform identity." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCJVY_R2UEDDyykAH2AZxvSE9VDrP_AxqSXFQoRamxdwATGGi7LQgpviY1xHS2ka7gxJlhpKMsuvegTErzJwMOIS3_u6BAMmTkbBxOygnRsDojQOiRwvF9YPRVJFyrMyiYW8n4GTjGdwDg62NLsY6ECbDyvK_wMlyFsJw-SdNsaX9_BE7yYKxzG5LWo3i4-yyLv40rjIR381YS1GHb6F1FfGH0ML51dO3JZexTGi8piBIc-vChrsU9Rk5FxUGJRY4y54d_WCkxPuwFO">
+</div>
+<div class="flex flex-col">
+<h2 class="font-headline-sm text-headline-sm text-[#0F172A] leading-tight">Registro de Hoy</h2>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-bold tracking-widest">HORASOCIAL PRO</span>
+</div>
+</div>
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container-high transition-colors active:scale-95">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="notifications">notifications</span>
+</button>
+</header>
+<main class="relative z-10 pt-24 px-md max-w-lg mx-auto">
+<!-- Main Action Card -->
+<div class="bg-white p-lg shadow-[0_4px_30px_rgba(15,23,42,0.08)] border border-white/40 overflow-hidden relative group rounded-3xl">
+<!-- Subtle Watermark -->
+<div class="absolute bottom-4 right-4 opacity-[0.03]">
+<span class="material-symbols-outlined text-[120px]" data-icon="settings">settings</span>
+</div>
+<div class="relative z-10">
+<div class="flex items-center justify-between mb-md">
+<span class="bg-secondary-fixed text-on-secondary-fixed text-[10px] uppercase font-bold tracking-wider px-3 py-1 rounded-full">En Curso</span>
+<div class="flex items-center gap-1.5 text-error font-label-md">
+<span class="material-symbols-outlined text-[18px]" data-icon="schedule" style="opacity: 0;">schedule</span>
+<span class="text-sm font-semibold">Faltan 12h para el límite</span>
+</div>
+</div>
+<h1 class="font-headline-md text-headline-md text-primary mb-2">Tutoría de Matemáticas</h1>
+<p class="text-on-surface-variant text-body-md mb-xl leading-relaxed">
+                    Soporte para estudiantes de primer ingreso en cálculo integral y álgebra lineal.
+                </p>
+<div class="space-y-4">
+<!-- Primary CTA -->
+<button class="w-full bg-[#0EA5E9] hover:bg-[#0284c7] text-white py-5 px-lg rounded-2xl font-headline-sm flex items-center justify-center gap-3 shadow-[0_8px_20px_rgba(14,165,233,0.2)] active:scale-[0.98] transition-all" id="confirmBtn">
+<span class="material-symbols-outlined" data-icon="check_circle" style="font-variation-settings: &quot;FILL&quot; 1;">check_circle</span>
+                        Confirmar Asistencia
                     </button>
-                    
-                    <button onclick="openModal('modal-no-asistir')" class="w-full sm:w-auto btn-outline px-6 py-3 rounded-xl font-semibold text-sm flex items-center justify-center gap-2 mt-2 sm:mt-0 sm:ml-2">
-                        <span class="material-symbols-outlined text-lg">block</span>
+<!-- Secondary CTA -->
+<button class="w-full text-outline font-label-md py-4 hover:text-on-surface transition-colors flex items-center justify-center gap-2" id="cancelBtn">
+<span class="material-symbols-outlined text-[20px]" data-icon="cancel">cancel</span>
                         No podré asistir
                     </button>
-                </div>
-            </div>
-        </section>
+</div>
+</div>
+</div>
+<!-- Hidden Excuse Section (Interactive Flow) -->
+<div class="hidden mt-lg animate-in slide-in-from-bottom-4 duration-500" id="excuseArea">
+<div class="bg-surface-container-low rounded-3xl p-lg border border-outline-variant/30">
+<h3 class="font-headline-sm text-on-surface mb-md">Reportar Inasistencia</h3>
+<div class="space-y-lg">
+<div>
+<label class="block font-label-md text-on-surface mb-2">Motivo del reporte</label>
+<textarea class="w-full bg-white border border-outline-variant rounded-xl p-md text-body-md focus:ring-2 focus:ring-secondary outline-none transition-all placeholder:text-outline" placeholder="Describe brevemente por qué no puedes asistir..." rows="3"></textarea>
+</div>
+<div class="relative">
+<div class="flex items-center justify-center w-full border-2 border-dashed border-outline-variant rounded-2xl py-8 px-md hover:border-secondary hover:bg-white transition-all cursor-pointer group">
+<div class="text-center">
+<span class="material-symbols-outlined text-outline group-hover:text-secondary text-[32px] mb-2 block" data-icon="upload_file">upload_file</span>
+<p class="text-label-md text-outline group-hover:text-on-surface">Subir justificante médico o académico</p>
+</div>
+</div>
+</div>
+<button class="w-full bg-primary text-white py-4 rounded-xl font-headline-sm shadow-lg hover:opacity-90 active:scale-95 transition-all">
+                        Enviar Reporte
+                    </button>
+</div>
+</div>
+</div>
+<!-- Recent Records Hint -->
+<section class="mt-xl">
+<div class="flex justify-between items-center mb-md">
+<h3 class="font-headline-sm text-on-surface">Historial Reciente</h3>
+<button class="text-secondary font-label-md">Ver todo</button>
+</div>
+<div class="space-y-3">
+<div class="flex items-center justify-between bg-white/60 p-md rounded-2xl border border-white/40">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-secondary-container/20 flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined" data-icon="history_edu">history_edu</span>
+</div>
+<div>
+<p class="font-label-md text-on-surface">Biblioteca Central</p>
+<p class="text-[12px] text-outline">Ayer • 2.5 horas</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-secondary" data-icon="check_circle" style="font-variation-settings: &quot;FILL&quot; 1;">check_circle</span>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 w-full z-50 flex justify-around items-center px-md pb-safe py-sm bg-white/80 backdrop-blur-md shadow-lg rounded-t-3xl">
+<button class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container-high transition-colors px-4 py-1.5">
+<span class="material-symbols-outlined mb-0.5" data-icon="dashboard">dashboard</span>
+<span class="font-label-sm text-label-sm">Dashboard</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container-high transition-colors px-4 py-1.5">
+<span class="material-symbols-outlined mb-0.5" data-icon="calendar_month">calendar_month</span>
+<span class="font-label-sm text-label-sm">Agenda</span>
+</button>
+<button class="flex flex-col items-center justify-center text-secondary-container transition-all duration-200 px-4 py-1.5">
+<span class="material-symbols-outlined mb-0.5" data-icon="edit_note" style="font-variation-settings: &quot;FILL&quot; 1;">edit_note</span>
+<span class="font-label-sm text-label-sm">Registro</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container-high transition-colors px-4 py-1.5">
+<span class="material-symbols-outlined mb-0.5" data-icon="chat_bubble">chat_bubble</span>
+<span class="font-label-sm text-label-sm">Mensajes</span>
+</button>
+</nav>
+<script>
+        // Simple micro-interactions
+        const cancelBtn = document.getElementById('cancelBtn');
+        const excuseArea = document.getElementById('excuseArea');
+        const confirmBtn = document.getElementById('confirmBtn');
 
-        <!-- Filtros y Historial -->
-        <section class="animate-fade-up animate-delay-300">
-            <div class="flex items-center justify-between mb-4">
-                <h3 class="font-display font-bold text-lg text-hs-primary">Historial de Asistencias</h3>
-                <button onclick="openModal('modal-filtros')" class="p-2 rounded-xl hover:bg-hs-secondary/10 transition-all text-hs-muted hover:text-hs-secondary">
-                    <span class="material-symbols-outlined">filter_list</span>
-                </button>
-            </div>
-
-            <!-- Filtros rápidos -->
-            <div class="flex gap-2 mb-4 overflow-x-auto scroll-hidden pb-2">
-                <button onclick="filterHistory('todos')" class="filter-btn active" id="filter-todos">Todos</button>
-                <button onclick="filterHistory('presente')" class="filter-btn" id="filter-presente">Presente</button>
-                <button onclick="filterHistory('falta')" class="filter-btn" id="filter-falta">Faltas</button>
-                <button onclick="filterHistory('justificada')" class="filter-btn" id="filter-justificada">Justificadas</button>
-                <button onclick="filterHistory('pendiente')" class="filter-btn" id="filter-pendiente">Pendientes</button>
-            </div>
-
-            <!-- Timeline de asistencias -->
-            <div class="space-y-0" id="attendance-timeline">
-                <!-- Generado por JS -->
-            </div>
-            
-            <div class="text-center mt-6">
-                <button onclick="loadMoreHistory()" class="btn-outline px-6 py-3 rounded-xl font-medium text-sm inline-flex items-center gap-2">
-                    <span class="material-symbols-outlined text-base">expand_more</span>
-                    Cargar más historial
-                </button>
-            </div>
-        </section>
-
-        <!-- Resumen Mensual -->
-        <section class="animate-fade-up animate-delay-300">
-            <div class="glass-card rounded-2xl p-6">
-                <h3 class="font-display font-bold text-hs-primary text-sm mb-4 uppercase tracking-wider">Resumen del Mes</h3>
-                <div class="grid grid-cols-7 gap-2 text-center">
-                    <div class="text-xs text-hs-muted font-medium">Lun</div>
-                    <div class="text-xs text-hs-muted font-medium">Mar</div>
-                    <div class="text-xs text-hs-muted font-medium">Mié</div>
-                    <div class="text-xs text-hs-muted font-medium">Jue</div>
-                    <div class="text-xs text-hs-muted font-medium">Vie</div>
-                    <div class="text-xs text-hs-muted font-medium">Sáb</div>
-                    <div class="text-xs text-hs-muted font-medium">Dom</div>
-                    
-                    <!-- Semana 1 -->
-                    <div class="aspect-square rounded-lg bg-hs-border/30"></div>
-                    <div class="aspect-square rounded-lg bg-hs-border/30"></div>
-                    <div class="aspect-square rounded-lg bg-hs-border/30"></div>
-                    <div class="aspect-square rounded-lg bg-hs-border/30"></div>
-                    <div class="aspect-square rounded-lg bg-hs-border/30"></div>
-                    <div class="aspect-square rounded-lg bg-emerald-100 flex items-center justify-center"><span class="w-2 h-2 rounded-full bg-emerald-500"></span></div>
-                    <div class="aspect-square rounded-lg bg-hs-border/30"></div>
-                    
-                    <!-- Semana 2 -->
-                    <div class="aspect-square rounded-lg bg-hs-border/30"></div>
-                    <div class="aspect-square rounded-lg bg-emerald-100 flex items-center justify-center"><span class="w-2 h-2 rounded-full bg-emerald-500"></span></div>
-                    <div class="aspect-square rounded-lg bg-hs-border/30"></div>
-                    <div class="aspect-square rounded-lg bg-emerald-100 flex items-center justify-center"><span class="w-2 h-2 rounded-full bg-emerald-500"></span></div>
-                    <div class="aspect-square rounded-lg bg-red-100 flex items-center justify-center"><span class="w-2 h-2 rounded-full bg-red-500"></span></div>
-                    <div class="aspect-square rounded-lg bg-hs-border/30"></div>
-                    <div class="aspect-square rounded-lg bg-hs-border/30"></div>
-                    
-                    <!-- Semana 3 -->
-                    <div class="aspect-square rounded-lg bg-amber-100 flex items-center justify-center"><span class="w-2 h-2 rounded-full bg-amber-500"></span></div>
-                    <div class="aspect-square rounded-lg bg-emerald-100 flex items-center justify-center"><span class="w-2 h-2 rounded-full bg-emerald-500"></span></div>
-                    <div class="aspect-square rounded-lg bg-hs-border/30"></div>
-                    <div class="aspect-square rounded-lg bg-emerald-100 flex items-center justify-center"><span class="w-2 h-2 rounded-full bg-emerald-500"></span></div>
-                    <div class="aspect-square rounded-lg bg-hs-border/30"></div>
-                    <div class="aspect-square rounded-lg bg-hs-border/30"></div>
-                    <div class="aspect-square rounded-lg bg-hs-border/30"></div>
-                    
-                    <!-- Semana 4 -->
-                    <div class="aspect-square rounded-lg bg-emerald-100 flex items-center justify-center"><span class="w-2 h-2 rounded-full bg-emerald-500"></span></div>
-                    <div class="aspect-square rounded-lg bg-hs-border/30"></div>
-                    <div class="aspect-square rounded-lg bg-hs-border/30"></div>
-                    <div class="aspect-square rounded-lg bg-hs-secondary/20 flex items-center justify-center border-2 border-hs-secondary"><span class="w-2 h-2 rounded-full bg-hs-secondary"></span></div>
-                    <div class="aspect-square rounded-lg bg-hs-border/30"></div>
-                    <div class="aspect-square rounded-lg bg-hs-border/30"></div>
-                    <div class="aspect-square rounded-lg bg-hs-border/30"></div>
-                </div>
-                <div class="flex items-center justify-center gap-4 mt-4 text-xs text-hs-muted">
-                    <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-emerald-500"></span> Asistió</span>
-                    <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-red-500"></span> Falta</span>
-                    <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-amber-500"></span> Justificada</span>
-                    <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-hs-secondary"></span> Hoy</span>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <!-- Bottom Navigation -->
-    <nav class="fixed bottom-0 left-0 w-full glass-panel border-t border-hs-border/50 z-50 pb-safe">
-        <div class="flex justify-around items-center h-16 px-4 max-w-lg mx-auto">
-            <a href="/estudiante/dashboard" class="nav-item flex flex-col items-center gap-1 py-2 px-4 text-hs-muted">
-                <span class="material-symbols-outlined text-xl">dashboard</span>
-                <span class="text-[10px] font-medium">Dashboard</span>
-            </a>
-            <a href="/estudiante/agenda" class="nav-item flex flex-col items-center gap-1 py-2 px-4 text-hs-muted">
-                <span class="material-symbols-outlined text-xl">calendar_month</span>
-                <span class="text-[10px] font-medium">Agenda</span>
-            </a>
-            <a href="/estudiante/registro" class="nav-item active flex flex-col items-center gap-1 py-2 px-4">
-                <span class="material-symbols-outlined text-xl filled">add_circle</span>
-                <span class="text-[10px] font-semibold">Registro</span>
-            </a>
-            <a href="/estudiante/mensajes" class="nav-item flex flex-col items-center gap-1 py-2 px-4 text-hs-muted">
-                <span class="material-symbols-outlined text-xl">chat_bubble</span>
-                <span class="text-[10px] font-medium">Mensajes</span>
-            </a>
-        </div>
-    </nav>
-
-    <!-- MODAL: Registrar Asistencia -->
-    <div id="modal-registro" class="modal-overlay" onclick="closeModalOnOverlay(event, 'modal-registro')">
-        <div class="modal-container">
-            <div class="modal-header">
-                <div class="flex items-center gap-3">
-                    <div class="p-2 rounded-xl bg-hs-secondary/10">
-                        <span class="material-symbols-outlined text-hs-secondary">check_circle</span>
-                    </div>
-                    <div>
-                        <h3 class="font-display font-bold text-hs-primary">Registrar Asistencia</h3>
-                        <p class="text-xs text-hs-muted">Tutoría de Matemáticas</p>
-                    </div>
-                </div>
-                <button class="modal-close" onclick="closeModal('modal-registro')">
-                    <span class="material-symbols-outlined">close</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="bg-hs-surface rounded-xl p-4 mb-4 space-y-3">
-                    <div class="flex justify-between items-center">
-                        <span class="text-sm text-hs-muted">Fecha</span>
-                        <span class="text-sm font-semibold text-hs-primary">18 de junio, 2026</span>
-                    </div>
-                    <div class="flex justify-between items-center">
-                        <span class="text-sm text-hs-muted">Hora de inicio</span>
-                        <span class="text-sm font-semibold text-hs-primary">15:00</span>
-                    </div>
-                    <div class="flex justify-between items-center">
-                        <span class="text-sm text-hs-muted">Duración estimada</span>
-                        <span class="text-sm font-semibold text-hs-primary">2 horas</span>
-                    </div>
-                    <div class="flex justify-between items-center">
-                        <span class="text-sm text-hs-muted">Ubicación</span>
-                        <span class="text-sm font-semibold text-hs-primary">Biblioteca Central</span>
-                    </div>
-                </div>
-                
-                <div class="space-y-3">
-                    <label class="block text-sm font-medium text-hs-primary">Notas de la actividad (opcional)</label>
-                    <textarea class="w-full p-3 rounded-xl border border-hs-border bg-white text-sm focus:border-hs-secondary focus:ring-2 focus:ring-hs-secondary/20 outline-none resize-none" rows="3" placeholder="Describe brevemente lo que realizaste..."></textarea>
-                </div>
-                
-                <div class="mt-4 p-3 bg-amber-50 rounded-xl border border-amber-200">
-                    <div class="flex items-start gap-2">
-                        <span class="material-symbols-outlined text-amber-600 text-base mt-0.5">info</span>
-                        <p class="text-xs text-amber-800">Tu asistencia será verificada por el coordinador. Las horas se acreditarán después de la validación.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button onclick="closeModal('modal-registro')" class="flex-1 btn-outline py-3 rounded-xl font-semibold text-sm">Cancelar</button>
-                <button onclick="confirmarRegistro()" class="flex-1 btn-secondary py-3 rounded-xl font-semibold text-sm">Confirmar Asistencia</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- MODAL: No podré asistir -->
-    <div id="modal-no-asistir" class="modal-overlay" onclick="closeModalOnOverlay(event, 'modal-no-asistir')">
-        <div class="modal-container">
-            <div class="modal-header">
-                <div class="flex items-center gap-3">
-                    <div class="p-2 rounded-xl bg-red-50">
-                        <span class="material-symbols-outlined text-red-500">block</span>
-                    </div>
-                    <div>
-                        <h3 class="font-display font-bold text-hs-primary">Reportar Inasistencia</h3>
-                        <p class="text-xs text-hs-muted">Tutoría de Matemáticas</p>
-                    </div>
-                </div>
-                <button class="modal-close" onclick="closeModal('modal-no-asistir')">
-                    <span class="material-symbols-outlined">close</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="space-y-4">
-                    <div>
-                        <label class="block text-sm font-medium text-hs-primary mb-2">Motivo de la inasistencia</label>
-                        <div class="space-y-2">
-                            <label class="flex items-center gap-3 p-3 rounded-xl border border-hs-border cursor-pointer hover:bg-hs-surface transition-all">
-                                <input type="radio" name="motivo" class="w-4 h-4 text-hs-secondary" checked>
-                                <div>
-                                    <p class="text-sm font-medium text-hs-primary">Enfermedad</p>
-                                    <p class="text-xs text-hs-muted">Presentaré certificado médico</p>
-                                </div>
-                            </label>
-                            <label class="flex items-center gap-3 p-3 rounded-xl border border-hs-border cursor-pointer hover:bg-hs-surface transition-all">
-                                <input type="radio" name="motivo" class="w-4 h-4 text-hs-secondary">
-                                <div>
-                                    <p class="text-sm font-medium text-hs-primary">Problema familiar</p>
-                                    <p class="text-xs text-hs-muted">Emergencia o compromiso familiar</p>
-                                </div>
-                            </label>
-                            <label class="flex items-center gap-3 p-3 rounded-xl border border-hs-border cursor-pointer hover:bg-hs-surface transition-all">
-                                <input type="radio" name="motivo" class="w-4 h-4 text-hs-secondary">
-                                <div>
-                                    <p class="text-sm font-medium text-hs-primary">Conflicto de horario</p>
-                                    <p class="text-xs text-hs-muted">Tengo examen o clase obligatoria</p>
-                                </div>
-                            </label>
-                            <label class="flex items-center gap-3 p-3 rounded-xl border border-hs-border cursor-pointer hover:bg-hs-surface transition-all">
-                                <input type="radio" name="motivo" class="w-4 h-4 text-hs-secondary">
-                                <div>
-                                    <p class="text-sm font-medium text-hs-primary">Otro motivo</p>
-                                    <p class="text-xs text-hs-muted">Especificaré en los comentarios</p>
-                                </div>
-                            </label>
-                        </div>
-                    </div>
-                    
-                    <div>
-                        <label class="block text-sm font-medium text-hs-primary mb-2">Comentarios adicionales</label>
-                        <textarea class="w-full p-3 rounded-xl border border-hs-border bg-white text-sm focus:border-hs-secondary focus:ring-2 focus:ring-hs-secondary/20 outline-none resize-none" rows="3" placeholder="Proporciona más detalles..."></textarea>
-                    </div>
-                    
-                    <div class="p-3 bg-red-50 rounded-xl border border-red-200">
-                        <div class="flex items-start gap-2">
-                            <span class="material-symbols-outlined text-red-600 text-base mt-0.5">warning</span>
-                            <p class="text-xs text-red-800">Las inasistencias no justificadas afectan tu record. Si acumulas 3 faltas injustificadas, podrías ser dado de baja del programa.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button onclick="closeModal('modal-no-asistir')" class="flex-1 btn-outline py-3 rounded-xl font-semibold text-sm">Cancelar</button>
-                <button onclick="reportarFalta()" class="flex-1 bg-red-500 hover:bg-red-600 text-white py-3 rounded-xl font-semibold text-sm transition-all">Reportar Falta</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- MODAL: Confirmación -->
-    <div id="modal-confirmacion" class="modal-overlay" onclick="closeModalOnOverlay(event, 'modal-confirmacion')">
-        <div class="modal-container" style="max-width: 400px;">
-            <div class="modal-body text-center py-8">
-                <div class="w-16 h-16 rounded-full bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center mx-auto mb-4 shadow-lg shadow-emerald-200">
-                    <span class="material-symbols-outlined text-white text-3xl">check</span>
-                </div>
-                <h3 class="font-display font-bold text-hs-primary text-xl mb-2">¡Asistencia registrada!</h3>
-                <p class="text-sm text-hs-muted mb-6">Tu registro ha sido guardado exitosamente.</p>
-                
-                <div class="bg-hs-surface rounded-xl p-4 text-left space-y-2">
-                    <div class="flex items-center gap-2 text-sm">
-                        <span class="material-symbols-outlined text-hs-secondary text-base">calendar_today</span>
-                        <span class="text-hs-muted">18 Jun 2026</span>
-                    </div>
-                    <div class="flex items-center gap-2 text-sm">
-                        <span class="material-symbols-outlined text-hs-secondary text-base">schedule</span>
-                        <span class="text-hs-muted">15:00 - 17:00</span>
-                    </div>
-                    <div class="flex items-center gap-2 text-sm">
-                        <span class="material-symbols-outlined text-emerald-600 text-base">timer</span>
-                        <span class="text-hs-muted font-semibold">+2 horas acreditadas</span>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button onclick="closeModal('modal-confirmacion')" class="flex-1 btn-primary py-3 rounded-xl font-semibold text-sm">Entendido</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- MODAL: Detalle de Asistencia -->
-    <div id="modal-detalle" class="modal-overlay" onclick="closeModalOnOverlay(event, 'modal-detalle')">
-        <div class="modal-container">
-            <div class="modal-header">
-                <div class="flex items-center gap-3">
-                    <div class="p-2 rounded-xl bg-hs-secondary/10">
-                        <span class="material-symbols-outlined text-hs-secondary">assignment</span>
-                    </div>
-                    <div>
-                        <h3 class="font-display font-bold text-hs-primary" id="detalle-titulo">Detalle de Asistencia</h3>
-                        <p class="text-xs text-hs-muted" id="detalle-fecha">18 de junio, 2026</p>
-                    </div>
-                </div>
-                <button class="modal-close" onclick="closeModal('modal-detalle')">
-                    <span class="material-symbols-outlined">close</span>
-                </button>
-            </div>
-            <div class="modal-body" id="detalle-contenido">
-                <!-- Generado por JS -->
-            </div>
-            <div class="modal-footer">
-                <button onclick="closeModal('modal-detalle')" class="flex-1 btn-outline py-3 rounded-xl font-semibold text-sm">Cerrar</button>
-                <button onclick="descargarComprobante()" class="flex-1 btn-secondary py-3 rounded-xl font-semibold text-sm flex items-center justify-center gap-2">
-                    <span class="material-symbols-outlined text-base">download</span>
-                    Comprobante
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        // ===== DATOS DE EJEMPLO =====
-        const attendanceHistory = [
-            {
-                id: 1,
-                fecha: '2026-06-18',
-                dia: 'Hoy',
-                actividad: 'Tutoría de Matemáticas',
-                hora: '15:00 - 17:00',
-                horas: 2,
-                estado: 'pendiente',
-                ubicacion: 'Biblioteca Central',
-                coordinador: 'Prof. Martínez',
-                notas: '',
-                tipo: 'tutoria'
-            },
-            {
-                id: 2,
-                fecha: '2026-06-14',
-                dia: 'Domingo',
-                actividad: 'Campaña Ambiental',
-                hora: '09:00 - 12:00',
-                horas: 3,
-                estado: 'presente',
-                ubicacion: 'Campus Principal, Zona Verde',
-                coordinador: 'Dra. López',
-                notas: 'Se recolectaron 50kg de residuos. Participaron 12 estudiantes.',
-                tipo: 'ambiental'
-            },
-            {
-                id: 3,
-                fecha: '2026-06-12',
-                dia: 'Viernes',
-                actividad: 'Tutoría de Matemáticas',
-                hora: '15:00 - 17:00',
-                horas: 2,
-                estado: 'presente',
-                ubicacion: 'Biblioteca Central',
-                coordinador: 'Prof. Martínez',
-                notas: 'Revisión de ejercicios de cálculo integral. 8 estudiantes asistieron.',
-                tipo: 'tutoria'
-            },
-            {
-                id: 4,
-                fecha: '2026-06-10',
-                dia: 'Miércoles',
-                actividad: 'Apoyo Biblioteca',
-                hora: '10:00 - 13:00',
-                horas: 3,
-                estado: 'justificada',
-                ubicacion: 'Biblioteca Municipal',
-                coordinador: 'Lic. García',
-                notas: 'No asistí por examen parcial de Física. Justificante presentado.',
-                tipo: 'biblioteca',
-                justificacion: 'Examen parcial - Física I'
-            },
-            {
-                id: 5,
-                fecha: '2026-06-08',
-                dia: 'Lunes',
-                actividad: 'Tutoría de Matemáticas',
-                hora: '15:00 - 17:00',
-                horas: 2,
-                estado: 'falta',
-                ubicacion: 'Biblioteca Central',
-                coordinador: 'Prof. Martínez',
-                notas: 'No se presentó. Sin justificación previa.',
-                tipo: 'tutoria',
-                injustificada: true
-            },
-            {
-                id: 6,
-                fecha: '2026-06-05',
-                dia: 'Viernes',
-                actividad: 'Reunión de Equipo',
-                hora: '15:00 - 16:00',
-                horas: 1,
-                estado: 'presente',
-                ubicacion: 'Sala de Conferencias A',
-                coordinador: 'Coord. Hernández',
-                notas: 'Planificación de actividades del próximo mes.',
-                tipo: 'reunion'
-            },
-            {
-                id: 7,
-                fecha: '2026-06-03',
-                dia: 'Miércoles',
-                actividad: 'Reciclaje Electrónico',
-                hora: '08:00 - 12:00',
-                horas: 4,
-                estado: 'presente',
-                ubicacion: 'Plaza Central',
-                coordinador: 'Ing. Soto',
-                notas: 'Se recolectaron 15 dispositivos electrónicos para reciclaje.',
-                tipo: 'ambiental'
-            },
-            {
-                id: 8,
-                fecha: '2026-05-28',
-                dia: 'Jueves',
-                actividad: 'Taller de Liderazgo',
-                hora: '14:00 - 17:00',
-                horas: 3,
-                estado: 'falta',
-                ubicacion: 'Auditorio Principal',
-                coordinador: 'Psic. Ramírez',
-                notas: 'Falta injustificada. Acumulada: 2 injustificadas.',
-                tipo: 'taller',
-                injustificada: true
-            },
-            {
-                id: 9,
-                fecha: '2026-05-25',
-                dia: 'Lunes',
-                actividad: 'Tutoría de Matemáticas',
-                hora: '15:00 - 17:00',
-                horas: 2,
-                estado: 'presente',
-                ubicacion: 'Biblioteca Central',
-                coordinador: 'Prof. Martínez',
-                notas: 'Sesión regular de tutoría.',
-                tipo: 'tutoria'
-            },
-            {
-                id: 10,
-                fecha: '2026-05-20',
-                dia: 'Miércoles',
-                actividad: 'Campaña de Donación',
-                hora: '09:00 - 11:00',
-                horas: 2,
-                estado: 'justificada',
-                ubicacion: 'Campus Norte',
-                coordinador: 'Lic. Torres',
-                notas: 'Justificada por enfermedad. Certificado médico adjunto.',
-                tipo: 'social',
-                justificacion: 'Gripe - reposo médico 3 días'
-            }
-        ];
-
-        let currentFilter = 'todos';
-        let displayedCount = 6;
-
-        // ===== RENDER TIMELINE =====
-        function renderTimeline() {
-            const container = document.getElementById('attendance-timeline');
-            const filtered = currentFilter === 'todos' 
-                ? attendanceHistory 
-                : attendanceHistory.filter(item => item.estado === currentFilter);
-            
-            const toShow = filtered.slice(0, displayedCount);
-            
-            if (toShow.length === 0) {
-                container.innerHTML = `
-                    <div class="text-center py-12">
-                        <div class="w-16 h-16 rounded-full bg-hs-secondary/10 flex items-center justify-center mx-auto mb-4">
-                            <span class="material-symbols-outlined text-hs-secondary text-2xl">search_off</span>
-                        </div>
-                        <p class="text-hs-muted font-medium">No hay registros con este filtro</p>
-                    </div>
-                `;
-                return;
-            }
-
-            container.innerHTML = toShow.map((item, index) => {
-                const statusConfig = {
-                    presente: { 
-                        dotClass: 'presente', 
-                        badgeClass: 'status-presente', 
-                        badgeText: 'Asistió',
-                        icon: 'check_circle',
-                        color: 'text-emerald-600'
-                    },
-                    falta: { 
-                        dotClass: 'falta', 
-                        badgeClass: 'status-falta', 
-                        badgeText: 'Falta',
-                        icon: 'cancel',
-                        color: 'text-red-500'
-                    },
-                    justificada: { 
-                        dotClass: 'justificada', 
-                        badgeClass: 'status-justificada', 
-                        badgeText: 'Justificada',
-                        icon: 'info',
-                        color: 'text-amber-600'
-                    },
-                    pendiente: { 
-                        dotClass: 'presente', 
-                        badgeClass: 'status-pendiente', 
-                        badgeText: 'Pendiente',
-                        icon: 'schedule',
-                        color: 'text-hs-secondary'
-                    }
-                };
-                
-                const status = statusConfig[item.estado];
-                const isLast = index === toShow.length - 1;
-                
-                return `
-                    <div class="timeline-item ${isLast ? '' : ''}" onclick="verDetalle(${item.id})">
-                        <div class="timeline-dot ${status.dotClass}"></div>
-                        <div class="attendance-card cursor-pointer">
-                            <div class="flex items-start justify-between gap-3">
-                                <div class="flex-1 min-w-0">
-                                    <div class="flex items-center gap-2 mb-1">
-                                        <span class="status-badge ${status.badgeClass}">
-                                            <span class="material-symbols-outlined text-[14px]">${status.icon}</span>
-                                            ${status.badgeText}
-                                        </span>
-                                        ${item.injustificada ? '<span class="status-badge status-falta text-[10px]">Injustificada</span>' : ''}
-                                        ${item.justificacion ? '<span class="status-badge status-justificada text-[10px]">Con certificado</span>' : ''}
-                                    </div>
-                                    <h4 class="font-display font-bold text-hs-primary text-sm">${item.actividad}</h4>
-                                    <div class="flex items-center gap-3 mt-2 text-xs text-hs-muted">
-                                        <span class="flex items-center gap-1">
-                                            <span class="material-symbols-outlined text-[14px]">calendar_today</span>
-                                            ${item.dia}, ${formatearFecha(item.fecha)}
-                                        </span>
-                                        <span class="flex items-center gap-1">
-                                            <span class="material-symbols-outlined text-[14px]">schedule</span>
-                                            ${item.hora}
-                                        </span>
-                                        <span class="flex items-center gap-1 ${item.estado === 'presente' ? 'text-emerald-600 font-semibold' : ''}">
-                                            <span class="material-symbols-outlined text-[14px]">timer</span>
-                                            ${item.horas}h
-                                        </span>
-                                    </div>
-                                    ${item.notas ? `<p class="text-xs text-hs-muted mt-2 line-clamp-2">${item.notas}</p>` : ''}
-                                </div>
-                                <span class="material-symbols-outlined text-hs-muted text-lg mt-1">chevron_right</span>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        function formatearFecha(fechaStr) {
-            const fecha = new Date(fechaStr + 'T00:00:00');
-            const dia = fecha.getDate();
-            const mes = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'][fecha.getMonth()];
-            return `${dia} ${mes}`;
-        }
-
-        // ===== FILTROS =====
-        function filterHistory(filter) {
-            currentFilter = filter;
-            displayedCount = 6;
-            
-            // Update buttons
-            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-            document.getElementById(`filter-${filter}`).classList.add('active');
-            
-            renderTimeline();
-        }
-
-        function loadMoreHistory() {
-            displayedCount += 4;
-            renderTimeline();
-        }
-
-        // ===== VER DETALLE =====
-        function verDetalle(id) {
-            const item = attendanceHistory.find(a => a.id === id);
-            if (!item) return;
-            
-            const statusConfig = {
-                presente: { badgeClass: 'status-presente', badgeText: 'Asistió', icon: 'check_circle' },
-                falta: { badgeClass: 'status-falta', badgeText: 'Falta', icon: 'cancel' },
-                justificada: { badgeClass: 'status-justificada', badgeText: 'Justificada', icon: 'info' },
-                pendiente: { badgeClass: 'status-pendiente', badgeText: 'Pendiente', icon: 'schedule' }
-            };
-            
-            const status = statusConfig[item.estado];
-            
-            document.getElementById('detalle-titulo').textContent = item.actividad;
-            document.getElementById('detalle-fecha').textContent = `${item.dia}, ${formatearFecha(item.fecha)}`;
-            
-            document.getElementById('detalle-contenido').innerHTML = `
-                <div class="space-y-4">
-                    <div class="flex items-center gap-2">
-                        <span class="status-badge ${status.badgeClass}">
-                            <span class="material-symbols-outlined text-[14px]">${status.icon}</span>
-                            ${status.badgeText}
-                        </span>
-                        ${item.injustificada ? '<span class="status-badge status-falta">Injustificada</span>' : ''}
-                    </div>
-                    
-                    <div class="bg-hs-surface rounded-xl p-4 space-y-3">
-                        <div class="flex justify-between items-center">
-                            <span class="text-sm text-hs-muted">Fecha</span>
-                            <span class="text-sm font-semibold text-hs-primary">${item.dia}, ${formatearFecha(item.fecha)}</span>
-                        </div>
-                        <div class="flex justify-between items-center">
-                            <span class="text-sm text-hs-muted">Horario</span>
-                            <span class="text-sm font-semibold text-hs-primary">${item.hora}</span>
-                        </div>
-                        <div class="flex justify-between items-center">
-                            <span class="text-sm text-hs-muted">Horas acreditadas</span>
-                            <span class="text-sm font-semibold ${item.estado === 'presente' ? 'text-emerald-600' : 'text-hs-muted'}">${item.horas} horas</span>
-                        </div>
-                        <div class="flex justify-between items-center">
-                            <span class="text-sm text-hs-muted">Ubicación</span>
-                            <span class="text-sm font-semibold text-hs-primary">${item.ubicacion}</span>
-                        </div>
-                        <div class="flex justify-between items-center">
-                            <span class="text-sm text-hs-muted">Coordinador</span>
-                            <span class="text-sm font-semibold text-hs-primary">${item.coordinador}</span>
-                        </div>
-                    </div>
-                    
-                    ${item.notas ? `
-                    <div>
-                        <h4 class="text-sm font-semibold text-hs-primary mb-2">Notas de la actividad</h4>
-                        <div class="bg-hs-surface rounded-xl p-4">
-                            <p class="text-sm text-hs-muted">${item.notas}</p>
-                        </div>
-                    </div>
-                    ` : ''}
-                    
-                    ${item.justificacion ? `
-                    <div>
-                        <h4 class="text-sm font-semibold text-hs-primary mb-2">Justificación</h4>
-                        <div class="bg-amber-50 rounded-xl p-4 border border-amber-200">
-                            <div class="flex items-start gap-2">
-                                <span class="material-symbols-outlined text-amber-600 text-base mt-0.5">description</span>
-                                <p class="text-sm text-amber-800">${item.justificacion}</p>
-                            </div>
-                        </div>
-                    </div>
-                    ` : ''}
-                    
-                    ${item.injustificada ? `
-                    <div class="p-3 bg-red-50 rounded-xl border border-red-200">
-                        <div class="flex items-start gap-2">
-                            <span class="material-symbols-outlined text-red-600 text-base mt-0.5">warning</span>
-                            <div>
-                                <p class="text-sm font-semibold text-red-800">Falta injustificada</p>
-                                <p class="text-xs text-red-700 mt-1">Esta falta afecta tu record de asistencia. Acumulas 2 injustificadas de 3 permitidas.</p>
-                            </div>
-                        </div>
-                    </div>
-                    ` : ''}
-                </div>
-            `;
-            
-            openModal('modal-detalle');
-        }
-
-        // ===== MODAL SYSTEM =====
-        function openModal(id) {
-            const modal = document.getElementById(id);
-            modal.classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeModal(id) {
-            const modal = document.getElementById(id);
-            modal.classList.remove('active');
-            document.body.style.overflow = '';
-        }
-
-        function closeModalOnOverlay(event, id) {
-            if (event.target === event.currentTarget) {
-                closeModal(id);
-            }
-        }
-
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                document.querySelectorAll('.modal-overlay.active').forEach(modal => {
-                    modal.classList.remove('active');
-                });
-                document.body.style.overflow = '';
+        cancelBtn.addEventListener('click', () => {
+            excuseArea.classList.toggle('hidden');
+            if(!excuseArea.classList.contains('hidden')) {
+                excuseArea.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }
         });
 
-        // ===== ACCIONES =====
-        function confirmarRegistro() {
-            closeModal('modal-registro');
-            setTimeout(() => openModal('modal-confirmacion'), 300);
-        }
-
-        function reportarFalta() {
-            closeModal('modal-no-asistir');
-            // Aquí iría la lógica para reportar la falta
-            alert('Falta reportada. El coordinador será notificado.');
-        }
-
-        function descargarComprobante() {
-            alert('Descargando comprobante de asistencia...');
-        }
-
-        // ===== SCROLL HEADER =====
-        window.addEventListener('scroll', () => {
-            const header = document.querySelector('.app-header');
-            if (window.pageYOffset > 50) {
-                header.style.boxShadow = '0 4px 20px -2px rgba(15, 23, 42, 0.08)';
-            } else {
-                header.style.boxShadow = 'none';
-            }
+        confirmBtn.addEventListener('click', function() {
+            this.innerHTML = `<span class="material-symbols-outlined animate-spin" data-icon="progress_activity">progress_activity</span> Procesando...`;
+            this.style.opacity = '0.7';
+            this.style.pointerEvents = 'none';
+            
+            setTimeout(() => {
+                this.innerHTML = `<span class="material-symbols-outlined" data-icon="task_alt">task_alt</span> ¡Registrado!`;
+                this.classList.remove('bg-[#0EA5E9]');
+                this.classList.add('bg-green-600');
+            }, 1500);
         });
-
-        // ===== INIT =====
-        renderTimeline();
-        
-        // Update current date
-        const hoy = new Date();
-        const meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
-        document.getElementById('current-date').textContent = `${meses[hoy.getMonth()]} ${hoy.getFullYear()}`;
     </script>
-</body>
-</html>
+
+
+</body></html>

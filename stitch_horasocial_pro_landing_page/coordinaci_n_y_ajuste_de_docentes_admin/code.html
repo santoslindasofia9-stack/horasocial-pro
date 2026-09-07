@@ -1,1601 +1,492 @@
 <!DOCTYPE html>
-<html lang="es">
-<head>
+
+<html class="light" lang="es"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Coordinación y Ajuste de Docentes | EduServe Pro</title>
+<title>Coordinación y Ajuste de Docentes | HORASOCIAL PRO</title>
+<!-- Fonts -->
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&family=Comfortaa:wght@400;700&display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;family=Comfortaa:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<!-- Icons -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind -->
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <script id="tailwind-config">
-    tailwind.config = {
+      tailwind.config = {
         darkMode: "class",
         theme: {
-            extend: {
-                colors: {
-                    primary: "#0F172A",
-                    secondary: "#0EA5E9",
-                    error: "#EF4444",
-                    success: "#22C55E",
-                    warning: "#F59E0B",
-                    background: "#F8FAFC",
-                    surface: "#FFFFFF",
-                    "surface-bright": "#f7f9fb",
-                    "surface-low": "#F2F4F6",
-                    "on-surface": "#191C1E",
-                    "on-surface-variant": "#64748B",
-                    "outline-variant": "#E2E8F0",
-                    "secondary-container": "#E0F2FE",
-                    "on-secondary-container": "#004666",
-                    "error-container": "#FEE2E2",
-                    "on-error-container": "#991B1B",
-                    "success-container": "#DCFCE7",
-                    "on-success-container": "#166534",
-                    outline: "#CBD5E1",
-                },
-                borderRadius: {
-                    DEFAULT: "0.5rem",
-                    lg: "1rem",
-                    xl: "1.25rem",
-                    "2xl": "1.5rem",
-                    full: "9999px"
-                },
-                spacing: {
-                    sm: "8px",
-                    md: "16px",
-                    lg: "24px",
-                    xl: "32px",
-                    gutter: "24px",
-                    "margin-mobile": "16px",
-                    "margin-desktop": "48px"
-                },
-                fontFamily: {
-                    sans: ["Inter", "sans-serif"],
-                    headline: ["Plus Jakarta Sans", "sans-serif"],
-                    comfortaa: ["Comfortaa", "cursive"],
-                }
+          extend: {
+            "colors": {
+                "surface-bright": "#f7f9fb",
+                "tertiary": "#000000",
+                "secondary-container": "#39b8fd",
+                "tertiary-fixed-dim": "#7bd0ff",
+                "on-secondary-fixed-variant": "#004c6e",
+                "secondary-fixed-dim": "#89ceff",
+                "inverse-on-surface": "#eff1f3",
+                "secondary": "#006591",
+                "outline-variant": "#c6c6cd",
+                "inverse-primary": "#bec6e0",
+                "error": "#ba1a1a",
+                "surface-dim": "#d8dadc",
+                "secondary-fixed": "#c9e6ff",
+                "primary-fixed": "#dae2fd",
+                "on-primary": "#ffffff",
+                "tertiary-fixed": "#c4e7ff",
+                "on-surface": "#191c1e",
+                "on-primary-fixed": "#131b2e",
+                "tertiary-container": "#001e2c",
+                "background": "#f7f9fb",
+                "on-secondary-fixed": "#001e2f",
+                "on-background": "#191c1e",
+                "on-secondary-container": "#004666",
+                "on-surface-variant": "#45464d",
+                "surface-variant": "#e0e3e5",
+                "surface-container-lowest": "#ffffff",
+                "on-tertiary-container": "#008ebf",
+                "on-secondary": "#ffffff",
+                "on-primary-fixed-variant": "#3f465c",
+                "error-container": "#ffdad6",
+                "primary-fixed-dim": "#bec6e0",
+                "on-error": "#ffffff",
+                "primary": "#000000",
+                "surface": "#f7f9fb",
+                "outline": "#76777d",
+                "on-tertiary": "#ffffff",
+                "surface-container-highest": "#e0e3e5",
+                "surface-container-low": "#f2f4f6",
+                "surface-container": "#eceef0",
+                "primary-container": "#131b2e",
+                "on-tertiary-fixed-variant": "#004c69",
+                "on-primary-container": "#7c839b",
+                "on-error-container": "#93000a",
+                "on-tertiary-fixed": "#001e2c",
+                "inverse-surface": "#2d3133",
+                "surface-container-high": "#e6e8ea",
+                "surface-tint": "#565e74"
             },
+            "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
+            },
+            "spacing": {
+                "sm": "8px",
+                "gutter": "24px",
+                "lg": "24px",
+                "unit": "4px",
+                "xl": "32px",
+                "xs": "4px",
+                "md": "16px",
+                "margin-mobile": "16px",
+                "margin-desktop": "48px"
+            },
+            "fontFamily": {
+                "headline-md": ["Plus Jakarta Sans"],
+                "display-lg": ["Plus Jakarta Sans"],
+                "body-lg": ["Inter"],
+                "headline-sm": ["Plus Jakarta Sans"],
+                "label-sm": ["Inter"],
+                "body-md": ["Inter"],
+                "label-md": ["Inter"],
+                "headline-lg": ["Plus Jakarta Sans"],
+                "comfortaa": ["Comfortaa"]
+            },
+            "fontSize": {
+                "headline-md": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                "headline-sm": ["20px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                "label-sm": ["12px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                "label-md": ["14px", {"lineHeight": "1.4", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                "headline-lg": ["32px", {"lineHeight": "1.2", "fontWeight": "600"}]
+            }
+          },
         },
-    }
-</script>
+      }
+    </script>
 <style>
-    .material-symbols-outlined {
-        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-        vertical-align: middle;
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .blur-blob {
+            filter: blur(80px);
+            opacity: 0.15;
+            z-index: -1;
+        }
+        .gear-watermark::after {
+            content: 'settings';
+            font-family: 'Material Symbols Outlined';
+            position: absolute;
+            bottom: -10px;
+            right: -10px;
+            font-size: 64px;
+            opacity: 0.03;
+            pointer-events: none;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #e2e8f0;
+            border-radius: 10px;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
     }
-    
-    /* ============================================
-       BOTTOM NAVBAR FIJA - Estilo identico al Dashboard
-       ============================================ */
-    .bottom-navbar {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        z-index: 50;
-        background: #ffffff;
-        padding: 8px 0 16px;
-        display: flex;
-        justify-content: space-around;
-        align-items: center;
-        box-shadow: 0 -4px 20px rgba(15, 23, 42, 0.06);
-        border-radius: 24px 24px 0 0;
-    }
-    .bottom-nav-item {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        padding: 6px 16px;
-        border-radius: 12px;
-        text-decoration: none;
-        color: #94a3b8;
-        transition: all 0.2s ease;
-        position: relative;
-        min-width: 64px;
-    }
-    .bottom-nav-item.active {
-        color: #0ea5e9;
-    }
-    .bottom-nav-item.active .nav-icon {
-        font-variation-settings: 'FILL' 1, 'wght' 400;
-    }
-    .bottom-nav-item.active::after {
-        content: '';
-        position: absolute;
-        bottom: -8px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 24px;
-        height: 3px;
-        background: #0ea5e9;
-        border-radius: 2px;
-    }
-    .bottom-nav-item:hover:not(.active) { color: #64748b; }
-    .nav-icon { font-size: 26px; margin-bottom: 2px; }
-    .nav-label { font-size: 11px; font-weight: 600; letter-spacing: 0.01em; }
-    .nav-badge {
-        position: absolute;
-        top: 2px;
-        right: 12px;
-        width: 8px;
-        height: 8px;
-        background: #ef4444;
-        border-radius: 50%;
-        border: 2px solid #ffffff;
-    }
-    
-    /* Animations */
-    @keyframes fadeInUp {
-        from { opacity: 0; transform: translateY(16px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes slideInRight {
-        from { opacity: 0; transform: translateX(30px); }
-        to { opacity: 1; transform: translateX(0); }
-    }
-    @keyframes scaleIn {
-        from { opacity: 0; transform: scale(0.95); }
-        to { opacity: 1; transform: scale(1); }
-    }
-    .animate-fade-in { animation: fadeInUp 0.5s ease forwards; opacity: 0; }
-    .animate-slide-in { animation: slideInRight 0.5s ease forwards; opacity: 0; }
-    .animate-scale-in { animation: scaleIn 0.4s ease forwards; opacity: 0; }
-    
-    /* Card hover effects */
-    .card-hover {
-        transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-    .card-hover:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 12px 30px rgba(0,0,0,0.08);
-    }
-    
-    /* Table row hover */
-    .table-row {
-        transition: all 0.2s ease;
-    }
-    .table-row:hover {
-        background: #F8FAFC;
-    }
-    
-    /* Custom scrollbar */
-    .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
-    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-    .custom-scrollbar::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 10px; }
-    .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
-    
-    /* Modal */
-    .modal-overlay {
-        position: fixed;
-        inset: 0;
-        background: rgba(15, 23, 42, 0.5);
-        backdrop-filter: blur(10px);
-        z-index: 100;
-        display: none;
-        align-items: center;
-        justify-content: center;
-        opacity: 0;
-        transition: opacity 0.3s ease;
-        padding: 16px;
-    }
-    .modal-overlay.show {
-        display: flex;
-        opacity: 1;
-    }
-    .modal-content {
-        background: white;
-        border-radius: 24px;
-        padding: 28px;
-        max-width: 480px;
-        width: 100%;
-        max-height: 85vh;
-        overflow-y: auto;
-        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-        transform: translateY(20px) scale(0.98);
-        transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-    .modal-overlay.show .modal-content {
-        transform: translateY(0) scale(1);
-    }
-    
-    /* Timeline */
-    .timeline-item {
-        position: relative;
-        padding-left: 28px;
-    }
-    .timeline-item::before {
-        content: '';
-        position: absolute;
-        left: 6px;
-        top: 8px;
-        bottom: -16px;
-        width: 2px;
-        background: #E2E8F0;
-    }
-    .timeline-item:last-child::before { display: none; }
-    .timeline-dot {
-        position: absolute;
-        left: 0;
-        top: 6px;
-        width: 14px;
-        height: 14px;
-        border-radius: 50%;
-        border: 2px solid white;
-        box-shadow: 0 0 0 2px #E2E8F0;
-    }
-    .timeline-dot.active {
-        background: #0EA5E9;
-        box-shadow: 0 0 0 2px #0EA5E9, 0 0 0 6px rgba(14, 165, 233, 0.2);
-    }
-    .timeline-dot.success {
-        background: #22C55E;
-        box-shadow: 0 0 0 2px #22C55E;
-    }
-    .timeline-dot.warning {
-        background: #F59E0B;
-        box-shadow: 0 0 0 2px #F59E0B;
-    }
-    
-    /* Status badge */
-    .status-badge {
-        display: inline-flex;
-        align-items: center;
-        gap: 4px;
-        padding: 4px 10px;
-        border-radius: 9999px;
-        font-size: 11px;
-        font-weight: 700;
-    }
-    
-    /* Toast */
-    .toast {
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        z-index: 200;
-        padding: 14px 22px;
-        border-radius: 14px;
-        font-weight: 600;
-        font-size: 14px;
-        display: none;
-        align-items: center;
-        gap: 10px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.12);
-    }
-    .toast.success { background: #DCFCE7; color: #166534; }
-    .toast.error { background: #FEE2E2; color: #991B1B; }
-    .toast.warning { background: #FEF3C7; color: #92400E; }
-    
-    /* Button press */
-    .btn-press:active { transform: scale(0.97); }
-    
-    /* Jornada card */
-    .jornada-card {
-        transition: all 0.3s ease;
-        cursor: pointer;
-    }
-    .jornada-card:hover {
-        border-color: #0EA5E9;
-        background: #F0F9FF;
-    }
-    .jornada-card.selected {
-        border-color: #0EA5E9;
-        background: #E0F2FE;
-        box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.15);
-    }
-    
-    /* ============================================
-       CALENDARIO - NUEVO
-       ============================================ */
-    .calendar-grid {
-        display: grid;
-        grid-template-columns: repeat(7, 1fr);
-        gap: 4px;
-    }
-    .calendar-day {
-        aspect-ratio: 1;
-        border-radius: 12px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: flex-start;
-        padding: 6px 2px;
-        font-size: 12px;
-        font-weight: 600;
-        transition: all 0.2s ease;
-        cursor: pointer;
-        position: relative;
-        min-height: 64px;
-        border: 1px solid transparent;
-    }
-    .calendar-day:hover:not(.empty):not(.header) {
-        background: #F0F9FF;
-        border-color: #0EA5E9;
-        transform: scale(1.05);
-    }
-    .calendar-day.header {
-        aspect-ratio: auto;
-        min-height: auto;
-        padding: 8px;
-        color: #94a3b8;
-        font-size: 11px;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        cursor: default;
-        border: none;
-    }
-    .calendar-day.empty {
-        background: transparent;
-        cursor: default;
-        border: none;
-    }
-    .calendar-day.today {
-        background: #E0F2FE;
-        color: #0EA5E9;
-        box-shadow: 0 0 0 2px #0EA5E9;
-    }
-    .calendar-day.has-event {
-        background: #F8FAFC;
-        border: 1px solid #E2E8F0;
-    }
-    .calendar-day-number {
-        font-size: 13px;
-        font-weight: 700;
-        margin-bottom: 2px;
-    }
-    .calendar-event-dot {
-        width: 6px;
-        height: 6px;
-        border-radius: 50%;
-        margin: 1px;
-    }
-    .calendar-event-bar {
-        width: 100%;
-        padding: 1px 4px;
-        border-radius: 4px;
-        font-size: 8px;
-        font-weight: 700;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        margin-top: 2px;
-        line-height: 1.4;
-    }
-    .calendar-nav-btn {
-        width: 36px;
-        height: 36px;
-        border-radius: 10px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: all 0.2s ease;
-    }
-    .calendar-nav-btn:hover {
-        background: #F2F4F6;
-    }
-    
-    /* Tab pills */
-    .tab-pill {
-        transition: all 0.25s ease;
-        position: relative;
-    }
-    .tab-pill.active {
-        background: white;
-        box-shadow: 0 1px 4px rgba(0,0,0,0.08);
-        color: #0f172a;
-    }
-    
-    /* Hover lift */
-    .hover-lift {
-        transition: all 0.3s ease;
-    }
-    .hover-lift:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 25px rgba(0,0,0,0.08);
-    }
-    
-    /* No results */
-    .no-results {
-        text-align: center;
-        padding: 40px 20px;
-        color: #94a3b8;
-    }
-</style>
-</head>
-<body class="bg-background text-on-surface font-sans min-h-screen pb-24">
-
-<!-- Toast -->
-<div id="toast" class="toast"></div>
-
-<!-- MODAL: Ajustar Horario -->
-<div id="adjustModal" class="modal-overlay" onclick="closeModal(event, 'adjustModal')">
-    <div class="modal-content" onclick="event.stopPropagation()">
-        <div class="flex justify-between items-start mb-6">
-            <div>
-                <h3 class="font-headline text-xl font-bold text-primary">Ajustar Horario</h3>
-                <p class="text-sm text-secondary font-bold mt-1" id="modalDocenteName">Docente: Ricardo Mendoza</p>
-            </div>
-            <button onclick="closeModal(null, 'adjustModal')" class="w-9 h-9 rounded-full flex items-center justify-center hover:bg-surface-low transition-colors">
-                <span class="material-symbols-outlined">close</span>
-            </button>
-        </div>
-        
-        <div class="space-y-5">
-            <div>
-                <label class="block text-sm font-bold text-primary mb-3">Tipo de Jornada</label>
-                <div class="grid grid-cols-2 gap-3">
-                    <div class="jornada-card border-2 border-outline rounded-xl p-4 text-center" onclick="selectJornada(this, 'completa')" id="jornada-completa">
-                        <span class="material-symbols-outlined text-3xl text-secondary mb-2">wb_sunny</span>
-                        <p class="text-sm font-bold text-primary">Jornada Completa</p>
-                        <p class="text-xs text-on-surface-variant mt-1">7:00 AM - 3:00 PM</p>
-                    </div>
-                    <div class="jornada-card border-2 border-outline rounded-xl p-4 text-center" onclick="selectJornada(this, 'media')" id="jornada-media">
-                        <span class="material-symbols-outlined text-3xl text-warning mb-2">wb_twilight</span>
-                        <p class="text-sm font-bold text-primary">Media Jornada</p>
-                        <p class="text-xs text-on-surface-variant mt-1">7:00 AM - 12:00 PM</p>
-                    </div>
-                    <div class="jornada-card border-2 border-outline rounded-xl p-4 text-center" onclick="selectJornada(this, 'tarde')" id="jornada-tarde">
-                        <span class="material-symbols-outlined text-3xl text-error mb-2">nights_stay</span>
-                        <p class="text-sm font-bold text-primary">Jornada Tarde</p>
-                        <p class="text-xs text-on-surface-variant mt-1">1:00 PM - 6:00 PM</p>
-                    </div>
-                    <div class="jornada-card border-2 border-outline rounded-xl p-4 text-center" onclick="selectJornada(this, 'mixta')" id="jornada-mixta">
-                        <span class="material-symbols-outlined text-3xl text-success mb-2">sync_alt</span>
-                        <p class="text-sm font-bold text-primary">Jornada Mixta</p>
-                        <p class="text-xs text-on-surface-variant mt-1">Variable</p>
-                    </div>
-                </div>
-            </div>
-            
-            <div>
-                <label class="block text-sm font-bold text-primary mb-2">Día de la Semana</label>
-                <select id="modalDay" class="w-full p-3.5 bg-surface-low border border-outline rounded-xl focus:ring-2 focus:ring-secondary/30 focus:border-secondary outline-none appearance-none text-sm font-medium">
-                    <option value="Lunes">Lunes</option>
-                    <option value="Martes">Martes</option>
-                    <option value="Miércoles">Miércoles</option>
-                    <option value="Jueves">Jueves</option>
-                    <option value="Viernes">Viernes</option>
-                </select>
-            </div>
-            
-            <div class="grid grid-cols-2 gap-3">
-                <div>
-                    <label class="block text-sm font-bold text-primary mb-2">Hora Inicio</label>
-                    <input type="time" id="modalTimeStart" class="w-full p-3.5 bg-surface-low border border-outline rounded-xl focus:ring-2 focus:ring-secondary/30 focus:border-secondary outline-none text-sm font-medium"/>
-                </div>
-                <div>
-                    <label class="block text-sm font-bold text-primary mb-2">Hora Fin</label>
-                    <input type="time" id="modalTimeEnd" class="w-full p-3.5 bg-surface-low border border-outline rounded-xl focus:ring-2 focus:ring-secondary/30 focus:border-secondary outline-none text-sm font-medium"/>
-                </div>
-            </div>
-            
-            <div class="bg-secondary-container/30 rounded-xl p-4 border border-secondary/10">
-                <div class="flex gap-3">
-                    <span class="material-symbols-outlined text-secondary">info</span>
-                    <p class="text-xs text-on-surface-variant leading-relaxed">
-                        Al guardar, el sistema verificará automáticamente si existe un conflicto con otros grupos asignados al mismo docente o salón.
-                    </p>
-                </div>
-            </div>
-        </div>
-        
-        <div class="mt-6 flex gap-3">
-            <button onclick="closeModal(null, 'adjustModal')" class="flex-1 py-3.5 border border-outline rounded-xl font-bold text-sm hover:bg-surface-low transition-colors btn-press">Cancelar</button>
-            <button onclick="saveSchedule()" class="flex-1 py-3.5 bg-primary text-white rounded-xl font-bold text-sm hover:bg-slate-800 transition-all shadow-lg shadow-primary/20 btn-press">Guardar Cambios</button>
-        </div>
-    </div>
+  </style>
+  </head>
+<body class="bg-[#F8FAFC] min-h-screen text-on-surface font-body-md overflow-x-hidden pb-24">
+<!-- Ambient Blobs -->
+<div class="fixed top-0 left-0 w-96 h-96 bg-secondary rounded-full blur-blob translate-x-[-20%] translate-y-[-20%]"></div>
+<div class="fixed bottom-0 right-0 w-96 h-96 bg-secondary-container rounded-full blur-blob translate-x-[20%] translate-y-[20%]"></div>
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-surface/80 dark:bg-surface-container/80 backdrop-blur-xl shadow-sm flex justify-between items-center px-lg py-md">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-3xl">school</span>
+<span class="font-headline-md text-headline-md font-bold text-primary tracking-tight">HORASOCIAL PRO</span>
 </div>
-
-<!-- MODAL: Detalle Cambio -->
-<div id="changeDetailModal" class="modal-overlay" onclick="closeModal(event, 'changeDetailModal')">
-    <div class="modal-content" onclick="event.stopPropagation()">
-        <div class="flex justify-between items-start mb-5">
-            <h3 class="font-headline text-xl font-bold text-primary" id="changeDetailTitle">Detalle del Cambio</h3>
-            <button onclick="closeModal(null, 'changeDetailModal')" class="w-9 h-9 rounded-full flex items-center justify-center hover:bg-surface-low transition-colors">
-                <span class="material-symbols-outlined">close</span>
-            </button>
-        </div>
-        <div id="changeDetailContent" class="space-y-4"></div>
-    </div>
+<div class="flex items-center gap-3 bg-surface-container-low px-4 py-2 rounded-full border border-outline-variant/30">
+<div class="text-right hidden sm:block">
+<p class="text-label-md font-bold text-on-surface">Coordinadora Carolina Rojas</p>
+<p class="text-[10px] text-on-surface-variant uppercase tracking-widest">Admin Central</p>
 </div>
-
-<!-- MODAL: Detalle Día Calendario -->
-<div id="calendarDayModal" class="modal-overlay" onclick="closeModal(event, 'calendarDayModal')">
-    <div class="modal-content" onclick="event.stopPropagation()" style="max-width: 420px;">
-        <div class="flex justify-between items-start mb-5">
-            <div>
-                <h3 class="font-headline text-xl font-bold text-primary" id="calendarDayTitle">Actividades del Día</h3>
-                <p class="text-xs text-on-surface-variant mt-1" id="calendarDaySubtitle">20 de Junio, 2026</p>
-            </div>
-            <button onclick="closeModal(null, 'calendarDayModal')" class="w-9 h-9 rounded-full flex items-center justify-center hover:bg-surface-low transition-colors">
-                <span class="material-symbols-outlined">close</span>
-            </button>
-        </div>
-        <div id="calendarDayContent" class="space-y-3"></div>
-    </div>
+<div class="w-10 h-10 rounded-full border-2 border-secondary-container overflow-hidden shadow-inner bg-primary-container flex items-center justify-center">
+<img class="w-full h-full object-cover" data-alt="A professional headshot of a middle-aged female school administrator with a warm and confident expression. She is wearing a professional navy blazer in a brightly lit, modern educational office setting. The style is clean, corporate minimalism with soft, natural lighting that emphasizes a trustworthy and authoritative persona, aligned with high-end SaaS platform aesthetics." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBldGCAm3UfM6rbmy6IZu9_RwuWFllWf6Ba7d1wEJM328FKC3tAD66gObJRKhUVx35JqVnipj6jNyKThWD9wUSSGJmg2O89JjycJqI1C7cH4Q-XT7rrVASeOKQ_UR-E1Scpnqux_KQaxuHBCYLp0-XKO4RSULfST96vCJSiIOpbBd2vVmcrY3m0zsVUlJsDsVqg1dqeVJTY8zW4A5m_mQyYGZuJHI0bUriZajCwcf4fUZeFiigpy2ESltCvF2d3NyrWZteAJ2unPhiK"/>
 </div>
-
-<!-- HEADER -->
-<header class="fixed top-0 w-full z-40 bg-white/80 backdrop-blur-xl shadow-sm flex justify-between items-center px-4 md:px-8 py-3">
-    <div class="flex items-center gap-2">
-        <span class="material-symbols-outlined text-secondary text-[28px]">school</span>
-        <span class="font-headline text-lg font-extrabold tracking-tight text-primary">EduServe Pro</span>
-    </div>
-    <div class="flex items-center gap-3 bg-surface-low px-4 py-2 rounded-full border border-outline-variant/30">
-        <div class="text-right hidden sm:block">
-            <p class="text-sm font-bold text-primary">Carolina Rojas</p>
-            <p class="text-[10px] text-on-surface-variant uppercase tracking-widest">Administrador</p>
-        </div>
-        <div class="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center border-2 border-secondary">
-            <span class="text-secondary font-bold text-sm">CR</span>
-        </div>
-    </div>
+</div>
 </header>
-
-<!-- MAIN CONTENT -->
-<main class="mt-20 px-4 md:px-8 max-w-6xl mx-auto space-y-6">
-
-<!-- Banner Hero -->
-<section class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-primary via-slate-800 to-slate-700 p-6 md:p-8 text-white shadow-lg animate-fade-in">
-    <div class="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-        <div class="space-y-2">
-            <h1 class="font-comfortaa text-2xl md:text-3xl font-bold tracking-tight">Coordinación de Docentes</h1>
-            <p class="text-slate-300 max-w-xl text-sm md:text-base leading-relaxed">
-                Gestione las asignaciones de proyectos sociales, supervise jornadas y ajuste horarios de forma eficiente.
-            </p>
-        </div>
-        <div class="hidden md:block opacity-20">
-            <span class="material-symbols-outlined text-[100px]">calendar_month</span>
-        </div>
-    </div>
-    <div class="absolute top-0 right-0 w-64 h-64 bg-secondary/10 rounded-full blur-3xl"></div>
-    <div class="absolute bottom-0 left-0 w-48 h-48 bg-white/5 rounded-full blur-2xl"></div>
-</section>
-
-<!-- Summary Cards -->
-<section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-    <div class="bg-white rounded-2xl p-5 shadow-sm border border-outline-variant/50 card-hover animate-fade-in" style="animation-delay: 0.05s">
-        <div class="flex justify-between items-start">
-            <p class="text-xs font-bold text-on-surface-variant uppercase tracking-wider">Docentes Activos</p>
-            <span class="material-symbols-outlined text-primary text-xl">person_check</span>
-        </div>
-        <h2 class="text-3xl font-bold text-primary mt-2">5</h2>
-        <div class="mt-3 flex items-center text-xs text-success font-semibold">
-            <span class="material-symbols-outlined text-sm mr-1">trending_up</span>
-            +2 este mes
-        </div>
-    </div>
-    
-    <div class="bg-white rounded-2xl p-5 shadow-sm border border-outline-variant/50 card-hover animate-fade-in" style="animation-delay: 0.1s">
-        <div class="flex justify-between items-start">
-            <p class="text-xs font-bold text-on-surface-variant uppercase tracking-wider">Jornadas Hoy</p>
-            <span class="material-symbols-outlined text-secondary text-xl">schedule</span>
-        </div>
-        <h2 class="text-3xl font-bold text-primary mt-2">4</h2>
-        <div class="mt-3 flex items-center text-xs text-on-surface-variant font-medium">
-            <span class="material-symbols-outlined text-sm mr-1">today</span>
-            Lunes, 20 Jun 2026
-        </div>
-    </div>
-    
-    <div class="bg-white rounded-2xl p-5 shadow-sm border border-outline-variant/50 card-hover animate-fade-in" style="animation-delay: 0.15s">
-        <div class="flex justify-between items-start">
-            <p class="text-xs font-bold text-on-surface-variant uppercase tracking-wider">Cambios Recientes</p>
-            <span class="material-symbols-outlined text-warning text-xl">swap_horiz</span>
-        </div>
-        <h2 class="text-3xl font-bold text-primary mt-2">5</h2>
-        <div class="mt-3 flex items-center text-xs text-warning font-semibold">
-            <span class="material-symbols-outlined text-sm mr-1">notifications</span>
-            2 pendientes de aprobar
-        </div>
-    </div>
-    
-    <div class="bg-white rounded-2xl p-5 shadow-sm border border-outline-variant/50 card-hover animate-fade-in" style="animation-delay: 0.2s">
-        <div class="flex justify-between items-start">
-            <p class="text-xs font-bold text-on-surface-variant uppercase tracking-wider">Sin Conflictos</p>
-            <span class="material-symbols-outlined text-success text-xl">check_circle</span>
-        </div>
-        <h2 class="text-3xl font-bold text-success mt-2">0</h2>
-        <div class="mt-3 flex items-center text-xs text-success font-semibold">
-            <span class="material-symbols-outlined text-sm mr-1">verified</span>
-            Todo en orden
-        </div>
-    </div>
-</section>
-
-<!-- Tabs de navegación -->
-<section class="bg-white rounded-2xl shadow-sm border border-outline-variant/50 p-2 animate-fade-in" style="animation-delay: 0.25s">
-    <div class="flex bg-surface-container p-1 rounded-xl">
-        <button class="flex-1 px-4 py-3 rounded-lg text-xs font-bold bg-white shadow-sm text-primary tab-pill active flex items-center justify-center gap-2" onclick="switchTab('asignacion', this)" id="tab-asignacion">
-            <span class="material-symbols-outlined text-[16px]">group</span>
-            Asignación de Grupos
-        </button>
-        <button class="flex-1 px-4 py-3 rounded-lg text-xs font-medium text-on-surface-variant tab-pill flex items-center justify-center gap-2" onclick="switchTab('calendario', this)" id="tab-calendario">
-            <span class="material-symbols-outlined text-[16px]">calendar_month</span>
-            Calendario de Horarios
-        </button>
-    </div>
-</section>
-
-<!-- TAB: ASIGNACIÓN DE GRUPOS -->
-<div id="panel-asignacion" class="space-y-6">
-    <section class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        
-        <!-- Left: Tabla de Docentes (70%) -->
-        <div class="lg:col-span-8 space-y-6">
-            <div class="bg-white rounded-2xl shadow-sm border border-outline-variant/50 overflow-hidden animate-fade-in" style="animation-delay: 0.3s">
-                <div class="p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-outline-variant/30">
-                    <div>
-                        <h3 class="font-headline text-lg font-bold text-primary">Asignación de Grupos y Horarios</h3>
-                        <p class="text-xs text-on-surface-variant mt-1">Gestione las jornadas de cada docente</p>
-                    </div>
-                    <div class="relative max-w-xs w-full">
-                        <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-lg">search</span>
-                        <input type="text" id="searchDocentes" placeholder="Buscar docente, técnica o grupo..." onkeyup="searchDocentes()" 
-                            class="w-full pl-10 pr-4 py-2.5 bg-surface-low border border-outline rounded-xl text-sm focus:ring-2 focus:ring-secondary/30 focus:border-secondary outline-none transition-all"/>
-                    </div>
-                </div>
-                
-                <div class="overflow-x-auto custom-scrollbar">
-                    <table class="w-full text-left" id="tablaDocentes">
-                        <thead>
-                            <tr class="bg-surface-low/70">
-                                <th class="px-5 py-4 text-xs font-bold text-on-surface-variant uppercase tracking-wider">Docente</th>
-                                <th class="px-5 py-4 text-xs font-bold text-on-surface-variant uppercase tracking-wider">Técnica</th>
-                                <th class="px-5 py-4 text-xs font-bold text-on-surface-variant uppercase tracking-wider">Grupo</th>
-                                <th class="px-5 py-4 text-xs font-bold text-on-surface-variant uppercase tracking-wider">Jornada</th>
-                                <th class="px-5 py-4 text-xs font-bold text-on-surface-variant uppercase tracking-wider text-center">Acción</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-outline-variant/30" id="tbodyDocentes">
-                            <tr class="table-row group" data-search="ricardo mendoza matemáticas cuidado de zonas verdes 11-a completa">
-                                <td class="px-5 py-4">
-                                    <div class="flex items-center gap-3">
-                                        <div class="w-9 h-9 rounded-full bg-primary text-white flex items-center justify-center text-xs font-bold">RM</div>
-                                        <div>
-                                            <p class="font-semibold text-sm text-primary">Ricardo Mendoza</p>
-                                            <p class="text-xs text-on-surface-variant">Matemáticas</p>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="px-5 py-4 text-sm text-on-surface-variant">Cuidado de Zonas Verdes</td>
-                                <td class="px-5 py-4"><span class="text-sm font-bold text-primary">11-A</span></td>
-                                <td class="px-5 py-4">
-                                    <span class="status-badge bg-success-container text-on-success-container">
-                                        <span class="w-1.5 h-1.5 rounded-full bg-success"></span>
-                                        Completa
-                                    </span>
-                                </td>
-                                <td class="px-5 py-4 text-center">
-                                    <button onclick="openAdjustModal('Ricardo Mendoza', 'Viernes', '14:00', '16:00', 'completa')" class="text-secondary hover:bg-secondary-container px-4 py-2 rounded-lg font-bold text-xs uppercase tracking-wider transition-all btn-press">
-                                        Ajustar
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr class="table-row group" data-search="lucía peña informática alfabetización digital 10-c media">
-                                <td class="px-5 py-4">
-                                    <div class="flex items-center gap-3">
-                                        <div class="w-9 h-9 rounded-full bg-secondary text-white flex items-center justify-center text-xs font-bold">LP</div>
-                                        <div>
-                                            <p class="font-semibold text-sm text-primary">Lucía Peña</p>
-                                            <p class="text-xs text-on-surface-variant">Informática</p>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="px-5 py-4 text-sm text-on-surface-variant">Alfabetización Digital</td>
-                                <td class="px-5 py-4"><span class="text-sm font-bold text-primary">10-C</span></td>
-                                <td class="px-5 py-4">
-                                    <span class="status-badge bg-warning/10 text-warning">
-                                        <span class="w-1.5 h-1.5 rounded-full bg-warning"></span>
-                                        Media
-                                    </span>
-                                </td>
-                                <td class="px-5 py-4 text-center">
-                                    <button onclick="openAdjustModal('Lucía Peña', 'Miércoles', '15:30', '17:30', 'media')" class="text-secondary hover:bg-secondary-container px-4 py-2 rounded-lg font-bold text-xs uppercase tracking-wider transition-all btn-press">
-                                        Ajustar
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr class="table-row group" data-search="jairo sánchez ciencias sociales apoyo comunitario 11-b tarde">
-                                <td class="px-5 py-4">
-                                    <div class="flex items-center gap-3">
-                                        <div class="w-9 h-9 rounded-full bg-error text-white flex items-center justify-center text-xs font-bold">JS</div>
-                                        <div>
-                                            <p class="font-semibold text-sm text-primary">Jairo Sánchez</p>
-                                            <p class="text-xs text-on-surface-variant">Ciencias Sociales</p>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="px-5 py-4 text-sm text-on-surface-variant">Apoyo Comunitario</td>
-                                <td class="px-5 py-4"><span class="text-sm font-bold text-primary">11-B</span></td>
-                                <td class="px-5 py-4">
-                                    <span class="status-badge bg-error-container text-on-error-container">
-                                        <span class="w-1.5 h-1.5 rounded-full bg-error"></span>
-                                        Tarde
-                                    </span>
-                                </td>
-                                <td class="px-5 py-4 text-center">
-                                    <button onclick="openAdjustModal('Jairo Sánchez', 'Martes', '13:00', '15:00', 'tarde')" class="text-secondary hover:bg-secondary-container px-4 py-2 rounded-lg font-bold text-xs uppercase tracking-wider transition-all btn-press">
-                                        Ajustar
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr class="table-row group" data-search="andrea giraldo liderazgo liderazgo juvenil 11-c mixta">
-                                <td class="px-5 py-4">
-                                    <div class="flex items-center gap-3">
-                                        <div class="w-9 h-9 rounded-full bg-warning text-white flex items-center justify-center text-xs font-bold">AG</div>
-                                        <div>
-                                            <p class="font-semibold text-sm text-primary">Andrea Giraldo</p>
-                                            <p class="text-xs text-on-surface-variant">Liderazgo</p>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="px-5 py-4 text-sm text-on-surface-variant">Liderazgo Juvenil</td>
-                                <td class="px-5 py-4"><span class="text-sm font-bold text-primary">11-C</span></td>
-                                <td class="px-5 py-4">
-                                    <span class="status-badge bg-secondary-container text-on-secondary-container">
-                                        <span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
-                                        Mixta
-                                    </span>
-                                </td>
-                                <td class="px-5 py-4 text-center">
-                                    <button onclick="openAdjustModal('Andrea Giraldo', 'Lunes', '16:00', '18:00', 'mixta')" class="text-secondary hover:bg-secondary-container px-4 py-2 rounded-lg font-bold text-xs uppercase tracking-wider transition-all btn-press">
-                                        Ajustar
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr class="table-row group" data-search="maría castro biología reciclaje escolar 10-a completa">
-                                <td class="px-5 py-4">
-                                    <div class="flex items-center gap-3">
-                                        <div class="w-9 h-9 rounded-full bg-success text-white flex items-center justify-center text-xs font-bold">MC</div>
-                                        <div>
-                                            <p class="font-semibold text-sm text-primary">María Castro</p>
-                                            <p class="text-xs text-on-surface-variant">Biología</p>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="px-5 py-4 text-sm text-on-surface-variant">Reciclaje Escolar</td>
-                                <td class="px-5 py-4"><span class="text-sm font-bold text-primary">10-A</span></td>
-                                <td class="px-5 py-4">
-                                    <span class="status-badge bg-success-container text-on-success-container">
-                                        <span class="w-1.5 h-1.5 rounded-full bg-success"></span>
-                                        Completa
-                                    </span>
-                                </td>
-                                <td class="px-5 py-4 text-center">
-                                    <button onclick="openAdjustModal('María Castro', 'Jueves', '08:00', '15:00', 'completa')" class="text-secondary hover:bg-secondary-container px-4 py-2 rounded-lg font-bold text-xs uppercase tracking-wider transition-all btn-press">
-                                        Ajustar
-                                    </button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <div id="noResults" class="no-results hidden">
-                        <span class="material-symbols-outlined text-[48px] opacity-30">search_off</span>
-                        <p class="mt-3 text-sm font-medium">No se encontraron docentes</p>
-                        <p class="text-xs text-on-surface-variant mt-1">Intenta con otro término de búsqueda</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Right: Timeline de Cambios (30%) -->
-        <div class="lg:col-span-4 space-y-6">
-            <div class="bg-white rounded-2xl shadow-sm border border-outline-variant/50 p-6 animate-fade-in" style="animation-delay: 0.35s">
-                <div class="flex items-center justify-between mb-6">
-                    <div>
-                        <h3 class="font-headline text-lg font-bold text-primary">Cambios Recientes</h3>
-                        <p class="text-xs text-on-surface-variant mt-1">Historial de ajustes de jornada</p>
-                    </div>
-                    <span class="material-symbols-outlined text-on-surface-variant">history</span>
-                </div>
-                
-                <div class="space-y-0">
-                    <div class="timeline-item pb-5 animate-fade-in" style="animation-delay: 0.4s" onclick="showChangeDetail('ricardo')">
-                        <div class="timeline-dot active"></div>
-                        <div class="cursor-pointer hover:bg-surface-low rounded-lg p-2 -ml-2 transition-colors">
-                            <div class="flex items-center gap-2 mb-1">
-                                <span class="text-xs font-bold text-primary">Ricardo Mendoza</span>
-                                <span class="status-badge bg-success-container text-on-success-container text-[10px] px-2 py-0.5">Aprobado</span>
-                            </div>
-                            <p class="text-xs text-on-surface-variant">Cambió de <span class="font-semibold">Media</span> a <span class="font-semibold text-secondary">Completa</span></p>
-                            <p class="text-[10px] text-outline mt-1">Hoy, 10:30 AM</p>
-                        </div>
-                    </div>
-                    
-                    <div class="timeline-item pb-5 animate-fade-in" style="animation-delay: 0.45s" onclick="showChangeDetail('lucia')">
-                        <div class="timeline-dot warning"></div>
-                        <div class="cursor-pointer hover:bg-surface-low rounded-lg p-2 -ml-2 transition-colors">
-                            <div class="flex items-center gap-2 mb-1">
-                                <span class="text-xs font-bold text-primary">Lucía Peña</span>
-                                <span class="status-badge bg-warning/10 text-warning text-[10px] px-2 py-0.5">Pendiente</span>
-                            </div>
-                            <p class="text-xs text-on-surface-variant">Solicita cambio a <span class="font-semibold text-warning">Jornada Tarde</span></p>
-                            <p class="text-[10px] text-outline mt-1">Hoy, 9:15 AM</p>
-                        </div>
-                    </div>
-                    
-                    <div class="timeline-item pb-5 animate-fade-in" style="animation-delay: 0.5s" onclick="showChangeDetail('jairo')">
-                        <div class="timeline-dot success"></div>
-                        <div class="cursor-pointer hover:bg-surface-low rounded-lg p-2 -ml-2 transition-colors">
-                            <div class="flex items-center gap-2 mb-1">
-                                <span class="text-xs font-bold text-primary">Jairo Sánchez</span>
-                                <span class="status-badge bg-success-container text-on-success-container text-[10px] px-2 py-0.5">Aprobado</span>
-                            </div>
-                            <p class="text-xs text-on-surface-variant">Ajuste de horario: <span class="font-semibold">Martes 1:00 PM</span></p>
-                            <p class="text-[10px] text-outline mt-1">Ayer, 4:45 PM</p>
-                        </div>
-                    </div>
-                    
-                    <div class="timeline-item pb-5 animate-fade-in" style="animation-delay: 0.55s" onclick="showChangeDetail('andrea')">
-                        <div class="timeline-dot success"></div>
-                        <div class="cursor-pointer hover:bg-surface-low rounded-lg p-2 -ml-2 transition-colors">
-                            <div class="flex items-center gap-2 mb-1">
-                                <span class="text-xs font-bold text-primary">Andrea Giraldo</span>
-                                <span class="status-badge bg-success-container text-on-success-container text-[10px] px-2 py-0.5">Aprobado</span>
-                            </div>
-                            <p class="text-xs text-on-surface-variant">Nueva asignación: <span class="font-semibold">Grupo 11-C</span></p>
-                            <p class="text-[10px] text-outline mt-1">Ayer, 2:20 PM</p>
-                        </div>
-                    </div>
-                    
-                    <div class="timeline-item animate-fade-in" style="animation-delay: 0.6s" onclick="showChangeDetail('maria')">
-                        <div class="timeline-dot active"></div>
-                        <div class="cursor-pointer hover:bg-surface-low rounded-lg p-2 -ml-2 transition-colors">
-                            <div class="flex items-center gap-2 mb-1">
-                                <span class="text-xs font-bold text-primary">María Castro</span>
-                                <span class="status-badge bg-success-container text-on-success-container text-[10px] px-2 py-0.5">Aprobado</span>
-                            </div>
-                            <p class="text-xs text-on-surface-variant">Cambió de <span class="font-semibold">Tarde</span> a <span class="font-semibold text-secondary">Completa</span></p>
-                            <p class="text-[10px] text-outline mt-1">19 Jun, 11:00 AM</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="bg-gradient-to-br from-primary to-slate-800 rounded-2xl p-6 text-white relative overflow-hidden animate-fade-in" style="animation-delay: 0.65s">
-                <div class="relative z-10">
-                    <p class="text-xs font-bold uppercase tracking-widest opacity-60 mb-2">Consejo</p>
-                    <p class="text-sm leading-relaxed opacity-90">
-                        Agrupe las técnicas por cercanía geográfica para reducir el tiempo de desplazamiento entre sedes.
+<main class="mt-24 px-gutter max-w-7xl mx-auto space-y-lg">
+<!-- Banner -->
+<section class="relative overflow-hidden rounded-xl bg-gradient-to-r from-[#0F172A] to-[#334155] p-xl text-white shadow-lg">
+<div class="relative z-10 flex flex-col md:flex-row justify-between items-center gap-lg">
+<div class="space-y-sm">
+<h1 class="font-comfortaa text-3xl font-bold tracking-tight">Distribución Horaria de Técnicas</h1>
+<p class="text-surface-variant max-w-2xl text-body-md opacity-90">
+                        Gestione de manera eficiente las asignaciones de proyectos sociales y técnicos. Asegure la adecuación de horarios para evitar solapamientos y optimizar la supervisión de los estudiantes.
                     </p>
-                </div>
-                <span class="material-symbols-outlined absolute -bottom-2 -right-2 text-7xl opacity-10">engineering</span>
-            </div>
-        </div>
-    </section>
-
-    <!-- Jornadas del Día -->
-    <section class="bg-white rounded-2xl shadow-sm border border-outline-variant/50 p-6 animate-fade-in" style="animation-delay: 0.7s">
-        <div class="flex items-center justify-between mb-5">
-            <div>
-                <h3 class="font-headline text-lg font-bold text-primary">Distribución de Jornadas - Hoy</h3>
-                <p class="text-xs text-on-surface-variant mt-1">Visualización de horarios activos</p>
-            </div>
-            <div class="flex gap-4 text-xs">
-                <div class="flex items-center gap-1.5">
-                    <span class="w-2.5 h-2.5 rounded-full bg-success"></span>
-                    <span class="text-on-surface-variant">Completa</span>
-                </div>
-                <div class="flex items-center gap-1.5">
-                    <span class="w-2.5 h-2.5 rounded-full bg-warning"></span>
-                    <span class="text-on-surface-variant">Media</span>
-                </div>
-                <div class="flex items-center gap-1.5">
-                    <span class="w-2.5 h-2.5 rounded-full bg-error"></span>
-                    <span class="text-on-surface-variant">Tarde</span>
-                </div>
-                <div class="flex items-center gap-1.5">
-                    <span class="w-2.5 h-2.5 rounded-full bg-secondary"></span>
-                    <span class="text-on-surface-variant">Mixta</span>
-                </div>
-            </div>
-        </div>
-        
-        <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-3">
-            <div class="bg-surface-low rounded-xl p-4 text-center border border-outline-variant/30 hover:border-secondary/30 transition-colors cursor-pointer">
-                <div class="w-10 h-10 rounded-full bg-success/10 flex items-center justify-center mx-auto mb-2">
-                    <span class="material-symbols-outlined text-success text-lg">wb_sunny</span>
-                </div>
-                <p class="text-xs font-bold text-primary">R. Mendoza</p>
-                <p class="text-[10px] text-success font-semibold mt-0.5">7:00 AM - 3:00 PM</p>
-            </div>
-            <div class="bg-surface-low rounded-xl p-4 text-center border border-outline-variant/30 hover:border-secondary/30 transition-colors cursor-pointer">
-                <div class="w-10 h-10 rounded-full bg-warning/10 flex items-center justify-center mx-auto mb-2">
-                    <span class="material-symbols-outlined text-warning text-lg">wb_twilight</span>
-                </div>
-                <p class="text-xs font-bold text-primary">L. Peña</p>
-                <p class="text-[10px] text-warning font-semibold mt-0.5">7:00 AM - 12:00 PM</p>
-            </div>
-            <div class="bg-surface-low rounded-xl p-4 text-center border border-outline-variant/30 hover:border-secondary/30 transition-colors cursor-pointer">
-                <div class="w-10 h-10 rounded-full bg-error/10 flex items-center justify-center mx-auto mb-2">
-                    <span class="material-symbols-outlined text-error text-lg">nights_stay</span>
-                </div>
-                <p class="text-xs font-bold text-primary">J. Sánchez</p>
-                <p class="text-[10px] text-error font-semibold mt-0.5">1:00 PM - 6:00 PM</p>
-            </div>
-            <div class="bg-surface-low rounded-xl p-4 text-center border border-outline-variant/30 hover:border-secondary/30 transition-colors cursor-pointer">
-                <div class="w-10 h-10 rounded-full bg-secondary/10 flex items-center justify-center mx-auto mb-2">
-                    <span class="material-symbols-outlined text-secondary text-lg">sync_alt</span>
-                </div>
-                <p class="text-xs font-bold text-primary">A. Giraldo</p>
-                <p class="text-[10px] text-secondary font-semibold mt-0.5">Variable</p>
-            </div>
-            <div class="bg-surface-low rounded-xl p-4 text-center border border-outline-variant/30 hover:border-secondary/30 transition-colors cursor-pointer">
-                <div class="w-10 h-10 rounded-full bg-success/10 flex items-center justify-center mx-auto mb-2">
-                    <span class="material-symbols-outlined text-success text-lg">wb_sunny</span>
-                </div>
-                <p class="text-xs font-bold text-primary">M. Castro</p>
-                <p class="text-[10px] text-success font-semibold mt-0.5">7:00 AM - 3:00 PM</p>
-            </div>
-            <div class="bg-surface-low rounded-xl p-4 text-center border border-outline-variant/30 hover:border-secondary/30 transition-colors cursor-pointer opacity-50">
-                <div class="w-10 h-10 rounded-full bg-outline/20 flex items-center justify-center mx-auto mb-2">
-                    <span class="material-symbols-outlined text-on-surface-variant text-lg">person_off</span>
-                </div>
-                <p class="text-xs font-bold text-on-surface-variant">C. Ruiz</p>
-                <p class="text-[10px] text-on-surface-variant mt-0.5">No asignado</p>
-            </div>
-        </div>
-    </section>
-</div><!-- TAB: CALENDARIO DE HORARIOS -->
-<div id="panel-calendario" class="hidden space-y-6">
-    <section class="bg-white rounded-2xl shadow-sm border border-outline-variant/50 p-6 animate-fade-in">
-        <div class="flex items-center justify-between mb-6">
-            <div>
-                <h3 class="font-headline text-lg font-bold text-primary">Calendario de Horas Sociales</h3>
-                <p class="text-xs text-on-surface-variant mt-1">Junio 2026 - Visualice conflictos y horarios</p>
-            </div>
-            <div class="flex items-center gap-3">
-                <button onclick="changeMonth(-1)" class="calendar-nav-btn border border-outline">
-                    <span class="material-symbols-outlined text-on-surface-variant">chevron_left</span>
-                </button>
-                <span class="text-sm font-bold text-primary min-w-[120px] text-center" id="calendarMonthLabel">Junio 2026</span>
-                <button onclick="changeMonth(1)" class="calendar-nav-btn border border-outline">
-                    <span class="material-symbols-outlined text-on-surface-variant">chevron_right</span>
-                </button>
-            </div>
-        </div>
-        
-        <div class="flex flex-wrap gap-3 mb-4 pb-4 border-b border-outline-variant/30">
-            <div class="flex items-center gap-2 bg-surface-low px-3 py-1.5 rounded-full">
-                <span class="w-3 h-3 rounded-full bg-primary"></span>
-                <span class="text-xs font-medium text-primary">R. Mendoza</span>
-            </div>
-            <div class="flex items-center gap-2 bg-surface-low px-3 py-1.5 rounded-full">
-                <span class="w-3 h-3 rounded-full bg-secondary"></span>
-                <span class="text-xs font-medium text-primary">L. Peña</span>
-            </div>
-            <div class="flex items-center gap-2 bg-surface-low px-3 py-1.5 rounded-full">
-                <span class="w-3 h-3 rounded-full bg-error"></span>
-                <span class="text-xs font-medium text-primary">J. Sánchez</span>
-            </div>
-            <div class="flex items-center gap-2 bg-surface-low px-3 py-1.5 rounded-full">
-                <span class="w-3 h-3 rounded-full bg-warning"></span>
-                <span class="text-xs font-medium text-primary">A. Giraldo</span>
-            </div>
-            <div class="flex items-center gap-2 bg-surface-low px-3 py-1.5 rounded-full">
-                <span class="w-3 h-3 rounded-full bg-success"></span>
-                <span class="text-xs font-medium text-primary">M. Castro</span>
-            </div>
-        </div>
-        
-        <div class="calendar-grid" id="calendarGrid">
-            <div class="calendar-day header">Dom</div>
-            <div class="calendar-day header">Lun</div>
-            <div class="calendar-day header">Mar</div>
-            <div class="calendar-day header">Mié</div>
-            <div class="calendar-day header">Jue</div>
-            <div class="calendar-day header">Vie</div>
-            <div class="calendar-day header">Sáb</div>
-        </div>
-    </section>
-    
-    <section class="bg-white rounded-2xl shadow-sm border border-outline-variant/50 p-6 animate-fade-in" style="animation-delay: 0.1s">
-        <div class="flex items-center gap-3 mb-4">
-            <div class="w-10 h-10 bg-error-container rounded-full flex items-center justify-center">
-                <span class="material-symbols-outlined text-error">warning</span>
-            </div>
-            <div>
-                <h3 class="font-headline text-lg font-bold text-primary">Detector de Conflictos</h3>
-                <p class="text-xs text-on-surface-variant">Horarios que se cruzan o superponen</p>
-            </div>
-        </div>
-        <div class="space-y-3" id="conflictosList">
-            <div class="flex items-center gap-4 p-4 bg-error-container/30 rounded-xl border border-error/20">
-                <span class="material-symbols-outlined text-error">schedule</span>
-                <div class="flex-grow">
-                    <p class="text-sm font-bold text-error">Posible conflicto detectado</p>
-                    <p class="text-xs text-on-surface-variant mt-1">Andrea Giraldo (Mixta) y Lucía Peña (Media) tienen horarios superpuestos los Miércoles</p>
-                </div>
-                <button onclick="openAdjustModal('Andrea Giraldo', 'Miércoles', '16:00', '18:00', 'mixta')" class="text-secondary text-xs font-bold hover:underline">Revisar</button>
-            </div>
-            <div class="flex items-center gap-4 p-4 bg-warning/10 rounded-xl border border-warning/20">
-                <span class="material-symbols-outlined text-warning">info</span>
-                <div class="flex-grow">
-                    <p class="text-sm font-bold text-warning">Alerta de capacidad</p>
-                    <p class="text-xs text-on-surface-variant mt-1">El Laboratorio de Ciencias está asignado a 2 docentes el mismo día</p>
-                </div>
-                <span class="text-xs text-on-surface-variant">Revisar calendario</span>
-            </div>
-        </div>
-    </section>
-    
-    <section class="bg-white rounded-2xl shadow-sm border border-outline-variant/50 p-6 animate-fade-in" style="animation-delay: 0.2s">
-        <h3 class="font-headline text-lg font-bold text-primary mb-4">Resumen de Carga Semanal</h3>
-        <div class="grid grid-cols-1 sm:grid-cols-5 gap-4">
-            <div class="bg-surface-low rounded-xl p-4 text-center">
-                <p class="text-xs font-bold text-on-surface-variant mb-2">Lunes</p>
-                <div class="space-y-1">
-                    <div class="text-[10px] bg-secondary-container text-on-secondary-container rounded px-2 py-1">A. Giraldo - 4h</div>
-                    <div class="text-[10px] bg-success-container text-on-success-container rounded px-2 py-1">M. Castro - 8h</div>
-                </div>
-                <p class="text-xs font-bold text-primary mt-2">12h total</p>
-            </div>
-            <div class="bg-surface-low rounded-xl p-4 text-center">
-                <p class="text-xs font-bold text-on-surface-variant mb-2">Martes</p>
-                <div class="space-y-1">
-                    <div class="text-[10px] bg-error-container text-on-error-container rounded px-2 py-1">J. Sánchez - 5h</div>
-                </div>
-                <p class="text-xs font-bold text-primary mt-2">5h total</p>
-            </div>
-            <div class="bg-surface-low rounded-xl p-4 text-center">
-                <p class="text-xs font-bold text-on-surface-variant mb-2">Miércoles</p>
-                <div class="space-y-1">
-                    <div class="text-[10px] bg-warning/10 text-warning rounded px-2 py-1">L. Peña - 4h</div>
-                    <div class="text-[10px] bg-secondary-container text-on-secondary-container rounded px-2 py-1">A. Giraldo - 4h</div>
-                </div>
-                <p class="text-xs font-bold text-primary mt-2">8h total</p>
-            </div>
-            <div class="bg-surface-low rounded-xl p-4 text-center">
-                <p class="text-xs font-bold text-on-surface-variant mb-2">Jueves</p>
-                <div class="space-y-1">
-                    <div class="text-[10px] bg-success-container text-on-success-container rounded px-2 py-1">M. Castro - 8h</div>
-                </div>
-                <p class="text-xs font-bold text-primary mt-2">8h total</p>
-            </div>
-            <div class="bg-surface-low rounded-xl p-4 text-center">
-                <p class="text-xs font-bold text-on-surface-variant mb-2">Viernes</p>
-                <div class="space-y-1">
-                    <div class="text-[10px] bg-primary/10 text-primary rounded px-2 py-1">R. Mendoza - 6h</div>
-                </div>
-                <p class="text-xs font-bold text-primary mt-2">6h total</p>
-            </div>
-        </div>
-    </section>
 </div>
-
+<div class="hidden lg:block opacity-20 transform scale-150">
+<span class="material-symbols-outlined text-[120px]">calendar_month</span>
+</div>
+</div>
+</section>
+<!-- Summary Cards Row -->
+<section class="grid grid-cols-1 md:grid-cols-3 gap-lg">
+<!-- Card 1 -->
+<div class="bg-white rounded-xl p-lg shadow-[0px_4px_20px_rgba(15,23,42,0.05)] border border-outline-variant/20 relative overflow-hidden gear-watermark">
+<div class="flex justify-between items-start">
+<p class="text-label-md font-bold text-on-surface-variant uppercase tracking-wider">Docentes Activos</p>
+<span class="material-symbols-outlined text-primary">person_check</span>
+</div>
+<h2 class="text-4xl font-bold text-[#0F172A] mt-2">12</h2>
+<div class="mt-4 flex items-center text-xs text-secondary font-semibold">
+<span class="material-symbols-outlined text-sm mr-1">trending_up</span>
+                    +2 respecto al mes anterior
+                </div>
+</div>
+<!-- Card 2 (Dynamic Switcher) -->
+<div class="bg-white rounded-xl p-lg shadow-[0px_4px_20px_rgba(15,23,42,0.05)] border border-outline-variant/20 transition-all duration-500 relative overflow-hidden gear-watermark" id="conflict-card">
+<div class="flex justify-between items-start">
+<p class="text-label-md font-bold text-on-surface-variant uppercase tracking-wider">Cruces de Horario</p>
+<span class="material-symbols-outlined text-green-600" id="conflict-icon-card">check_circle</span>
+</div>
+<h2 class="text-4xl font-bold text-green-600 mt-2" id="conflict-count">0</h2>
+<p class="text-xs text-on-surface-variant mt-4 font-medium italic" id="conflict-subtext">Estructura horaria balanceada</p>
+</div>
+<!-- Card 3 -->
+<div class="bg-white rounded-xl p-lg shadow-[0px_4px_20px_rgba(15,23,42,0.05)] border border-outline-variant/20 relative overflow-hidden gear-watermark">
+<div class="flex justify-between items-start">
+<p class="text-label-md font-bold text-on-surface-variant uppercase tracking-wider">Proyectos Activos</p>
+<span class="material-symbols-outlined text-secondary-container">assignment_turned_in</span>
+</div>
+<h2 class="text-4xl font-bold text-secondary-container mt-2">6</h2>
+<div class="mt-4 flex items-center text-xs text-on-surface-variant font-medium">
+<span class="material-symbols-outlined text-sm mr-1">history</span>
+                    Última actualización: Hoy, 08:30 AM
+                </div>
+</div>
+</section>
+<!-- Main Content Grid -->
+<section class="grid grid-cols-1 lg:grid-cols-10 gap-lg pb-10">
+<!-- Left (70%) Table -->
+<div class="lg:col-span-7 bg-white rounded-xl shadow-[0px_4px_20px_rgba(15,23,42,0.05)] border border-outline-variant/20 flex flex-col">
+<div class="p-lg flex flex-col md:flex-row md:items-center justify-between gap-md border-b border-outline-variant/30">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Asignación de Grupos y Horarios</h3>
+<div class="relative max-w-xs w-full">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-md">search</span>
+<input class="w-full pl-10 pr-4 py-2 bg-surface-container-low border border-outline-variant/50 rounded-lg text-sm focus:ring-2 focus:ring-secondary-container/50 focus:border-secondary-container outline-none transition-all" placeholder="Buscar docente..." type="text"/>
+</div>
+</div>
+<div class="overflow-x-auto custom-scrollbar">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low/50">
+<th class="px-lg py-4 text-label-md font-bold text-on-surface-variant">Docente</th>
+<th class="px-lg py-4 text-label-md font-bold text-on-surface-variant">Técnica</th>
+<th class="px-lg py-4 text-label-md font-bold text-on-surface-variant">Grupo</th>
+<th class="px-lg py-4 text-label-md font-bold text-on-surface-variant">Horario</th>
+<th class="px-lg py-4 text-label-md font-bold text-on-surface-variant text-center">Acción</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/20">
+<!-- Row 1 -->
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="px-lg py-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-primary-container text-on-primary-fixed-variant flex items-center justify-center text-xs font-bold">RM</div>
+<span class="font-medium text-sm">Ricardo Mendoza</span>
+</div>
+</td>
+<td class="px-lg py-4 text-sm text-on-surface-variant">Cuidado de Zonas Verdes</td>
+<td class="px-lg py-4 text-sm font-bold">11-A</td>
+<td class="px-lg py-4 text-sm font-medium">Viernes, 2:00 PM</td>
+<td class="px-lg py-4 text-center">
+<button class="text-secondary hover:underline font-bold text-xs uppercase tracking-widest px-4 py-2 bg-secondary/5 rounded-full hover:bg-secondary/10 transition-all active:scale-95" onclick="openAdjustModal('Ricardo Mendoza', 'Viernes', '2:00 PM')">Ajustar</button>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="px-lg py-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-secondary-container/20 text-secondary flex items-center justify-center text-xs font-bold">LP</div>
+<span class="font-medium text-sm">Lucía Peña</span>
+</div>
+</td>
+<td class="px-lg py-4 text-sm text-on-surface-variant">Alfabetización Digital</td>
+<td class="px-lg py-4 text-sm font-bold">10-C</td>
+<td class="px-lg py-4 text-sm font-medium">Miércoles, 3:30 PM</td>
+<td class="px-lg py-4 text-center">
+<button class="text-secondary hover:underline font-bold text-xs uppercase tracking-widest px-4 py-2 bg-secondary/5 rounded-full hover:bg-secondary/10 transition-all active:scale-95" onclick="openAdjustModal('Lucía Peña', 'Miércoles', '3:30 PM')">Ajustar</button>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="px-lg py-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-tertiary-fixed text-on-tertiary-fixed-variant flex items-center justify-center text-xs font-bold">JS</div>
+<span class="font-medium text-sm">Jairo Sánchez</span>
+</div>
+</td>
+<td class="px-lg py-4 text-sm text-on-surface-variant">Apoyo Comunitario</td>
+<td class="px-lg py-4 text-sm font-bold">11-B</td>
+<td class="px-lg py-4 text-sm font-medium">Martes, 1:00 PM</td>
+<td class="px-lg py-4 text-center">
+<button class="text-secondary hover:underline font-bold text-xs uppercase tracking-widest px-4 py-2 bg-secondary/5 rounded-full hover:bg-secondary/10 transition-all active:scale-95" onclick="openAdjustModal('Jairo Sánchez', 'Martes', '1:00 PM')">Ajustar</button>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="px-lg py-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-outline-variant/50 text-on-surface flex items-center justify-center text-xs font-bold">AG</div>
+<span class="font-medium text-sm">Andrea Giraldo</span>
+</div>
+</td>
+<td class="px-lg py-4 text-sm text-on-surface-variant">Liderazgo Juvenil</td>
+<td class="px-lg py-4 text-sm font-bold">11-C</td>
+<td class="px-lg py-4 text-sm font-medium">Lunes, 4:00 PM</td>
+<td class="px-lg py-4 text-center">
+<button class="text-secondary hover:underline font-bold text-xs uppercase tracking-widest px-4 py-2 bg-secondary/5 rounded-full hover:bg-secondary/10 transition-all active:scale-95" onclick="openAdjustModal('Andrea Giraldo', 'Lunes', '4:00 PM')">Ajustar</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Right (30%) Conflict Assistant -->
+<div class="lg:col-span-3 space-y-lg">
+<div class="bg-white rounded-xl shadow-[0px_4px_20px_rgba(15,23,42,0.05)] border border-outline-variant/20 p-lg flex flex-col items-center justify-center text-center space-y-4 min-h-[300px] transition-all duration-700 relative overflow-hidden" id="conflict-assistant">
+<!-- Dynamic Content -->
+<div class="flex flex-col items-center" id="assistant-status-ui">
+<div class="w-20 h-20 rounded-full bg-green-50 flex items-center justify-center mb-4 transition-colors" id="assistant-icon-bg">
+<span class="material-symbols-outlined text-4xl text-green-500" id="assistant-icon">task_alt</span>
+</div>
+<h4 class="font-headline-sm text-on-surface" id="assistant-title">Asistente de Conflictos</h4>
+<p class="text-label-md text-on-surface-variant mt-2 px-4" id="assistant-desc">
+                            No se han detectado cruces de horarios en el sistema actual.
+                        </p>
+</div>
+<div class="w-full pt-4 mt-auto border-t border-outline-variant/30">
+<p class="text-[10px] text-on-surface-variant uppercase font-bold tracking-widest mb-2">Próximos Ajustes</p>
+<div class="bg-surface-container-low rounded-lg p-3 text-left">
+<p class="text-xs font-bold">Sede Norte - Bloque C</p>
+<p class="text-[10px] text-on-surface-variant">Revisión programada mañana 10am</p>
+</div>
+</div>
+</div>
+<!-- Subtle Gear Texture Card -->
+<div class="bg-white rounded-xl p-6 border border-outline-variant/20 shadow-sm relative overflow-hidden">
+<div class="relative z-10">
+<p class="text-label-sm font-bold text-secondary uppercase tracking-widest mb-2">Tips de Optimización</p>
+<p class="text-xs text-on-surface-variant leading-relaxed">
+                            Agrupe las técnicas por cercanía geográfica para reducir el tiempo de desplazamiento de los docentes entre sedes.
+                        </p>
+</div>
+<span class="material-symbols-outlined absolute -bottom-4 -right-4 text-7xl opacity-5">engineering</span>
+</div>
+</div>
+</section>
 </main>
-
-<!-- ============================================
-     BOTTOM NAVBAR - Estilo identico al Dashboard
-     ============================================ -->
-<nav class="bottom-navbar">
-    <a href="/admin/dashboard" class="bottom-nav-item" onclick="setActiveNav(this)">
-        <span class="material-symbols-outlined nav-icon">dashboard</span>
-        <span class="nav-label">Dashboard</span>
-    </a>
-    <a href="/admin/docentes" class="bottom-nav-item active" onclick="setActiveNav(this)">
-        <span class="material-symbols-outlined nav-icon">group</span>
-        <span class="nav-label">Docentes</span>
-    </a>
-    <a href="/admin/alertas" class="bottom-nav-item" onclick="setActiveNav(this)">
-        <span class="material-symbols-outlined nav-icon">school</span>
-        <span class="nav-label">Estudiantes</span>
-    </a>
-    <a href="/admin/mensajes" class="bottom-nav-item relative" onclick="setActiveNav(this)">
-        <span class="material-symbols-outlined nav-icon">mail</span>
-        <span class="nav-label">Mensajes</span>
-        <span class="nav-badge"></span>
-    </a>
+<!-- Bottom Navigation Shell -->
+<nav class="fixed bottom-0 left-0 w-full grid grid-cols-4 items-center h-20 px-md pb-safe bg-surface shadow-[0px_-4px_20px_rgba(15,23,42,0.05)] border-t border-dashed border-outline-variant z-50">
+<!-- Dashboard -->
+<div class="flex flex-col items-center justify-center text-on-surface-variant border-r border-dashed border-outline-variant cursor-pointer hover:bg-surface-container-high transition-colors active:scale-90 duration-200">
+<span class="material-symbols-outlined text-2xl mb-1">dashboard</span>
+<span class="font-comfortaa text-[11px] font-bold">Dashboard</span>
+</div>
+<!-- Docentes (ACTIVE) -->
+<div class="flex items-center justify-center border-r border-dashed border-outline-variant">
+<div class="flex flex-col items-center justify-center bg-secondary-container/20 text-secondary rounded-full px-5 py-2 transition-all duration-300 w-4/5 mx-auto">
+<span class="material-symbols-outlined text-2xl mb-1" style="font-variation-settings: 'FILL' 1;">badge</span>
+<span class="font-comfortaa text-[11px] font-bold">Docentes</span>
+</div>
+</div>
+<!-- Estudiantes -->
+<div class="flex flex-col items-center justify-center text-on-surface-variant border-r border-dashed border-outline-variant cursor-pointer hover:bg-surface-container-high transition-colors active:scale-90 duration-200">
+<span class="material-symbols-outlined text-2xl mb-1">group</span>
+<span class="font-comfortaa text-[11px] font-bold">Estudiantes</span>
+</div>
+<!-- Mensajes -->
+<div class="flex flex-col items-center justify-center text-on-surface-variant cursor-pointer hover:bg-surface-container-high transition-colors active:scale-90 duration-200">
+<span class="material-symbols-outlined text-2xl mb-1">chat_bubble</span>
+<span class="font-comfortaa text-[11px] font-bold">Mensajes</span>
+</div>
 </nav>
-
+<!-- Modal: Ajustar Horarios -->
+<div class="fixed inset-0 z-[60] hidden flex items-center justify-center p-4" id="adjust-modal">
+<!-- Backdrop -->
+<div class="absolute inset-0 bg-black/40 backdrop-blur-sm" onclick="closeAdjustModal()"></div>
+<!-- Modal Content -->
+<div class="relative w-full max-w-md bg-white rounded-2xl shadow-2xl p-xl overflow-hidden animate-in fade-in zoom-in duration-300">
+<div class="flex justify-between items-start mb-6">
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Ajustar Horario</h3>
+<p class="text-label-md text-secondary font-bold" id="modal-docente-name">Docente: Ricardo Mendoza</p>
+</div>
+<button class="w-8 h-8 rounded-full flex items-center justify-center hover:bg-surface-container transition-colors" onclick="closeAdjustModal()">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<div class="space-y-4">
+<div>
+<label class="block text-label-md font-bold text-on-surface mb-2">Día de la Semana</label>
+<select class="w-full p-3 bg-surface-container-low border border-outline-variant rounded-lg focus:ring-2 focus:ring-secondary-container outline-none appearance-none" id="modal-day">
+<option value="Lunes">Lunes</option>
+<option value="Martes">Martes</option>
+<option value="Miércoles">Miércoles</option>
+<option value="Jueves">Jueves</option>
+<option value="Viernes">Viernes</option>
+</select>
+</div>
+<div>
+<label class="block text-label-md font-bold text-on-surface mb-2">Hora de Inicio</label>
+<input class="w-full p-3 bg-surface-container-low border border-outline-variant rounded-lg focus:ring-2 focus:ring-secondary-container outline-none" id="modal-time" type="time"/>
+</div>
+<div class="bg-primary-container/5 rounded-lg p-4 border border-primary-container/10">
+<div class="flex gap-3">
+<span class="material-symbols-outlined text-secondary-container">info</span>
+<p class="text-xs text-on-surface-variant leading-relaxed">
+                            Al guardar, el asistente verificará automáticamente si existe un conflicto con otros grupos asignados al mismo docente o salón.
+                        </p>
+</div>
+</div>
+</div>
+<div class="mt-8 flex gap-3">
+<button class="flex-1 py-3 px-4 border border-outline-variant rounded-lg font-bold text-sm hover:bg-surface-container transition-colors" onclick="closeAdjustModal()">Cancelar</button>
+<button class="flex-1 py-3 px-4 bg-primary text-white rounded-lg font-bold text-sm hover:shadow-lg transition-all active:scale-95 shadow-md" onclick="saveSchedule()">Guardar Cambios</button>
+</div>
+</div>
+</div>
 <script>
-    // ============================================
-    // DATOS DE DOCENTES Y CALENDARIO
-    // ============================================
-    const docentesData = [
-        { id: 1, nombre: 'Ricardo Mendoza', materia: 'Matemáticas', tecnica: 'Cuidado de Zonas Verdes', grupo: '11-A', jornada: 'Completa', dia: 'Viernes', inicio: '14:00', fin: '16:00', color: 'bg-primary', textColor: 'text-primary', dotColor: 'bg-primary' },
-        { id: 2, nombre: 'Lucía Peña', materia: 'Informática', tecnica: 'Alfabetización Digital', grupo: '10-C', jornada: 'Media', dia: 'Miércoles', inicio: '15:30', fin: '17:30', color: 'bg-secondary', textColor: 'text-secondary', dotColor: 'bg-secondary' },
-        { id: 3, nombre: 'Jairo Sánchez', materia: 'Ciencias Sociales', tecnica: 'Apoyo Comunitario', grupo: '11-B', jornada: 'Tarde', dia: 'Martes', inicio: '13:00', fin: '15:00', color: 'bg-error', textColor: 'text-error', dotColor: 'bg-error' },
-        { id: 4, nombre: 'Andrea Giraldo', materia: 'Liderazgo', tecnica: 'Liderazgo Juvenil', grupo: '11-C', jornada: 'Mixta', dia: 'Lunes', inicio: '16:00', fin: '18:00', color: 'bg-warning', textColor: 'text-warning', dotColor: 'bg-warning' },
-        { id: 5, nombre: 'María Castro', materia: 'Biología', tecnica: 'Reciclaje Escolar', grupo: '10-A', jornada: 'Completa', dia: 'Jueves', inicio: '08:00', fin: '15:00', color: 'bg-success', textColor: 'text-success', dotColor: 'bg-success' }
-    ];
-    
-    // Eventos del calendario (Junio 2026)
-    const calendarEvents = {
-        1:  [{ docente: 'Andrea Giraldo', tipo: 'Mixta', hora: '4:00 PM - 6:00 PM', color: 'bg-warning', textColor: 'text-warning' }],
-        2:  [{ docente: 'Jairo Sánchez', tipo: 'Tarde', hora: '1:00 PM - 3:00 PM', color: 'bg-error', textColor: 'text-error' }],
-        4:  [{ docente: 'Lucía Peña', tipo: 'Media', hora: '3:30 PM - 5:30 PM', color: 'bg-secondary', textColor: 'text-secondary' }],
-        5:  [{ docente: 'María Castro', tipo: 'Completa', hora: '8:00 AM - 3:00 PM', color: 'bg-success', textColor: 'text-success' }],
-        8:  [{ docente: 'Andrea Giraldo', tipo: 'Mixta', hora: '4:00 PM - 6:00 PM', color: 'bg-warning', textColor: 'text-warning' }],
-        9:  [{ docente: 'Jairo Sánchez', tipo: 'Tarde', hora: '1:00 PM - 3:00 PM', color: 'bg-error', textColor: 'text-error' }],
-        10: [{ docente: 'Ricardo Mendoza', tipo: 'Completa', hora: '2:00 PM - 4:00 PM', color: 'bg-primary', textColor: 'text-primary' }],
-        11: [{ docente: 'Lucía Peña', tipo: 'Media', hora: '3:30 PM - 5:30 PM', color: 'bg-secondary', textColor: 'text-secondary' }],
-        12: [{ docente: 'María Castro', tipo: 'Completa', hora: '8:00 AM - 3:00 PM', color: 'bg-success', textColor: 'text-success' }],
-        15: [{ docente: 'Andrea Giraldo', tipo: 'Mixta', hora: '4:00 PM - 6:00 PM', color: 'bg-warning', textColor: 'text-warning' }],
-        16: [{ docente: 'Jairo Sánchez', tipo: 'Tarde', hora: '1:00 PM - 3:00 PM', color: 'bg-error', textColor: 'text-error' }],
-        17: [{ docente: 'Ricardo Mendoza', tipo: 'Completa', hora: '2:00 PM - 4:00 PM', color: 'bg-primary', textColor: 'text-primary' }],
-        18: [{ docente: 'Lucía Peña', tipo: 'Media', hora: '3:30 PM - 5:30 PM', color: 'bg-secondary', textColor: 'text-secondary' },
-             { docente: 'Andrea Giraldo', tipo: 'Mixta', hora: '4:00 PM - 6:00 PM', color: 'bg-warning', textColor: 'text-warning' }],
-        19: [{ docente: 'María Castro', tipo: 'Completa', hora: '8:00 AM - 3:00 PM', color: 'bg-success', textColor: 'text-success' }],
-        22: [{ docente: 'Andrea Giraldo', tipo: 'Mixta', hora: '4:00 PM - 6:00 PM', color: 'bg-warning', textColor: 'text-warning' }],
-        23: [{ docente: 'Jairo Sánchez', tipo: 'Tarde', hora: '1:00 PM - 3:00 PM', color: 'bg-error', textColor: 'text-error' }],
-        24: [{ docente: 'Ricardo Mendoza', tipo: 'Completa', hora: '2:00 PM - 4:00 PM', color: 'bg-primary', textColor: 'text-primary' }],
-        25: [{ docente: 'Lucía Peña', tipo: 'Media', hora: '3:30 PM - 5:30 PM', color: 'bg-secondary', textColor: 'text-secondary' }],
-        26: [{ docente: 'María Castro', tipo: 'Completa', hora: '8:00 AM - 3:00 PM', color: 'bg-success', textColor: 'text-success' }],
-        29: [{ docente: 'Andrea Giraldo', tipo: 'Mixta', hora: '4:00 PM - 6:00 PM', color: 'bg-warning', textColor: 'text-warning' }],
-        30: [{ docente: 'Jairo Sánchez', tipo: 'Tarde', hora: '1:00 PM - 3:00 PM', color: 'bg-error', textColor: 'text-error' }]
-    };
-    
-    let currentMonth = 5;
-    let currentYear = 2026;
-    const monthNames = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
-    
-    // ============================================
-    // NAVBAR ACTIVO - Estilo identico al Dashboard
-    // ============================================
-    function setActiveNav(element) {
-        document.querySelectorAll('.bottom-nav-item').forEach(item => {
-            item.classList.remove('active');
-        });
-        element.classList.add('active');
-    }
-    
-    // ============================================
-    // TABS DE NAVEGACIÓN
-    // ============================================
-    function switchTab(tab, btn) {
-        document.querySelectorAll('.tab-pill').forEach(b => {
-            b.classList.remove('bg-white', 'shadow-sm', 'text-primary', 'active', 'font-bold');
-            b.classList.add('text-on-surface-variant', 'font-medium');
-        });
-        btn.classList.add('bg-white', 'shadow-sm', 'text-primary', 'active', 'font-bold');
-        btn.classList.remove('text-on-surface-variant', 'font-medium');
-        
-        if (tab === 'asignacion') {
-            document.getElementById('panel-asignacion').classList.remove('hidden');
-            document.getElementById('panel-calendario').classList.add('hidden');
-        } else {
-            document.getElementById('panel-asignacion').classList.add('hidden');
-            document.getElementById('panel-calendario').classList.remove('hidden');
-            renderCalendar();
+        function openAdjustModal(name, day, time) {
+            document.getElementById('modal-docente-name').innerText = 'Docente: ' + name;
+            // Clean time for input type="time" (e.g., "2:00 PM" -> "14:00")
+            let formattedTime = "14:00"; 
+            if(time.includes("3:30")) formattedTime = "15:30";
+            if(time.includes("1:00")) formattedTime = "13:00";
+            if(time.includes("4:00")) formattedTime = "16:00";
+
+            document.getElementById('modal-day').value = day;
+            document.getElementById('modal-time').value = formattedTime;
+            
+            const modal = document.getElementById('adjust-modal');
+            modal.classList.remove('hidden');
         }
-    }
-    
-    // ============================================
-    // BÚSQUEDA DE DOCENTES
-    // ============================================
-    function searchDocentes() {
-        const input = document.getElementById('searchDocentes');
-        const filter = input.value.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-        const rows = document.querySelectorAll('#tbodyDocentes tr');
-        const noResults = document.getElementById('noResults');
-        let visibleCount = 0;
-        
-        rows.forEach(row => {
-            const searchData = row.getAttribute('data-search').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-            if (searchData.includes(filter)) {
-                row.style.display = '';
-                visibleCount++;
-                const cells = row.querySelectorAll('td');
-                cells.forEach(cell => {
-                    const text = cell.textContent;
-                    if (filter && text.toLowerCase().includes(filter)) {
-                        cell.style.background = '#FEF3C7';
-                        setTimeout(() => { cell.style.background = ''; }, 300);
-                    }
-                });
+
+        function closeAdjustModal() {
+            document.getElementById('adjust-modal').classList.add('hidden');
+        }
+
+        function saveSchedule() {
+            // Simulation of Conflict Detection
+            const day = document.getElementById('modal-day').value;
+            const time = document.getElementById('modal-time').value;
+
+            // Simple Logic: if day is "Lunes" and time is "16:00", simulate a conflict (Andrea Giraldo overlap)
+            if (day === "Lunes" && time === "16:00") {
+                activateConflict();
             } else {
-                row.style.display = 'none';
+                deactivateConflict();
             }
-        });
-        
-        if (visibleCount === 0 && filter.length > 0) {
-            noResults.classList.remove('hidden');
-        } else {
-            noResults.classList.add('hidden');
+            closeAdjustModal();
         }
-    }
-    
-    // ============================================
-    // CALENDARIO MENSUAL
-    // ============================================
-    function renderCalendar() {
-        const grid = document.getElementById('calendarGrid');
-        const label = document.getElementById('calendarMonthLabel');
-        
-        label.textContent = monthNames[currentMonth] + ' ' + currentYear;
-        
-        const headers = grid.querySelectorAll('.calendar-day.header');
-        grid.innerHTML = '';
-        headers.forEach(h => grid.appendChild(h));
-        
-        const firstDay = new Date(currentYear, currentMonth, 1).getDay();
-        const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
-        const today = new Date();
-        const isCurrentMonth = today.getMonth() === currentMonth && today.getFullYear() === currentYear;
-        const todayDate = today.getDate();
-        
-        for (let i = 0; i < firstDay; i++) {
-            const emptyDay = document.createElement('div');
-            emptyDay.className = 'calendar-day empty';
-            grid.appendChild(emptyDay);
+
+        function activateConflict() {
+            // Update Summary Card
+            const conflictCard = document.getElementById('conflict-card');
+            const conflictCount = document.getElementById('conflict-count');
+            const conflictIcon = document.getElementById('conflict-icon-card');
+            const conflictSubtext = document.getElementById('conflict-subtext');
+
+            conflictCount.innerText = "1";
+            conflictCount.className = "text-4xl font-bold text-error mt-2";
+            conflictIcon.innerText = "warning";
+            conflictIcon.className = "material-symbols-outlined text-error";
+            conflictSubtext.innerText = "¡Conflicto detectado en Lunes!";
+            conflictSubtext.className = "text-xs text-error mt-4 font-bold animate-pulse";
+
+            // Update Assistant
+            document.getElementById('assistant-icon-bg').classList.replace('bg-green-50', 'bg-error-container');
+            document.getElementById('assistant-icon').innerText = "report_problem";
+            document.getElementById('assistant-icon').classList.replace('text-green-500', 'text-error');
+            document.getElementById('assistant-title').innerText = "¡Choque Detectado!";
+            document.getElementById('assistant-title').classList.add('text-error');
+            document.getElementById('assistant-desc').innerText = "Andrea Giraldo tiene dos grupos asignados en el mismo horario. Por favor, reasigne el Grupo 11-C.";
+            document.getElementById('assistant-assistant').classList.add('border-error');
         }
-        
-        for (let day = 1; day <= daysInMonth; day++) {
-            const dayEl = document.createElement('div');
-            const hasEvents = calendarEvents[day] && calendarEvents[day].length > 0;
-            const isToday = isCurrentMonth && day === todayDate;
-            
-            let className = 'calendar-day';
-            if (isToday) className += ' today';
-            if (hasEvents) className += ' has-event';
-            dayEl.className = className;
-            dayEl.onclick = () => showDayDetail(day);
-            
-            const numEl = document.createElement('span');
-            numEl.className = 'calendar-day-number';
-            numEl.textContent = day;
-            dayEl.appendChild(numEl);
-            
-            if (hasEvents) {
-                const eventsContainer = document.createElement('div');
-                eventsContainer.className = 'w-full flex flex-col items-center mt-1';
-                
-                calendarEvents[day].slice(0, 2).forEach(evt => {
-                    const bar = document.createElement('div');
-                    bar.className = `calendar-event-bar ${evt.color} ${evt.textColor} bg-opacity-20`;
-                    bar.textContent = evt.docente.split(' ')[0];
-                    eventsContainer.appendChild(bar);
-                });
-                
-                if (calendarEvents[day].length > 2) {
-                    const more = document.createElement('div');
-                    more.className = 'text-[8px] text-on-surface-variant mt-0.5';
-                    more.textContent = '+' + (calendarEvents[day].length - 2) + ' más';
-                    eventsContainer.appendChild(more);
-                }
-                
-                dayEl.appendChild(eventsContainer);
-            }
-            
-            grid.appendChild(dayEl);
+
+        function deactivateConflict() {
+             // Reset Summary Card
+            const conflictCard = document.getElementById('conflict-card');
+            const conflictCount = document.getElementById('conflict-count');
+            const conflictIcon = document.getElementById('conflict-icon-card');
+            const conflictSubtext = document.getElementById('conflict-subtext');
+
+            conflictCount.innerText = "0";
+            conflictCount.className = "text-4xl font-bold text-green-600 mt-2";
+            conflictIcon.innerText = "check_circle";
+            conflictIcon.className = "material-symbols-outlined text-green-600";
+            conflictSubtext.innerText = "Estructura horaria balanceada";
+            conflictSubtext.className = "text-xs text-on-surface-variant mt-4 font-medium italic";
+
+            // Reset Assistant
+            document.getElementById('assistant-icon-bg').classList.replace('bg-error-container', 'bg-green-50');
+            document.getElementById('assistant-icon').innerText = "task_alt";
+            document.getElementById('assistant-icon').classList.replace('text-error', 'text-green-500');
+            document.getElementById('assistant-title').innerText = "Asistente de Conflictos";
+            document.getElementById('assistant-title').classList.remove('text-error');
+            document.getElementById('assistant-desc').innerText = "No se han detectado cruces de horarios en el sistema actual.";
         }
-    }
-    
-    function changeMonth(direction) {
-        currentMonth += direction;
-        if (currentMonth > 11) {
-            currentMonth = 0;
-            currentYear++;
-        } else if (currentMonth < 0) {
-            currentMonth = 11;
-            currentYear--;
-        }
-        renderCalendar();
-    }
-    
-    function showDayDetail(day) {
-        const events = calendarEvents[day];
-        if (!events || events.length === 0) return;
-        
-        const modal = document.getElementById('calendarDayModal');
-        const title = document.getElementById('calendarDayTitle');
-        const subtitle = document.getElementById('calendarDaySubtitle');
-        const content = document.getElementById('calendarDayContent');
-        
-        title.textContent = 'Actividades del Día';
-        subtitle.textContent = day + ' de ' + monthNames[currentMonth] + ', ' + currentYear;
-        
-        content.innerHTML = events.map(evt => `
-            <div class="flex items-center gap-4 p-4 bg-surface-low rounded-xl border-l-4 ${evt.color.replace('bg-', 'border-')}">
-                <div class="w-10 h-10 rounded-full ${evt.color} bg-opacity-20 flex items-center justify-center">
-                    <span class="material-symbols-outlined ${evt.textColor}">schedule</span>
-                </div>
-                <div class="flex-grow">
-                    <p class="text-sm font-bold text-primary">${evt.docente}</p>
-                    <p class="text-xs text-on-surface-variant mt-0.5">${evt.tipo} • ${evt.hora}</p>
-                </div>
-                <span class="material-symbols-outlined text-on-surface-variant">chevron_right</span>
-            </div>
-        `).join('');
-        
-        const conflictos = detectConflicts(day);
-        if (conflictos.length > 0) {
-            content.innerHTML += `
-                <div class="mt-4 p-4 bg-error-container/30 rounded-xl border border-error/20">
-                    <div class="flex items-center gap-2 mb-2">
-                        <span class="material-symbols-outlined text-error">warning</span>
-                        <span class="text-sm font-bold text-error">Conflicto detectado</span>
-                    </div>
-                    <p class="text-xs text-on-surface-variant">${conflictos[0]}</p>
-                </div>
-            `;
-        }
-        
-        modal.classList.add('show');
-    }
-    
-    function detectConflicts(day) {
-        const events = calendarEvents[day];
-        if (!events || events.length < 2) return [];
-        
-        const conflictos = [];
-        for (let i = 0; i < events.length; i++) {
-            for (let j = i + 1; j < events.length; j++) {
-                const hora1 = events[i].hora;
-                const hora2 = events[j].hora;
-                if (hora1.includes('PM') && hora2.includes('PM')) {
-                    conflictos.push(`${events[i].docente} y ${events[j].docente} tienen horarios superpuestos (${hora1} vs ${hora2})`);
-                }
-            }
-        }
-        return conflictos;
-    }
-    
-    // ============================================
-    // MODAL AJUSTAR HORARIO
-    // ============================================
-    let currentDocente = null;
-    let selectedJornada = null;
-    
-    function openAdjustModal(name, day, timeStart, timeEnd, jornadaType) {
-        currentDocente = name;
-        document.getElementById('modalDocenteName').textContent = 'Docente: ' + name;
-        document.getElementById('modalDay').value = day;
-        document.getElementById('modalTimeStart').value = timeStart;
-        document.getElementById('modalTimeEnd').value = timeEnd;
-        
-        document.querySelectorAll('.jornada-card').forEach(c => c.classList.remove('selected'));
-        if (jornadaType) {
-            const card = document.getElementById('jornada-' + jornadaType);
-            if (card) {
-                card.classList.add('selected');
-                selectedJornada = jornadaType;
-            }
-        }
-        
-        document.getElementById('adjustModal').classList.add('show');
-    }
-    
-    function selectJornada(element, type) {
-        document.querySelectorAll('.jornada-card').forEach(c => c.classList.remove('selected'));
-        element.classList.add('selected');
-        selectedJornada = type;
-        
-        const times = {
-            completa: { start: '07:00', end: '15:00' },
-            media: { start: '07:00', end: '12:00' },
-            tarde: { start: '13:00', end: '18:00' },
-            mixta: { start: '07:00', end: '18:00' }
-        };
-        
-        if (times[type]) {
-            document.getElementById('modalTimeStart').value = times[type].start;
-            document.getElementById('modalTimeEnd').value = times[type].end;
-        }
-    }
-    
-    function saveSchedule() {
-        const day = document.getElementById('modalDay').value;
-        const timeStart = document.getElementById('modalTimeStart').value;
-        const timeEnd = document.getElementById('modalTimeEnd').value;
-        
-        if (!selectedJornada) {
-            showToast('Seleccione un tipo de jornada', 'error');
-            return;
-        }
-        
-        if (day === 'Lunes' && timeStart === '16:00') {
-            showToast('¡Conflicto detectado! Andrea Giraldo ya tiene asignado este horario.', 'warning');
-        } else {
-            showToast('Cambios guardados correctamente para ' + currentDocente, 'success');
-        }
-        
-        closeModal(null, 'adjustModal');
-    }
-    
-    // ============================================
-    // DETALLE DE CAMBIO (Timeline)
-    // ============================================
-    function showChangeDetail(docente) {
-        const detalles = {
-            ricardo: {
-                title: 'Cambio de Jornada - Ricardo Mendoza',
-                content: `
-                    <div class="bg-success-container/30 rounded-xl p-4 mb-4">
-                        <div class="flex items-center gap-2 mb-2">
-                            <span class="material-symbols-outlined text-success">check_circle</span>
-                            <span class="text-sm font-bold text-success">Aprobado por Coordinación</span>
-                        </div>
-                        <p class="text-xs text-on-surface-variant">Solicitud aprobada el 20 Jun 2026 a las 10:45 AM</p>
-                    </div>
-                    <div class="space-y-3">
-                        <div class="flex justify-between items-center p-3 bg-surface-low rounded-lg">
-                            <span class="text-sm text-on-surface-variant">Jornada anterior</span>
-                            <span class="text-sm font-bold text-warning">Media (7:00 AM - 12:00 PM)</span>
-                        </div>
-                        <div class="flex justify-center">
-                            <span class="material-symbols-outlined text-secondary">arrow_downward</span>
-                        </div>
-                        <div class="flex justify-between items-center p-3 bg-secondary-container/30 rounded-lg border border-secondary/20">
-                            <span class="text-sm text-on-surface-variant">Nueva jornada</span>
-                            <span class="text-sm font-bold text-secondary">Completa (7:00 AM - 3:00 PM)</span>
-                        </div>
-                        <div class="flex justify-between items-center p-3 bg-surface-low rounded-lg">
-                            <span class="text-sm text-on-surface-variant">Motivo</span>
-                            <span class="text-sm font-medium text-primary">Aumento de carga estudiantil</span>
-                        </div>
-                        <div class="flex justify-between items-center p-3 bg-surface-low rounded-lg">
-                            <span class="text-sm text-on-surface-variant">Aprobado por</span>
-                            <span class="text-sm font-medium text-primary">Carolina Rojas</span>
-                        </div>
-                    </div>
-                    <button onclick="closeModal(null, 'changeDetailModal')" class="w-full mt-5 py-3 bg-primary text-white rounded-xl font-bold text-sm hover:bg-slate-800 transition-colors btn-press">Cerrar</button>
-                `
-            },
-            lucia: {
-                title: 'Solicitud Pendiente - Lucía Peña',
-                content: `
-                    <div class="bg-warning/10 rounded-xl p-4 mb-4 border border-warning/20">
-                        <div class="flex items-center gap-2 mb-2">
-                            <span class="material-symbols-outlined text-warning">pending</span>
-                            <span class="text-sm font-bold text-warning">Pendiente de Aprobación</span>
-                        </div>
-                        <p class="text-xs text-on-surface-variant">Solicitud enviada el 20 Jun 2026 a las 9:15 AM</p>
-                    </div>
-                    <div class="space-y-3">
-                        <div class="flex justify-between items-center p-3 bg-surface-low rounded-lg">
-                            <span class="text-sm text-on-surface-variant">Jornada actual</span>
-                            <span class="text-sm font-bold text-warning">Media (7:00 AM - 12:00 PM)</span>
-                        </div>
-                        <div class="flex justify-center">
-                            <span class="material-symbols-outlined text-secondary">arrow_downward</span>
-                        </div>
-                        <div class="flex justify-between items-center p-3 bg-secondary-container/30 rounded-lg border border-secondary/20">
-                            <span class="text-sm text-on-surface-variant">Jornada solicitada</span>
-                            <span class="text-sm font-bold text-secondary">Tarde (1:00 PM - 6:00 PM)</span>
-                        </div>
-                        <div class="flex justify-between items-center p-3 bg-surface-low rounded-lg">
-                            <span class="text-sm text-on-surface-variant">Motivo</span>
-                            <span class="text-sm font-medium text-primary">Compromisos personales por la mañana</span>
-                        </div>
-                    </div>
-                    <div class="mt-5 flex gap-3">
-                        <button onclick="showToast('Solicitud aprobada', 'success'); closeModal(null, 'changeDetailModal')" class="flex-1 py-3 bg-success text-white rounded-xl font-bold text-sm hover:bg-green-600 transition-colors btn-press">Aprobar</button>
-                        <button onclick="showToast('Solicitud rechazada', 'error'); closeModal(null, 'changeDetailModal')" class="flex-1 py-3 bg-white border border-outline text-on-surface-variant rounded-xl font-bold text-sm hover:bg-surface-low transition-colors btn-press">Rechazar</button>
-                    </div>
-                `
-            },
-            jairo: {
-                title: 'Ajuste de Horario - Jairo Sánchez',
-                content: `
-                    <div class="bg-success-container/30 rounded-xl p-4 mb-4">
-                        <div class="flex items-center gap-2 mb-2">
-                            <span class="material-symbols-outlined text-success">check_circle</span>
-                            <span class="text-sm font-bold text-success">Aprobado por Coordinación</span>
-                        </div>
-                        <p class="text-xs text-on-surface-variant">Aprobado el 19 Jun 2026 a las 5:00 PM</p>
-                    </div>
-                    <div class="space-y-3">
-                        <div class="flex justify-between items-center p-3 bg-surface-low rounded-lg">
-                            <span class="text-sm text-on-surface-variant">Horario anterior</span>
-                            <span class="text-sm font-bold text-on-surface-variant">Martes 2:00 PM - 4:00 PM</span>
-                        </div>
-                        <div class="flex justify-center">
-                            <span class="material-symbols-outlined text-secondary">arrow_downward</span>
-                        </div>
-                        <div class="flex justify-between items-center p-3 bg-secondary-container/30 rounded-lg border border-secondary/20">
-                            <span class="text-sm text-on-surface-variant">Nuevo horario</span>
-                            <span class="text-sm font-bold text-secondary">Martes 1:00 PM - 3:00 PM</span>
-                        </div>
-                    </div>
-                    <button onclick="closeModal(null, 'changeDetailModal')" class="w-full mt-5 py-3 bg-primary text-white rounded-xl font-bold text-sm hover:bg-slate-800 transition-colors btn-press">Cerrar</button>
-                `
-            },
-            andrea: {
-                title: 'Nueva Asignación - Andrea Giraldo',
-                content: `
-                    <div class="bg-success-container/30 rounded-xl p-4 mb-4">
-                        <div class="flex items-center gap-2 mb-2">
-                            <span class="material-symbols-outlined text-success">check_circle</span>
-                            <span class="text-sm font-bold text-success">Asignación Completada</span>
-                        </div>
-                    </div>
-                    <div class="space-y-3">
-                        <div class="flex justify-between items-center p-3 bg-surface-low rounded-lg">
-                            <span class="text-sm text-on-surface-variant">Docente</span>
-                            <span class="text-sm font-bold text-primary">Andrea Giraldo</span>
-                        </div>
-                        <div class="flex justify-between items-center p-3 bg-surface-low rounded-lg">
-                            <span class="text-sm text-on-surface-variant">Nuevo grupo</span>
-                            <span class="text-sm font-bold text-secondary">11-C</span>
-                        </div>
-                        <div class="flex justify-between items-center p-3 bg-surface-low rounded-lg">
-                            <span class="text-sm text-on-surface-variant">Técnica</span>
-                            <span class="text-sm font-bold text-primary">Liderazgo Juvenil</span>
-                        </div>
-                        <div class="flex justify-between items-center p-3 bg-surface-low rounded-lg">
-                            <span class="text-sm text-on-surface-variant">Jornada</span>
-                            <span class="text-sm font-bold text-secondary">Mixta</span>
-                        </div>
-                    </div>
-                    <button onclick="closeModal(null, 'changeDetailModal')" class="w-full mt-5 py-3 bg-primary text-white rounded-xl font-bold text-sm hover:bg-slate-800 transition-colors btn-press">Cerrar</button>
-                `
-            },
-            maria: {
-                title: 'Cambio de Jornada - María Castro',
-                content: `
-                    <div class="bg-success-container/30 rounded-xl p-4 mb-4">
-                        <div class="flex items-center gap-2 mb-2">
-                            <span class="material-symbols-outlined text-success">check_circle</span>
-                            <span class="text-sm font-bold text-success">Aprobado por Coordinación</span>
-                        </div>
-                    </div>
-                    <div class="space-y-3">
-                        <div class="flex justify-between items-center p-3 bg-surface-low rounded-lg">
-                            <span class="text-sm text-on-surface-variant">Jornada anterior</span>
-                            <span class="text-sm font-bold text-error">Tarde (1:00 PM - 6:00 PM)</span>
-                        </div>
-                        <div class="flex justify-center">
-                            <span class="material-symbols-outlined text-secondary">arrow_downward</span>
-                        </div>
-                        <div class="flex justify-between items-center p-3 bg-secondary-container/30 rounded-lg border border-secondary/20">
-                            <span class="text-sm text-on-surface-variant">Nueva jornada</span>
-                            <span class="text-sm font-bold text-secondary">Completa (7:00 AM - 3:00 PM)</span>
-                        </div>
-                    </div>
-                    <button onclick="closeModal(null, 'changeDetailModal')" class="w-full mt-5 py-3 bg-primary text-white rounded-xl font-bold text-sm hover:bg-slate-800 transition-colors btn-press">Cerrar</button>
-                `
-            }
-        };
-        
-        const detalle = detalles[docente];
-        document.getElementById('changeDetailTitle').textContent = detalle.title;
-        document.getElementById('changeDetailContent').innerHTML = detalle.content;
-        document.getElementById('changeDetailModal').classList.add('show');
-    }
-    
-    // ============================================
-    // UTILIDADES
-    // ============================================
-    function closeModal(event, modalId) {
-        if (!event || event.target.id === modalId) {
-            document.getElementById(modalId).classList.remove('show');
-        }
-    }
-    
-    function showToast(message, type) {
-        const toast = document.getElementById('toast');
-        const icons = { success: 'check_circle', error: 'cancel', warning: 'warning' };
-        toast.innerHTML = `<span class="material-symbols-outlined text-[20px]">${icons[type]}</span> ${message}`;
-        toast.className = `toast ${type}`;
-        toast.style.display = 'flex';
-        toast.style.opacity = '1';
-        setTimeout(() => {
-            toast.style.transition = 'opacity 0.3s ease';
-            toast.style.opacity = '0';
-            setTimeout(() => {
-                toast.style.display = 'none';
-                toast.style.opacity = '1';
-                toast.style.transition = '';
-            }, 300);
-        }, 3000);
-    }
-    
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') {
-            document.querySelectorAll('.modal-overlay.show').forEach(modal => modal.classList.remove('show'));
-        }
-    });
-    
-    // Inicializar calendario al cargar
-    document.addEventListener('DOMContentLoaded', () => {
-        renderCalendar();
-    });
-</script>
-</body>
-</html>
+    </script>
+</body></html>

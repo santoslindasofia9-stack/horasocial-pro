@@ -1,241 +1,177 @@
 <!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HORASOCIAL PRO - Selección de Rol</title>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Plus+Jakarta+Sans:wght@600;700&display=swap" rel="stylesheet">
-    
-    <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        
-        body {
-            background: #fafbfc;
-            font-family: 'Inter', sans-serif;
-            color: #191c1e;
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-            overflow: hidden;
-            -webkit-font-smoothing: antialiased;
-        }
 
-        .material-symbols-outlined { font-variation-settings: 'FILL' 1, 'wght' 400; }
-
-        .content-wrapper {
-            position: relative; z-index: 2;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            flex: 1; padding: 40px 24px; gap: 36px;
-        }
-
-        .header-logo {
-            display: flex; align-items: center; justify-content: center;
-            width: 100%; max-width: 300px;
-            animation: float 6s ease-in-out infinite;
-        }
-        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
-
-        .logo-img {
-            width: 100%; max-width: 220px;
-            border: 3px solid #000; border-radius: 14px; box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-            transition: transform 0.5s;
-        }
-        .header-logo:hover .logo-img { transform: scale(1.05); }
-
-        .text-block { text-align: center; max-width: 480px; margin-top: -8px; }
-        .text-block h1 { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 28px; color: #0c2340; line-height: 1.25; margin-bottom: 8px; }
-        .text-block p { font-size: 15px; color: #5a6370; line-height: 1.5; }
-
-        .roles-grid {
-            display: flex; flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 20px; width: 100%; max-width: 520px; margin-top: 10px;
-        }
-        .role-card {
-            background: #ffffff;
-            border-radius: 16px;
-            padding: 24px 16px;
-            display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px;
-            cursor: pointer;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
-            border: 1px solid transparent;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            text-decoration: none;
-            color: #191c1e;
-            width: 140px;
-            height: 140px;
-        }
-        
-        .role-card:hover {
-            transform: translateY(-4px) scale(1.02);
-            box-shadow: 0 10px 28px rgba(12, 35, 64, 0.12);
-            border-color: rgba(57, 184, 253, 0.4);
-        }
-        .role-card:active {
-            transform: translateY(0) scale(0.98);
-        }
-
-        .role-icon-wrapper {
-            width: 60px; height: 60px; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            flex-shrink: 0;
-            transition: transform 0.3s ease;
-        }
-        .role-card:hover .role-icon-wrapper { transform: scale(1.08); }
-
-        .role-icon-wrapper.estudiante { background: #34bcfb; }
-        .role-icon-wrapper.profesor { background: #006591; }
-        .role-icon-wrapper.admin { background: #0f172a; }
-        
-        .role-icon-wrapper .material-symbols-outlined { color: white; font-size: 30px; transition: opacity 0.2s; }
-        
-        .role-info { text-align: center; }
-        .role-info h3 { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 16px; font-weight: 700; margin: 0; }
-        .role-info p { display: none; }
-
-        .footer-info { text-align: center; padding-bottom: 24px; position: relative; z-index: 2; }
-        .footer-info p { font-size: 13px; color: #5a6370; margin-bottom: 6px; }
-        .footer-info a { color: #006591; text-decoration: none; font-weight: 600; }
-        .footer-info a:hover { text-decoration: underline; }
-        
-        .footer-bottom { margin-top: 12px; }
-        .footer-bottom span { font-size: 11px; font-weight: 600; color: #9ca3af; letter-spacing: 0.04em; }
-        .footer-line { width: 40px; height: 3px; background: #d1d5db; border-radius: 9999px; margin: 5px auto 0; opacity: 0.5; }
-
-        @media (max-width: 520px) {
-            .roles-grid { gap: 16px; }
-            .role-card { width: 140px; height: 140px; }
-        }
-        @media (max-width: 380px) {
-            .role-card { width: 120px; height: 120px; padding: 16px 12px; gap: 12px; }
-            .role-icon-wrapper { width: 50px; height: 50px; }
-            .role-icon-wrapper .material-symbols-outlined { font-size: 26px; }
-            .role-info h3 { font-size: 14px; }
-        }
-        @media (max-height: 700px) {
-            .content-wrapper { gap: 24px; padding: 20px; }
-            .logo-img { max-width: 160px; }
-            .text-block h1 { font-size: 24px; }
-            .role-card { height: 120px; gap: 10px; }
-            .role-icon-wrapper { width: 44px; height: 44px; }
-            .role-icon-wrapper .material-symbols-outlined { font-size: 24px; }
-        }
-    </style>
-</head>
-<body>
-
-<canvas id="ribbon-canvas" style="position:fixed; inset:0; z-index:0; pointer-events:none;"></canvas>
-
-<div class="content-wrapper">
-    <header class="header-logo">
-        <img alt="HORASOCIAL PRO Logo Pequeño" class="logo-img" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBwMhl_DdmeafGOmiL2QLqeQV_Ut8aNvKKYwKjKUtrAMBSjpyGc1Acc5TCQm084EODuuIAA3GiusiDfLdXgW3DAC8tdYPa8R-TEraz_hHglTpuTQJRtfOJfW_OyF25795_lzWR3g1wKtd_0fCPC6QxHfyblbvKAQVJNcggVB3k8TYcOAOsA0lTgC8lQz0E1YRlDIn1zQ0vALf8l_40TC_X6xkuWE-o1qr0sdsv2THdAcTxAM9txnjL8N_7oSnlqsHLnXkvvL7tImO-s">
-    </header>
-
-    <div class="text-block">
-        <h1>Elige cómo quieres ingresar</h1>
-        <p>Selecciona tu rol para acceder a las herramientas correspondientes a tu perfil.</p>
-    </div>
-
-    <div class="roles-grid">
-        <button class="role-card" onclick="selectRole('estudiante', this)">
-            <div class="role-icon-wrapper estudiante">
-                <span class="material-symbols-outlined">school</span>
-            </div>
-            <div class="role-info">
-                <h3>Estudiante</h3>
-                <p>Registra tus horas</p>
-            </div>
-        </button>
-
-        <button class="role-card" onclick="selectRole('profesor', this)">
-            <div class="role-icon-wrapper profesor">
-                <span class="material-symbols-outlined">group</span>
-            </div>
-            <div class="role-info">
-                <h3>Profesor</h3>
-                <p>Supervisa a tus alumnos</p>
-            </div>
-        </button>
-
-        <button class="role-card" onclick="selectRole('admin', this)">
-            <div class="role-icon-wrapper admin">
-                <span class="material-symbols-outlined">verified_user</span>
-            </div>
-            <div class="role-info">
-                <h3>Administrador</h3>
-                <p>Gestiona la plataforma</p>
-            </div>
-        </button>
-    </div>
-
-</div>
-
-<div class="footer-info">
-    <p>¿Necesitas ayuda? <a href="#">Consulta nuestra guía de acceso</a></p>
-    <div class="footer-bottom">
-        <span>© 2026 HORASOCIAL PRO</span>
-        <div class="footer-line"></div>
-    </div>
-</div>
-
-<script>
-    function selectRole(role, btnElement) {
-        console.log("Rol seleccionado: " + role);
-        
-        const icon = btnElement.querySelector('.material-symbols-outlined');
-        icon.style.opacity = '0';
-        setTimeout(() => {
-            icon.innerText = 'progress_activity';
-            icon.style.animation = 'spin 0.8s linear infinite';
-            icon.style.opacity = '1';
-        }, 150);
-        
-        document.querySelectorAll('.role-card').forEach(btn => btn.disabled = true);
-        
-        setTimeout(() => {
-            if (role === 'estudiante') {
-                window.location.href = '/login';
-            } else if (role === 'profesor') {
-                window.location.href = '/profesor/login';
-            } else if (role === 'admin') {
-                window.location.href = '/login_administrador';
-            }
-        }, 800);
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "institutional-blue": "#0F172A",
+            "bright-sky": "#38BDF8",
+            "surface-container-highest": "#e0e3e5",
+            "primary": "#000000",
+            "on-tertiary-fixed": "#001e2c",
+            "on-tertiary-container": "#008ebf",
+            "on-primary-fixed-variant": "#3f465c",
+            "inverse-primary": "#bec6e0",
+            "secondary-fixed-dim": "#89ceff",
+            "surface-bright": "#f7f9fb",
+            "tertiary-container": "#001e2c",
+            "surface-tint": "#565e74",
+            "on-error-container": "#93000a",
+            "inverse-surface": "#2d3133",
+            "secondary-fixed": "#c9e6ff",
+            "surface-container": "#eceef0",
+            "on-tertiary": "#ffffff",
+            "primary-fixed-dim": "#bec6e0",
+            "outline": "#76777d",
+            "on-background": "#191c1e",
+            "tertiary-fixed-dim": "#7bd0ff",
+            "surface-container-high": "#e6e8ea",
+            "on-secondary-container": "#004666",
+            "surface-container-low": "#f2f4f6",
+            "primary-fixed": "#dae2fd",
+            "error-container": "#ffdad6",
+            "on-primary-container": "#7c839b",
+            "tertiary": "#000000",
+            "inverse-on-surface": "#eff1f3",
+            "on-surface-variant": "#45464d",
+            "error": "#ba1a1a",
+            "tertiary-fixed": "#c4e7ff",
+            "on-primary": "#ffffff",
+            "primary-container": "#131b2e",
+            "surface-container-lowest": "#ffffff",
+            "background": "#f7f9fb",
+            "surface": "#f7f9fb",
+            "on-surface": "#191c1e",
+            "outline-variant": "#c6c6cd",
+            "on-secondary-fixed": "#001e2f",
+            "on-secondary-fixed-variant": "#004c6e",
+            "on-secondary": "#ffffff",
+            "on-primary-fixed": "#131b2e",
+            "surface-variant": "#e0e3e5",
+            "on-error": "#ffffff",
+            "secondary": "#006591",
+            "on-tertiary-fixed-variant": "#004c69"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "unit": "4px",
+            "margin-mobile": "16px",
+            "margin-desktop": "48px",
+            "lg": "24px",
+            "xs": "4px",
+            "md": "16px",
+            "gutter": "24px",
+            "sm": "8px",
+            "xl": "32px"
+          },
+          "fontFamily": {
+            "body-md": ["Inter"],
+            "headline-lg-mobile": ["Plus Jakarta Sans"],
+            "label-sm": ["Inter"],
+            "headline-md": ["Plus Jakarta Sans"],
+            "headline-lg": ["Plus Jakarta Sans"],
+            "display-lg": ["Plus Jakarta Sans"],
+            "body-lg": ["Inter"],
+            "label-md": ["Inter"],
+            "headline-sm": ["Plus Jakarta Sans"]
+          },
+          "fontSize": {
+            "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
+            "headline-lg-mobile": ["28px", {"lineHeight": "1.2", "fontWeight": "600"}],
+            "label-sm": ["12px", {"lineHeight": "1.2", "fontWeight": "600"}],
+            "headline-md": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
+            "headline-lg": ["32px", {"lineHeight": "1.2", "fontWeight": "600"}],
+            "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+            "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+            "label-md": ["14px", {"lineHeight": "1.4", "letterSpacing": "0.01em", "fontWeight": "500"}],
+            "headline-sm": ["20px", {"lineHeight": "1.4", "fontWeight": "600"}]
+          }
+        },
+      },
     }
-
-    const ctx = document.getElementById('ribbon-canvas').getContext('2d');
-    let w, h, time = 0;
-
-    function init() { w = ctx.canvas.width = window.innerWidth; h = ctx.canvas.height = window.innerHeight; }
-    window.addEventListener('resize', init); init();
-
-    function animate() {
-        ctx.clearRect(0, 0, w, h);
-        for (let i = 0; i < 60; i++) {
-            ctx.beginPath();
-            const grad = ctx.createLinearGradient(0, 0, w, 0), a = 0.12 + Math.sin(i * 0.1) * 0.05;
-            grad.addColorStop(0, `rgba(167, 139, 250, ${a})`); grad.addColorStop(0.35, `rgba(147, 197, 253, ${a})`);
-            grad.addColorStop(0.65, `rgba(103, 232, 249, ${a})`); grad.addColorStop(1, `rgba(94, 234, 212, ${a})`);
-            ctx.strokeStyle = grad; ctx.lineWidth = 0.8;
-            
-            for (let x = 0; x <= w; x += 10) {
-                const nx = x / w;
-                const spread = Math.sin(nx * 3.5 - time * 0.5) * (h * 0.25) + 30;
-                const y = h * 0.5 + Math.sin(nx * 4 + time * 0.4) * (h * 0.15) + Math.cos(nx * 2 - time * 0.25) * (h * 0.1) + ((i/60)*2-1) * spread;
-                x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
-            }
-            ctx.stroke();
-        }
-        time += 0.004; requestAnimationFrame(animate);
-    }
-    animate();
-</script>
-
+  </script>
 <style>
-    @keyframes spin {
-        to { transform: rotate(360deg); }
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
     }
-</style>
-
-</body>
-</html>
+    .blur-blob {
+      filter: blur(100px);
+      z-index: -1;
+    }
+  </style>
+</head>
+<body class="bg-surface font-body-md text-on-surface overflow-hidden min-h-screen h-screen relative flex flex-col justify-between">
+<!-- Dynamic Background Blurs -->
+<div class="fixed inset-0 -z-10 bg-gradient-to-br from-[#FDFBF7] via-[#F7F9FB] to-[#E0F2FE]">
+<div class="absolute top-[-5%] left-[-5%] w-[60%] h-[60%] rounded-full bg-bright-sky/15 blur-blob"></div>
+<div class="absolute bottom-[-5%] right-[-5%] w-[50%] h-[50%] rounded-full bg-pink-200/10 blur-blob"></div>
+</div>
+<!-- Top section: Logo and Slogan -->
+<header class="w-full flex flex-col items-center pt-xl">
+<div class="bg-transparent mb-6">
+<img alt="HORASOCIAL PRO Logo" class="h-24 w-auto object-contain mix-blend-multiply" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBl0_W9o0isr1E81a1ecAaftLUFNSxWfoq4b2vQUpjiQJIGuEArx0ORA6uZeLxm4VwWZWYbxI31qfhIPVKxaidEz7wwBHPuS5AOaWO7vHr7LoOOcO_UVoMvFFWEAcllJ_HhnLwIEaJKAcEkGB9P7PVxfsnjDl_Xv6BUMooxWANxcRFdtFaOBVbxtyECYSl3ZkLhzSTsfzEfCBZUmL1g3hVO8rUpNIAMSP5j-a4s1waL7ePWk4Ia51DIBDexIXSwj2bjEfDFejB0NrOU"/>
+</div>
+<div class="text-center px-margin-mobile">
+<p class="font-headline-sm text-headline-sm flex flex-col items-center gap-1">
+<span class="text-institutional-blue font-bold">Formando líderes.</span>
+<span class="text-bright-sky font-bold">Trackeando tu impacto.</span>
+</p>
+</div>
+</header>
+<!-- Middle section: Role Cards -->
+<main class="w-full px-lg flex flex-col items-center justify-center flex-grow">
+<div class="w-full grid grid-cols-3 gap-sm max-w-md">
+<!-- Card 1: Estudiante -->
+<button class="group flex flex-col aspect-square bg-white rounded-xl shadow-md border border-surface-variant/20 transition-all duration-300 active:scale-95 items-center justify-center p-2 text-center">
+<div class="w-12 h-12 rounded-full bg-bright-sky flex items-center justify-center mb-sm shadow-sm">
+<span class="material-symbols-outlined text-white text-2xl">school</span>
+</div>
+<h3 class="font-label-md text-label-md text-on-surface font-bold leading-tight">Estudiante</h3>
+</button>
+<!-- Card 2: Profesor -->
+<button class="group flex flex-col aspect-square bg-white rounded-xl shadow-md border border-surface-variant/20 transition-all duration-300 active:scale-95 items-center justify-center p-2 text-center">
+<div class="w-12 h-12 rounded-full bg-secondary flex items-center justify-center mb-sm shadow-sm">
+<span class="material-symbols-outlined text-white text-2xl">group</span>
+</div>
+<h3 class="font-label-md text-label-md text-on-surface font-bold leading-tight">Profesor</h3>
+</button>
+<!-- Card 3: Administrador -->
+<button class="group flex flex-col aspect-square bg-white rounded-xl shadow-md border border-surface-variant/20 transition-all duration-300 active:scale-95 items-center justify-center p-2 text-center">
+<div class="w-12 h-12 rounded-full bg-institutional-blue flex items-center justify-center mb-sm shadow-sm">
+<span class="material-symbols-outlined text-white text-2xl">verified_user</span>
+</div>
+<h3 class="font-label-md text-label-md text-on-surface font-bold leading-tight">Administrador</h3>
+</button>
+</div>
+</main>
+<!-- Bottom section: Help and Footer -->
+<footer class="w-full px-margin-mobile pb-sm pt-md text-center">
+<div class="mb-md">
+<p class="font-label-md text-label-md text-outline">
+        ¿Necesitas ayuda? 
+        <a class="text-bright-sky font-semibold hover:underline" href="#">Consulta nuestra guía de acceso</a>
+</p>
+</div>
+<div class="mb-sm">
+<span class="font-label-md text-label-md font-bold text-on-surface">HORASOCIAL PRO</span>
+<p class="font-label-sm text-label-sm text-on-surface-variant">© 2024 HORASOCIAL PRO: Gestión de Servicio Social Escolar</p>
+</div>
+<nav class="flex justify-center gap-md mb-2">
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary" href="#">Términos</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary" href="#">Privacidad</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary" href="#">Contacto</a>
+</nav>
+</footer>
+</body></html>

@@ -1,1227 +1,359 @@
 <!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HORASOCIAL PRO - Gestión Técnica</title>
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
 
-    <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;family=Inter:wght@400;500;600&amp;family=Comfortaa:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary-fixed": "#001e2f",
+                        "on-tertiary-fixed": "#001e2c",
+                        "surface-container-lowest": "#ffffff",
+                        "background": "#f7f9fb",
+                        "tertiary-container": "#001e2c",
+                        "primary": "#0F172A",
+                        "on-background": "#191c1e",
+                        "outline": "#76777d",
+                        "on-surface-variant": "#45464d",
+                        "surface-container": "#eceef0",
+                        "surface-bright": "#f7f9fb",
+                        "on-primary": "#ffffff",
+                        "surface-variant": "#e0e3e5",
+                        "on-tertiary": "#ffffff",
+                        "on-tertiary-container": "#008ebf",
+                        "error-container": "#ffdad6",
+                        "surface-container-high": "#e6e8ea",
+                        "surface-container-low": "#f2f4f6",
+                        "inverse-primary": "#bec6e0",
+                        "on-error-container": "#93000a",
+                        "tertiary-fixed": "#c4e7ff",
+                        "secondary-container": "#39b8fd",
+                        "on-secondary-fixed-variant": "#004c6e",
+                        "tertiary-fixed-dim": "#7bd0ff",
+                        "surface-dim": "#d8dadc",
+                        "on-error": "#ffffff",
+                        "secondary": "#006591",
+                        "on-surface": "#191c1e",
+                        "surface-container-highest": "#e0e3e5",
+                        "primary-fixed": "#dae2fd",
+                        "on-secondary": "#ffffff",
+                        "on-primary-fixed-variant": "#3f465c",
+                        "on-primary-fixed": "#131b2e",
+                        "inverse-on-surface": "#eff1f3",
+                        "tertiary": "#000000",
+                        "secondary-fixed-dim": "#89ceff",
+                        "outline-variant": "#c6c6cd",
+                        "inverse-surface": "#2d3133",
+                        "on-tertiary-fixed-variant": "#004c69",
+                        "primary-container": "#131b2e",
+                        "error": "#ba1a1a",
+                        "primary-fixed-dim": "#bec6e0",
+                        "surface-tint": "#565e74",
+                        "surface": "#f7f9fb",
+                        "on-secondary-container": "#004666",
+                        "secondary-fixed": "#c9e6ff",
+                        "on-primary-container": "#7c839b",
+                        "celeste-accent": "#0EA5E9"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "1rem",
+                        "xl": "1.25rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xs": "4px",
+                        "unit": "4px",
+                        "margin-desktop": "48px",
+                        "margin-mobile": "16px",
+                        "lg": "24px",
+                        "sm": "8px",
+                        "gutter": "24px",
+                        "xl": "32px",
+                        "md": "16px"
+                    },
+                    "fontFamily": {
+                        "system-title": ["Comfortaa", "cursive"],
+                        "headline-lg": ["Plus Jakarta Sans"],
+                        "headline-md": ["Plus Jakarta Sans"],
+                        "headline-sm": ["Plus Jakarta Sans"],
+                        "label-md": ["Inter"],
+                        "body-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "label-sm": ["Inter"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
         body {
-            background: linear-gradient(180deg, #e0f7ff 0%, #f0f9ff 30%, #f8fcff 60%, #ffffff 100%);
-            font-family: 'Inter', sans-serif;
-            color: #1e293b;
-            min-height: 100vh;
-            -webkit-font-smoothing: antialiased;
-            padding-bottom: 80px;
+            background-color: #f7f9fb;
             position: relative;
             overflow-x: hidden;
         }
-
-        .bg-waves {
+        .blur-blob {
             position: fixed;
-            inset: 0;
-            z-index: 0;
-            pointer-events: none;
-            overflow: hidden;
-        }
-
-        .wave {
-            position: absolute;
-            border-radius: 50%;
+            z-index: -1;
             filter: blur(80px);
-            opacity: 0.5;
-            animation: wave-float 15s ease-in-out infinite;
-        }
-
-        .wave-1 {
-            width: 600px;
-            height: 600px;
-            background: radial-gradient(circle, rgba(56, 189, 248, 0.4) 0%, rgba(14, 165, 233, 0.1) 50%, transparent 70%);
-            top: -200px;
-            right: -150px;
-            animation-delay: 0s;
-        }
-
-        .wave-2 {
-            width: 500px;
-            height: 500px;
-            background: radial-gradient(circle, rgba(125, 211, 252, 0.35) 0%, rgba(56, 189, 248, 0.08) 50%, transparent 70%);
-            bottom: 100px;
-            left: -200px;
-            animation-delay: -5s;
-            animation-duration: 18s;
-        }
-
-        .wave-3 {
-            width: 400px;
-            height: 400px;
-            background: radial-gradient(circle, rgba(186, 230, 253, 0.4) 0%, rgba(125, 211, 252, 0.1) 50%, transparent 70%);
-            top: 40%;
-            right: -100px;
-            animation-delay: -10s;
-            animation-duration: 20s;
-        }
-
-        .wave-4 {
-            width: 350px;
-            height: 350px;
-            background: radial-gradient(circle, rgba(14, 165, 233, 0.25) 0%, rgba(56, 189, 248, 0.05) 50%, transparent 70%);
-            bottom: -50px;
-            left: 20%;
-            animation-delay: -15s;
-            animation-duration: 22s;
-        }
-
-        .wave-5 {
-            width: 300px;
-            height: 300px;
-            background: radial-gradient(circle, rgba(224, 242, 254, 0.5) 0%, rgba(186, 230, 253, 0.1) 50%, transparent 70%);
-            top: 20%;
-            left: -50px;
-            animation-delay: -8s;
-            animation-duration: 16s;
-        }
-
-        @keyframes wave-float {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            25% { transform: translate(20px, -30px) scale(1.05); }
-            50% { transform: translate(-15px, 20px) scale(0.98); }
-            75% { transform: translate(25px, 10px) scale(1.02); }
-        }
-
-        .bg-lines {
-            position: fixed;
-            inset: 0;
-            z-index: 0;
-            pointer-events: none;
-            opacity: 0.03;
-            background-image: 
-                linear-gradient(90deg, #0284c7 1px, transparent 1px),
-                linear-gradient(180deg, #0284c7 1px, transparent 1px);
-            background-size: 80px 80px;
-        }
-
-        .bg-circles {
-            position: fixed;
-            inset: 0;
-            z-index: 0;
-            pointer-events: none;
-            overflow: hidden;
-        }
-
-        .deco-circle {
-            position: absolute;
+            opacity: 0.15;
             border-radius: 50%;
-            border: 1px solid rgba(56, 189, 248, 0.12);
-            animation: circle-pulse 10s ease-in-out infinite;
         }
-
-        .deco-circle-1 { width: 200px; height: 200px; top: 15%; left: 5%; animation-delay: 0s; }
-        .deco-circle-2 { width: 150px; height: 150px; bottom: 20%; left: -5%; animation-delay: -3s; animation-duration: 14s; }
-        .deco-circle-3 { width: 100px; height: 100px; bottom: 25%; left: 15%; animation-delay: -6s; animation-duration: 12s; }
-        .deco-circle-4 { width: 180px; height: 180px; top: 35%; left: 50%; animation-delay: -2s; animation-duration: 9s; }
-
-        @keyframes circle-pulse {
-            0%, 100% { transform: scale(1); opacity: 0.3; }
-            50% { transform: scale(1.15); opacity: 0.6; }
+        .card-shadow {
+            box-shadow: 0px 4px 20px rgba(15, 23, 42, 0.05);
         }
-
-        .bg-particles {
-            position: fixed;
-            inset: 0;
-            z-index: 0;
-            pointer-events: none;
-            overflow: hidden;
-        }
-
-        .particle {
-            position: absolute;
-            width: 4px;
-            height: 4px;
-            background: rgba(56, 189, 248, 0.25);
-            border-radius: 50%;
-            animation: particle-float 20s linear infinite;
-        }
-
-        .particle:nth-child(1) { left: 10%; top: 80%; animation-delay: 0s; animation-duration: 18s; width: 5px; height: 5px; }
-        .particle:nth-child(2) { left: 25%; top: 90%; animation-delay: -5s; animation-duration: 22s; }
-        .particle:nth-child(3) { left: 70%; top: 85%; animation-delay: -10s; animation-duration: 16s; width: 6px; height: 6px; }
-        .particle:nth-child(4) { left: 85%; top: 75%; animation-delay: -15s; animation-duration: 20s; width: 3px; height: 3px; }
-        .particle:nth-child(5) { left: 50%; top: 95%; animation-delay: -8s; animation-duration: 24s; width: 4px; height: 4px; }
-        .particle:nth-child(6) { left: 40%; top: 70%; animation-delay: -12s; animation-duration: 19s; width: 5px; height: 5px; }
-
-        @keyframes particle-float {
-            0% { transform: translateY(0) translateX(0); opacity: 0; }
-            10% { opacity: 1; }
-            90% { opacity: 1; }
-            100% { transform: translateY(-100vh) translateX(30px); opacity: 0; }
-        }
-
-        .bg-gradient-top {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 300px;
-            background: linear-gradient(180deg, rgba(224, 242, 254, 0.6) 0%, transparent 100%);
-            z-index: 0;
-            pointer-events: none;
-        }
-
-        .material-symbols-outlined { font-variation-settings: 'FILL' 1, 'wght' 400; }
-
-        .top-header {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(226, 232, 240, 0.6);
-            padding: 0 24px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            height: 60px;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .header-left { display: flex; align-items: center; gap: 12px; }
-        .logo-small { display: flex; align-items: center; gap: 10px; }
-        .logo-small img { width: 32px; height: 32px; border-radius: 8px; object-fit: cover; }
-        .logo-small span {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            font-size: 16px;
-            font-weight: 700;
-            color: #0f172a;
-        }
-
-        .header-right { display: flex; align-items: center; gap: 12px; }
-
-        .user-avatar {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #38bdf8, #0284c7);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            font-size: 13px;
-            font-weight: 700;
-            color: #ffffff;
-            border: 2px solid #ffffff;
-            box-shadow: 0 2px 8px rgba(2, 132, 199, 0.3);
-        }
-
-        .btn-icon {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            border: none;
-            background: #f1f5f9;
-            color: #64748b;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .btn-icon:hover { background: #e2e8f0; color: #0f172a; }
-
-        .main-content {
-            padding: 20px 24px;
-            max-width: 600px;
-            margin: 0 auto;
-            position: relative;
-            z-index: 1;
-        }
-
-        .welcome-section { margin-bottom: 24px; }
-        .welcome-section h1 {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            font-size: 24px;
-            font-weight: 700;
-            color: #0f172a;
-            line-height: 1.3;
-            margin-bottom: 6px;
-        }
-        .welcome-section h1 span { color: #0284c7; }
-        .welcome-section p {
-            font-size: 14px;
-            color: #64748b;
-            line-height: 1.5;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            margin-bottom: 24px;
-        }
-
-        .stat-card {
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(10px);
-            border-radius: 16px;
-            padding: 20px;
-            text-align: center;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
-            border: 1px solid rgba(255, 255, 255, 0.8);
-            transition: transform 0.2s;
-        }
-        .stat-card:hover { transform: translateY(-2px); }
-
-        .stat-value {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            font-size: 28px;
-            font-weight: 700;
-            color: #0f172a;
-            margin-bottom: 4px;
-        }
-        .stat-value.blue { color: #0284c7; }
-        .stat-value.red { color: #ef4444; }
-
-        .stat-label {
-            font-size: 13px;
-            color: #64748b;
-            font-weight: 500;
-        }
-
-        .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 16px;
-        }
-
-        .section-title {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            font-size: 18px;
-            font-weight: 700;
-            color: #0f172a;
-        }
-
-        .section-link {
-            font-size: 13px;
-            color: #0284c7;
-            text-decoration: none;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            cursor: pointer;
-            background: none;
-            border: none;
-            font-family: inherit;
-        }
-        .section-link:hover { text-decoration: underline; }
-
-        .calendar-container {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 16px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
-            border: 1px solid rgba(255, 255, 255, 0.8);
-            overflow: hidden;
-            margin-bottom: 24px;
-        }
-
-        .calendar-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 16px 20px;
-            border-bottom: 1px solid #e2e8f0;
-        }
-
-        .calendar-header h3 {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            font-size: 16px;
-            font-weight: 700;
-            color: #0f172a;
-        }
-
-        .calendar-nav {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            border: none;
-            background: #f1f5f9;
-            color: #64748b;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .calendar-nav:hover { background: #e2e8f0; color: #0f172a; }
-
-        .calendar-grid {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-        }
-
-        .calendar-day-header {
-            padding: 12px;
-            text-align: center;
-            font-size: 11px;
-            font-weight: 600;
-            color: #94a3b8;
-            text-transform: uppercase;
-            background: #f8fafc;
-        }
-
-        .calendar-day {
-            min-height: 60px;
-            padding: 8px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.2s;
-            position: relative;
-            border-bottom: 1px solid #f1f5f9;
-        }
-        .calendar-day:hover { background: #f8fafc; }
-
-        .calendar-day.other-month {
-            color: #cbd5e1;
-        }
-
-        .calendar-day.today {
-            background: #e0f2fe;
-        }
-        .calendar-day.today .day-number {
-            color: #0284c7;
-            font-weight: 700;
-        }
-
-        .day-number {
-            font-size: 14px;
-            font-weight: 600;
-            color: #0f172a;
-            margin-bottom: 4px;
-        }
-
-        .day-event {
-            font-size: 9px;
-            padding: 2px 4px;
-            border-radius: 4px;
-            margin-bottom: 2px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        .day-event.ambiental { background: #dcfce7; color: #166534; }
-        .day-event.academico { background: #dbeafe; color: #1e40af; }
-        .day-event.comunitario { background: #f3e8ff; color: #7c3aed; }
-
-        .btn-primary {
-            padding: 12px 20px;
-            background: #0f172a;
-            color: #ffffff;
-            border: none;
-            border-radius: 12px;
-            font-family: 'Inter', sans-serif;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .btn-primary:hover { background: #1e293b; }
-
-        .btn-secondary {
-            padding: 12px 20px;
-            background: #f1f5f9;
-            color: #64748b;
-            border: none;
-            border-radius: 12px;
-            font-family: 'Inter', sans-serif;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .btn-secondary:hover { background: #e2e8f0; }
-
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(4px);
-            z-index: 200;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-        .modal-overlay.active { display: flex; }
-
-        .modal {
-            background: #ffffff;
-            border-radius: 20px;
-            width: 100%;
-            max-width: 500px;
-            max-height: 80vh;
-            overflow-y: auto;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
-            animation: modalIn 0.3s ease;
-        }
-
-        @keyframes modalIn {
-            from { opacity: 0; transform: scale(0.95) translateY(20px); }
-            to { opacity: 1; transform: scale(1) translateY(0); }
-        }
-
-        .modal-header {
-            padding: 20px 24px;
-            border-bottom: 1px solid #e2e8f0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .modal-header h3 {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            font-size: 18px;
-            font-weight: 700;
-            color: #0f172a;
-        }
-
-        .modal-close {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            border: none;
-            background: #f1f5f9;
-            color: #64748b;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .modal-close:hover { background: #e2e8f0; color: #0f172a; }
-
-        .modal-body { padding: 20px 24px; }
-
-        .modal-footer {
-            padding: 16px 24px;
-            border-top: 1px solid #e2e8f0;
-            display: flex;
-            gap: 12px;
-        }
-
-        .form-group { margin-bottom: 16px; }
-        .form-label {
-            display: block;
-            font-size: 14px;
-            font-weight: 600;
-            color: #374151;
-            margin-bottom: 6px;
-        }
-        .form-input, .form-select, .form-textarea {
-            width: 100%;
-            padding: 10px 14px;
-            border: 1px solid #e2e8f0;
-            border-radius: 10px;
-            font-size: 14px;
-            font-family: 'Inter', sans-serif;
-            transition: all 0.2s;
-        }
-        .form-input:focus, .form-select:focus, .form-textarea:focus {
-            outline: none;
-            border-color: #0284c7;
-            box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.1);
-        }
-        .form-textarea {
-            resize: vertical;
-            min-height: 80px;
-        }
-
-        .activity-card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 16px;
-            padding: 16px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
-            border: 1px solid rgba(255, 255, 255, 0.8);
-            margin-bottom: 12px;
-            cursor: pointer;
-            transition: all 0.2s;
-            border-left: 4px solid #0284c7;
-        }
-        .activity-card:hover {
-            transform: translateX(4px);
-            box-shadow: 0 6px 16px rgba(0,0,0,0.1);
-        }
-
-        .activity-card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 8px;
-        }
-
-        .activity-card h4 {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            font-size: 15px;
-            font-weight: 700;
-            color: #0f172a;
-        }
-
-        .activity-card .tag {
-            font-size: 11px;
-            font-weight: 600;
-            padding: 4px 10px;
-            border-radius: 20px;
-        }
-        .tag-ambiental { background: #dcfce7; color: #16a34a; }
-        .tag-academico { background: #dbeafe; color: #2563eb; }
-        .tag-comunitario { background: #f3e8ff; color: #9333ea; }
-
-        .activity-meta {
-            display: flex;
-            gap: 16px;
-            margin-bottom: 8px;
-            font-size: 12px;
-            color: #64748b;
-        }
-
-        .activity-meta span {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .attendance-avatars {
-            display: flex;
-            align-items: center;
-        }
-        .attendance-avatars .avatar {
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 10px;
-            font-weight: 700;
-            color: white;
-            border: 2px solid white;
-            margin-left: -8px;
-        }
-        .attendance-avatars .avatar:first-child { margin-left: 0; }
-
-        .tabs {
-            display: flex;
-            gap: 4px;
-            background: #f1f5f9;
-            padding: 4px;
-            border-radius: 12px;
-            margin-bottom: 16px;
-        }
-
-        .tab {
-            padding: 10px 16px;
-            border-radius: 10px;
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-            border: none;
-            background: transparent;
-            color: #64748b;
-            transition: all 0.2s;
-            flex: 1;
-            text-align: center;
-            font-family: 'Inter', sans-serif;
-        }
-        .tab.active {
-            background: white;
-            color: #0f172a;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        }
-
-        .tab-content { display: none; }
-        .tab-content.active { display: block; }
-
-        .attendance-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px;
-            border-radius: 12px;
-            background: #f8fafc;
-            margin-bottom: 8px;
-            transition: background 0.2s;
-        }
-        .attendance-item:hover { background: #f1f5f9; }
-
-        .attendance-avatar {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-            font-weight: 700;
-            color: white;
-            flex-shrink: 0;
-        }
-
-        .attendance-info { flex: 1; }
-        .attendance-info h4 {
-            font-size: 14px;
-            font-weight: 600;
-            color: #0f172a;
-        }
-        .attendance-info p {
-            font-size: 12px;
-            color: #64748b;
-        }
-
-        .status-badge {
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: 600;
-        }
-        .status-present { background: #dcfce7; color: #166534; }
-        .status-absent { background: #fee2e2; color: #991b1b; }
-        .status-pending { background: #fef3c7; color: #92400e; }
-
-        /* ============================================
-           BOTTOM NAVIGATION - SOLO ESTE BLOQUE CAMBIA
-           ============================================ */
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-top: 1px solid #e2e8f0;
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            height: 70px;
-            z-index: 100;
-            box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
-            padding-bottom: env(safe-area-inset-bottom);
-        }
-
-        .bottom-nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 4px;
-            padding: 8px 12px;
-            color: #94a3b8;
-            text-decoration: none;
-            font-size: 11px;
-            font-weight: 500;
-            transition: all 0.2s ease;
-            cursor: pointer;
-            border: none;
-            background: none;
-            font-family: inherit;
-            flex: 1;
-            position: relative;
-        }
-
-        .bottom-nav-item:hover { color: #0284c7; }
-        .bottom-nav-item.active { color: #0284c7; }
-
-        /* INDICADOR: Línea azul superior (igual que Dashboard) */
-        .bottom-nav-item.active::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 40px;
-            height: 3px;
-            background: #0284c7;
-            border-radius: 0 0 4px 4px;
-        }
-
-        .bottom-nav-item .material-symbols-outlined { font-size: 24px; }
-
-        @media (min-width: 768px) {
-            .main-content {
-                max-width: 800px;
-                padding: 24px 32px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .main-content { padding: 16px; }
-            .welcome-section h1 { font-size: 20px; }
-            .bottom-nav { height: 65px; }
-            .bottom-nav-item { padding: 6px 8px; font-size: 10px; }
-            .bottom-nav-item .material-symbols-outlined { font-size: 22px; }
+        .gear-pattern {
+            background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 14c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm11.2 4.3l1.8-1.5c.2-.2.2-.5 0-.7l-2.1-3.6c-.1-.2-.4-.3-.6-.2l-2.3.9c-.5-.4-1-.7-1.5-.9l-.4-2.4c0-.2-.3-.4-.6-.4h-4.2c-.3 0-.5.2-.6.4l-.4 2.4c-.6.2-1.1.5-1.5.9l-2.3-.9c-.2-.1-.5 0-.6.2l-2.1 3.6c-.1.2-.1.5.1.7l1.8 1.5c-.1.3-.1.5-.1.8s0 .5.1.8l-1.8 1.5c-.2.2-.2.5 0 .7l2.1 3.6c.1.2.4.3.6.2l2.3-.9c.5.4 1 .7 1.5.9l.4 2.4c0 .2.3.4.6.4h4.2c.3 0 .5-.2.6-.4l.4-2.4c.6-.2 1.1-.5 1.5-.9l2.3.9c.2.1.5 0 .6-.2l2.1-3.6c.1-.2.1-.5-.1-.7l-1.8-1.5c.1-.3.1-.5.1-.8s0-.5-.1-.8z' fill='%23ffffff' fill-opacity='0.05'/%3E%3C/svg%3E");
         }
     </style>
-</head>
-<body>
-
-    <div class="bg-waves">
-        <div class="wave wave-1"></div>
-        <div class="wave wave-2"></div>
-        <div class="wave wave-3"></div>
-        <div class="wave wave-4"></div>
-        <div class="wave wave-5"></div>
-    </div>
-    <div class="bg-lines"></div>
-    
-    <div class="bg-circles">
-        <div class="deco-circle deco-circle-1"></div>
-        <div class="deco-circle deco-circle-2"></div>
-        <div class="deco-circle deco-circle-3"></div>
-        <div class="deco-circle deco-circle-4"></div>
-    </div>
-    
-    <div class="bg-particles">
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-    </div>
-    
-    <div class="bg-gradient-top"></div>
-
-    <header class="top-header">
-        <div class="header-left">
-            <div class="logo-small">
-                <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuBwMhl_DdmeafGOmiL2QLqeQV_Ut8aNvKKYwKjKUtrAMBSjpyGc1Acc5TCQm084EODuuIAA3GiusiDfLdXgW3DAC8tdYPa8R-TEraz_hHglTpuTQJRtfOJfW_OyF25795_lzWR3g1wKtd_0fCPC6QxHfyblbvKAQVJNcggVB3k8TYcOAOsA0lTgC8lQz0E1YRlDIn1zQ0vALf8l_40TC_X6xkuWE-o1qr0sdsv2THdAcTxAM9txnjL8N_7oSnlqsHLnXkvvL7tImO-s" alt="Logo">
-                <span>HORASOCIAL PRO</span>
-            </div>
-        </div>
-        <div class="header-right">
-            <div class="user-avatar">MR</div>
-            <button class="btn-icon" onclick="window.location.href='/seleccion-rol'" title="Cerrar Sesión">
-                <span class="material-symbols-outlined">logout</span>
-            </button>
-        </div>
-    </header>
-
-    <main class="main-content">
-        
-        <div class="welcome-section">
-            <h1>Gestión <span>Técnica</span></h1>
-            <p>Programa jornadas, supervisa actividades y gestiona el progreso de tus estudiantes.</p>
-        </div>
-
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-value">24</div>
-                <div class="stat-label">Estudiantes Activos</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-value blue">1,420</div>
-                <div class="stat-label">Horas Acumuladas</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-value red">8</div>
-                <div class="stat-label">Reportes por Aprobar</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-value blue">4</div>
-                <div class="stat-label">Jornadas este mes</div>
-            </div>
-        </div>
-
-        <div class="section-header">
-            <h2 class="section-title">Calendario de Jornadas</h2>
-            <button class="btn-primary" onclick="openModal('nueva-jornada')">
-                <span class="material-symbols-outlined" style="font-size:18px;">add</span>
-                Programar
-            </button>
-        </div>
-
-        <div class="calendar-container">
-            <div class="calendar-header">
-                <button class="calendar-nav" onclick="changeMonth(-1)">
-                    <span class="material-symbols-outlined" style="font-size:18px;">chevron_left</span>
-                </button>
-                <h3 id="calendarMonth">Junio 2026</h3>
-                <button class="calendar-nav" onclick="changeMonth(1)">
-                    <span class="material-symbols-outlined" style="font-size:18px;">chevron_right</span>
-                </button>
-            </div>
-            <div class="calendar-grid" id="calendarGrid">
-                <div class="calendar-day-header">Dom</div>
-                <div class="calendar-day-header">Lun</div>
-                <div class="calendar-day-header">Mar</div>
-                <div class="calendar-day-header">Mié</div>
-                <div class="calendar-day-header">Jue</div>
-                <div class="calendar-day-header">Vie</div>
-                <div class="calendar-day-header">Sáb</div>
-            </div>
-        </div>
-
-        <div class="section-header">
-            <h2 class="section-title">Próximas Actividades</h2>
-        </div>
-
-        <div class="activity-card" onclick="openModal('detalle-actividad')">
-            <div class="activity-card-header">
-                <h4>Jornada de Reforestación</h4>
-                <span class="tag tag-ambiental">Ambiental</span>
-            </div>
-            <div class="activity-meta">
-                <span><span class="material-symbols-outlined" style="font-size:14px;">schedule</span> 08:00 - 12:00</span>
-                <span><span class="material-symbols-outlined" style="font-size:14px;">location_on</span> Zona Verde Norte</span>
-            </div>
-            <div class="attendance-avatars">
-                <div class="avatar" style="background: linear-gradient(135deg, #38bdf8, #0284c7);">JC</div>
-                <div class="avatar" style="background: linear-gradient(135deg, #fbbf24, #d97706);">SF</div>
-                <div class="avatar" style="background: linear-gradient(135deg, #f472b6, #db2777);">MR</div>
-                <div class="avatar" style="background: linear-gradient(135deg, #34d399, #059669);">+2</div>
-            </div>
-        </div>
-
-        <div class="activity-card" style="border-left-color: #9333ea;" onclick="openModal('detalle-actividad')">
-            <div class="activity-card-header">
-                <h4>Tutoría Académica</h4>
-                <span class="tag tag-academico">Académico</span>
-            </div>
-            <div class="activity-meta">
-                <span><span class="material-symbols-outlined" style="font-size:14px;">schedule</span> 14:00 - 16:00</span>
-                <span><span class="material-symbols-outlined" style="font-size:14px;">location_on</span> Sala de Estudios B</span>
-            </div>
-            <div class="attendance-avatars">
-                <div class="avatar" style="background: linear-gradient(135deg, #c084fc, #7e22ce);">AL</div>
-                <div class="avatar" style="background: linear-gradient(135deg, #f472b6, #db2777);">CM</div>
-                <div class="avatar" style="background: linear-gradient(135deg, #38bdf8, #0284c7);">DR</div>
-                <div class="avatar" style="background: linear-gradient(135deg, #fbbf24, #d97706);">+3</div>
-            </div>
-        </div>
-
-    </main>
-
-    <div class="modal-overlay" id="modal-nueva-jornada">
-        <div class="modal">
-            <div class="modal-header">
-                <h3>Programar Nueva Jornada</h3>
-                <button class="modal-close" onclick="closeModal('nueva-jornada')">
-                    <span class="material-symbols-outlined">close</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <label class="form-label">Nombre de la Jornada</label>
-                    <input type="text" class="form-input" placeholder="Ej: Jornada de Reforestación" id="jornadaNombre">
-                </div>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
-                    <div class="form-group">
-                        <label class="form-label">Fecha</label>
-                        <input type="date" class="form-input" id="jornadaFecha">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Brigada</label>
-                        <select class="form-select" id="jornadaBrigada">
-                            <option value="ambiental">Ambiental</option>
-                            <option value="academico">Académico</option>
-                            <option value="comunitario">Comunitario</option>
-                        </select>
-                    </div>
-                </div>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
-                    <div class="form-group">
-                        <label class="form-label">Hora Inicio</label>
-                        <input type="time" class="form-input" id="jornadaInicio">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Hora Fin</label>
-                        <input type="time" class="form-input" id="jornadaFin">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Ubicación</label>
-                    <input type="text" class="form-input" placeholder="Ej: Zona Verde Norte" id="jornadaUbicacion">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Descripción</label>
-                    <textarea class="form-textarea" placeholder="Describe las actividades..." id="jornadaDescripcion"></textarea>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn-secondary" onclick="closeModal('nueva-jornada')">Cancelar</button>
-                <button class="btn-primary" onclick="guardarJornada()">
-                    <span class="material-symbols-outlined" style="font-size:18px;">save</span>
-                    Guardar
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal-overlay" id="modal-detalle-actividad">
-        <div class="modal">
-            <div class="modal-header">
-                <h3>Jornada de Reforestación</h3>
-                <button class="modal-close" onclick="closeModal('detalle-actividad')">
-                    <span class="material-symbols-outlined">close</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div style="display: flex; gap: 16px; margin-bottom: 16px; flex-wrap: wrap; padding-bottom: 16px; border-bottom: 1px solid #f1f5f9;">
-                    <span style="display: flex; align-items: center; gap: 4px; font-size: 14px; color: #64748b;">
-                        <span class="material-symbols-outlined" style="color: #0284c7;">calendar_today</span>
-                        21 de junio, 2026
-                    </span>
-                    <span style="display: flex; align-items: center; gap: 4px; font-size: 14px; color: #64748b;">
-                        <span class="material-symbols-outlined" style="color: #0284c7;">schedule</span>
-                        08:00 - 12:00
-                    </span>
-                    <span style="display: flex; align-items: center; gap: 4px; font-size: 14px; color: #64748b;">
-                        <span class="material-symbols-outlined" style="color: #0284c7;">location_on</span>
-                        Zona Verde Norte
-                    </span>
-                </div>
-
-                <p style="font-size: 14px; color: #64748b; line-height: 1.6; margin-bottom: 20px;">
-                    Actividad de reforestación en las zonas verdes del colegio. Los estudiantes sembrarán árboles nativos y realizarán mantenimiento.
-                </p>
-
-                <div class="tabs">
-                    <button class="tab active" onclick="switchTab('asistentes')">Asistentes (5)</button>
-                    <button class="tab" onclick="switchTab('ausentes')">Ausentes (0)</button>
-                    <button class="tab" onclick="switchTab('pendientes')">Pendientes (0)</button>
-                </div>
-
-                <div class="tab-content active" id="tab-asistentes">
-                    <div class="attendance-item">
-                        <div class="attendance-avatar" style="background: linear-gradient(135deg, #38bdf8, #0284c7);">JC</div>
-                        <div class="attendance-info">
-                            <h4>Juan Carlos Rodríguez</h4>
-                            <p>11-A • Brigada Ambiental</p>
-                        </div>
-                        <span class="status-badge status-present">Confirmado</span>
-                    </div>
-                    <div class="attendance-item">
-                        <div class="attendance-avatar" style="background: linear-gradient(135deg, #fbbf24, #d97706);">SF</div>
-                        <div class="attendance-info">
-                            <h4>Sofía Fernández</h4>
-                            <p>10-B • Brigada Ambiental</p>
-                        </div>
-                        <span class="status-badge status-present">Confirmado</span>
-                    </div>
-                    <div class="attendance-item">
-                        <div class="attendance-avatar" style="background: linear-gradient(135deg, #f472b6, #db2777);">MR</div>
-                        <div class="attendance-info">
-                            <h4>María Elena Ruiz</h4>
-                            <p>11-A • Brigada Ambiental</p>
-                        </div>
-                        <span class="status-badge status-present">Confirmado</span>
-                    </div>
-                </div>
-
-                <div class="tab-content" id="tab-ausentes">
-                    <div style="text-align: center; padding: 40px; color: #94a3b8;">
-                        <span class="material-symbols-outlined" style="font-size: 48px; margin-bottom: 12px;">check_circle</span>
-                        <p>No hay ausentes registrados</p>
-                    </div>
-                </div>
-
-                <div class="tab-content" id="tab-pendientes">
-                    <div style="text-align: center; padding: 40px; color: #94a3b8;">
-                        <span class="material-symbols-outlined" style="font-size: 48px; margin-bottom: 12px;">check_circle</span>
-                        <p>Todos los estudiantes han confirmado</p>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn-secondary" onclick="closeModal('detalle-actividad')">Cerrar</button>
-                <button class="btn-primary" onclick="editarActividad()">
-                    <span class="material-symbols-outlined" style="font-size:18px;">edit</span>
-                    Editar
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <nav class="bottom-nav">
-        <button class="bottom-nav-item" onclick="window.location.href='/maestro/dashboard'">
-            <span class="material-symbols-outlined">dashboard</span>
-            Dashboard
-        </button>
-        <button class="bottom-nav-item" onclick="window.location.href='/maestro/estudiantes'">
-            <span class="material-symbols-outlined">groups</span>
-            Estudiantes
-        </button>
-        <button class="bottom-nav-item active" onclick="window.location.href='/maestro/tecnico'">
-            <span class="material-symbols-outlined">engineering</span>
-            Técnico
-        </button>
-        <button class="bottom-nav-item" onclick="window.location.href='/maestro/mensajes'">
-            <span class="material-symbols-outlined">chat</span>
-            Mensajes
-        </button>
-    </nav>
-
-    <script>
-        let currentDate = new Date();
-        let currentMonth = currentDate.getMonth();
-        let currentYear = currentDate.getFullYear();
-
-        const monthNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", 
-                           "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
-
-        const events = {
-            "2026-06-21": [
-                { name: "Reforestación", type: "ambiental" },
-                { name: "Mantenimiento", type: "ambiental" }
-            ],
-            "2026-06-23": [
-                { name: "Tutoría", type: "academico" }
-            ],
-            "2026-06-25": [
-                { name: "Comunitario", type: "comunitario" }
-            ],
-            "2026-06-28": [
-                { name: "Limpieza", type: "ambiental" }
-            ]
-        };
-
-        function renderCalendar() {
-            const grid = document.getElementById('calendarGrid');
-            const headers = grid.querySelectorAll('.calendar-day-header');
-            grid.innerHTML = '';
-            headers.forEach(h => grid.appendChild(h));
-
-            document.getElementById('calendarMonth').textContent = `${monthNames[currentMonth]} ${currentYear}`;
-
-            const firstDay = new Date(currentYear, currentMonth, 1).getDay();
-            const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
-            const daysInPrevMonth = new Date(currentYear, currentMonth, 0).getDate();
-
-            for (let i = firstDay - 1; i >= 0; i--) {
-                const day = daysInPrevMonth - i;
-                const div = document.createElement('div');
-                div.className = 'calendar-day other-month';
-                div.innerHTML = `<div class="day-number">${day}</div>`;
-                grid.appendChild(div);
-            }
-
-            for (let day = 1; day <= daysInMonth; day++) {
-                const div = document.createElement('div');
-                div.className = 'calendar-day';
-                const dateStr = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-                
-                let eventsHtml = '';
-                if (events[dateStr]) {
-                    events[dateStr].forEach(ev => {
-                        eventsHtml += `<div class="day-event ${ev.type}">${ev.name}</div>`;
-                    });
-                }
-
-                div.innerHTML = `<div class="day-number">${day}</div>${eventsHtml}`;
-                
-                const today = new Date();
-                if (day === today.getDate() && currentMonth === today.getMonth() && currentYear === today.getFullYear()) {
-                    div.classList.add('today');
-                }
-
-                div.onclick = () => {
-                    if (!div.classList.contains('other-month')) {
-                        openModal('nueva-jornada');
-                        document.getElementById('jornadaFecha').value = dateStr;
-                    }
-                };
-
-                grid.appendChild(div);
-            }
-
-            const remainingCells = 42 - (firstDay + daysInMonth);
-            for (let day = 1; day <= remainingCells; day++) {
-                const div = document.createElement('div');
-                div.className = 'calendar-day other-month';
-                div.innerHTML = `<div class="day-number">${day}</div>`;
-                grid.appendChild(div);
-            }
-        }
-
-        function changeMonth(delta) {
-            currentMonth += delta;
-            if (currentMonth > 11) {
-                currentMonth = 0;
-                currentYear++;
-            } else if (currentMonth < 0) {
-                currentMonth = 11;
-                currentYear--;
-            }
-            renderCalendar();
-        }
-
-        function openModal(id) {
-            document.getElementById('modal-' + id).classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeModal(id) {
-            document.getElementById('modal-' + id).classList.remove('active');
-            document.body.style.overflow = '';
-        }
-
-        document.querySelectorAll('.modal-overlay').forEach(modal => {
-            modal.addEventListener('click', function(e) {
-                if (e.target === this) {
-                    this.classList.remove('active');
-                    document.body.style.overflow = '';
-                }
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-body-md text-on-surface">
+<!-- Atmospheric Blobs -->
+<div class="blur-blob bg-celeste-accent w-[500px] h-[500px] -top-40 -left-20"></div>
+<div class="blur-blob bg-error w-[400px] h-[400px] bottom-0 -right-20" style="opacity: 0.08;"></div>
+<!-- Header (TopAppBar) -->
+<header class="fixed top-0 w-full h-16 bg-surface-container-lowest shadow-sm z-50 flex justify-between items-center px-margin-mobile md:px-margin-desktop">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-3xl" data-icon="school">school</span>
+<span class="font-system-title text-headline-sm font-bold text-primary tracking-tight">HORASOCIAL PRO</span>
+</div>
+<div class="flex items-center gap-3">
+<div class="hidden md:flex flex-col items-end">
+<span class="font-label-md text-primary">Prof. Alejandro Gómez</span>
+<span class="text-xs text-on-surface-variant">Docente Técnico</span>
+</div>
+<img alt="Teacher Profile" class="w-10 h-10 rounded-full object-cover border-2 border-celeste-accent" data-alt="A professional headshot of a middle-aged male teacher with a friendly expression. He is wearing a neat charcoal suit over a white shirt, positioned against a soft-focus academic hallway background. The lighting is bright and natural, reflecting a professional and reliable educational environment in line with a high-end SaaS dashboard aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB3JYipNTFXEF4sRylSDZBFYtxrR2OugWQr-pmnpiLgwGbh1ytcveHa0Un_qlJB1TskYS9cvq-gNZfXlGJEg4fxh8FQqO-kD9OoNoGrEap9ztwjx540c3Qa2DFNDw_L7LEly_ad-2tKyKj0oBIXtIRQFkHuWi7J772s_3fT0uohrDwavrH4Hf0Qs7oFqJFLWBctXe7Kdn0nG9OmcnmoqVpU574xwE8FMjxEJX8GPY7G3wqRkjZHweoyK4vqX2zn5-DK-fuZYCWxUkpg"/>
+</div>
+</header>
+<main class="pt-24 pb-32 px-margin-mobile md:px-margin-desktop max-w-7xl mx-auto space-y-6">
+<!-- Specialty Banner -->
+<section class="relative bg-primary rounded-xl p-8 overflow-hidden gear-pattern flex flex-col md:flex-row justify-between items-center gap-6">
+<div class="relative z-10 text-center md:text-left">
+<h1 class="font-system-title text-headline-lg text-white mb-2">Cuidado de Zonas Verdes del Colegio</h1>
+<p class="text-white/80 max-w-xl font-body-md">Gestión y supervisión técnica de proyectos ambientales liderados por estudiantes de grado décimo y undécimo. Fomentando la sostenibilidad y el sentido de pertenencia institucional.</p>
+</div>
+<div class="relative z-10 bg-white/10 backdrop-blur-md p-4 rounded-xl border border-white/20">
+<span class="material-symbols-outlined text-white text-5xl" data-icon="eco">eco</span>
+</div>
+</section>
+<!-- Metric Row -->
+<section class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<!-- Metric 1 -->
+<div class="bg-white p-6 rounded-lg card-shadow flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-celeste-accent/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-celeste-accent" data-icon="group">group</span>
+</div>
+<div>
+<p class="text-on-surface-variant font-label-md">Estudiantes Activos</p>
+<h3 class="text-headline-md font-bold text-primary">24</h3>
+</div>
+</div>
+<!-- Metric 2 -->
+<div class="bg-white p-6 rounded-lg card-shadow flex flex-col justify-center">
+<div class="flex justify-between mb-2">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-celeste-accent" data-icon="history">history</span>
+<p class="text-on-surface-variant font-label-md">Horas Acumuladas</p>
+</div>
+<span class="text-primary font-bold">1,420 / 1,920 h</span>
+</div>
+<div class="w-full bg-surface-container rounded-full h-2">
+<div class="bg-celeste-accent h-2 rounded-full" style="width: 74%"></div>
+</div>
+</div>
+<!-- Metric 3 -->
+<div class="bg-white p-6 rounded-lg card-shadow flex items-center justify-between">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-error/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-error" data-icon="assignment_late">assignment_late</span>
+</div>
+<div>
+<p class="text-on-surface-variant font-label-md">Reportes por Aprobar</p>
+<h3 class="text-headline-md font-bold text-primary">8</h3>
+</div>
+</div>
+<span class="bg-error text-white text-[10px] px-2 py-1 rounded-full font-bold animate-pulse">PENDIENTE</span>
+</div>
+</section>
+<!-- Content Grid -->
+<section class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+<!-- Student Table (2/3 width on desktop) -->
+<div class="lg:col-span-2 space-y-4">
+<div class="flex justify-between items-center px-1">
+<h2 class="font-system-title text-headline-sm text-primary">Panel de Estudiantes</h2>
+<button class="text-celeste-accent font-label-md flex items-center gap-1 hover:underline">
+                        Ver todos <span class="material-symbols-outlined text-sm" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+<div class="bg-white rounded-xl card-shadow overflow-hidden">
+<table class="w-full text-left border-collapse">
+<thead class="bg-surface-container-low">
+<tr>
+<th class="p-4 font-label-md text-on-surface-variant">Estudiante</th>
+<th class="p-4 font-label-md text-on-surface-variant">Curso</th>
+<th class="p-4 font-label-md text-on-surface-variant">Progreso (80h)</th>
+<th class="p-4 font-label-md text-on-surface-variant text-right">Acción</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-container">
+<!-- Student Row 1 -->
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="p-4">
+<div class="flex items-center gap-3">
+<img class="w-8 h-8 rounded-full object-cover" data-alt="Close-up portrait of a high school student with a confident and focused expression. The student is in a modern school setting, with soft daylight and clean architectural lines in the background. The visual tone is positive, professional, and consistent with a high-end educational management platform's clean aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAOE7a4j5atWrfgNuxd1Df0NYtNOYr5DxQ9TsD8au9OevGH-lC-TJh4K2mftWuPly9VCFX6bn7AppDKHw_2CglTCyn9UmdCxl4aUxosBBLawF6AcGFInYNmrckBaAJ6RuWo_8g8mgw9UUNynpJi_O9WKckplUkj9beW8l_RDqMipPDBVGwYzePGOa0WucYv7yAxrE-GM2M4S_z5krloCfnV7xi0nStZtXFBbLp2FMFmGe5oWGWDXcHWkKjfYwX8G4a3vAe_vri-J0xL"/>
+<span class="font-label-md text-primary">Mateo Restrepo</span>
+</div>
+</td>
+<td class="p-4 text-on-surface-variant">11-A</td>
+<td class="p-4">
+<div class="flex items-center gap-3">
+<div class="flex-grow bg-surface-container rounded-full h-1.5 overflow-hidden">
+<div class="bg-celeste-accent h-full" style="width: 85%"></div>
+</div>
+<span class="text-xs font-bold text-primary">68h</span>
+</div>
+</td>
+<td class="p-4 text-right">
+<button class="bg-primary text-white text-[12px] px-3 py-1 rounded-lg hover:bg-primary/90 transition-all font-bold">Ver Ficha</button>
+</td>
+</tr>
+<!-- Student Row 2 -->
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="p-4">
+<div class="flex items-center gap-3">
+<img class="w-8 h-8 rounded-full object-cover" data-alt="Portrait of a female high school student with a bright, motivated smile. She is in a brightly lit library setting, conveying a sense of academic achievement and community engagement. The lighting is soft and airy, fitting the modern, light-filled interface of the school management dashboard." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAygUHSF1CDcri9WcMQK6Lz7hQPPvlL4GcjKeRT1Q4tA_-EVFS6dRIFx1TveAA8Zmrd8siFfoScGWFwxPSDiwGa7gkp2gzfkmDGpgFuQ7QARzLL7oFVP1wTQ8TYPHS9vyejkBi5JPQZETE2Ofcb1InleP7CNA804b_7BEweuYhxTVjJEia8qD6wl7jnnsPSrZTvmoQSy3RJdMcANAK-RFewsmtersdt90uWEVPrpYD23YDE-mNKMdGrqV4gosZESZRZ9-0J2-JcryOk"/>
+<span class="font-label-md text-primary">Camila Duque</span>
+</div>
+</td>
+<td class="p-4 text-on-surface-variant">10-B</td>
+<td class="p-4">
+<div class="flex items-center gap-3">
+<div class="flex-grow bg-surface-container rounded-full h-1.5 overflow-hidden">
+<div class="bg-celeste-accent h-full" style="width: 40%"></div>
+</div>
+<span class="text-xs font-bold text-primary">32h</span>
+</div>
+</td>
+<td class="p-4 text-right">
+<button class="bg-primary text-white text-[12px] px-3 py-1 rounded-lg hover:bg-primary/90 transition-all font-bold">Ver Ficha</button>
+</td>
+</tr>
+<!-- Student Row 3 -->
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="p-4">
+<div class="flex items-center gap-3">
+<img class="w-8 h-8 rounded-full object-cover" data-alt="Portrait of a teenage boy with a thoughtful expression, wearing a school uniform sweater. He is positioned in a modern classroom environment with natural light pouring in from large windows. The style is clean, sharp, and focused, aligning with the corporate minimalism of the project's brand identity." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDNVP3o3TWZH16s6I492i60mVMCjazuzyz2HdNe6ZW0whNQ5y0Nv7NpcjiAB8RTrEe8bGTg8JDEhbeJy3seMPv5YtMmldU7QgrBmAAo3uHABGDAWXFf7anri_aJh6WGObYrxSoE0wZQ0uqf5PgGciMUxRpqWRZAtapMeSdkqoIhExkv7rIOPa-ARK08_0JMIPp-vkAfGMC6tSSnbxF8l30HVOtCePcI51-xKUA7Z-sQEq5qKUt9AtsDVRDNJv-ksKWYu10AQuvFaSka"/>
+<span class="font-label-md text-primary">Juan Pablo Rico</span>
+</div>
+</td>
+<td class="p-4 text-on-surface-variant">11-A</td>
+<td class="p-4">
+<div class="flex items-center gap-3">
+<div class="flex-grow bg-surface-container rounded-full h-1.5 overflow-hidden">
+<div class="bg-celeste-accent h-full" style="width: 92%"></div>
+</div>
+<span class="text-xs font-bold text-primary">74h</span>
+</div>
+</td>
+<td class="p-4 text-right">
+<button class="bg-primary text-white text-[12px] px-3 py-1 rounded-lg hover:bg-primary/90 transition-all font-bold">Ver Ficha</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Pending Signatures -->
+<div class="space-y-4">
+<h2 class="font-system-title text-headline-sm text-primary px-1">Firmas Pendientes</h2>
+<div class="space-y-4">
+<!-- Log Card 1 -->
+<div class="bg-white p-5 rounded-xl card-shadow border-l-4 border-celeste-accent">
+<div class="flex justify-between items-start mb-3">
+<div>
+<h4 class="font-bold text-primary">Santi Giraldo</h4>
+<p class="text-[10px] text-on-surface-variant uppercase tracking-wider">Hoy, 09:30 AM</p>
+</div>
+<span class="bg-celeste-accent/10 text-celeste-accent text-xs px-2 py-0.5 rounded font-bold">4.5 h</span>
+</div>
+<p class="text-sm text-on-surface-variant mb-4 leading-relaxed">Poda de setos perimetrales y limpieza de residuos en el jardín principal del bloque B.</p>
+<div class="grid grid-cols-2 gap-3">
+<button class="bg-primary text-white text-[12px] py-2 rounded-lg font-bold hover:bg-primary/90 transition-all flex items-center justify-center gap-1">
+<span class="material-symbols-outlined text-sm" data-icon="check">check</span> Aprobar
+                            </button>
+<button class="border border-outline-variant text-on-surface-variant text-[12px] py-2 rounded-lg font-bold hover:bg-surface-variant transition-all flex items-center justify-center gap-1">
+<span class="material-symbols-outlined text-sm" data-icon="close">close</span> Rechazar
+                            </button>
+</div>
+</div>
+<!-- Log Card 2 -->
+<div class="bg-white p-5 rounded-xl card-shadow border-l-4 border-celeste-accent/30">
+<div class="flex justify-between items-start mb-3">
+<div>
+<h4 class="font-bold text-primary">Valentina Ospina</h4>
+<p class="text-[10px] text-on-surface-variant uppercase tracking-wider">Ayer, 04:15 PM</p>
+</div>
+<span class="bg-celeste-accent/10 text-celeste-accent text-xs px-2 py-0.5 rounded font-bold">3.0 h</span>
+</div>
+<p class="text-sm text-on-surface-variant mb-4 leading-relaxed">Siembra de plantas ornamentales y tutorado de árboles jóvenes en el sendero ecológico.</p>
+<div class="grid grid-cols-2 gap-3">
+<button class="bg-primary text-white text-[12px] py-2 rounded-lg font-bold hover:bg-primary/90 transition-all flex items-center justify-center gap-1">
+<span class="material-symbols-outlined text-sm" data-icon="check">check</span> Aprobar
+                            </button>
+<button class="border border-outline-variant text-on-surface-variant text-[12px] py-2 rounded-lg font-bold hover:bg-surface-variant transition-all flex items-center justify-center gap-1">
+<span class="material-symbols-outlined text-sm" data-icon="close">close</span> Rechazar
+                            </button>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Navigation Bar (BottomNavBar) -->
+<nav class="fixed bottom-0 w-full z-50 flex justify-around items-center h-20 bg-surface border-t border-outline-variant px-4">
+<!-- Dashboard -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:bg-surface-variant rounded-xl transition-all scale-95" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label-sm text-[10px] mt-1">Dashboard</span>
+</a>
+<!-- Students -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:bg-surface-variant rounded-xl transition-all scale-95" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+<span class="font-label-sm text-[10px] mt-1">Estudiantes</span>
+</a>
+<!-- Technical (ACTIVE) -->
+<a class="flex flex-col items-center justify-center bg-celeste-accent/10 text-celeste-accent border-2 border-dashed border-celeste-accent rounded-xl px-4 py-1 transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="engineering" style="font-variation-settings: 'FILL' 1;">engineering</span>
+<span class="font-label-sm text-[10px] mt-1 font-bold">Gestión Técnica</span>
+</a>
+<!-- Messages -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:bg-surface-variant rounded-xl transition-all scale-95" href="#">
+<div class="relative">
+<span class="material-symbols-outlined" data-icon="mail">mail</span>
+<span class="absolute -top-1 -right-1 w-2 h-2 bg-error rounded-full"></span>
+</div>
+<span class="font-label-sm text-[10px] mt-1">Mensajes</span>
+</a>
+</nav>
+<script>
+        // Simple micro-interaction for buttons
+        document.querySelectorAll('button').forEach(button => {
+            button.addEventListener('click', function() {
+                this.classList.add('scale-95');
+                setTimeout(() => this.classList.remove('scale-95'), 150);
             });
-        });
-
-        function switchTab(tabName) {
-            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
-            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-            
-            event.target.classList.add('active');
-            document.getElementById('tab-' + tabName).classList.add('active');
-        }
-
-        function guardarJornada() {
-            const nombre = document.getElementById('jornadaNombre').value;
-            const fecha = document.getElementById('jornadaFecha').value;
-            
-            if (!nombre || !fecha) {
-                alert('Por favor completa los campos obligatorios');
-                return;
-            }
-
-            if (!events[fecha]) events[fecha] = [];
-            events[fecha].push({
-                name: nombre,
-                type: document.getElementById('jornadaBrigada').value
-            });
-
-            renderCalendar();
-            closeModal('nueva-jornada');
-            
-            document.getElementById('jornadaNombre').value = '';
-            document.getElementById('jornadaFecha').value = '';
-            document.getElementById('jornadaUbicacion').value = '';
-            document.getElementById('jornadaDescripcion').value = '';
-            
-            alert('✅ Jornada programada correctamente');
-        }
-
-        function editarActividad() {
-            alert('📝 Modo edición activado');
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            renderCalendar();
         });
     </script>
-
-</body>
-</html>
+</body></html>
