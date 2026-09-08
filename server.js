@@ -8,6 +8,15 @@ const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Never let the browser serve stale HTML from cache (pages change on every deploy).
+app.use((req, res, next) => {
+    res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
+    next();
+});
+
 app.use(express.static(path.join(__dirname), { index: false }));
 app.use('/stitch', express.static(path.join(__dirname, 'stitch_horasocial_pro_landing_page')));
 
