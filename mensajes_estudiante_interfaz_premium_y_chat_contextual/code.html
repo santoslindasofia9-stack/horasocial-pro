@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+<title>Mensajes - HORASOCIAL PRO</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;family=Poppins:wght@700&amp;display=swap" rel="stylesheet"/>
+<!-- Icons -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Scripts -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "primary-fixed-dim": "#bec6e0",
+                    "surface-variant": "#e0e3e5",
+                    "surface-dim": "#d8dadc",
+                    "primary-fixed": "#dae2fd",
+                    "on-tertiary-container": "#008ebf",
+                    "on-error": "#ffffff",
+                    "tertiary-fixed": "#c4e7ff",
+                    "outline-variant": "#c6c6cd",
+                    "on-primary-fixed-variant": "#3f465c",
+                    "on-background": "#191c1e",
+                    "secondary-fixed": "#c9e6ff",
+                    "secondary": "#006591",
+                    "tertiary-fixed-dim": "#7bd0ff",
+                    "background": "#f7f9fb",
+                    "outline": "#76777d",
+                    "inverse-surface": "#2d3133",
+                    "surface-tint": "#565e74",
+                    "surface-container-highest": "#e0e3e5",
+                    "primary-container": "#131b2e",
+                    "surface": "#f7f9fb",
+                    "secondary-fixed-dim": "#89ceff",
+                    "error-container": "#ffdad6",
+                    "on-secondary": "#ffffff",
+                    "on-error-container": "#93000a",
+                    "tertiary-container": "#001e2c",
+                    "on-secondary-fixed": "#001e2f",
+                    "on-tertiary-fixed-variant": "#004c69",
+                    "on-surface": "#191c1e",
+                    "surface-container-low": "#f2f4f6",
+                    "on-primary-container": "#7c839b",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-container-high": "#e6e8ea",
+                    "surface-container": "#eceef0",
+                    "on-primary-fixed": "#131b2e",
+                    "on-primary": "#ffffff",
+                    "secondary-container": "#39b8fd",
+                    "surface-bright": "#f7f9fb",
+                    "inverse-on-surface": "#eff1f3",
+                    "inverse-primary": "#bec6e0",
+                    "on-tertiary": "#ffffff",
+                    "on-surface-variant": "#45464d",
+                    "on-secondary-fixed-variant": "#004c6e",
+                    "tertiary": "#000000",
+                    "error": "#ba1a1a",
+                    "primary": "#000000",
+                    "on-tertiary-fixed": "#001e2c",
+                    "on-secondary-container": "#004666"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline-lg-mobile": ["Plus Jakarta Sans"],
+                    "headline-sm": ["Plus Jakarta Sans"],
+                    "headline-md": ["Plus Jakarta Sans"],
+                    "label-sm": ["Inter"],
+                    "label-md": ["Inter"],
+                    "body-md": ["Inter"],
+                    "poppins-bold": ["Poppins", "sans-serif"]
+            },
+            "fontSize": {
+                    "headline-lg-mobile": ["28px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                    "label-sm": ["12px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                    "label-md": ["14px", {"lineHeight": "1.4", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                    "headline-sm": ["20px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                    "headline-md": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .blur-blob {
+            filter: blur(80px);
+            opacity: 0.15;
+            z-index: -1;
+            position: absolute;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        /* Custom scrollbar for data tables and chat lists */
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface font-body-md selection:bg-secondary-container selection:text-on-secondary-container min-h-screen overflow-hidden flex flex-col">
+<!-- Background Decorative Blobs -->
+<div class="fixed inset-0 overflow-hidden -z-10 bg-gradient-to-br from-[#fdfbf7] to-[#ffffff]">
+<div class="blur-blob w-72 h-72 bg-secondary-container top-10 -left-20 rounded-full"></div>
+<div class="blur-blob w-80 h-80 bg-error-container bottom-20 -right-10 rounded-full"></div>
+<div class="blur-blob w-64 h-64 bg-tertiary-fixed-dim top-1/2 left-1/3 rounded-full"></div>
+</div>
+<!-- Top App Bar -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-lg py-sm bg-surface/80 backdrop-blur-xl shadow-sm">
+<div class="flex items-center gap-md">
+<div class="w-10 h-10 rounded-full bg-primary-fixed overflow-hidden ring-2 ring-surface">
+<img alt="Student Profile Photo" class="w-full h-full object-cover" data-alt="A professional close-up portrait of a male student with a bright, friendly expression, set against a soft academic library background. The lighting is natural and high-key, reinforcing a professional and reliable tone consistent with a premium educational management platform. The overall color palette is warm and minimal." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBoBwrqDo9NtoeZ6fqSLNzRsEVUk_sMsK_dwI49809A1OeEA_xliePF6EEPPkg5KcPB70jp1aK16516FNxRzk3MPnBBfNRGYpPg_nPFHwP45jLSibAWJUibztjT4oQLxbSKQ4IX-UgRcMmi0vi-wnrsaLEGb35VB8lMW8kDRkQHdeTvjWvvZqUdSNDFIxncoz0WMlPWjf__sU_1pHYb3-945C118PRonSEaUksZuSQ0My1dS7eD7zfj8AeQOLaIkMlHeFRZ_Uh3rRgU"/>
+</div>
+<h1 class="font-headline-md text-headline-md font-bold tracking-tight text-primary">HORASOCIAL PRO</h1>
+</div>
+<button class="w-10 h-10 flex items-center justify-center text-primary hover:opacity-80 transition-opacity active:scale-95 transition-transform">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+</header>
+<!-- Main Content Area -->
+<main class="flex-grow pt-24 pb-24 px-4 max-w-5xl mx-auto w-full grid grid-cols-1 md:grid-cols-[320px_1fr] gap-lg h-screen">
+<!-- Sidebar: Inbox / Chat List -->
+<section class="flex flex-col gap-md h-full overflow-hidden">
+<div class="flex items-center justify-between mb-2">
+<h2 class="font-poppins-bold text-headline-lg-mobile text-[#0F172A]">Mensajes</h2>
+<button class="p-2 bg-secondary-container/20 text-on-secondary-container rounded-lg hover:bg-secondary-container transition-colors">
+<span class="material-symbols-outlined" data-icon="edit_square">edit_square</span>
+</button>
+</div>
+<div class="flex-grow overflow-y-auto pr-2 space-y-3">
+<!-- Unread Chat Item -->
+<button class="w-full text-left p-md glass-panel rounded-xl flex gap-md items-center shadow-sm hover:shadow-md transition-all border-l-4 border-secondary-container">
+<div class="relative">
+<img alt="Maestra Elena" class="w-12 h-12 rounded-full object-cover" data-alt="A professional headshot of a female professor with a kind smile, wearing academic attire in a bright office environment. The image is clean and corporate, featuring soft shadows and a high-contrast aesthetic that fits a modern school administrative dashboard. Natural lighting enhances the clarity." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCmx5eYmVLeNrEHFn_NF1gliQkj-qHBCPQx2mj-B8G9kJLhL_kBvQlVLq7yF2EiCNYRB_t50STcob-gneP7doI9_AlQOPHOH9rRK9yXF_PYDtJy3ocQbdwIVM0XayANxnOAFvPPXIZiUmAbHukPOmDDTvncKnyKkdd5gGkG8UFOWzE4AkzgetvttihlGlYN8t0gT53H1zz1JB9syIGn387VxMMGJxdP605gcfP9Hz_jyONwhKQo47EjgRIIQHwxBisuw3svOt5gyor8"/>
+<div class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></div>
+</div>
+<div class="flex-grow min-w-0">
+<div class="flex justify-between items-baseline">
+<span class="font-semibold text-on-surface truncate">Mtra. Elena Gómez</span>
+<span class="text-[10px] text-secondary font-bold">10:45 AM</span>
+</div>
+<p class="text-sm font-bold text-on-surface truncate">¿Ya subiste tu reporte de agosto?</p>
+</div>
+</button>
+<!-- Regular Chat Item -->
+<button class="w-full text-left p-md bg-white/50 rounded-xl flex gap-md items-center hover:bg-white/80 transition-all">
+<img alt="Mtro. Roberto" class="w-12 h-12 rounded-full object-cover opacity-80" data-alt="A portrait of a male teacher in a professional, light-filled classroom setting. He is wearing a minimalist dark shirt, and the background is slightly blurred with academic motifs. The visual style is crisp and modern, emphasizing reliability and administrative integrity with a cool blue color palette." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAq9FoTzthEvjPqmoV9BZRdzZIi0-ZWsWP8vj-LJk4OLpRgu7oUYe0JQ3PjEg-tWzgQgpvz6ubKEMK1rOzXH6bCLZmOpkivCoCIAal249_jduzRoSfAk86OF09fEtDji-OEd-1BMOgLRD9aOuaStgPIBqsjRjWsmTfsroGebPAS382fDfvEs7d5XjmMz2aEw22qs3_rh-KEC71uQ4qwhmaD8jRnS9141PuQ8VDPCzIods7YUxV8Vm7c0HDZkUy273duWzyYlmK2fD-P"/>
+<div class="flex-grow min-w-0">
+<div class="flex justify-between items-baseline">
+<span class="font-medium text-on-surface-variant truncate">Mtro. Roberto R.</span>
+<span class="text-[10px] text-outline">Ayer</span>
+</div>
+<p class="text-sm text-on-surface-variant truncate">Mañana es la junta de seguimiento.</p>
+</div>
+</button>
+<!-- Regular Chat Item -->
+<button class="w-full text-left p-md bg-white/50 rounded-xl flex gap-md items-center hover:bg-white/80 transition-all">
+<img alt="Mtra. Lucía" class="w-12 h-12 rounded-full object-cover opacity-80" data-alt="A professional headshot of a university administrator, a woman with glasses and a composed expression, in a modern office with glass walls. The lighting is diffused and bright, creating a clean light-mode aesthetic. The color accents are subtle navy and soft greys." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCtuCJ35RBQ_svtsaSmHoWNBePExZVcD-Uz4ENBIFfwlOKbhvCXVNeh7nkfRX19At3JAxB9_sVKCjoru6NaPR7In6BRgLplrnbYcoyLDia7yvgHUgqbY3U-kgRAmk9tPV2NgndDgzz2V04Kyi2TQ5lJ4-BxlAroz5JYhLNUslFvjf_92wNIxgLVYc-QnFXLlHM8S24IshFUlZtKWQeJvCm2iF3vp4LESi4shAU7OVUUVEvrrXDHJDVEWDdhJ_D8kLiCTzX3MdSRTOhl"/>
+<div class="flex-grow min-w-0">
+<div class="flex justify-between items-baseline">
+<span class="font-medium text-on-surface-variant truncate">Mtra. Lucía Méndez</span>
+<span class="text-[10px] text-outline">Lun</span>
+</div>
+<p class="text-sm text-on-surface-variant truncate">Gracias por la aclaración, nos vemos.</p>
+</div>
+</button>
+</div>
+</section>
+<!-- Main Chat Window (Desktop) / Mobile Detail -->
+<section class="hidden md:flex flex-col glass-panel rounded-2xl shadow-lg border-none h-full overflow-hidden">
+<!-- Chat Header -->
+<div class="p-md border-b border-outline-variant flex items-center justify-between bg-white/60">
+<div class="flex items-center gap-md">
+<div class="relative">
+<img alt="Maestra Elena" class="w-10 h-10 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuChFFOw7s6Eu6ntOFN-SQpu94pfhjMmZ9r9liiUzMsvpZXqc9aVHiQp6JXu5cCznilW9l9brmnMR0Uxkx2WZ_2p5K9ukJIfHuD_cNVsE8tTY1XnNOruzHwxMqoOH1Q1t8tHCahyMyMmA6i3OgixNjiAR3t2JnxPAtp9BEUQD-CCdvBogU-SvAvYTrQy1w2D2LqmV2DMDVTILEcnXQWDSb09WXpvfUEOz8kvcDSVtuNzdRZlhp35w7r7SDL36kj-IcgA8_tCrS7Xg_Fh"/>
+<div class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 border-2 border-white rounded-full"></div>
+</div>
+<div>
+<h3 class="font-semibold text-on-surface leading-tight">Mtra. Elena Gómez</h3>
+<p class="text-xs text-secondary">En línea</p>
+</div>
+</div>
+<div class="flex gap-sm">
+<button class="p-2 text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="videocam">videocam</span>
+</button>
+<button class="p-2 text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="info">info</span>
+</button>
+</div>
+</div>
+<!-- Messages Area -->
+<div class="flex-grow overflow-y-auto p-lg space-y-lg flex flex-col">
+<div class="flex justify-center">
+<span class="text-[10px] font-semibold bg-surface-container-high px-3 py-1 rounded-full text-on-surface-variant uppercase tracking-wider">Hoy</span>
+</div>
+<!-- Teacher Message (Left) -->
+<div class="flex items-end gap-sm max-w-[80%]">
+<div class="p-lg bg-surface-container-low text-on-surface rounded-2xl rounded-bl-none shadow-sm text-sm leading-relaxed">
+                        Hola, ¿cómo vas con tus horas de este mes? Recuerda que el cierre es el viernes.
+                    </div>
+<span class="text-[10px] text-outline mb-1">10:42 AM</span>
+</div>
+<!-- Student Message (Right) -->
+<div class="flex items-end gap-sm max-w-[80%] ml-auto flex-row-reverse">
+<div class="p-lg bg-[#0ea5e9] text-white rounded-2xl rounded-br-none shadow-md text-sm leading-relaxed">
+                        ¡Hola Maestra! Ya casi termino. Solo me falta el sello de la organización. Lo subo hoy mismo.
+                    </div>
+<span class="text-[10px] text-outline mb-1">10:44 AM</span>
+</div>
+<!-- Teacher Message (Left) - Unread Style -->
+<div class="flex items-end gap-sm max-w-[80%]">
+<div class="p-lg bg-surface-container-low text-on-surface rounded-2xl rounded-bl-none shadow-sm text-sm leading-relaxed font-bold border-l-2 border-secondary-container">
+                        Excelente. ¿Ya subiste tu reporte de agosto?
+                    </div>
+<span class="text-[10px] text-outline mb-1">10:45 AM</span>
+</div>
+</div>
+<!-- Input Area -->
+<div class="p-md bg-white/80 border-t border-outline-variant">
+<div class="flex items-center gap-md bg-surface-container-lowest rounded-full px-lg py-sm shadow-sm ring-1 ring-black/5">
+<button class="text-on-surface-variant hover:text-secondary-container transition-colors">
+<span class="material-symbols-outlined" data-icon="attach_file">attach_file</span>
+</button>
+<input class="flex-grow bg-transparent border-none focus:ring-0 text-sm placeholder:text-outline py-2" placeholder="Escribe un mensaje..." type="text"/>
+<button class="w-10 h-10 rounded-full bg-[#0ea5e9] text-white flex items-center justify-center shadow-md hover:scale-105 active:scale-90 transition-all">
+<span class="material-symbols-outlined" data-icon="send" style="font-variation-settings: 'FILL' 1;">send</span>
+</button>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 w-full z-50 flex justify-around items-center px-md pb-safe py-sm bg-surface/90 backdrop-blur-md rounded-t-xl shadow-[0_-4px_20px_rgba(15,23,42,0.05)] shadow-lg">
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1.5 hover:bg-surface-container-high transition-colors group" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label-sm text-label-sm">Dashboard</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1.5 hover:bg-surface-container-high transition-colors group" href="#">
+<span class="material-symbols-outlined" data-icon="calendar_month">calendar_month</span>
+<span class="font-label-sm text-label-sm">Agenda</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1.5 hover:bg-surface-container-high transition-colors group" href="#">
+<span class="material-symbols-outlined" data-icon="edit_note">edit_note</span>
+<span class="font-label-sm text-label-sm">Registro</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container rounded-full px-4 py-1.5 scale-90 transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="chat_bubble" style="font-variation-settings: 'FILL' 1;">chat_bubble</span>
+<span class="font-label-sm text-label-sm">Mensajes</span>
+</a>
+</nav>
+<script>
+        // Micro-interaction for chat bubbles
+        document.querySelectorAll('button.w-full').forEach(btn => {
+            btn.addEventListener('mousedown', () => btn.classList.add('scale-95'));
+            btn.addEventListener('mouseup', () => btn.classList.remove('scale-95'));
+            btn.addEventListener('mouseleave', () => btn.classList.remove('scale-95'));
+        });
+
+        // Floating Action Button logic if needed (Suppressed on this screen per instructions)
+    </script>
+</body></html>

@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+
+<html lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Iniciar Sesión - HORASOCIAL PRO</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-error": "#ffffff",
+                    "secondary-fixed-dim": "#89ceff",
+                    "primary": "#000000",
+                    "secondary": "#006591",
+                    "outline": "#76777d",
+                    "surface-dim": "#d8dadc",
+                    "on-tertiary-container": "#008ebf",
+                    "on-tertiary": "#ffffff",
+                    "on-primary-fixed-variant": "#3f465c",
+                    "error-container": "#ffdad6",
+                    "secondary-container": "#39b8fd",
+                    "tertiary-fixed-dim": "#7bd0ff",
+                    "tertiary": "#000000",
+                    "inverse-surface": "#2d3133",
+                    "inverse-on-surface": "#eff1f3",
+                    "on-secondary-fixed-variant": "#004c6e",
+                    "surface-tint": "#565e74",
+                    "on-secondary": "#ffffff",
+                    "outline-variant": "#c6c6cd",
+                    "surface-bright": "#f7f9fb",
+                    "on-surface": "#191c1e",
+                    "surface-container-high": "#e6e8ea",
+                    "on-error-container": "#93000a",
+                    "primary-fixed-dim": "#bec6e0",
+                    "error": "#ba1a1a",
+                    "on-surface-variant": "#45464d",
+                    "primary-fixed": "#dae2fd",
+                    "tertiary-fixed": "#c4e7ff",
+                    "surface-container-highest": "#e0e3e5",
+                    "on-secondary-container": "#004666",
+                    "on-secondary-fixed": "#001e2f",
+                    "background": "#f7f9fb",
+                    "on-tertiary-fixed-variant": "#004c69",
+                    "on-primary-container": "#7c839b",
+                    "on-background": "#191c1e",
+                    "on-tertiary-fixed": "#001e2c",
+                    "surface": "#f7f9fb",
+                    "inverse-primary": "#bec6e0",
+                    "tertiary-container": "#001e2c",
+                    "primary-container": "#131b2e",
+                    "surface-container": "#eceef0",
+                    "on-primary": "#ffffff",
+                    "surface-container-low": "#f2f4f6",
+                    "secondary-fixed": "#c9e6ff",
+                    "surface-variant": "#e0e3e5",
+                    "surface-container-lowest": "#ffffff",
+                    "on-primary-fixed": "#131b2e"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "unit": "4px",
+                    "margin-desktop": "48px",
+                    "xs": "4px",
+                    "xl": "32px",
+                    "gutter": "24px",
+                    "md": "16px",
+                    "margin-mobile": "16px",
+                    "sm": "8px",
+                    "lg": "24px"
+            },
+            "fontFamily": {
+                    "display-lg": ["Plus Jakarta Sans"],
+                    "label-sm": ["Inter"],
+                    "headline-sm": ["Plus Jakarta Sans"],
+                    "body-lg": ["Inter"],
+                    "label-md": ["Inter"],
+                    "headline-lg": ["Plus Jakarta Sans"],
+                    "headline-md": ["Plus Jakarta Sans"],
+                    "body-md": ["Inter"],
+                    "headline-lg-mobile": ["Plus Jakarta Sans"]
+            },
+            "fontSize": {
+                    "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "label-sm": ["12px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                    "headline-sm": ["20px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "label-md": ["14px", {"lineHeight": "1.4", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                    "headline-lg": ["32px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                    "headline-md": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                    "headline-lg-mobile": ["28px", {"lineHeight": "1.2", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            user-select: none;
+        }
+        .blur-blob {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(14, 165, 233, 0.15) 0%, rgba(255, 255, 255, 0) 70%);
+            filter: blur(80px);
+            z-index: -1;
+            animation: float 20s infinite alternate ease-in-out;
+        }
+        @keyframes float {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(40px, -60px) scale(1.1); }
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface font-body-md min-h-screen flex flex-col relative overflow-hidden">
+<!-- Background Decor -->
+<div class="blur-blob top-[-10%] left-[-10%]"></div>
+<div class="blur-blob bottom-[-10%] right-[-10%]" style="animation-delay: -5s; background: radial-gradient(circle, rgba(15, 23, 42, 0.1) 0%, rgba(255, 255, 255, 0) 70%);"></div>
+<!-- Main Content: Perfect Centering -->
+<main class="flex-grow flex items-center justify-center px-margin-mobile">
+<div class="w-full max-w-[440px] bg-surface-container-lowest rounded-xl shadow-[0px_4px_20px_rgba(15,23,42,0.05)] p-xl flex flex-col items-center relative overflow-hidden border border-outline-variant/30 backdrop-blur-sm">
+<!-- Floating Gear Watermark -->
+<span class="material-symbols-outlined absolute -right-4 -bottom-4 text-[120px] text-on-surface/5 opacity-50 rotate-12">settings</span>
+<!-- Top Transparent Logo Placeholder -->
+<div class="mb-lg opacity-80">
+<span class="material-symbols-outlined text-[64px] text-on-primary-fixed-variant" data-icon="school">school</span>
+</div>
+<!-- Header -->
+<header class="text-center mb-xl w-full">
+<h1 class="font-headline-md text-headline-md text-primary tracking-tight">
+                    Iniciar Sesión: <span class="text-on-secondary-fixed-variant">Profesores</span>
+</h1>
+<p class="font-label-md text-label-md text-on-surface-variant mt-xs">Gestión de Servicio Social Escolar</p>
+</header>
+<!-- Login Form -->
+<form class="w-full space-y-md" onsubmit="return false">
+<!-- User Input -->
+<div class="space-y-xs">
+<label class="font-label-md text-label-md text-primary flex items-center gap-xs">
+<span class="material-symbols-outlined text-[18px]" data-icon="person">person</span>
+                        Usuario
+                    </label>
+<div class="relative group">
+<input class="w-full h-12 px-md bg-white border border-outline-variant rounded-lg font-body-md text-body-md placeholder:text-outline focus:outline-none focus:border-on-secondary-fixed-variant focus:ring-2 focus:ring-on-secondary-fixed-variant/10 transition-all duration-200" placeholder="Correo electrónico o usuario" type="text"/>
+</div>
+</div>
+<!-- Password Input -->
+<div class="space-y-xs">
+<label class="font-label-md text-label-md text-primary flex items-center gap-xs">
+<span class="material-symbols-outlined text-[18px]" data-icon="lock">lock</span>
+                        Contraseña
+                    </label>
+<div class="relative group">
+<input class="w-full h-12 px-md bg-white border border-outline-variant rounded-lg font-body-md text-body-md placeholder:text-outline focus:outline-none focus:border-on-secondary-fixed-variant focus:ring-2 focus:ring-on-secondary-fixed-variant/10 transition-all duration-200" id="password-field" placeholder="Contraseña" type="password"/>
+<button class="absolute right-md top-1/2 -translate-y-1/2 text-on-surface-variant hover:text-primary transition-colors" onclick="togglePassword()" type="button">
+<span class="material-symbols-outlined text-[20px]" data-icon="visibility" id="eye-icon">visibility</span>
+</button>
+</div>
+</div>
+<!-- Primary Button -->
+<button class="w-full h-12 mt-lg bg-primary-container text-white font-label-md text-label-md tracking-wider rounded-lg shadow-lg hover:opacity-90 active:scale-[0.98] transition-all flex items-center justify-center gap-sm" type="submit">
+                    INGRESAR
+                    <span class="material-symbols-outlined text-[18px]" data-icon="login">login</span>
+</button>
+<!-- Forgot Password -->
+<div class="text-center pt-md">
+<a class="font-label-md text-label-md text-on-secondary-fixed-variant hover:underline transition-all" href="#">¿Olvidaste tu contraseña?</a>
+</div>
+</form>
+</div>
+</main>
+<!-- Footer -->
+<footer class="w-full px-margin-mobile md:px-margin-desktop py-lg text-center flex flex-col md:flex-row justify-between items-center gap-md">
+<div class="font-label-md text-label-md font-bold text-on-surface">HORASOCIAL PRO</div>
+<div class="font-body-md text-body-md text-on-surface-variant">© 2024 HORASOCIAL PRO: Gestión de Servicio Social Escolar</div>
+<div class="flex items-center gap-lg">
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Términos</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Privacidad</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Contacto</a>
+</div>
+</footer>
+<script>
+        function togglePassword() {
+            const passwordInput = document.getElementById('password-field');
+            const eyeIcon = document.getElementById('eye-icon');
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                eyeIcon.innerText = 'visibility_off';
+            } else {
+                passwordInput.type = 'password';
+                eyeIcon.innerText = 'visibility';
+            }
+        }
+    </script>
+</body></html>

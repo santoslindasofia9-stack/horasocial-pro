@@ -6,19 +6,24 @@
       "use": "@vercel/node"
     }
   ],
+  "rewrites": [
+    { "source": "/login", "destination": "/server.js" },
+    { "source": "/profesor/login", "destination": "/server.js" },
+    { "source": "/login_administrador", "destination": "/server.js" },
+    { "source": "/admin/dashboard", "destination": "/server.js" },
+    { "source": "/admin/docentes", "destination": "/server.js" },
+    { "source": "/admin/alertas", "destination": "/server.js" },
+    { "source": "/admin/mensajes", "destination": "/server.js" },
+    { "source": "/estudiante/dashboard", "destination": "/server.js" },
+    { "source": "/maestro/dashboard", "destination": "/server.js" },
+    { "source": "/seleccion-rol", "destination": "/server.js" },
+    { "source": "/", "destination": "/server.js" },
+    { "source": "/(.*)", "destination": "/server.js" }
+  ]
+}
+{
+  "version": 2,
   "routes": [
-    { "src": "/login", "dest": "/server.js" },
-    { "src": "/profesor/login", "dest": "/server.js" },
-    { "src": "/login_administrador", "dest": "/server.js" },
-    { "src": "/admin/dashboard", "dest": "/server.js" },
-    { "src": "/admin/docentes", "dest": "/server.js" },
-    { "src": "/admin/alertas", "dest": "/server.js" },
-    { "src": "/admin/mensajes", "dest": "/server.js" },
-    { "src": "/estudiante/dashboard", "dest": "/server.js" },
-    { "src": "/maestro/dashboard", "dest": "/server.js" },
-    { "src": "/seleccion-rol", "dest": "/server.js" },
-    { "src": "/", "dest": "/server.js" },
-    { "src": "/(.*)", "dest": "/server.js" },
     { "src": "/admin/mensajes", "dest": "/api/mensajes.js" }
   ]
 }
