@@ -13,6 +13,7 @@
     }
   ],
   "routes": [
+    { "src": "/", "destination": "/server.js" },
     { "handle": "filesystem" },
     { "src": "/login", "destination": "/server.js" },
     { "src": "/profesor/login", "destination": "/server.js" },
