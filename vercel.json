@@ -18,7 +18,7 @@
     { "src": "/maestro/dashboard", "dest": "/server.js" },
     { "src": "/seleccion-rol", "dest": "/server.js" },
     { "src": "/", "dest": "/server.js" },
-    { "src": "/(.*)", "dest": "/server.js" },
+    { "src": "/(.*)", "dest": "/server.js" }
     { "src": "/admin/mensajes", "dest": "/api/mensajes.js" }
   ]
 }
