@@ -29,7 +29,7 @@
       font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
       user-select: none;
     }
-    /* Background wave field — same as welcome / role selection */
+    /* Background wave field — same as welcome / role selection / login */
     .flow-field {
       position: absolute;
       left: 0;
@@ -95,8 +95,8 @@
     .slogan .line-1 { color: var(--institutional); }
     .slogan .line-2 { color: var(--sky); }
 
-    /* Login card */
-    .login-wrap {
+    /* Recovery card */
+    .recovery-wrap {
       flex: 1;
       width: 100%;
       display: flex;
@@ -104,9 +104,9 @@
       justify-content: center;
       padding: 24px 20px;
     }
-    .login-card {
+    .recovery-card {
       width: 100%;
-      max-width: 440px;
+      max-width: 460px;
       background: #fff;
       border: 1px solid rgba(209, 215, 226, 0.9);
       border-radius: 16px;
@@ -114,19 +114,22 @@
       padding: 32px;
       text-align: center;
     }
-    .login-card h1 {
+    .recovery-card h1 {
       font-family: "Plus Jakarta Sans", sans-serif;
       font-size: 24px;
       line-height: 1.3;
       font-weight: 700;
       color: var(--institutional);
+      margin-bottom: 8px;
+    }
+    .recovery-card .subtitle {
+      font-size: 14px;
+      line-height: 1.55;
+      color: var(--muted-soft);
       margin-bottom: 24px;
     }
-    .login-card h1 .rol {
-      color: var(--sky);
-    }
     .field {
-      margin-bottom: 20px;
+      margin-bottom: 16px;
       text-align: left;
     }
     .field label {
@@ -150,7 +153,7 @@
     }
     .input-wrap input {
       width: 100%;
-      padding: 14px 44px 14px 46px;
+      padding: 13px 16px 13px 46px;
       font-size: 15px;
       font-family: "Inter", sans-serif;
       color: var(--institutional);
@@ -165,20 +168,7 @@
       border-color: var(--sky);
       box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.18);
     }
-    .input-wrap .eye {
-      position: absolute;
-      right: 12px;
-      background: none;
-      border: none;
-      cursor: pointer;
-      color: var(--muted-soft);
-      font-size: 20px;
-      display: flex;
-      align-items: center;
-      padding: 4px;
-    }
-    .input-wrap .eye:hover { color: var(--sky); }
-    .btn-ingresar {
+    .btn-enviar {
       width: 100%;
       padding: 14px;
       font-family: "Inter", sans-serif;
@@ -193,10 +183,12 @@
       cursor: pointer;
       box-shadow: 0 2px 8px rgba(56, 189, 248, 0.35);
       transition: background .2s ease, transform .15s ease, box-shadow .2s ease;
+      margin-top: 6px;
     }
-    .btn-ingresar:hover { background: var(--sky-dark); box-shadow: 0 4px 12px rgba(56, 189, 248, 0.45); }
-    .btn-ingresar:active { transform: scale(0.98); }
-    .forgot {
+    .btn-enviar:hover { background: var(--sky-dark); box-shadow: 0 4px 12px rgba(56, 189, 248, 0.45); }
+    .btn-enviar:active { transform: scale(0.98); }
+    .btn-enviar:disabled { opacity: 0.6; cursor: not-allowed; }
+    .back-link {
       display: inline-block;
       margin-top: 18px;
       font-size: 12px;
@@ -204,7 +196,18 @@
       color: var(--sky);
       text-decoration: none;
     }
-    .forgot:hover { text-decoration: underline; }
+    .back-link:hover { text-decoration: underline; }
+    .msg {
+      display: none;
+      margin-top: 16px;
+      padding: 12px 14px;
+      border-radius: 10px;
+      font-size: 14px;
+      line-height: 1.5;
+      text-align: left;
+    }
+    .msg.ok { display: block; background: #E6F7EE; color: #0E5C22; border: 1px solid #B7E5C8; }
+    .msg.err { display: block; background: #FDECEA; color: #93000A; border: 1px solid #F5C6C0; }
 
     /* Footer */
     .site-footer {
@@ -233,13 +236,13 @@
     @media (max-width: 640px) {
       .site-header { padding-top: 20px; }
       .site-header .logo { height: 120px; }
-      .login-card { padding: 24px 18px; }
+      .recovery-card { padding: 24px 18px; }
       .site-footer { justify-content: center; }
     }
 </style>
 </head>
 <body>
-<!-- Background Wave Field: same central band as welcome / role selection -->
+<!-- Background Wave Field: same central band as welcome / role selection / login -->
 <div class="flow-field wiggle" aria-hidden="true">
 <svg viewBox="0 0 1600 900" preserveAspectRatio="none">
 <defs>
@@ -310,35 +313,52 @@
 </p>
 </header>
 
-<!-- Login card: estudiantes -->
-<main class="login-wrap">
-<div class="login-card">
-<h1>Iniciar Sesión: <span class="rol">estudiantes</span></h1>
+<!-- Recovery card -->
+<main class="recovery-wrap">
+<div class="recovery-card">
+<h1>Recuperar contraseña</h1>
+<p class="subtitle">Envía la solicitud con tus datos. El administrador la revisará y autorizará tu acceso.</p>
 
-<form id="loginForm" action="/login" method="post">
+<form id="recoveryForm">
 <div class="field">
-<label for="username">Código o correo electrónico</label>
+<label for="usuario">Código de estudiante</label>
+<div class="input-wrap">
+<span class="material-symbols-outlined icon">badge</span>
+<input id="usuario" name="usuario" type="text" placeholder="Código de estudiante" autocomplete="username" required/>
+</div>
+</div>
+
+<div class="field">
+<label for="nombre">Nombre completo</label>
 <div class="input-wrap">
 <span class="material-symbols-outlined icon">person</span>
-<input id="username" name="username" type="text" placeholder="Código o correo electrónico" autocomplete="username" required/>
+<input id="nombre" name="nombre" type="text" placeholder="Nombre completo" autocomplete="name" required/>
 </div>
 </div>
 
 <div class="field">
-<label for="password">Contraseña</label>
+<label for="telefono">Teléfono</label>
 <div class="input-wrap">
-<span class="material-symbols-outlined icon">lock</span>
-<input id="password" name="password" type="password" placeholder="Contraseña" autocomplete="current-password" required/>
-<button class="eye" type="button" onclick="togglePassword()" aria-label="Mostrar u ocultar contraseña">
-<span class="material-symbols-outlined" id="eyeIcon">visibility</span>
-</button>
+<span class="material-symbols-outlined icon">call</span>
+<input id="telefono" name="telefono" type="tel" placeholder="Teléfono" autocomplete="tel" required/>
 </div>
 </div>
 
-<button class="btn-ingresar" type="submit">INGRESAR</button>
+<div class="field">
+<label for="curso">Curso</label>
+<div class="input-wrap">
+<span class="material-symbols-outlined icon">groups</span>
+<input id="curso" name="curso" type="text" placeholder="Curso" required/>
+</div>
+</div>
+
+<button class="btn-enviar" type="submit">ENVIAR SOLICITUD</button>
 </form>
 
-<a class="forgot" href="/recuperar-contrasena">¿Olvidaste tu contraseña?</a>
+<div class="msg" id="msgOk">Solicitud enviada correctamente. El administrador revisará tus datos y autorizará tu acceso.</div>
+<div class="msg err" id="msgErr">No se pudo enviar la solicitud. Probalo nuevamente.</div>
+
+<a class="back-link" href="/login">← Volver al inicio de sesión</a>
 </div>
 </main>
 
@@ -353,12 +373,43 @@
 </footer>
 
 <script>
-function togglePassword() {
-  const input = document.getElementById('password');
-  const icon = document.getElementById('eyeIcon');
-  const show = input.type === 'password';
-  input.type = show ? 'text' : 'password';
-  icon.textContent = show ? 'visibility_off' : 'visibility';
-}
+document.getElementById('recoveryForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const form = e.target;
+  const btn = form.querySelector('.btn-enviar');
+  const msgOk = document.getElementById('msgOk');
+  const msgErr = document.getElementById('msgErr');
+  msgOk.style.display = 'none';
+  msgErr.style.display = 'none';
+  btn.disabled = true;
+  btn.textContent = 'ENVIANDO...';
+
+  const payload = {
+    usuario: document.getElementById('usuario').value.trim(),
+    nombre: document.getElementById('nombre').value.trim(),
+    telefono: document.getElementById('telefono').value.trim(),
+    curso: document.getElementById('curso').value.trim()
+  };
+
+  try {
+    const res = await fetch('/api/recuperar-contrasena', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    const data = await res.json().catch(() => ({}));
+    if (res.ok && data.success) {
+      document.getElementById('msgOk').style.display = 'block';
+      form.reset();
+    } else {
+      document.getElementById('msgErr').style.display = 'block';
+    }
+  } catch (err) {
+    document.getElementById('msgErr').style.display = 'block';
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'ENVIAR SOLICITUD';
+  }
+});
 </script>
 </body></html>

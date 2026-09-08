@@ -8,7 +8,8 @@
         "includeFiles": [
           "bienvenido_a_horasocial_pro_1/**",
           "selecci_n_de_rol_distribuci_n_expandida_vertical/**",
-          "stitch_horasocial_pro_landing_page/login_estudiante_distribuci_n_centrada_y_logo_optimizado_2/**"
+          "stitch_horasocial_pro_landing_page/login_estudiante_distribuci_n_centrada_y_logo_optimizado_2/**",
+          "stitch_horasocial_pro_landing_page/recuperar_contrasena_estudiante/**"
         ]
       }
     }
@@ -17,6 +18,7 @@
     { "src": "/", "destination": "/server.js" },
     { "handle": "filesystem" },
     { "src": "/login", "destination": "/server.js" },
+    { "src": "/recuperar-contrasena", "destination": "/server.js" },
     { "src": "/profesor/login", "destination": "/server.js" },
     { "src": "/login_administrador", "destination": "/server.js" },
     { "src": "/admin/dashboard", "destination": "/server.js" },
