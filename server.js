@@ -245,7 +245,7 @@ app.get('/sobre', (req, res) => {
 });
 
 app.get('/estudiante/dashboard', (req, res) => {
-    res.sendFile(path.join(__dirname, 'dashboard_estudiante_navegaci_n_optimizada', 'code.html'));
+    res.sendFile(path.join(__dirname, 'stitch_horasocial_pro_landing_page', 'dashboard_estudiante_horasocial_pro', 'code.html'));
 });
 
 app.get('/estudiante/agenda', (req, res) => {
@@ -327,7 +327,7 @@ app.get('/sobre', (req, res) => {
 });
 
 app.get('/estudiante/dashboard', (req, res) => {
-    res.sendFile(path.join(__dirname, 'dashboard_estudiante_navegaci_n_optimizada', 'code.html'));
+    res.sendFile(path.join(__dirname, 'stitch_horasocial_pro_landing_page', 'dashboard_estudiante_horasocial_pro', 'code.html'));
 });
 
 app.get('/estudiante/agenda', (req, res) => {
