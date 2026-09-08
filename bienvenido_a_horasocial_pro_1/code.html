@@ -70,10 +70,13 @@
         }
         @keyframes flow-drift {
             0%, 100% { transform: translate(0px, 0px); }
-            50% { transform: translate(16px, -12px); }
+            20% { transform: translate(9px, -16px); }
+            45% { transform: translate(19px, -6px); }
+            70% { transform: translate(11px, 6px); }
         }
         .wiggle {
-            animation: flow-drift 34s ease-in-out infinite;
+            animation: flow-drift 38s ease-in-out infinite;
+            will-change: transform;
         }
     </style>
 </head>
