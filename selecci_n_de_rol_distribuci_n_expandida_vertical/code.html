@@ -3,125 +3,113 @@
 <html class="light" lang="es"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link rel="stylesheet" href="style.css"/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<script id="tailwind-config">
-    tailwind.config = {
-      darkMode: "class",
-      theme: {
-        extend: {
-          "colors": {
-            "institutional-blue": "#0F172A",
-            "bright-sky": "#38BDF8",
-            "surface-container-highest": "#e0e3e5",
-            "primary": "#000000",
-            "on-tertiary-fixed": "#001e2c",
-            "on-tertiary-container": "#008ebf",
-            "on-primary-fixed-variant": "#3f465c",
-            "inverse-primary": "#bec6e0",
-            "secondary-fixed-dim": "#89ceff",
-            "surface-bright": "#f7f9fb",
-            "tertiary-container": "#001e2c",
-            "surface-tint": "#565e74",
-            "on-error-container": "#93000a",
-            "inverse-surface": "#2d3133",
-            "secondary-fixed": "#c9e6ff",
-            "surface-container": "#eceef0",
-            "on-tertiary": "#ffffff",
-            "primary-fixed-dim": "#bec6e0",
-            "outline": "#76777d",
-            "on-background": "#191c1e",
-            "tertiary-fixed-dim": "#7bd0ff",
-            "surface-container-high": "#e6e8ea",
-            "on-secondary-container": "#004666",
-            "surface-container-low": "#f2f4f6",
-            "primary-fixed": "#dae2fd",
-            "error-container": "#ffdad6",
-            "on-primary-container": "#7c839b",
-            "tertiary": "#000000",
-            "inverse-on-surface": "#eff1f3",
-            "on-surface-variant": "#45464d",
-            "error": "#ba1a1a",
-            "tertiary-fixed": "#c4e7ff",
-            "on-primary": "#ffffff",
-            "primary-container": "#131b2e",
-            "surface-container-lowest": "#ffffff",
-            "background": "#f7f9fb",
-            "surface": "#f7f9fb",
-            "on-surface": "#191c1e",
-            "outline-variant": "#c6c6cd",
-            "on-secondary-fixed": "#001e2f",
-            "on-secondary-fixed-variant": "#004c6e",
-            "on-secondary": "#ffffff",
-            "on-primary-fixed": "#131b2e",
-            "surface-variant": "#e0e3e5",
-            "on-error": "#ffffff",
-            "secondary": "#006591",
-            "on-tertiary-fixed-variant": "#004c69"
-          },
-          "borderRadius": {
-            "DEFAULT": "0.25rem",
-            "lg": "0.5rem",
-            "xl": "0.75rem",
-            "full": "9999px"
-          },
-          "spacing": {
-            "unit": "4px",
-            "margin-mobile": "16px",
-            "margin-desktop": "48px",
-            "lg": "24px",
-            "xs": "4px",
-            "md": "16px",
-            "gutter": "24px",
-            "sm": "8px",
-            "xl": "32px"
-          },
-          "fontFamily": {
-            "body-md": ["Inter"],
-            "headline-lg-mobile": ["Plus Jakarta Sans"],
-            "label-sm": ["Inter"],
-            "headline-md": ["Plus Jakarta Sans"],
-            "headline-lg": ["Plus Jakarta Sans"],
-            "display-lg": ["Plus Jakarta Sans"],
-            "body-lg": ["Inter"],
-            "label-md": ["Inter"],
-            "headline-sm": ["Plus Jakarta Sans"]
-          },
-          "fontSize": {
-            "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
-            "headline-lg-mobile": ["28px", {"lineHeight": "1.2", "fontWeight": "600"}],
-            "label-sm": ["12px", {"lineHeight": "1.2", "fontWeight": "600"}],
-            "headline-md": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
-            "headline-lg": ["32px", {"lineHeight": "1.2", "fontWeight": "600"}],
-            "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
-            "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
-            "label-md": ["14px", {"lineHeight": "1.4", "letterSpacing": "0.01em", "fontWeight": "500"}],
-            "headline-sm": ["20px", {"lineHeight": "1.4", "fontWeight": "600"}]
-          }
-        },
-      },
-    }
-  </script>
+
 <style>
     .material-symbols-outlined {
       font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
     }
-    .blur-blob {
-      filter: blur(100px);
-      z-index: -1;
+    .flow-field {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 30%;
+      height: 40%;
+      z-index: 0;
+      pointer-events: none;
+      overflow: visible;
+    }
+    .flow-field svg {
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+    }
+    .wf-l {
+      fill: none;
+      stroke-width: 0.9;
+      vector-effect: non-scaling-stroke;
+    }
+    .wiggle {
+      animation: flow-drift 34s ease-in-out infinite;
+    }
+    @keyframes flow-drift {
+      0%, 100% { transform: translate(0, 0); }
+      50% { transform: translate(16px, -12px); }
+    }
+    header, main, footer {
+      position: relative;
+      z-index: 1;
     }
   </style>
 </head>
-<body class="bg-surface font-body-md text-on-surface overflow-hidden min-h-screen h-screen relative flex flex-col justify-between">
-<!-- Dynamic Background Blurs -->
-<div class="fixed inset-0 -z-10 bg-gradient-to-br from-[#FDFBF7] via-[#F7F9FB] to-[#E0F2FE]">
-<div class="absolute top-[-5%] left-[-5%] w-[60%] h-[60%] rounded-full bg-bright-sky/15 blur-blob"></div>
-<div class="absolute bottom-[-5%] right-[-5%] w-[50%] h-[50%] rounded-full bg-pink-200/10 blur-blob"></div>
+<body class="bg-white font-body-md text-on-surface overflow-hidden min-h-screen h-screen relative flex flex-col justify-between">
+<!-- Background Wave Field: same central band as welcome -->
+<div class="flow-field wiggle" aria-hidden="true">
+    <svg viewBox="0 0 1600 900" preserveAspectRatio="none">
+        <defs>
+            <linearGradient id="gradField" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#cde9ff"/>
+                <stop offset="35%" stop-color="#9fd4ff"/>
+                <stop offset="70%" stop-color="#5fb4f7"/>
+                <stop offset="100%" stop-color="#7dbfc8"/>
+            </linearGradient>
+        </defs>
+<path class="wf-l" stroke="url(#gradField)" opacity="0.11" transform="translate(0 6.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+        <path class="wf-l" stroke="url(#gradField)" opacity="0.14" transform="translate(11 24.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+        <path class="wf-l" stroke="url(#gradField)" opacity="0.17" transform="translate(22 43.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+        <path class="wf-l" stroke="url(#gradField)" opacity="0.20" transform="translate(33 61.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+        <path class="wf-l" stroke="url(#gradField)" opacity="0.22" transform="translate(44 80.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+        <path class="wf-l" stroke="url(#gradField)" opacity="0.25" transform="translate(55 98.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+        <path class="wf-l" stroke="url(#gradField)" opacity="0.27" transform="translate(66 117.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+        <path class="wf-l" stroke="url(#gradField)" opacity="0.30" transform="translate(77 135.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+        <path class="wf-l" stroke="url(#gradField)" opacity="0.32" transform="translate(88 154.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+        <path class="wf-l" stroke="url(#gradField)" opacity="0.34" transform="translate(99 172.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+        <path class="wf-l" stroke="url(#gradField)" opacity="0.37" transform="translate(110 191.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+        <path class="wf-l" stroke="url(#gradField)" opacity="0.39" transform="translate(121 209.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+        <path class="wf-l" stroke="url(#gradField)" opacity="0.41" transform="translate(132 228.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+        <path class="wf-l" stroke="url(#gradField)" opacity="0.42" transform="translate(143 246.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+        <path class="wf-l" stroke="url(#gradField)" opacity="0.44" transform="translate(154 265.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+        <path class="wf-l" stroke="url(#gradField)" opacity="0.46" transform="translate(165 283.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+        <path class="wf-l" stroke="url(#gradField)" opacity="0.47" transform="translate(176 302.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+        <path class="wf-l" stroke="url(#gradField)" opacity="0.48" transform="translate(187 320.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+        <path class="wf-l" stroke="url(#gradField)" opacity="0.49" transform="translate(198 339.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+        <path class="wf-l" stroke="url(#gradField)" opacity="0.50" transform="translate(209 357.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+        <path class="wf-l" stroke="url(#gradField)" opacity="0.51" transform="translate(220 376.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+        <path class="wf-l" stroke="url(#gradField)" opacity="0.51" transform="translate(231 394.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+        <path class="wf-l" stroke="url(#gradField)" opacity="0.52" transform="translate(242 413.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+        <path class="wf-l" stroke="url(#gradField)" opacity="0.52" transform="translate(253 431.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+        <path class="wf-l" stroke="url(#gradField)" opacity="0.52" transform="translate(264 450.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+        <path class="wf-l" stroke="url(#gradField)" opacity="0.52" transform="translate(275 468.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+        <path class="wf-l" stroke="url(#gradField)" opacity="0.51" transform="translate(286 487.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+        <path class="wf-l" stroke="url(#gradField)" opacity="0.51" transform="translate(297 505.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+        <path class="wf-l" stroke="url(#gradField)" opacity="0.50" transform="translate(308 524.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+        <path class="wf-l" stroke="url(#gradField)" opacity="0.49" transform="translate(319 542.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+        <path class="wf-l" stroke="url(#gradField)" opacity="0.48" transform="translate(330 561.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+        <path class="wf-l" stroke="url(#gradField)" opacity="0.47" transform="translate(341 579.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+        <path class="wf-l" stroke="url(#gradField)" opacity="0.46" transform="translate(352 598.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+        <path class="wf-l" stroke="url(#gradField)" opacity="0.44" transform="translate(363 616.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+        <path class="wf-l" stroke="url(#gradField)" opacity="0.42" transform="translate(374 635.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+        <path class="wf-l" stroke="url(#gradField)" opacity="0.41" transform="translate(385 653.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+        <path class="wf-l" stroke="url(#gradField)" opacity="0.39" transform="translate(396 672.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+        <path class="wf-l" stroke="url(#gradField)" opacity="0.37" transform="translate(407 690.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+        <path class="wf-l" stroke="url(#gradField)" opacity="0.34" transform="translate(418 709.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+        <path class="wf-l" stroke="url(#gradField)" opacity="0.32" transform="translate(429 727.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+        <path class="wf-l" stroke="url(#gradField)" opacity="0.30" transform="translate(440 746.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+        <path class="wf-l" stroke="url(#gradField)" opacity="0.27" transform="translate(451 764.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+        <path class="wf-l" stroke="url(#gradField)" opacity="0.25" transform="translate(462 783.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+        <path class="wf-l" stroke="url(#gradField)" opacity="0.22" transform="translate(473 801.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+        <path class="wf-l" stroke="url(#gradField)" opacity="0.20" transform="translate(484 820.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+        <path class="wf-l" stroke="url(#gradField)" opacity="0.17" transform="translate(495 838.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+        <path class="wf-l" stroke="url(#gradField)" opacity="0.14" transform="translate(506 857.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+        <path class="wf-l" stroke="url(#gradField)" opacity="0.11" transform="translate(517 875.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+</svg>
 </div>
+
 <!-- Top section: Logo and Slogan -->
 <header class="w-full flex flex-col items-center pt-xl">
 <div class="bg-transparent mb-6">
-<img alt="HORASOCIAL PRO Logo" class="h-24 w-auto object-contain mix-blend-multiply" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBl0_W9o0isr1E81a1ecAaftLUFNSxWfoq4b2vQUpjiQJIGuEArx0ORA6uZeLxm4VwWZWYbxI31qfhIPVKxaidEz7wwBHPuS5AOaWO7vHr7LoOOcO_UVoMvFFWEAcllJ_HhnLwIEaJKAcEkGB9P7PVxfsnjDl_Xv6BUMooxWANxcRFdtFaOBVbxtyECYSl3ZkLhzSTsfzEfCBZUmL1g3hVO8rUpNIAMSP5j-a4s1waL7ePWk4Ia51DIBDexIXSwj2bjEfDFejB0NrOU"/>
+<img alt="HORASOCIAL PRO Logo" class="h-32 w-auto object-contain border-[1.5px] border-black/75 rounded-[14px] p-2 bg-white" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBl0_W9o0isr1E81a1ecAaftLUFNSxWfoq4b2vQUpjiQJIGuEArx0ORA6uZeLxm4VwWZWYbxI31qfhIPVKxaidEz7wwBHPuS5AOaWO7vHr7LoOOcO_UVoMvFFWEAcllJ_HhnLwIEaJKAcEkGB9P7PVxfsnjDl_Xv6BUMooxWANxcRFdtFaOBVbxtyECYSl3ZkLhzSTsfzEfCBZUmL1g3hVO8rUpNIAMSP5j-a4s1waL7ePWk4Ia51DIBDexIXSwj2bjEfDFejB0NrOU"/>
 </div>
 <div class="text-center px-margin-mobile">
 <p class="font-headline-sm text-headline-sm flex flex-col items-center gap-1">
@@ -132,7 +120,7 @@
 </header>
 <!-- Middle section: Role Cards -->
 <main class="w-full px-lg flex flex-col items-center justify-center flex-grow">
-<div class="w-full grid grid-cols-3 gap-sm max-w-md">
+<div class="w-full grid grid-cols-3 gap-lg max-w-lg">
 <!-- Card 1: Estudiante -->
 <button class="group flex flex-col aspect-square bg-white rounded-xl shadow-md border border-surface-variant/20 transition-all duration-300 active:scale-95 items-center justify-center p-2 text-center">
 <div class="w-12 h-12 rounded-full bg-bright-sky flex items-center justify-center mb-sm shadow-sm">
@@ -158,7 +146,7 @@
 </main>
 <!-- Bottom section: Help and Footer -->
 <footer class="w-full px-margin-mobile pb-sm pt-md text-center">
-<div class="mb-md">
+<div class="mb-sm">
 <p class="font-label-md text-label-md text-outline">
         ¿Necesitas ayuda? 
         <a class="text-bright-sky font-semibold hover:underline" href="#">Consulta nuestra guía de acceso</a>
@@ -168,7 +156,7 @@
 <span class="font-label-md text-label-md font-bold text-on-surface">HORASOCIAL PRO</span>
 <p class="font-label-sm text-label-sm text-on-surface-variant">© 2024 HORASOCIAL PRO: Gestión de Servicio Social Escolar</p>
 </div>
-<nav class="flex justify-center gap-md mb-2">
+<nav class="flex justify-center gap-md mb-1">
 <a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary" href="#">Términos</a>
 <a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary" href="#">Privacidad</a>
 <a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary" href="#">Contacto</a>
