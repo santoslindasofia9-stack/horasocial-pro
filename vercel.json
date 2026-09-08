@@ -7,7 +7,8 @@
       "config": {
         "includeFiles": [
           "bienvenido_a_horasocial_pro_1/**",
-          "selecci_n_de_rol_distribuci_n_expandida_vertical/**"
+          "selecci_n_de_rol_distribuci_n_expandida_vertical/**",
+          "stitch_horasocial_pro_landing_page/login_estudiante_distribuci_n_centrada_y_logo_optimizado_2/**"
         ]
       }
     }
