@@ -190,9 +190,20 @@ app.post('/api/rechazar-solicitud', (req, res) => {
                 res.json({ success: true, message: 'Solicitud ignorada' });
             }
         });
-    } else {
+} else {
         deleteRequestLocal();
     }
+});
+
+// Ruta de ingreso desde el login de estudiante: valida que el usuario completó
+// el formulario y lo lleva al dashboard. La navegación real POST->redirect
+// permite que el navegador ofrezca guardar la contraseña.
+app.post('/api/login-estudiante', (req, res) => {
+    const { username, password } = req.body;
+    if (!username || !password) {
+        return res.status(400).json({ error: 'Usuario y contraseña son obligatorios' });
+    }
+    res.redirect(302, '/estudiante/dashboard');
 });
 
 // ==========================================
