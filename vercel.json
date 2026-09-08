@@ -3,7 +3,13 @@
   "builds": [
     {
       "src": "server.js",
-      "use": "@vercel/node"
+      "use": "@vercel/node",
+      "config": {
+        "includeFiles": [
+          "bienvenido_a_horasocial_pro_1/**",
+          "selecci_n_de_rol_distribuci_n_expandida_vertical/**"
+        ]
+      }
     }
   ],
   "routes": [

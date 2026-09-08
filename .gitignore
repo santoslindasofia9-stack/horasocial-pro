@@ -1,3 +1,5 @@
 node_modules/
 .env
 *.log
+.vercel/
+stitch_horasocial_pro_landing_page/
