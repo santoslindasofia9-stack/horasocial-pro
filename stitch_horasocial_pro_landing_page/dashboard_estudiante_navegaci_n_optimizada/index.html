@@ -1,0 +1,306 @@
+<!DOCTYPE html><html class="light" lang="es"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Horasocial Pro - Student Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary-fixed": "#c4e7ff",
+                    "surface-container-highest": "#e0e3e5",
+                    "primary-fixed": "#dae2fd",
+                    "on-surface-variant": "#45464d",
+                    "tertiary-container": "#001e2c",
+                    "surface": "#f7f9fb",
+                    "inverse-primary": "#bec6e0",
+                    "on-tertiary-fixed-variant": "#004c69",
+                    "on-primary-container": "#7c839b",
+                    "on-background": "#191c1e",
+                    "on-tertiary-fixed": "#001e2c",
+                    "on-secondary-container": "#004666",
+                    "on-secondary-fixed": "#001e2f",
+                    "background": "#f7f9fb",
+                    "surface-container-low": "#f2f4f6",
+                    "on-primary": "#ffffff",
+                    "surface-container": "#eceef0",
+                    "primary-container": "#131b2e",
+                    "on-primary-fixed": "#131b2e",
+                    "surface-variant": "#e0e3e5",
+                    "surface-container-lowest": "#ffffff",
+                    "secondary-fixed": "#c9e6ff",
+                    "primary": "#000000",
+                    "secondary": "#006591",
+                    "outline": "#76777d",
+                    "secondary-fixed-dim": "#89ceff",
+                    "on-error": "#ffffff",
+                    "tertiary-fixed-dim": "#7bd0ff",
+                    "secondary-container": "#39b8fd",
+                    "error-container": "#ffdad6",
+                    "surface-dim": "#d8dadc",
+                    "on-tertiary-container": "#008ebf",
+                    "on-tertiary": "#ffffff",
+                    "on-primary-fixed-variant": "#3f465c",
+                    "outline-variant": "#c6c6cd",
+                    "on-secondary": "#ffffff",
+                    "on-secondary-fixed-variant": "#004c6e",
+                    "surface-tint": "#565e74",
+                    "tertiary": "#000000",
+                    "inverse-surface": "#2d3133",
+                    "inverse-on-surface": "#eff1f3",
+                    "primary-fixed-dim": "#bec6e0",
+                    "error": "#ba1a1a",
+                    "surface-bright": "#f7f9fb",
+                    "on-surface": "#191c1e",
+                    "surface-container-high": "#e6e8ea",
+                    "on-error-container": "#93000a"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px",
+                    "3xl": "1.5rem"
+            },
+            "spacing": {
+                    "unit": "4px",
+                    "margin-desktop": "48px",
+                    "xs": "4px",
+                    "gutter": "24px",
+                    "md": "16px",
+                    "xl": "32px",
+                    "lg": "24px",
+                    "margin-mobile": "16px",
+                    "sm": "8px"
+            },
+            "fontFamily": {
+                    "label-md": ["Inter"],
+                    "headline-lg": ["Plus Jakarta Sans"],
+                    "body-lg": ["Inter"],
+                    "headline-sm": ["Plus Jakarta Sans"],
+                    "label-sm": ["Inter"],
+                    "display-lg": ["Plus Jakarta Sans"],
+                    "headline-lg-mobile": ["Plus Jakarta Sans"],
+                    "body-md": ["Inter"],
+                    "headline-md": ["Plus Jakarta Sans"]
+            },
+            "fontSize": {
+                    "label-md": ["14px", {"lineHeight": "1.4", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                    "headline-lg": ["32px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "headline-sm": ["20px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                    "label-sm": ["12px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                    "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-lg-mobile": ["28px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                    "headline-md": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3, .font-jakarta { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .custom-shadow {
+            box-shadow: 0 4px 20px rgba(15, 23, 42, 0.05);
+        }
+        .nav-shadow {
+            box-shadow: 0 -4px 20px rgba(15, 23, 42, 0.05);
+        }
+        .bg-gear-pattern {
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 5c-1.38 0-2.5 1.12-2.5 2.5V10c-1.12.18-2.2.5-3.23.95l-1.77-1.77c-.98-.98-2.56-.98-3.54 0s-.98 2.56 0 3.54l1.77 1.77c-.45 1.03-.77 2.11-.95 3.23H17.5c-1.38 0-2.5 1.12-2.5 2.5s1.12 2.5 2.5 2.5h2.28c.18 1.12.5 2.2.95 3.23l-1.77 1.77c-.98.98-.98 2.56 0 3.54s2.56.98 3.54 0l1.77-1.77c1.03.45 2.11.77 3.23.95v2.28c0 1.38 1.12 2.5 2.5 2.5s2.5-1.12 2.5-2.5v-2.28c1.12-.18 2.2-.5 3.23-.95l1.77 1.77c.98.98 2.56.98 3.54 0s.98-2.56 0-3.54l-1.77-1.77c.45-1.03.77-2.11.95-3.23h2.28c1.38 0 2.5-1.12 2.5-2.5s-1.12-2.5-2.5-2.5h-2.28c-.18-1.12-.5-2.2-.95-3.23l1.77-1.77c.98-.98.98-2.56 0-3.54s-2.56-.98-3.54 0l-1.77 1.77c-1.03-.45-2.11-.77-3.23-.95V7.5C32.5 6.12 31.38 5 30 5zm0 10c8.28 0 15 6.72 15 15s-6.72 15-15 15-15-6.72-15-15 6.72-15 15-15z' fill='%230f172a' fill-opacity='0.02' fill-rule='evenodd'/%3E%3C/svg%3E");
+        }
+    </style>
+</head>
+<body class="bg-surface min-h-screen pb-32 bg-gear-pattern">
+<!-- Top AppBar (from JSON logic) -->
+<header class="fixed top-0 w-full z-50 bg-surface/80 dark:bg-surface-dim/80 backdrop-blur-md shadow-sm h-16 flex items-center justify-between px-margin-mobile">
+<div class="flex items-center gap-3">
+<div class="bg-primary p-1.5 rounded-lg">
+<span class="material-symbols-outlined text-white text-[20px]" data-icon="school">school</span>
+</div>
+<span class="font-headline-md text-headline-md text-primary font-bold tracking-tight">Horasocial Pro</span>
+</div>
+<div class="flex items-center gap-4">
+<button class="relative p-2 rounded-full hover:bg-surface-container-high transition-colors active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="notifications">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full border-2 border-surface"></span>
+</button>
+<div class="w-10 h-10 rounded-full overflow-hidden border-2 border-primary-fixed shadow-sm">
+<img alt="Student Profile Photo" class="w-full h-full object-cover" data-alt="A professional yet friendly close-up portrait of a young male university student with a bright smile. He is in a modern campus library with soft natural light streaming in, creating a clean and facilitative atmosphere. The image is captured with a high-end lens, featuring a shallow depth of field that softly blurs the books in the background. The aesthetic is clean, academic, and minimalist." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAkrvKQnHDlPMp7705qkei2xMqO9j7nDyJNByTpol_9iPrHSNhSXYWXlhueFZ9ic7OytKS8XSdTeToTk7ayz-V5Oyo76Cpw6PHxP603EzdcFUinIZWqOQuniASrkw0Q-EnlOpQUxk9tKmy2R4kjEz6VhWwDXgau308W60bq0icqQmnE0nh0o2ZMN-BJy5MlblaPQ5vHpBrKtFeM0RsI3hjdiptdSppJVvFzTc9nI-FsTOhkaypT5uWixNDK5cIKnJCkBq76dU3FhXMi">
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="pt-24 px-margin-mobile max-w-4xl mx-auto space-y-xl pb-32">
+<!-- Greeting Header -->
+<section class="animate-in fade-in slide-in-from-bottom-4 duration-700">
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-primary font-bold">¡Hola, Alex!</h1>
+<p class="text-on-surface-variant font-body-md text-body-md mt-1">Tu progreso de servicio social hoy.</p>
+</section>
+<!-- Progress Section (Glassmorphism Featured Banner) -->
+<section class="animate-in fade-in slide-in-from-bottom-6 duration-700 delay-100">
+<div class="glass-card rounded-3xl p-lg relative overflow-hidden custom-shadow">
+<div class="absolute -right-10 -top-10 w-40 h-40 bg-secondary-container/20 rounded-full blur-3xl"></div>
+<div class="relative z-10">
+<div class="flex justify-between items-end mb-4">
+<div>
+<span class="text-label-sm font-label-sm text-secondary uppercase tracking-wider">Servicio Social</span>
+<h2 class="font-headline-sm text-headline-sm text-primary-container mt-1">Has cumplido 40 de 80 horas</h2>
+</div>
+<div class="text-right">
+<span class="text-display-lg font-display-lg text-primary tracking-tighter">50<span class="text-headline-md">%</span></span>
+</div>
+</div>
+<div class="w-full h-4 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-secondary-container w-1/2 rounded-full transition-all duration-1000 ease-out relative">
+<div class="absolute inset-0 bg-gradient-to-r from-transparent to-white/30"></div>
+</div>
+</div>
+<div class="flex justify-between mt-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-sm" data-icon="task_alt">task_alt</span>
+<span class="text-label-md font-label-md text-on-surface-variant">Próxima meta: 60h</span>
+</div>
+<button class="text-secondary font-label-md hover:underline flex items-center gap-1 active:scale-95 transition-transform">
+                            Ver detalles <span class="material-symbols-outlined text-sm" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Activity List Section -->
+<section class="space-y-lg animate-in fade-in slide-in-from-bottom-8 duration-700 delay-200">
+<div class="flex items-center justify-between">
+<h2 class="font-headline-sm text-headline-sm text-primary-container">Tus Actividades</h2>
+<button class="text-on-surface-variant font-label-md hover:text-primary transition-colors">Ver todas</button>
+</div>
+<!-- Activities Bento-like Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-gutter">
+<!-- Activity Card 1 -->
+<div class="bg-surface-container-lowest p-lg rounded-3xl custom-shadow hover:bg-surface-container-low transition-all duration-300 group">
+<div class="flex items-start justify-between">
+<div class="p-3 bg-secondary-container/10 rounded-2xl group-hover:bg-secondary-container group-hover:text-white transition-colors duration-300">
+<span class="material-symbols-outlined text-secondary group-hover:text-white" data-icon="library_books">library_books</span>
+</div>
+<div class="px-3 py-1 bg-tertiary-fixed rounded-full text-on-tertiary-fixed-variant font-label-sm text-label-sm">
+                            En curso
+                        </div>
+</div>
+<div class="mt-md">
+<h3 class="font-headline-sm text-headline-sm text-primary">Apoyo en Biblioteca</h3>
+<div class="flex flex-col gap-1 mt-2">
+<div class="flex items-center gap-2 text-on-surface-variant">
+<span class="material-symbols-outlined text-sm" data-icon="calendar_today">calendar_today</span>
+<span class="font-label-md text-label-md">24 de Oct, 2023</span>
+</div>
+<div class="flex items-center gap-2 text-on-surface-variant">
+<span class="material-symbols-outlined text-sm" data-icon="schedule">schedule</span>
+<span class="font-label-md text-label-md">09:00 - 13:00 (4h)</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Activity Card 2 -->
+<div class="bg-surface-container-lowest p-lg rounded-3xl custom-shadow hover:bg-surface-container-low transition-all duration-300 group" style="transform: translateY(0px);">
+<div class="flex items-start justify-between">
+<div class="p-3 bg-tertiary-fixed/30 rounded-2xl group-hover:bg-tertiary-container group-hover:text-white transition-colors duration-300">
+<span class="material-symbols-outlined text-on-tertiary-container group-hover:text-white" data-icon="calculate">calculate</span>
+</div>
+<div class="px-3 py-1 bg-surface-container-highest rounded-full text-on-surface-variant font-label-sm text-label-sm">
+                            Mañana
+                        </div>
+</div>
+<div class="mt-md">
+<h3 class="font-headline-sm text-headline-sm text-primary">Tutoría de Matemáticas</h3>
+<div class="flex flex-col gap-1 mt-2">
+<div class="flex items-center gap-2 text-on-surface-variant">
+<span class="material-symbols-outlined text-sm" data-icon="calendar_today">calendar_today</span>
+<span class="font-label-md text-label-md">25 de Oct, 2023</span>
+</div>
+<div class="flex items-center gap-2 text-on-surface-variant">
+<span class="material-symbols-outlined text-sm" data-icon="schedule">schedule</span>
+<span class="font-label-md text-label-md">15:00 - 17:00 (2h)</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Activity Card 3 (Featured/Full Width on Mobile) -->
+<div class="md:col-span-2 bg-surface-container-lowest p-lg rounded-3xl custom-shadow hover:bg-surface-container-low transition-all duration-300 flex flex-col md:flex-row md:items-center justify-between group gap-lg" style="transform: translateY(0px);">
+<div class="flex items-center gap-lg">
+<div class="p-4 bg-error-container/20 rounded-2xl group-hover:bg-error group-hover:text-white transition-colors duration-300">
+<span class="material-symbols-outlined text-error group-hover:text-white" data-icon="volunteer_activism">volunteer_activism</span>
+</div>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-primary">Campaña de Reciclaje</h3>
+<p class="text-on-surface-variant font-body-md text-body-md">Sábado 28 de Oct • Campus Principal</p>
+</div>
+</div>
+<button class="bg-primary text-white px-lg py-md rounded-2xl font-label-md text-label-md active:scale-95 transition-transform">
+                        Inscribirme
+                    </button>
+</div><div class="flex justify-center mt-xl mb-[100px]">
+  <button class="flex items-center justify-center gap-2 px-xl py-md border border-[#1E293B] rounded-full text-[#1E293B] font-label-md text-label-md hover:bg-surface-container-low active:scale-95 transition-all w-[70%]">
+    <span class="material-symbols-outlined text-[18px]">logout</span>
+    <span class="">Cerrar Sesión</span>
+  </button>
+</div>
+</div>
+</section>
+<!-- Academic Gear Decoration (Hidden on mobile for clarity) -->
+<div class="hidden md:block absolute right-0 top-1/2 -translate-y-1/2 opacity-5 pointer-events-none transform rotate-12 scale-150">
+<span class="material-symbols-outlined text-[300px]" data-icon="settings">settings</span>
+</div>
+</main><nav class="fixed bottom-0 left-0 w-full bg-white/80 backdrop-blur-md border-t border-outline-variant/30 nav-shadow z-50">
+<div class="flex justify-around items-center h-20 px-margin-mobile pb-safe">
+<a class="flex flex-col items-center gap-1 text-secondary" href="#">
+<span class="material-symbols-outlined text-[24px]">dashboard</span>
+<span class="font-label-sm text-label-sm font-bold">Dashboard</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-on-surface-variant" href="#">
+<span class="material-symbols-outlined text-[24px]">calendar_month</span>
+<span class="font-label-sm text-label-sm">Agenda</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-on-surface-variant" href="#">
+<span class="material-symbols-outlined text-[24px]">add_circle</span>
+<span class="font-label-sm text-label-sm">Registro</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-on-surface-variant" href="#">
+<span class="material-symbols-outlined text-[24px]">chat_bubble</span>
+<span class="font-label-sm text-label-sm">Mensajes</span>
+</a>
+</div>
+</nav>
+<!-- Bottom Navigation Bar (from JSON logic) -->
+<script>
+        // Micro-interaction for activity cards
+        document.querySelectorAll('.custom-shadow').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'translateY(-4px)';
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0)';
+            });
+        });
+
+        // Add subtle parallax effect to background gear
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            document.body.style.backgroundPositionY = -(scrolled * 0.1) + 'px';
+        });
+    </script>
+
+
+</body></html>

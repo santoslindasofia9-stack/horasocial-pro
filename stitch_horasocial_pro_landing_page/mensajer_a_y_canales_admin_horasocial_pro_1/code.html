@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+
+<html lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Servicio Social - Mensajería</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;family=Comfortaa:wght@400;600;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;family=Plus+Jakarta+Sans:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .active-icon {
+            font-variation-settings: 'FILL' 1;
+        }
+        .chat-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .chat-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .chat-scrollbar::-webkit-scrollbar-thumb {
+            background: #E2E8F0;
+            border-radius: 10px;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(226, 232, 240, 0.5);
+        }
+        .blob {
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            background: linear-gradient(135deg, rgba(14, 165, 233, 0.1) 0%, rgba(15, 23, 42, 0.05) 100%);
+            filter: blur(80px);
+            border-radius: 50%;
+            z-index: -1;
+        }
+        .font-comfortaa { font-family: 'Comfortaa', cursive; }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              colors: {
+                "secondary-fixed": "#c9e6ff",
+                "on-primary-fixed-variant": "#3f465c",
+                "surface-container-high": "#e6e8ea",
+                "background": "#f7f9fb",
+                "surface-container-lowest": "#ffffff",
+                "surface-container": "#eceef0",
+                "on-tertiary": "#ffffff",
+                "on-surface-variant": "#45464d",
+                "primary-fixed-dim": "#bec6e0",
+                "inverse-primary": "#bec6e0",
+                "on-tertiary-container": "#008ebf",
+                "surface-tint": "#565e74",
+                "on-secondary-fixed": "#001e2f",
+                "on-surface": "#191c1e",
+                "tertiary-container": "#001e2c",
+                "on-tertiary-fixed": "#001e2c",
+                "on-error": "#ffffff",
+                "surface": "#f8fafc",
+                "secondary": "#0ea5e9",
+                "primary-fixed": "#dae2fd",
+                "on-tertiary-fixed-variant": "#004c69",
+                "tertiary-fixed": "#c4e7ff",
+                "secondary-fixed-dim": "#89ceff",
+                "outline": "#76777d",
+                "secondary-container": "#e0f2fe",
+                "tertiary-fixed-dim": "#7bd0ff",
+                "surface-bright": "#f7f9fb",
+                "error-container": "#ffdad6",
+                "surface-variant": "#e0e3e5",
+                "surface-dim": "#d8dadc",
+                "inverse-surface": "#2d3133",
+                "primary": "#0f172a",
+                "on-primary": "#ffffff",
+                "on-secondary-container": "#0ea5e9",
+                "primary-container": "#131b2e",
+                "tertiary": "#000000",
+                "surface-container-low": "#f2f4f6",
+                "outline-variant": "#c6c6cd",
+                "surface-container-highest": "#e0e3e5",
+                "on-background": "#191c1e",
+                "on-primary-fixed": "#131b2e",
+                "error": "#ba1a1a",
+                "on-error-container": "#93000a",
+                "on-primary-container": "#7c839b",
+                "inverse-on-surface": "#eff1f3",
+                "on-secondary-fixed-variant": "#004c6e",
+                "on-secondary": "#ffffff"
+              },
+              borderRadius: {
+                "DEFAULT": "0.25rem",
+                "lg": "1rem",
+                "xl": "1.25rem",
+                "full": "9999px"
+              },
+              spacing: {
+                "lg": "24px",
+                "gutter": "24px",
+                "margin-desktop": "48px",
+                "xs": "4px",
+                "sm": "8px",
+                "md": "16px",
+                "xl": "32px",
+                "margin-mobile": "16px",
+                "unit": "4px"
+              },
+              fontFamily: {
+                "headline-lg": ["Plus Jakarta Sans"],
+                "headline-sm": ["Plus Jakarta Sans"],
+                "headline-md": ["Plus Jakarta Sans"],
+                "body-lg": ["Inter"],
+                "body-md": ["Inter"],
+                "display-lg": ["Plus Jakarta Sans"],
+                "label-md": ["Inter"],
+                "label-sm": ["Inter"]
+              },
+              fontSize: {
+                "headline-lg": ["32px", { "lineHeight": "1.2", "fontWeight": "600" }],
+                "headline-sm": ["20px", { "lineHeight": "1.4", "fontWeight": "600" }],
+                "headline-md": ["24px", { "lineHeight": "1.3", "fontWeight": "600" }],
+                "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                "body-md": ["16px", { "lineHeight": "1.5", "fontWeight": "400" }],
+                "display-lg": ["48px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                "label-md": ["14px", { "lineHeight": "1.4", "letterSpacing": "0.01em", "fontWeight": "500" }],
+                "label-sm": ["12px", { "lineHeight": "1.2", "fontWeight": "600" }]
+              }
+            },
+          },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface font-body-md overflow-hidden h-screen flex flex-col">
+<!-- Decorative Blobs -->
+<div class="blob top-[-100px] left-[-100px]"></div>
+<div class="blob bottom-[-100px] right-[-100px]"></div>
+<!-- Header / TopAppBar -->
+<header class="bg-surface-container-lowest shadow-sm docked full-width top-0 z-50">
+<div class="flex justify-between items-center px-lg py-md w-full max-w-[1600px] mx-auto">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 bg-primary rounded-lg flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined">school</span>
+</div>
+<h1 class="font-headline-md text-headline-md font-bold text-primary tracking-tight">Servicio Social</h1>
+</div>
+<div class="flex items-center gap-4">
+<div class="text-right hidden sm:block">
+<p class="font-label-md text-on-surface font-semibold">Coordinadora Carolina Rojas</p>
+<p class="text-xs text-on-surface-variant">Administradora General</p>
+</div>
+<div class="relative">
+<img alt="Carolina Rojas" class="w-10 h-10 rounded-full border-2 border-secondary-container object-cover" data-alt="A professional high-resolution headshot of a female school administrator with a warm and approachable expression, set against a soft-focus office background with books and a window with morning light. The style is modern corporate photography, clean and bright, matching a professional SaaS dashboard aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD288ZUspRB0Rr9vfB1891UXmi5LL0S3XmJodCbEt_9DA94EhKuWPAaRk-c39kR7NswoN1wEXWb1-_SWt6OUpKxQPt5u3PN735Pis5yK8mNE3CM4AbK5l_QC3tH8RuE0yPlZR1WZUrQUaYEUQK0kSKtsiMHu3SaTIg4T5mMQuKqNtR7qJGrEVG3AIbFh4_2QENRx9gdFriKNcfB08XVIsWBXSGAZ5f5243GZQlhDwn49wEtmvIKKKQQpcQ-SIppFWIA6pWXdW4IKrVU"/>
+<span class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></span>
+</div>
+<button class="flex items-center justify-center p-2 text-primary hover:bg-surface-container-high transition-colors rounded-full cursor-pointer active:scale-95" title="Cerrar Sesión">
+<span class="material-symbols-outlined">logout</span>
+</button>
+</div>
+</div>
+</header>
+<!-- Main Content Area (Split View) -->
+<main class="flex-grow flex overflow-hidden w-full max-w-[1600px] mx-auto md:px-lg md:py-sm">
+<!-- Messaging Sidebar (30%) -->
+<aside class="w-full md:w-[320px] lg:w-[400px] flex flex-col bg-white md:bg-transparent border-r border-outline-variant md:border-none">
+<div class="p-md md:pb-sm">
+<h2 class="font-comfortaa text-headline-sm font-bold text-primary mb-md">Mensajería</h2>
+<!-- Search Bar -->
+<div class="relative group mb-md">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant group-focus-within:text-secondary transition-colors">search</span>
+<input class="w-full pl-10 pr-4 py-2 bg-surface-container-low border border-outline-variant rounded-lg focus:ring-2 focus:ring-secondary/20 focus:border-secondary outline-none transition-all font-body-md text-sm" placeholder="Buscar chats o alumnos..." type="text"/>
+</div>
+<!-- Filter Pills -->
+<div class="flex gap-2 overflow-x-auto pb-2 chat-scrollbar">
+<button class="px-4 py-1.5 bg-primary text-on-primary rounded-full text-xs font-semibold whitespace-nowrap">Todos</button>
+<button class="px-4 py-1.5 bg-surface-container-high text-on-surface-variant hover:bg-surface-container-highest rounded-full text-xs font-semibold whitespace-nowrap transition-colors">Excusas</button>
+<button class="px-4 py-1.5 bg-surface-container-high text-on-surface-variant hover:bg-surface-container-highest rounded-full text-xs font-semibold whitespace-nowrap transition-colors">Docentes</button>
+<button class="px-4 py-1.5 bg-surface-container-high text-on-surface-variant hover:bg-surface-container-highest rounded-full text-xs font-semibold whitespace-nowrap transition-colors">Estudiantes</button>
+</div>
+</div>
+<!-- Chat List -->
+<div class="flex-grow overflow-y-auto chat-scrollbar px-md pb-24 md:pb-4">
+<!-- Priority Item: Excusas -->
+<div class="p-3 mb-2 rounded-xl bg-secondary-container border border-secondary/20 cursor-pointer hover:shadow-md transition-all group">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 bg-secondary text-on-primary rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined active-icon">assessment</span>
+</div>
+<div class="flex-grow">
+<div class="flex justify-between items-start">
+<p class="text-sm font-bold text-on-secondary-container">Notificaciones Oficiales</p>
+<span class="text-[10px] text-secondary font-bold uppercase tracking-wider">3 nuevas</span>
+</div>
+<p class="text-xs text-on-secondary-container/80 truncate font-semibold">Nueva excusa médica: Juan Pérez</p>
+</div>
+</div>
+</div>
+<!-- Regular Chats -->
+<div class="space-y-1">
+<!-- Active Item -->
+<div class="p-3 rounded-xl bg-white shadow-sm border-l-4 border-secondary cursor-pointer hover:bg-surface-container-low transition-all flex items-center gap-3 group">
+<div class="relative flex-shrink-0">
+<img alt="Juan Pérez" class="w-12 h-12 rounded-full object-cover grayscale-[0.2]" data-alt="Detailed portrait of a male high school student with a serious but respectful expression, wearing a clean school polo shirt. The lighting is bright and even, like a professional ID photo, set against a clean, light-colored classroom wall in the background. High-quality digital rendering in a soft, bright color palette." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAzgfcfY3Ko9bYLBepF89WcIzybn6dCa7vhz5M9zvU5FSD8RFJ-6wJASUlEh8xwkoDy0_aDndQoLkfhmGAG0eO3rx4LYPl4EOzUA_aWsOQGmwynArIK90nHgV4Exu3bMlq2YTFu9B7JY-aRnj4cqckW3sPL_u1Ivt5SigVZZ0Pkyi1NDtEM6UeMKeZ0Y7mfFcV3E3BDVL88_0qfXWVqhYLkcJbIPQxcGg-m7-mNEFz5lc2Gb83e0JWgr3RsfWamYlg8W4fPIiDRmcC-"/>
+<span class="absolute bottom-0 right-0 w-3.5 h-3.5 bg-green-500 border-2 border-white rounded-full"></span>
+</div>
+<div class="flex-grow overflow-hidden">
+<div class="flex justify-between items-baseline">
+<p class="text-sm font-bold text-primary truncate">Juan Pérez</p>
+<span class="text-[10px] text-on-surface-variant">10:45 AM</span>
+</div>
+<div class="flex items-center gap-1.5 mb-0.5">
+<span class="px-1.5 py-0.5 bg-surface-container-high text-on-surface-variant rounded text-[10px] font-bold uppercase">Estudiante 11-B</span>
+</div>
+<p class="text-xs text-on-surface-variant truncate">Ya adjunté el archivo de la clínica...</p>
+</div>
+</div>
+<!-- Other Item -->
+<div class="p-3 rounded-xl hover:bg-surface-container-low cursor-pointer transition-all flex items-center gap-3 group">
+<div class="relative flex-shrink-0">
+<img alt="Marta Moreno" class="w-12 h-12 rounded-full object-cover opacity-80" data-alt="A professional headshot of an elderly female teacher with graying hair and glasses, wearing a smart cardigan. The background is a library with blurred wooden shelves filled with books. The lighting is warm and intellectual, suggesting experience and reliability in an academic environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD6c73YOnsNx6VgskflProEWxgiKY1lCgUB2XcR0DaebP0vnCpQnfbxwh3VSIlKJD2CViTeBot96cPiDHvd8J9hIm3mzGcbshTSqQ9UuRh4mV9BIenwH0lqWlNkU9c8BanVMB6lPEg6JgZwOP4jDaw-T-E65UhgfAXaPkyNnbtRpb5lvhTx-Gonb8-g2QpyNfb9X_huoexH9fEq-F9HoPRxdZmdncC-aUFrlsx2eOeVLVhh6kwa68elVpX_A0Zg57sDs_oc9hlHouyX"/>
+<span class="absolute bottom-0 right-0 w-3.5 h-3.5 bg-gray-300 border-2 border-white rounded-full"></span>
+</div>
+<div class="flex-grow overflow-hidden">
+<div class="flex justify-between items-baseline">
+<p class="text-sm font-semibold text-primary truncate">Prof. Marta Moreno</p>
+<span class="text-[10px] text-on-surface-variant">Ayer</span>
+</div>
+<div class="flex items-center gap-1.5 mb-0.5">
+<span class="px-1.5 py-0.5 bg-blue-50 text-blue-600 rounded text-[10px] font-bold uppercase">Docente</span>
+</div>
+<p class="text-xs text-on-surface-variant truncate">¿Revisaste el reporte de horas de...</p>
+</div>
+</div>
+<!-- Other Item -->
+<div class="p-3 rounded-xl hover:bg-surface-container-low cursor-pointer transition-all flex items-center gap-3 group">
+<div class="relative flex-shrink-0">
+<img alt="Diego Luna" class="w-12 h-12 rounded-full object-cover opacity-80" data-alt="A clear portrait of a male student with short dark hair, smiling confidently. He is wearing a dark blue school jacket. The background is an outdoor sports field under a bright blue sky, softly blurred. The mood is energetic and optimistic, fitting a student-focused educational platform." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBVnXGskzjBsZyzQkFMlhs-2D4zHewYiqlmDhTm6ip2i9F_-LwWZxjZcKn8h41z6no2a_vwedsQ9oVwBV45EZl9eB73iYBcHHf6dKcerdQb1m5e7-eslA707Kc_Dw5UhAmWQm0kcVJaCXjKhiuYzO-60GL9rt01FjUzs1eDAoYtbswmaIwQaM2TuKebt4uYWhC9wmGeUziF4ujXvstedJnqtUmUkfJvjmOkSpgXJBUilYwlBve_YAcvhWP5fYfe_H8zL1wnLbPyEtoj"/>
+</div>
+<div class="flex-grow overflow-hidden">
+<div class="flex justify-between items-baseline">
+<p class="text-sm font-semibold text-primary truncate">Diego Luna</p>
+<span class="text-[10px] text-on-surface-variant">Lun</span>
+</div>
+<div class="flex items-center gap-1.5 mb-0.5">
+<span class="px-1.5 py-0.5 bg-surface-container-high text-on-surface-variant rounded text-[10px] font-bold uppercase">Estudiante 10-A</span>
+</div>
+<p class="text-xs text-on-surface-variant truncate">Muchas gracias por la aprobación.</p>
+</div>
+</div>
+</div>
+</div>
+</aside>
+<!-- Active Chat Window (70%) -->
+<section class="hidden md:flex flex-col flex-grow glass-panel rounded-xl ml-lg relative overflow-hidden">
+<!-- Chat Header -->
+<div class="p-md bg-white/50 border-b border-outline-variant flex justify-between items-center">
+<div class="flex items-center gap-3">
+<div class="relative">
+<img alt="Juan Pérez" class="w-10 h-10 rounded-full" data-alt="A portrait of a male high school student with a serious but respectful expression, wearing a clean school polo shirt. The lighting is bright and even, like a professional ID photo, set against a clean, light-colored classroom wall in the background. High-quality digital rendering." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCI-U8_ZcXvorcfcMRm05gGJ_EmOcDQuWLCIoVe32_FMfwUiIguw9buk6WhE4J8To-vMp8Ng1JIVL3bZ7A6wUBHxZloznTWFJqHedhCjW47V-UoPU3gAPAAI18MQPBJsaBwv4HNWIAsRm7GG3X2NrsyG6ac79V0Ummj6Vk6cmeqQKUCmXI9zUYDYtljT2lEqwHz6XHfL4eywCigxJt9BoeUl1-RQXHsPOk59eGdGVJVed0Gy3H4vvZuBVV-RkHNVkeWNwxLae0kRLqG"/>
+<span class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 border-2 border-white rounded-full"></span>
+</div>
+<div>
+<h3 class="text-sm font-bold text-primary">Juan Pérez - Estudiante 11-B</h3>
+<p class="text-[10px] text-green-600 font-semibold uppercase tracking-wider flex items-center gap-1">
+<span class="w-1 h-1 bg-green-600 rounded-full"></span> En línea
+                        </p>
+</div>
+</div>
+<div class="flex gap-2">
+<button class="p-2 text-on-surface-variant hover:bg-surface-container-low rounded-full transition-colors">
+<span class="material-symbols-outlined">call</span>
+</button>
+<button class="p-2 text-on-surface-variant hover:bg-surface-container-low rounded-full transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+</div>
+<!-- Contextual Action Banner -->
+<div class="mx-md mt-md p-lg bg-secondary-container/60 border border-secondary/30 rounded-xl flex items-center justify-between gap-4">
+<div class="flex gap-4 items-start">
+<div class="p-3 bg-white rounded-lg shadow-sm text-secondary">
+<span class="material-symbols-outlined text-3xl">medical_information</span>
+</div>
+<div>
+<p class="text-sm font-bold text-primary mb-1">Trámite de Excusa Médica</p>
+<p class="text-xs text-on-surface-variant max-w-md leading-relaxed">Este estudiante ha subido una excusa médica para el día <strong>08/06/2026</strong>. ¿Deseas validar su inasistencia para las horas de servicio social?</p>
+</div>
+</div>
+<div class="flex flex-col sm:flex-row gap-2">
+<button class="px-4 py-2 bg-white text-primary border border-outline-variant hover:bg-surface-container-low text-xs font-bold rounded-lg transition-all flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">picture_as_pdf</span> Ver PDF
+                    </button>
+<button class="px-4 py-2 bg-primary text-on-primary hover:opacity-90 text-xs font-bold rounded-lg transition-all">Aprobar Excusa</button>
+<button class="px-4 py-2 bg-transparent text-on-surface-variant border border-outline-variant hover:bg-white text-xs font-bold rounded-lg transition-all">Rechazar</button>
+</div>
+</div>
+<!-- Messages Area -->
+<div class="flex-grow overflow-y-auto chat-scrollbar p-lg space-y-4">
+<div class="flex justify-center my-4">
+<span class="px-3 py-1 bg-surface-container-high rounded-full text-[10px] text-on-surface-variant font-bold uppercase tracking-widest">Hoy</span>
+</div>
+<!-- Received -->
+<div class="flex gap-3 max-w-[80%]">
+<div class="flex-shrink-0 self-end mb-1">
+<img alt="Juan" class="w-8 h-8 rounded-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC25VCy6z2jkYbrYwULHChoS2E3TzaIbsZFVknVFvix_2ToubZj2aD2GzbsHRchPFbQOkWYvkHgtfmoEJXR2nurGRS4am59bnGHVpRxGozevqnYj3ENA96VdkIcMQtEWuxMLOrxI0Rz4oYwh_bTsV70R9cARvAyzHzfGfFUWbWCy3lABLjGc5wsBVW_5CaWQs0vJYZzgLX5amAEkIJn3Ja2Ha7gkJE8jCgg0sicdA0ES7sac9bPk_Q5qf9ewzTHPbU6rh86Vn2T5nnf"/>
+</div>
+<div class="bg-white p-3 rounded-2xl rounded-bl-none shadow-sm border border-outline-variant/30">
+<p class="text-sm text-on-surface leading-relaxed">Buenas tardes, coordinadora. Le escribo para informarle que tuve una cita médica de urgencia ayer y no pude asistir al asilo para mis horas.</p>
+<p class="text-[10px] text-on-surface-variant mt-2 text-right">10:42 AM</p>
+</div>
+</div>
+<!-- Received -->
+<div class="flex gap-3 max-w-[80%] ml-11">
+<div class="bg-white p-3 rounded-2xl rounded-bl-none shadow-sm border border-outline-variant/30">
+<p class="text-sm text-on-surface leading-relaxed">Ya adjunté el archivo de la clínica en el sistema. ¿Me confirma si le llegó bien por favor?</p>
+<p class="text-[10px] text-on-surface-variant mt-2 text-right">10:43 AM</p>
+</div>
+</div>
+<!-- Sent -->
+<div class="flex justify-end gap-3 max-w-[80%] ml-auto">
+<div class="bg-primary p-3 rounded-2xl rounded-br-none shadow-md">
+<p class="text-sm text-white leading-relaxed">Hola Juan. Lo estoy revisando justo ahora. Un momento por favor mientras valido los sellos.</p>
+<div class="flex items-center justify-end gap-1 mt-2">
+<p class="text-[10px] text-on-primary-container">10:45 AM</p>
+<span class="material-symbols-outlined text-secondary text-[14px] active-icon">done_all</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Input Bar -->
+<div class="p-md bg-white border-t border-outline-variant">
+<div class="flex items-center gap-3">
+<button class="p-2 text-on-surface-variant hover:text-secondary hover:bg-secondary-container/50 rounded-full transition-all">
+<span class="material-symbols-outlined">attach_file</span>
+</button>
+<div class="flex-grow relative">
+<input class="w-full pl-4 pr-12 py-3 bg-surface-container-low border-none rounded-xl focus:ring-2 focus:ring-secondary/20 outline-none text-sm font-body-md transition-all" placeholder="Escribe un mensaje..." type="text"/>
+<button class="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 text-on-surface-variant hover:text-secondary">
+<span class="material-symbols-outlined">sentiment_satisfied</span>
+</button>
+</div>
+<button class="w-11 h-11 bg-primary text-on-primary rounded-xl flex items-center justify-center hover:opacity-90 active:scale-95 transition-all shadow-md">
+<span class="material-symbols-outlined">send</span>
+</button>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Navigation (Shared Component Integration) -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-4 pt-2 bg-surface border-t border-dashed border-outline-variant md:hidden">
+<!-- Dashboard -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant flex-1 h-14 border-dashed border-outline-variant" href="#">
+<span class="material-symbols-outlined mb-1">home</span>
+<span class="font-label-sm text-label-sm">Inicio</span>
+</a>
+<!-- Docentes -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant flex-1 h-14 border-dashed border-outline-variant" href="#">
+<span class="material-symbols-outlined mb-1">chat_bubble</span>
+<span class="font-label-sm text-label-sm">Mensajes</span>
+</a>
+<!-- Estudiantes -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant flex-1 h-14 border-dashed border-outline-variant" href="#">
+<span class="material-symbols-outlined mb-1">assessment</span>
+<span class="font-label-sm text-label-sm">Reportes</span>
+</a>
+<!-- Mensajes ACTIVE -->
+<a class="flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container rounded-full px-4 py-1 flex-1 h-14 transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined mb-1 active-icon">settings</span>
+<span class="font-label-sm text-label-sm">Ajustes</span>
+</a>
+</nav>
+<!-- Desktop Bottom Nav Cluster (Simulated for Layout Integrity) -->
+<div class="hidden md:flex justify-center w-full max-w-[1600px] mx-auto pb-4 px-lg mt-auto">
+<div class="flex gap-4 w-full">
+<div class="flex-1 p-3 rounded-xl border border-dashed border-secondary/30 flex items-center justify-center gap-3 bg-white/50 cursor-pointer hover:bg-secondary-container transition-all">
+<span class="material-symbols-outlined text-secondary">dashboard</span>
+<span class="font-label-md text-primary font-bold">Dashboard</span>
+</div>
+<div class="flex-1 p-3 rounded-xl border border-dashed border-secondary/30 flex items-center justify-center gap-3 bg-white/50 cursor-pointer hover:bg-secondary-container transition-all">
+<span class="material-symbols-outlined text-secondary">group</span>
+<span class="font-label-md text-primary font-bold">Docentes</span>
+</div>
+<div class="flex-1 p-3 rounded-xl border border-dashed border-secondary/30 flex items-center justify-center gap-3 bg-white/50 cursor-pointer hover:bg-secondary-container transition-all">
+<span class="material-symbols-outlined text-secondary">school</span>
+<span class="font-label-md text-primary font-bold">Estudiantes</span>
+</div>
+<div class="flex-1 p-3 rounded-xl border border-dashed border-secondary flex items-center justify-center gap-3 bg-secondary-container shadow-sm transition-all">
+<span class="material-symbols-outlined text-secondary active-icon">chat</span>
+<span class="font-label-md text-secondary font-bold">Mensajes</span>
+</div>
+</div>
+</div>
+<script>
+        // Simple micro-interaction for filter pills
+        const pills = document.querySelectorAll('.flex.gap-2 button');
+        pills.forEach(pill => {
+            pill.addEventListener('click', () => {
+                pills.forEach(p => {
+                    p.classList.remove('bg-primary', 'text-on-primary');
+                    p.classList.add('bg-surface-container-high', 'text-on-surface-variant');
+                });
+                pill.classList.remove('bg-surface-container-high', 'text-on-surface-variant');
+                pill.classList.add('bg-primary', 'text-on-primary');
+            });
+        });
+
+        // Chat list selection micro-interaction
+        const chatItems = document.querySelectorAll('.chat-scrollbar > .space-y-1 > div');
+        chatItems.forEach(item => {
+            item.addEventListener('click', () => {
+                chatItems.forEach(i => {
+                    i.classList.remove('bg-white', 'shadow-sm', 'border-l-4', 'border-secondary');
+                    i.classList.add('hover:bg-surface-container-low');
+                });
+                item.classList.add('bg-white', 'shadow-sm', 'border-l-4', 'border-secondary');
+                item.classList.remove('hover:bg-surface-container-low');
+            });
+        });
+    </script>
+</body></html>

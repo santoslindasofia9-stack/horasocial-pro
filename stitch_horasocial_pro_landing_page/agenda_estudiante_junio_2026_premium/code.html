@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Agenda del Estudiante</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .active-icon {
+            font-variation-settings: 'FILL' 1;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f7f9fb 0%, #eef6ff 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .blob {
+            position: fixed;
+            z-index: -1;
+            filter: blur(80px);
+            border-radius: 50%;
+        }
+        .title-premium {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            color: #001e2c; /* Dark navy blue */
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "sky-blue": "#38bdf8",
+                        "primary": "#001e2c",
+                        "on-surface": "#191c1e",
+                        "background": "#f7f9fb",
+                        "outline": "#76777d",
+                        "outline-variant": "#c6c6cd"
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-background text-on-surface">
+<!-- Background Aesthetic Blobs -->
+<div class="blob bg-sky-blue/30 w-[400px] h-[400px] -top-20 -left-10 animate-pulse"></div>
+<div class="blob bg-primary/5 w-[500px] h-[500px] -bottom-32 -right-32"></div>
+<!-- Top App Bar -->
+<header class="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-md shadow-sm h-16 flex items-center justify-between px-6">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full overflow-hidden border-2 border-white shadow-sm">
+<img alt="Student Profile Photo" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDR1UDIqc2bsTcZnWFGDQm5MJhYSoO021Y_T61MlNe_n_jva9xZgrk2nkpy0AdR71x0_2V0iX8PZtaM2oH5T8hp4mi394gRuqq08u2L2iePfFKJn5NcxrKKEEryF6deoRD5gBSHohBlz7Dp8WGBylO3qVZyGjZftVAz203oGGCV8KwpnJzNkuNDho_2enUnPZ9g1IY4rmUsNp3-2B2RCo7vr2rtAAcvz2i2CKFkvkXvIRDUHN-fXqkLxydWJPwJreI__l8nykS9ViVg"/>
+</div>
+<h1 class="title-premium font-bold text-lg" style="font-family: 'Poppins', 'Plus Jakarta Sans', sans-serif;">Mi Agenda</h1>
+</div>
+<button class="text-primary hover:bg-gray-100 p-2 rounded-full transition-colors active:scale-95">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+</header>
+<main class="pt-24 pb-32 px-6 max-w-2xl mx-auto">
+<!-- Calendar Section -->
+<section class="mb-8">
+<div class="glass-card rounded-[2rem] p-6 shadow-sm">
+<div class="flex items-center justify-between mb-6">
+<h2 class="title-premium font-bold text-xl">Junio 2026</h2>
+<div class="flex gap-2">
+<button class="p-2 hover:bg-white rounded-full transition-colors"><span class="material-symbols-outlined text-primary">chevron_left</span></button>
+<button class="p-2 hover:bg-white rounded-full transition-colors"><span class="material-symbols-outlined text-primary">chevron_right</span></button>
+</div>
+</div>
+<!-- Calendar Grid -->
+<div class="grid grid-cols-7 gap-y-4 text-center"><!-- Weekdays -->
+<div class="text-outline font-medium text-xs uppercase">Lu</div>
+<div class="text-outline font-medium text-xs uppercase">Ma</div>
+<div class="text-outline font-medium text-xs uppercase">Mi</div>
+<div class="text-outline font-medium text-xs uppercase">Ju</div>
+<div class="text-outline font-medium text-xs uppercase">Vi</div>
+<div class="text-sky-blue font-medium text-xs uppercase">Sa</div>
+<div class="text-sky-blue font-medium text-xs uppercase">Do</div>
+<!-- Days -->
+<div class="py-2 text-on-surface font-medium relative">1</div>
+<div class="py-2 text-on-surface font-medium relative">2</div>
+<div class="py-2 text-on-surface font-medium relative">3</div>
+<div class="py-2 text-on-surface font-medium relative">4</div>
+<div class="py-2 text-on-surface font-medium relative">5<span class="absolute bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 bg-sky-blue rounded-full"></span></div>
+<div class="py-2 text-sky-blue font-medium relative">6</div>
+<div class="py-2 text-sky-blue font-medium relative">7</div>
+<div class="py-2 text-on-surface font-medium relative">8</div>
+<div class="py-2 text-on-surface font-medium relative">9</div>
+<div class="py-2 text-on-surface font-medium relative">10</div>
+<div class="flex items-center justify-center">
+<div class="w-10 h-10 flex items-center justify-center bg-sky-blue/20 text-sky-blue rounded-full font-bold shadow-sm">11</div>
+</div>
+<div class="py-2 text-on-surface font-medium relative">12<span class="absolute bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 bg-sky-blue rounded-full"></span></div>
+<div class="py-2 text-sky-blue font-medium relative">13</div>
+<div class="py-2 text-sky-blue font-medium relative">14</div>
+<div class="py-2 text-on-surface font-medium relative">15</div>
+<div class="py-2 text-on-surface font-medium relative">16</div>
+<div class="py-2 text-on-surface font-medium relative">17</div>
+<div class="py-2 text-on-surface font-medium relative">18</div>
+<div class="py-2 text-on-surface font-medium relative">19</div>
+<div class="py-2 text-sky-blue font-medium relative">20<span class="absolute bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 bg-sky-blue rounded-full"></span></div>
+<div class="py-2 text-sky-blue font-medium relative">21</div>
+<div class="py-2 text-on-surface font-medium relative">22</div>
+<div class="py-2 text-on-surface font-medium relative">23</div>
+<div class="py-2 text-on-surface font-medium relative">24</div>
+<div class="py-2 text-on-surface font-medium relative">25</div>
+<div class="py-2 text-on-surface font-medium relative">26</div>
+<div class="py-2 text-sky-blue font-medium relative">27</div>
+<div class="py-2 text-sky-blue font-medium relative">28<span class="absolute bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 bg-sky-blue rounded-full"></span></div>
+<div class="py-2 text-on-surface font-medium relative">29</div>
+<div class="py-2 text-on-surface font-medium relative">30</div>
+<div class="py-2 text-outline-variant">1</div>
+<div class="py-2 text-outline-variant">2</div>
+<div class="py-2 text-outline-variant">3</div>
+<div class="py-2 text-outline-variant">4</div>
+<div class="py-2 text-outline-variant">5</div></div>
+</div>
+</section>
+<!-- Activities Section -->
+<section>
+<div class="flex items-center justify-between mb-4">
+<h3 class="title-premium font-bold text-lg">Actividades del Día</h3>
+<span class="text-sm font-medium text-outline">Hoy, 11 Oct</span>
+</div>
+<div class="space-y-4"><!-- Activity Card: Campaña Ambiental -->
+<div class="bg-white rounded-2xl p-6 shadow-sm border border-sky-blue/30 flex gap-4 items-start">
+<div class="w-12 h-12 rounded-full bg-primary flex items-center justify-center text-white">
+<span class="material-symbols-outlined text-[24px]">assignment</span>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start">
+<h4 class="title-premium font-bold text-base">Campaña Ambiental</h4>
+<span class="px-2.5 py-0.5 bg-sky-blue/10 text-sky-blue rounded-full text-[10px] font-bold uppercase tracking-wider">Confirmado</span>
+</div>
+<div class="mt-2 space-y-1">
+<div class="flex items-center gap-2 text-outline text-sm">
+<span class="material-symbols-outlined text-base text-sky-blue">location_on</span>
+<span>Campus Principal, Zona Verde</span>
+</div>
+<div class="flex items-center gap-2 text-outline text-sm">
+<span class="material-symbols-outlined text-base text-sky-blue">schedule</span>
+<span>09:00 AM - 01:00 PM</span>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-white/40 backdrop-blur-sm rounded-3xl p-6 border-2 border-dashed border-sky-blue/20 flex flex-col items-center justify-center py-8">
+<p class="text-outline text-sm font-medium">¿Tienes más horas por cumplir?</p>
+<button class="mt-2 text-sky-blue font-bold text-sm flex items-center gap-1 hover:underline">
+    Ver vacantes disponibles
+    <span class="material-symbols-outlined text-base">arrow_forward</span>
+</button>
+</div></div>
+</section>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 w-full z-50 bg-white border-t border-gray-100 flex justify-around items-center pt-3 pb-8 px-4 shadow-lg">
+<!-- Dashboard -->
+<a class="flex flex-col items-center justify-center text-gray-400 hover:text-sky-blue transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="text-[11px] font-medium mt-1">Inicio</span>
+</a>
+<!-- Agenda (Active) -->
+<a class="flex flex-col items-center justify-center text-sky-blue" href="#">
+<span class="material-symbols-outlined active-icon" data-icon="event_note">event_note</span>
+<span class="text-[11px] font-bold mt-1">Agenda</span>
+</a>
+<!-- Registration -->
+<a class="flex flex-col items-center justify-center text-gray-400 hover:text-sky-blue transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="app_registration">app_registration</span>
+<span class="text-[11px] font-medium mt-1">Registro</span>
+</a>
+<!-- Messages -->
+<a class="flex flex-col items-center justify-center text-gray-400 hover:text-sky-blue transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="forum">forum</span>
+<span class="text-[11px] font-medium mt-1">Mensajes</span>
+</a>
+</nav>
+<script>
+    // Premium interactive feedback for calendar days
+    document.querySelectorAll('.grid-cols-7 > div:not(.text-xs)').forEach(day => {
+        day.addEventListener('click', function() {
+            if (this.innerText && !this.classList.contains('text-outline-variant')) {
+                document.querySelectorAll('.bg-sky-blue\\/20').forEach(el => {
+                    el.classList.remove('bg-sky-blue/20', 'text-sky-blue', 'rounded-full', 'font-bold', 'w-10', 'h-10', 'shadow-sm', 'flex', 'items-center', 'justify-center');
+                });
+                
+                // Reset styling for other days
+                document.querySelectorAll('.grid-cols-7 > div:not(.text-xs)').forEach(d => {
+                    if(!d.querySelector('.bg-sky-blue\\/20')) {
+                        d.classList.remove('text-sky-blue', 'font-bold');
+                    }
+                });
+
+                // Apply active style
+                const wrapper = document.createElement('div');
+                wrapper.className = 'w-10 h-10 flex items-center justify-center bg-sky-blue/20 text-sky-blue rounded-full font-bold shadow-sm';
+                wrapper.innerHTML = this.innerHTML;
+                this.innerHTML = '';
+                this.appendChild(wrapper);
+            }
+        });
+    });
+</script>
+</body></html>

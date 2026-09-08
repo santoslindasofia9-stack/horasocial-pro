@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Mensajes y Notificaciones - HORASOCIAL PRO</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;family=Comfortaa:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .font-comfortaa { font-family: 'Comfortaa', cursive; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .active-nav-capsule {
+            background-color: rgba(14, 165, 233, 0.15);
+            border: 2px dashed #0EA5E9;
+        }
+        /* Custom scrollbar for clean administrative UI */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #E2E8F0;
+            border-radius: 10px;
+        }
+        @media (max-width: 768px) {
+            .mobile-hidden { display: none; }
+            .chat-active .list-section { display: none; }
+            .chat-active .chat-section { display: block; }
+        }
+    </style>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "secondary-fixed-dim": "#89ceff",
+                    "on-error-container": "#93000a",
+                    "on-secondary-fixed": "#001e2f",
+                    "error-container": "#ffdad6",
+                    "on-surface": "#191c1e",
+                    "surface-container": "#eceef0",
+                    "on-surface-variant": "#45464d",
+                    "secondary-fixed": "#c9e6ff",
+                    "secondary-container": "#39b8fd",
+                    "on-primary-fixed-variant": "#3f465c",
+                    "surface-dim": "#d8dadc",
+                    "on-tertiary": "#ffffff",
+                    "inverse-on-surface": "#eff1f3",
+                    "tertiary-fixed": "#c4e7ff",
+                    "inverse-surface": "#2d3133",
+                    "primary-fixed": "#dae2fd",
+                    "secondary": "#006591",
+                    "on-primary-container": "#7c839b",
+                    "tertiary-fixed-dim": "#7bd0ff",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-bright": "#f7f9fb",
+                    "on-secondary-container": "#004666",
+                    "outline": "#76777d",
+                    "on-tertiary-fixed": "#001e2c",
+                    "surface-container-high": "#e6e8ea",
+                    "on-secondary-fixed-variant": "#004c6e",
+                    "surface-container-highest": "#e0e3e5",
+                    "on-secondary": "#ffffff",
+                    "on-error": "#ffffff",
+                    "tertiary-container": "#001e2c",
+                    "surface-variant": "#e0e3e5",
+                    "on-background": "#191c1e",
+                    "primary-container": "#131b2e",
+                    "on-primary-fixed": "#131b2e",
+                    "on-primary": "#ffffff",
+                    "outline-variant": "#c6c6cd",
+                    "primary-fixed-dim": "#bec6e0",
+                    "on-tertiary-fixed-variant": "#004c69",
+                    "tertiary": "#000000",
+                    "surface": "#f7f9fb",
+                    "on-tertiary-container": "#008ebf",
+                    "surface-tint": "#565e74",
+                    "primary": "#0F172A",
+                    "background": "#F8FAFC",
+                    "inverse-primary": "#bec6e0",
+                    "surface-container-low": "#f2f4f6",
+                    "error": "#ba1a1a"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "1rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "margin-desktop": "48px",
+                    "sm": "8px",
+                    "xl": "32px",
+                    "gutter": "24px",
+                    "xs": "4px",
+                    "md": "16px",
+                    "unit": "4px",
+                    "lg": "24px",
+                    "margin-mobile": "16px"
+            },
+            "fontFamily": {
+                    "headline-lg": ["Plus Jakarta Sans"],
+                    "label-sm": ["Inter"],
+                    "headline-md": ["Plus Jakarta Sans"],
+                    "body-md": ["Inter"],
+                    "label-md": ["Inter"],
+                    "headline-lg-mobile": ["Plus Jakarta Sans"],
+                    "display-lg": ["Plus Jakarta Sans"],
+                    "headline-sm": ["Plus Jakarta Sans"],
+                    "body-lg": ["Inter"]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body-md overflow-hidden h-screen flex flex-col">
+<!-- TopAppBar Execution -->
+<header class="bg-surface shadow-[0px_4px_20px_rgba(15,23,42,0.05)] flex justify-between items-center px-margin-mobile md:px-margin-desktop h-16 w-full z-50 shrink-0">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary md:hidden cursor-pointer">menu</span>
+<h1 class="font-headline-md text-headline-md-mobile font-bold text-primary tracking-tight">HORASOCIAL PRO</h1>
+</div>
+<div class="flex items-center gap-3">
+<div class="text-right hidden sm:block">
+<p class="font-label-md text-primary font-bold">Coordinadora Carolina Rojas</p>
+<p class="text-[10px] text-on-surface-variant uppercase tracking-wider">Administrador Senior</p>
+</div>
+<img alt="Admin Profile" class="w-10 h-10 rounded-full border-2 border-primary/10 shadow-sm" data-alt="A professional headshot of a female administrator with a warm, confident smile. She is wearing professional attire against a soft-focus office background with natural lighting. The image maintains a clean, corporate aesthetic consistent with a modern SaaS management platform." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCsSwmmtNuaFlOq0fKJ8nCkv8xWA32-d6c9eUJU1zDoL76y4CwBs4X1P2fCqevyVjWOAOtEPgGtn-ZruEvhOyhuIjslUXFa66kDj6ycky3ZalZAQeIx4Yt-NywrEUGQCwZjUZkYngHZfJx6KFJSr-pwLhG4mxJ0uRXeSD-yJ5pbLs8YORsHxtfjO1WbzcFDZ10-KgIStxkUWUZqTJojtDM04QwohSLkXNEbOTY-hN7DPNcpRLqrGwkx--r5TbuwHytXZSW37e06NL86"/>
+</div>
+</header>
+<!-- Main Workspace: Split View -->
+<main class="flex-grow flex overflow-hidden relative" id="chat-container">
+<!-- Conversation List (30% logic) -->
+<aside class="list-section w-full md:w-[30%] lg:w-[25%] bg-white border-r border-outline-variant flex flex-col h-full z-20">
+<div class="p-lg">
+<h2 class="font-comfortaa text-headline-sm text-primary mb-md">Centro de Mensajes</h2>
+<!-- Search Bar -->
+<div class="relative mb-md">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-sm">search</span>
+<input class="w-full pl-10 pr-4 py-2 bg-surface-container-low border border-outline-variant rounded-lg focus:ring-2 focus:ring-secondary-container outline-none text-label-md" placeholder="Buscar mensajes..." type="text"/>
+</div>
+<!-- Quick Filters -->
+<div class="flex gap-2 overflow-x-auto pb-2 no-scrollbar">
+<button class="px-4 py-1.5 bg-primary text-white text-label-sm rounded-full whitespace-nowrap shadow-sm">Todos</button>
+<button class="px-4 py-1.5 bg-surface-container-high text-on-surface-variant text-label-sm rounded-full whitespace-nowrap hover:bg-outline-variant transition-colors">Excusas</button>
+<button class="px-4 py-1.5 bg-surface-container-high text-on-surface-variant text-label-sm rounded-full whitespace-nowrap hover:bg-outline-variant transition-colors">Docentes</button>
+<button class="px-4 py-1.5 bg-surface-container-high text-on-surface-variant text-label-sm rounded-full whitespace-nowrap hover:bg-outline-variant transition-colors">Alumnos</button>
+</div>
+</div>
+<!-- Chat List Items -->
+<div class="flex-grow overflow-y-auto custom-scrollbar">
+<!-- Active Chat Item -->
+<div class="p-md flex gap-4 bg-secondary-container/10 border-l-4 border-secondary cursor-pointer hover:bg-secondary-container/20 transition-all" onclick="document.body.classList.add('chat-active')">
+<div class="relative">
+<div class="w-12 h-12 bg-pink-100 rounded-full flex items-center justify-center text-pink-600">
+<span class="material-symbols-outlined">medical_services</span>
+</div>
+<span class="absolute bottom-0 right-0 w-3 h-3 bg-error rounded-full border-2 border-white"></span>
+</div>
+<div class="flex-grow min-w-0">
+<div class="flex justify-between items-start mb-0.5">
+<h3 class="font-label-md font-bold text-primary truncate">Mateo Valencia</h3>
+<span class="text-[10px] text-on-surface-variant">10:45 AM</span>
+</div>
+<p class="text-label-sm text-on-surface-variant truncate">Nueva excusa médica adjunta: Mateo_V_Clinica.pdf</p>
+<span class="inline-block mt-1 px-2 py-0.5 bg-amber-100 text-amber-700 text-[10px] font-bold rounded">Pendiente</span>
+</div>
+</div>
+<!-- Other Items -->
+<div class="p-md flex gap-4 border-b border-outline-variant/30 cursor-pointer hover:bg-surface-container-low transition-all">
+<img alt="Teacher Profile" class="w-12 h-12 rounded-full" data-alt="A small circular avatar of a male teacher in his late 40s, looking professional and friendly. The portrait is high-quality with clear facial features, suitable for a school administration app interface." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDrVKZWVq1nhAY9nGhx5Ud9D5Io8AXAd8A_dWQOnx76e8kme4V61I77Gp1y4z_TpDeyMq7TE7o6vlBZLEpfRKXdPTnPD_hskBRbQ2fLLFljW7Spz8bNrgsrNqc80ERM3yqQg_cxHfpa_YKpvGUbDlburcHqFWQdGVfJ7wmJ0MWRd-TGfBp_hWgoJKR5_ZjRrRZhef-os5U_bcMkXmQz_QH3BLBk0PMCpPbvIv3BPCtyA8gPWYh2UTeDpvMXTZZVe5i5aXjL5a81_H2b"/>
+<div class="flex-grow min-w-0">
+<div class="flex justify-between items-start mb-0.5">
+<h3 class="font-label-md font-medium text-primary truncate">Prof. Sergio Andrade</h3>
+<span class="text-[10px] text-on-surface-variant">09:12 AM</span>
+</div>
+<p class="text-label-sm text-on-surface-variant truncate">Confirmación de asistencia para el evento de mañana...</p>
+</div>
+</div>
+<div class="p-md flex gap-4 border-b border-outline-variant/30 cursor-pointer hover:bg-surface-container-low transition-all">
+<img alt="Student Profile" class="w-12 h-12 rounded-full" data-alt="A small circular avatar of a teenage female student, smiling brightly. The lighting is crisp and the background is a solid soft pastel, creating a friendly and modern student profile look." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDXsORr74S5l9aHkgcHPd01lu2QklTHeAqlsAY0c8sXUholbMyj5AzCgGZ0XsTtVQbGGCKoTemnGMeOtrER_l0dqLPesE6GOpTDdXUbI03KF-ezYEfblM86RBywn20X8LMCXbJy2mzoZNdqqVCuZ7IJKUWwkh7ocyopKccsr8AJutjwuKit_vl28xYh7A3Z6VZF1rVwHW3zgwXdj2ujFnRG9rD_Cib8heqjnkFCeb9-vcVdyItIVe1ngtcXEreTS2QHSg5MGTLW88hP"/>
+<div class="flex-grow min-w-0">
+<div class="flex justify-between items-start mb-0.5">
+<h3 class="font-label-md font-medium text-primary truncate">Lucia Fernández</h3>
+<span class="text-[10px] text-on-surface-variant">Ayer</span>
+</div>
+<p class="text-label-sm text-on-surface-variant truncate">¿Cómo puedo registrar mis horas de hoy?</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Active Chat Window (70% logic) -->
+<section class="chat-section hidden md:flex flex-col flex-grow bg-background h-full relative">
+<!-- Chat Header -->
+<div class="bg-white px-lg py-md border-b border-outline-variant flex justify-between items-center shrink-0">
+<div class="flex items-center gap-3">
+<button class="md:hidden mr-2" onclick="document.body.classList.remove('chat-active')">
+<span class="material-symbols-outlined text-primary">arrow_back</span>
+</button>
+<div class="relative">
+<img alt="Active Chat Profile" class="w-10 h-10 rounded-full" data-alt="Close-up portrait of a young male student named Mateo, with a professional yet approachable look. Soft studio lighting highlights his features against a clean, off-white background, perfect for a modern communication dashboard." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDPju5z5j6v5b0kWrQH2wpUlj0hP0hzdQDQlQx1Z8FJP2qelhMp5OhosFQ5AP2TOtfN89iXNb3O9PSaRBBdrYJR8I_FcHTSRMR1lGfshZXucaATMTIzaERpuVxXH2qdRJBe1XssecyiAsf_mMrzPi65IUnutMolx8mKkglAnUUFQcovJm1pTCBr-kFLAhI0sfG63Oj-ggsB-c8X6MZHE2ScQq-HEq5LRGrfBHrINS7u_mS5Y_POT8CSGUUE5mfeG9sOmEJD1Z3aIMRs"/>
+<span class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 rounded-full border-2 border-white"></span>
+</div>
+<div>
+<h2 class="font-label-md font-bold text-primary">Mateo Valencia</h2>
+<p class="text-label-sm text-on-surface-variant flex items-center gap-1">
+                            Estudiante • <span class="text-green-600 font-medium">En línea</span>
+</p>
+</div>
+</div>
+<div class="flex gap-4">
+<button class="text-outline hover:text-primary transition-colors"><span class="material-symbols-outlined">call</span></button>
+<button class="text-outline hover:text-primary transition-colors"><span class="material-symbols-outlined">more_vert</span></button>
+</div>
+</div>
+<!-- CONTEXTUAL ACTION BANNER -->
+<div class="bg-pink-100/80 backdrop-blur-sm px-lg py-3 flex flex-col sm:flex-row justify-between items-center gap-3 shrink-0 border-b border-pink-200">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-pink-600">picture_as_pdf</span>
+<span class="text-label-sm font-bold text-primary">Excusa_Medica_Mateo_Oct12.pdf</span>
+</div>
+<div class="flex gap-2">
+<button class="px-4 py-1.5 bg-primary text-white text-label-sm font-bold rounded-lg shadow-sm hover:scale-[1.02] active:scale-95 transition-all">Aprobar Excusa</button>
+<button class="px-4 py-1.5 bg-outline-variant text-on-surface text-label-sm font-bold rounded-lg hover:bg-outline transition-all">Rechazar</button>
+</div>
+</div>
+<!-- Chat Content -->
+<div class="flex-grow overflow-y-auto p-lg space-y-lg custom-scrollbar">
+<div class="flex justify-center">
+<span class="px-3 py-1 bg-surface-container text-[10px] font-bold text-outline rounded-full uppercase tracking-tighter">Hoy, 12 de Octubre</span>
+</div>
+<!-- Received Bubble -->
+<div class="flex items-end gap-2 max-w-[80%]">
+<div class="bg-white p-4 rounded-2xl rounded-bl-none shadow-[0px_2px_8px_rgba(0,0,0,0.04)] text-label-md text-primary">
+                        Buen día Coordinadora Carolina. Adjunto mi excusa médica por la inasistencia a la jornada de servicio social del pasado sábado. Tuve una emergencia dental.
+                    </div>
+<span class="text-[10px] text-outline mb-1">10:42 AM</span>
+</div>
+<!-- Received Bubble with PDF -->
+<div class="flex items-end gap-2 max-w-[80%]">
+<div class="bg-white p-3 rounded-2xl rounded-bl-none shadow-[0px_2px_8px_rgba(0,0,0,0.04)] border border-outline-variant/30">
+<div class="flex items-center gap-3 p-2 bg-surface-container-low rounded-lg border border-outline-variant/20">
+<span class="material-symbols-outlined text-pink-600 text-3xl">picture_as_pdf</span>
+<div>
+<p class="text-label-sm font-bold text-primary">Excusa_Medica_Mateo_Oct12.pdf</p>
+<p class="text-[10px] text-outline">1.2 MB • PDF Documento</p>
+</div>
+<button class="ml-2 text-primary"><span class="material-symbols-outlined">download</span></button>
+</div>
+</div>
+</div>
+<!-- Sent Bubble -->
+<div class="flex flex-col items-end gap-1">
+<div class="max-w-[80%] flex items-end gap-2 justify-end">
+<span class="text-[10px] text-outline mb-1">10:45 AM</span>
+<div class="bg-[#0F172A] p-4 rounded-2xl rounded-br-none shadow-[0px_4px_12px_rgba(15,23,42,0.1)] text-label-md text-white">
+                            Recibido Mateo. Voy a revisar el documento ahora mismo y te daré respuesta por este medio. ¡Espero que te encuentres mejor!
+                        </div>
+</div>
+<div class="flex items-center gap-1 text-[10px] text-secondary">
+                        Visto <span class="material-symbols-outlined !text-[14px]">done_all</span>
+</div>
+</div>
+</div>
+<!-- Input Area -->
+<div class="p-lg bg-white border-t border-outline-variant shrink-0">
+<div class="flex items-center gap-3 bg-surface-container-low rounded-xl px-4 py-2 border border-outline-variant/30 focus-within:border-secondary-container focus-within:ring-2 focus-within:ring-secondary-container/20 transition-all">
+<button class="text-outline hover:text-primary transition-colors">
+<span class="material-symbols-outlined">attach_file</span>
+</button>
+<input class="flex-grow bg-transparent border-none focus:ring-0 text-label-md py-2" placeholder="Escribe un mensaje..." type="text"/>
+<button class="text-outline hover:text-primary transition-colors">
+<span class="material-symbols-outlined">sentiment_satisfied</span>
+</button>
+<button class="w-10 h-10 bg-[#0F172A] text-white rounded-lg flex items-center justify-center shadow-lg hover:scale-105 active:scale-95 transition-all">
+<span class="material-symbols-outlined !text-[20px]">send</span>
+</button>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar Execution -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-4 pt-2 bg-surface-container-lowest shadow-[0px_-4px_16px_rgba(0,0,0,0.04)] border-t border-outline-variant">
+<!-- Dashboard -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:text-primary transition-all" href="#">
+<span class="material-symbols-outlined mb-1">dashboard</span>
+<span class="font-label-sm text-label-sm">Dashboard</span>
+</a>
+<!-- Teachers -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:text-primary transition-all" href="#">
+<span class="material-symbols-outlined mb-1">school</span>
+<span class="font-label-sm text-label-sm">Docentes</span>
+</a>
+<!-- Students -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:text-primary transition-all" href="#">
+<span class="material-symbols-outlined mb-1">group</span>
+<span class="font-label-sm text-label-sm">Estudiantes</span>
+</a>
+<!-- Messages (ACTIVE) -->
+<a class="flex flex-col items-center justify-center active-nav-capsule text-secondary rounded-full px-4 py-1 scale-90 duration-200 ease-out" href="#">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 1;">chat</span>
+<span class="font-label-sm text-label-sm">Mensajes</span>
+</a>
+</nav>
+<!-- Spacer for Bottom Nav on Mobile -->
+<div class="h-20 shrink-0 md:hidden bg-background"></div>
+<script>
+        // Simple micro-interaction for mobile view toggle
+        function toggleChat() {
+            document.getElementById('chat-container').classList.toggle('chat-active');
+        }
+
+        // Handle window resize to reset layout if needed
+        window.addEventListener('resize', () => {
+            if (window.innerWidth >= 768) {
+                document.body.classList.remove('chat-active');
+            }
+        });
+    </script>
+</body></html>

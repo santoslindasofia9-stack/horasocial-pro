@@ -1,0 +1,390 @@
+<!DOCTYPE html><html class="light" lang="es"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>EduServe Pro | Administrator Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600;700&amp;family=Comfortaa:wght@400;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<style>
+        .font-comfortaa { font-family: 'Comfortaa', cursive; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 24px;
+        }
+        @media (max-width: 768px) {
+            .bento-grid {
+                display: flex;
+                flex-direction: column;
+            }
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-error": "#ffffff",
+                        "tertiary-fixed-dim": "#7bd0ff",
+                        "primary": "#0F172A",
+                        "secondary": "#0EA5E9",
+                        "on-secondary-fixed-variant": "#004c6e",
+                        "outline-variant": "#c6c6cd",
+                        "surface-container": "#eceef0",
+                        "primary-container": "#131b2e",
+                        "surface-bright": "#f7f9fb",
+                        "secondary-container": "#e0f2fe",
+                        "on-error-container": "#93000a",
+                        "on-secondary-container": "#004666",
+                        "surface-dim": "#d8dadc",
+                        "on-tertiary": "#ffffff",
+                        "on-surface": "#191c1e",
+                        "on-tertiary-fixed": "#001e2c",
+                        "inverse-on-surface": "#eff1f3",
+                        "on-surface-variant": "#45464d",
+                        "on-primary-fixed-variant": "#3f465c",
+                        "on-primary-fixed": "#131b2e",
+                        "surface-tint": "#565e74",
+                        "tertiary-container": "#001e2c",
+                        "on-primary": "#ffffff",
+                        "surface-variant": "#e0e3e5",
+                        "error": "#ba1a1a",
+                        "on-secondary": "#ffffff",
+                        "inverse-primary": "#bec6e0",
+                        "surface-container-high": "#e6e8ea",
+                        "surface-container-highest": "#e0e3e5",
+                        "on-secondary-fixed": "#001e2f",
+                        "secondary-fixed": "#c9e6ff",
+                        "primary-fixed": "#dae2fd",
+                        "tertiary": "#000000",
+                        "error-container": "#ffdad6",
+                        "inverse-surface": "#2d3133",
+                        "on-tertiary-container": "#008ebf",
+                        "surface-container-lowest": "#ffffff",
+                        "primary-fixed-dim": "#bec6e0",
+                        "on-background": "#191c1e",
+                        "surface-container-low": "#f2f4f6",
+                        "on-primary-container": "#7c839b",
+                        "tertiary-fixed": "#c4e7ff",
+                        "secondary-fixed-dim": "#89ceff",
+                        "background": "#f8fafc",
+                        "on-tertiary-fixed-variant": "#004c69",
+                        "surface": "#f7f9fb",
+                        "outline": "#76777d"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "1rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "margin-desktop": "48px",
+                        "unit": "4px",
+                        "xs": "4px",
+                        "xl": "32px",
+                        "margin-mobile": "16px",
+                        "lg": "24px",
+                        "md": "16px",
+                        "sm": "8px",
+                        "gutter": "24px"
+                    },
+                    "fontFamily": {
+                        "headline-lg-mobile": ["Plus Jakarta Sans"],
+                        "body-md": ["Inter"],
+                        "display-lg": ["Plus Jakarta Sans"],
+                        "body-lg": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "headline-sm": ["Plus Jakarta Sans"],
+                        "label-md": ["Inter"],
+                        "headline-md": ["Plus Jakarta Sans"],
+                        "headline-lg": ["Plus Jakarta Sans"]
+                    },
+                    "fontSize": {
+                        "headline-lg-mobile": ["28px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                        "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "label-sm": ["12px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                        "headline-sm": ["20px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                        "label-md": ["14px", {"lineHeight": "1.4", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                        "headline-md": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                        "headline-lg": ["32px", {"lineHeight": "1.2", "fontWeight": "600"}]
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background text-on-surface font-body-md min-h-screen pb-24">
+<!-- TopAppBar -->
+<header class="bg-surface dark:bg-surface-dim shadow-sm w-full top-0 sticky z-50 flex justify-between items-center px-margin-mobile md:px-margin-desktop py-sm">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[32px]">school</span>
+<span class="font-headline-sm text-headline-sm font-extrabold tracking-tight text-on-surface">EduServe Pro</span>
+</div>
+<div class="flex items-center gap-3">
+<div class="text-right hidden md:block">
+<p class="font-label-md text-on-surface font-bold">Coordinadora Carolina Rojas</p>
+<p class="text-label-sm text-on-surface-variant">Administrador Senior</p>
+</div>
+<div class="relative">
+<img alt="User Avatar" class="w-10 h-10 rounded-full border-2 border-secondary object-cover" data-alt="A professional portrait of a woman in her 40s with a confident and kind expression, wearing a dark blazer. The lighting is soft and studio-like, creating a high-end professional atmosphere. The background is a clean, minimalist office setting that aligns with a corporate SaaS aesthetic. The overall mood is reliable and authoritative." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC2a3doQcYz7YW2YfF68HVbOvJ0y2UEpVIz_a1cdaOKDVUxSxGCUp8vcnpothWg82RQjdLADzsR4HcF9LcPVsvyJvQJtAwi_8o9nq47jRNCo_Y8XOyqXvlFSLrjV8PckkMvsJapiYfkCKzK9bv-uHzDS3C1nM2wbIxXIm-fBz1Ygc0ezuWNXCHIpcLFTq_5skl6y8h9aoN8xy-msY3KWtXyYLqUH4fx7FGE71bDInKsmHX2PaOIYf48mgicFJJrgOhAli8rttZwQwLJ">
+</div>
+</div>
+</header>
+<main class="max-w-7xl mx-auto px-margin-mobile md:px-margin-desktop mt-lg">
+<!-- Welcome Banner -->
+<section class="mb-lg">
+<div class="relative overflow-hidden bg-gradient-to-r from-primary to-slate-700 rounded-lg p-lg text-white shadow-lg">
+<div class="relative z-10">
+<h1 class="font-comfortaa text-headline-md md:text-headline-lg font-bold mb-2">Bitácora de Cambios y Novedades</h1>
+<p class="text-on-primary-container opacity-90 max-w-xl">Supervisa y valida las actividades de servicio social en tiempo real. Mantén la integridad académica y la eficiencia administrativa.</p>
+</div>
+<!-- Background Decoration -->
+<div class="absolute right-[-20px] bottom-[-20px] opacity-10">
+<span class="material-symbols-outlined text-[180px]">settings_applications</span>
+</div>
+</div>
+</section>
+<!-- Metric Cards -->
+<section class="grid grid-cols-1 md:grid-cols-3 gap-gutter mb-lg">
+<!-- Red/Pink Alert -->
+<div class="bg-surface-container-lowest p-md rounded-lg shadow-sm border-l-4 border-error flex items-center justify-between hover:shadow-md transition-shadow">
+<div>
+<p class="text-label-md text-on-surface-variant mb-1">Excusas por Validar</p>
+<p class="font-headline-md text-error">3</p>
+</div>
+<div class="w-12 h-12 bg-error-container flex items-center justify-center rounded-full">
+<span class="material-symbols-outlined text-on-error-container">notification_important</span>
+</div>
+</div>
+<!-- Cyan Info -->
+<div class="bg-surface-container-lowest p-md rounded-lg shadow-sm border-l-4 border-secondary flex items-center justify-between hover:shadow-md transition-shadow">
+<div>
+<p class="text-label-md text-on-surface-variant mb-1">Cambios de Horarios</p>
+<p class="font-headline-md text-secondary">2</p>
+</div>
+<div class="w-12 h-12 bg-secondary-container flex items-center justify-center rounded-full">
+<span class="material-symbols-outlined text-secondary">schedule</span>
+</div>
+</div>
+<!-- Neutral Alert -->
+<div class="bg-surface-container-lowest p-md rounded-lg shadow-sm border-l-4 border-outline flex items-center justify-between hover:shadow-md transition-shadow">
+<div>
+<p class="text-label-md text-on-surface-variant mb-1">Alertas de Profesores</p>
+<p class="font-headline-md text-on-surface-variant">1</p>
+</div>
+<div class="w-12 h-12 bg-surface-variant flex items-center justify-center rounded-full">
+<span class="material-symbols-outlined text-outline">report</span>
+</div>
+</div>
+</section>
+<div class="bento-grid">
+<!-- Main Content (70%) -->
+<div class="col-span-12 md:col-span-8 flex flex-col gap-gutter">
+<div class="bg-surface-container-lowest rounded-lg shadow-sm p-lg min-h-[500px]">
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-lg gap-4">
+<h2 class="font-headline-sm text-headline-sm font-bold text-on-surface">Bitácora de Actividades Recientes</h2>
+<div class="flex bg-surface-container p-1 rounded-lg">
+<button class="px-4 py-1 rounded-md text-label-sm font-bold bg-white shadow-sm text-primary transition-all">Todos</button>
+<button class="px-4 py-1 rounded-md text-label-sm font-medium text-on-surface-variant hover:text-primary transition-all">Docentes</button>
+<button class="px-4 py-1 rounded-md text-label-sm font-medium text-on-surface-variant hover:text-primary transition-all">Estudiantes</button>
+</div>
+</div>
+<!-- Activities List -->
+<div class="space-y-sm">
+<!-- Activity Item 1 -->
+<div class="flex items-center p-md border-b border-surface-variant hover:bg-surface-container-low transition-colors rounded-xl">
+<div class="w-10 h-10 bg-secondary-container rounded-full flex items-center justify-center mr-md">
+<span class="material-symbols-outlined text-secondary">edit_calendar</span>
+</div>
+<div class="flex-grow">
+<p class="text-label-md font-bold text-on-surface">Prof. Ricardo Méndez</p>
+<p class="text-label-sm text-on-surface-variant">Modificó horario de práctica en Biblioteca Central.</p>
+</div>
+<div class="text-right">
+<span class="px-3 py-1 bg-secondary-container text-on-secondary-container text-[10px] font-bold rounded-full uppercase tracking-wider">DOCENTE</span>
+<p class="text-[11px] text-outline mt-1 italic">Hace 15 min</p>
+</div>
+</div>
+<!-- Activity Item 2 -->
+<div class="flex items-center p-md border-b border-surface-variant hover:bg-surface-container-low transition-colors rounded-xl">
+<div class="w-10 h-10 bg-error-container rounded-full flex items-center justify-center mr-md">
+<span class="material-symbols-outlined text-error">assignment_late</span>
+</div>
+<div class="flex-grow">
+<p class="text-label-md font-bold text-on-surface">Mariana López</p>
+<p class="text-label-sm text-on-surface-variant">Subió excusa médica por inasistencia al comedor.</p>
+</div>
+<div class="text-right">
+<span class="px-3 py-1 bg-error-container text-on-error-container text-[10px] font-bold rounded-full uppercase tracking-wider">EXCUSA</span>
+<p class="text-[11px] text-outline mt-1 italic">Hace 1 h</p>
+</div>
+</div>
+<!-- Activity Item 3 -->
+<div class="flex items-center p-md border-b border-surface-variant hover:bg-surface-container-low transition-colors rounded-xl">
+<div class="w-10 h-10 bg-surface-variant rounded-full flex items-center justify-center mr-md">
+<span class="material-symbols-outlined text-on-surface-variant">person_add</span>
+</div>
+<div class="flex-grow">
+<p class="text-label-md font-bold text-on-surface">Esteban Quito</p>
+<p class="text-label-sm text-on-surface-variant">Nuevo registro de estudiante para Servicio Social.</p>
+</div>
+<div class="text-right">
+<span class="px-3 py-1 bg-surface-container-high text-on-surface-variant text-[10px] font-bold rounded-full uppercase tracking-wider">ESTUDIANTE</span>
+<p class="text-[11px] text-outline mt-1 italic">Hace 2 h</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Sidebar/Right Block (30%) -->
+<div class="col-span-12 md:col-span-4 flex flex-col gap-gutter">
+<div class="bg-surface-container-lowest rounded-lg shadow-sm p-lg">
+<div class="flex items-center justify-between mb-md">
+<h2 class="font-headline-sm text-headline-sm font-bold text-on-surface">Excusas Pendientes</h2>
+<span class="bg-error text-white text-[10px] font-bold px-2 py-0.5 rounded-full">3</span>
+</div>
+<!-- Excusa Card -->
+<div class="space-y-md">
+<div class="bg-surface-container-low p-md rounded-lg border border-surface-variant flex flex-col gap-3">
+<div class="flex justify-between items-start">
+<div>
+<p class="text-label-md font-bold text-on-surface">Juan Pérez</p>
+<p class="text-label-sm text-on-surface-variant">Grado 11-A • 24 Oct 2023</p>
+</div>
+<span class="material-symbols-outlined text-secondary cursor-pointer hover:scale-110 transition-transform">picture_as_pdf</span>
+</div>
+<div class="bg-white/50 p-sm rounded-md border-l-2 border-secondary italic text-label-sm text-on-surface-variant">
+                                "Cita odontológica programada de urgencia."
+                            </div>
+<div class="grid grid-cols-2 gap-sm pt-2">
+<button class="bg-primary text-white py-2 rounded-md font-label-md hover:bg-slate-800 active:scale-95 transition-all">Aceptar</button>
+<button class="bg-white border border-outline-variant text-on-surface-variant py-2 rounded-md font-label-md hover:bg-surface-variant transition-all">Rechazar</button>
+</div>
+</div>
+<div class="bg-surface-container-low p-md rounded-lg border border-surface-variant flex flex-col gap-3">
+<div class="flex justify-between items-start">
+<div>
+<p class="text-label-md font-bold text-on-surface">Sofía Ramírez</p>
+<p class="text-label-sm text-on-surface-variant">Grado 10-C • 23 Oct 2023</p>
+</div>
+<span class="material-symbols-outlined text-secondary cursor-pointer hover:scale-110 transition-transform">picture_as_pdf</span>
+</div>
+<div class="bg-white/50 p-sm rounded-md border-l-2 border-secondary italic text-label-sm text-on-surface-variant">
+                                "Incapacidad médica por cuadro viral."
+                            </div>
+<div class="grid grid-cols-2 gap-sm pt-2">
+<button class="bg-primary text-white py-2 rounded-md font-label-md hover:bg-slate-800 active:scale-95 transition-all">Aceptar</button>
+<button class="bg-white border border-outline-variant text-on-surface-variant py-2 rounded-md font-label-md hover:bg-surface-variant transition-all">Rechazar</button>
+</div>
+</div>
+</div>
+<button class="w-full mt-lg text-secondary font-label-md hover:underline flex items-center justify-center gap-1">
+                        Ver todas las solicitudes
+                        <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+</div>
+<!-- Subtle Data Visualization Placeholder -->
+<div class="bg-primary text-white rounded-lg p-lg relative overflow-hidden h-40 flex flex-col justify-end">
+<p class="text-label-sm uppercase tracking-widest opacity-60 mb-1">Horas Totales Mes</p>
+<p class="font-headline-md font-bold">1,248 h</p>
+<div class="absolute top-4 right-4 text-secondary opacity-40">
+<span class="material-symbols-outlined text-[64px]">bar_chart</span>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-8 mb-24 px-margin-mobile md:px-0">
+    <button class="w-full flex items-center justify-center gap-2 py-4 px-6 border border-outline rounded-lg text-on-surface-variant font-medium hover:bg-surface-variant/50 transition-colors active:scale-95">
+        <span class="material-symbols-outlined">logout</span>
+        <span class="font-label-md">Cerrar Sesión</span>
+    </button>
+</div></main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 bg-surface-container-lowest dark:bg-surface-container-high px-4 pb-4 pt-2 shadow-[0_-4px_20px_rgba(15,23,42,0.05)] rounded-t-xl md:hidden grid grid-cols-4">
+<!-- Dashboard (ACTIVE) -->
+<a class="border-2 border-dashed border-secondary/30 rounded-lg p-1 flex justify-center" href="#">
+<div class="flex flex-col items-center justify-center bg-secondary-container dark:bg-secondary text-on-secondary-container dark:text-on-secondary rounded-full px-4 py-1 active:scale-95 transition-transform duration-200 text-secondary">
+<span class="material-symbols-outlined font-bold" data-weight="fill">dashboard</span>
+<span class="font-label-sm font-bold text-[10px]">Dashboard</span>
+</div>
+</a>
+<!-- Docentes -->
+<a class="border-2 border-dashed rounded-lg p-1 border-secondary/30 flex justify-center" href="#">
+<div class="flex flex-col items-center justify-center dark:text-outline-variant px-4 py-1 hover:bg-surface-variant/50 transition-colors text-primary">
+<span class="material-symbols-outlined">group</span>
+<span class="font-label-sm text-[10px]">Docentes</span>
+</div>
+</a>
+<!-- Estudiantes -->
+<a class="border-2 border-dashed rounded-lg p-1 border-secondary/30 flex justify-center" href="#">
+<div class="flex flex-col items-center justify-center dark:text-outline-variant px-4 py-1 hover:bg-surface-variant/50 transition-colors text-primary">
+<span class="material-symbols-outlined">school</span>
+<span class="font-label-sm text-[10px]">Estudiantes</span>
+</div>
+</a>
+<!-- Mensajes -->
+<a class="border-2 border-dashed rounded-lg p-1 relative border-secondary/30 flex justify-center" href="#">
+<div class="flex flex-col items-center justify-center dark:text-outline-variant px-4 py-1 hover:bg-surface-variant/50 transition-colors text-primary">
+<span class="material-symbols-outlined">mail</span>
+<span class="font-label-sm text-[10px]">Mensajes</span>
+</div>
+<div class="absolute top-0 right-3 w-2 h-2 bg-error rounded-full ring-2 ring-white text-primary"></div>
+</a>
+</nav>
+<!-- Desktop Sidebar Suggestion (Optional but good for premium feel) -->
+<div class="hidden md:flex fixed left-0 top-[64px] h-screen w-20 bg-surface-container-lowest border-r border-surface-variant flex-col items-center py-lg gap-lg shadow-sm">
+<div class="p-3 rounded-xl bg-secondary-container text-secondary">
+<span class="material-symbols-outlined text-[28px]" data-weight="fill">dashboard</span>
+</div>
+<div class="p-3 rounded-xl text-on-surface-variant hover:bg-surface-variant/50 cursor-pointer">
+<span class="material-symbols-outlined text-[28px]">group</span>
+</div>
+<div class="p-3 rounded-xl text-on-surface-variant hover:bg-surface-variant/50 cursor-pointer">
+<span class="material-symbols-outlined text-[28px]">settings_applications</span>
+</div>
+<div class="p-3 rounded-xl text-on-surface-variant hover:bg-surface-variant/50 cursor-pointer">
+<span class="material-symbols-outlined text-[28px]">mail</span>
+</div>
+</div>
+<script>
+        // Micro-interactions
+        document.querySelectorAll('button').forEach(btn => {
+            btn.addEventListener('mousedown', () => {
+                btn.classList.add('scale-95');
+            });
+            btn.addEventListener('mouseup', () => {
+                btn.classList.remove('scale-95');
+            });
+        });
+
+        // Tab switching logic mockup
+        const tabs = document.querySelectorAll('.flex.bg-surface-container button');
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                tabs.forEach(t => {
+                    t.classList.remove('bg-white', 'shadow-sm', 'text-primary');
+                    t.classList.add('text-on-surface-variant');
+                });
+                tab.classList.add('bg-white', 'shadow-sm', 'text-primary');
+                tab.classList.remove('text-on-surface-variant');
+            });
+        });
+    </script>
+
+
+
+
+</body></html>

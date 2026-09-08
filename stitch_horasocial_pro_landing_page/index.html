@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Horas Sociales – Landing Page</title>
+    <meta name="description" content="Plataforma de Horas Sociales para gestionar y visualizar actividades comunitarias." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body>
+    <header class="site-header">
+        <h1>Horas Sociales</h1>
+        <nav class="nav">
+            <ul>
+                <li><a href="#" class="nav-link">Inicio</a></li>
+                <li><a href="#" class="nav-link">Acerca</a></li>
+                <li><a href="#" class="nav-link">Contactos</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main class="main-content">
+        <!-- SECTION: Hero -->
+        <section class="hero" id="hero">
+            <h2>Conecta, comparte y registra tus horas sociales</h2>
+            <p>Plataforma intuitiva para visualizar el impacto de tus actividades comunitarias.</p>
+            <button class="cta-btn" id="load-stats">Ver Estadísticas</button>
+        </section>
+        <!-- SECTION: Stats (populated via JS) -->
+        <section class="stats" id="stats" hidden>
+            <h3>Estadísticas en tiempo real</h3>
+            <div class="stats-grid" id="stats-grid">
+                <!-- Dynamic cards will be inserted here -->
+            </div>
+        </section>
+    </main>
+    <footer class="site-footer">
+        <p>&copy; 2026 Horas Sociales. Todos los derechos reservados.</p>
+    </footer>
+    <script src="assets/js/app.js"></script>
+</body>
+</html>

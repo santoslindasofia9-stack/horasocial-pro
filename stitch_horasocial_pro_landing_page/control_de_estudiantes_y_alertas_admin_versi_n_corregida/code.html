@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+
+<html lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Control de Estudiantes - HORASOCIAL PRO</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;family=Comfortaa:wght@400;600;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .font-comfortaa { font-family: 'Comfortaa', cursive; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        body { background-color: #F8FAFC; }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0F172A",
+                        "accent": "#0EA5E9",
+                        "background": "#F8FAFC",
+                        "surface": "#FFFFFF",
+                        "on-surface": "#191c1e",
+                        "on-surface-variant": "#45464d",
+                        "outline-variant": "#c6c6cd"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "1rem",
+                        "xl": "1.25rem",
+                        "full": "9999px"
+                    },
+                    fontFamily: {
+                        "body": ["Inter", "sans-serif"],
+                        "headline": ["Plus Jakarta Sans", "sans-serif"]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="font-body text-on-surface min-h-screen pb-32">
+<!-- Header -->
+<header class="fixed top-0 w-full z-50 bg-white/90 backdrop-blur-md border-b border-slate-200 px-4 md:px-lg py-md flex justify-between items-center h-20">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 bg-primary rounded-lg flex items-center justify-center text-white">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">school</span>
+</div>
+<h1 class="font-headline text-xl font-bold text-primary tracking-tight">HORASOCIAL PRO</h1>
+</div>
+<div class="flex items-center gap-4 px-3 py-1.5 rounded-full bg-slate-50 border border-slate-100">
+<div class="text-right hidden sm:block">
+<p class="text-sm font-bold text-primary leading-tight">Coordinadora Carolina Rojas</p>
+<p class="text-[11px] text-on-surface-variant font-medium">Administrador</p>
+</div>
+<div class="relative">
+<img alt="Profile" class="w-10 h-10 rounded-full border-2 border-primary object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD-jEaB1rRyiv-PFoHJYSYVflUphAJutNcW0ho3QJG2K8su-qgH2W2g609ldMcSycw7sYsVDxvgXEh8r07r3VlJxUVifGqFjwKtfg0ZBok1rdZHXJxitVGwIUD-smAwVcdHDfaKgoNGMFvkI-7RQJY87LuDRhKUwQELFPGRcJ6Ac4FuJlXsjOV2LlujosUbzrs7MX4AhqdNV9HekG47FckN51Rjsm7sX9lVJp1tOsYsOaaIh3EQkZzDcNaqN5JKFFvS2UPJ69jNx6J2"/>
+<div class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></div>
+</div>
+</div>
+</header>
+<main class="relative z-10 pt-24 px-4 md:px-8 max-w-[1440px] mx-auto">
+<!-- Banner -->
+<section class="mt-6 mb-8 rounded-2xl overflow-hidden relative h-44 flex items-center shadow-md">
+<div class="absolute inset-0 bg-gradient-to-r from-[#0F172A] via-[#1E293B] to-[#334155]"></div>
+<div class="absolute right-8 opacity-10">
+<span class="material-symbols-outlined text-[160px] text-white">settings_suggest</span>
+</div>
+<div class="relative z-10 px-8">
+<h2 class="font-comfortaa text-3xl md:text-4xl text-white font-bold mb-2">Monitoreo de Actividad y Normas</h2>
+<p class="text-slate-300 text-sm md:text-base max-w-xl">Supervisión centralizada de compromisos sociales, excusas médicas y alertas de convivencia para el periodo académico 2024.</p>
+</div>
+</section>
+<!-- Metrics Section -->
+<section class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+<!-- Metric 1 -->
+<div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col justify-between">
+<div class="flex justify-between items-start">
+<div class="bg-blue-50 p-2.5 rounded-xl text-accent">
+<span class="material-symbols-outlined">assignment_late</span>
+</div>
+<span class="text-xs font-bold text-green-600 bg-green-50 px-2.5 py-1 rounded-full">+12% este mes</span>
+</div>
+<div class="mt-4">
+<h3 class="text-slate-500 text-xs font-bold uppercase tracking-widest mb-1">Excusas Enviadas</h3>
+<p class="text-4xl font-headline font-extrabold text-primary">142</p>
+</div>
+</div>
+<!-- Metric 2 (Alerts) -->
+<div class="bg-white p-6 rounded-2xl shadow-sm border-2 border-red-50 flex flex-col justify-between">
+<div class="flex justify-between items-start">
+<div class="bg-red-50 p-2.5 rounded-xl text-red-600">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">warning</span>
+</div>
+<span class="text-xs font-bold text-red-600 bg-red-50 px-2.5 py-1 rounded-full uppercase tracking-tight">Acción Requerida</span>
+</div>
+<div class="mt-4">
+<h3 class="text-red-700 text-xs font-bold uppercase tracking-widest mb-1">Alertas de Convivencia</h3>
+<p class="text-4xl font-headline font-extrabold text-red-600">08</p>
+</div>
+</div>
+<!-- Metric 3 -->
+<div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col justify-between">
+<div class="flex justify-between items-start">
+<div class="bg-indigo-50 p-2.5 rounded-xl text-indigo-600">
+<span class="material-symbols-outlined">group</span>
+</div>
+</div>
+<div class="mt-4">
+<h3 class="text-slate-500 text-xs font-bold uppercase tracking-widest mb-1">Estudiantes Registrados</h3>
+<p class="text-4xl font-headline font-extrabold text-primary">1,240</p>
+</div>
+</div>
+</section>
+<!-- Main Content Grid -->
+<section class="grid grid-cols-1 lg:grid-cols-10 gap-8 mb-12">
+<!-- Bitácora (70%) -->
+<div class="lg:col-span-7 space-y-6">
+<div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+<div class="p-6 border-b border-slate-100 flex flex-col md:flex-row md:items-center justify-between gap-4">
+<div>
+<h3 class="font-comfortaa text-xl text-primary font-bold">Bitácora de Actividad y Excusas</h3>
+<p class="text-slate-500 text-sm">Historial reciente de novedades y justificaciones.</p>
+</div>
+<div class="flex items-center gap-3">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">search</span>
+<input class="pl-9 pr-4 py-2 border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-accent focus:border-accent outline-none w-48 md:w-64" placeholder="Buscar estudiante..." type="text"/>
+</div>
+<button class="bg-primary text-white px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-2 hover:bg-slate-800 transition-colors">
+<span class="material-symbols-outlined text-sm">download</span> Exportar
+                        </button>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead class="bg-slate-50">
+<tr>
+<th class="px-6 py-4 text-[11px] font-bold text-slate-400 uppercase">Estudiante</th>
+<th class="px-6 py-4 text-[11px] font-bold text-slate-400 uppercase">Grado</th>
+<th class="px-6 py-4 text-[11px] font-bold text-slate-400 uppercase">Fecha</th>
+<th class="px-6 py-4 text-[11px] font-bold text-slate-400 uppercase">Motivo</th>
+<th class="px-6 py-4 text-right"></th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-50">
+<tr class="hover:bg-slate-50/50 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-accent/20 flex items-center justify-center text-accent font-bold text-[10px]">MA</div>
+<div>
+<p class="text-sm font-bold text-primary">Mateo Arboleda</p>
+<p class="text-[10px] text-slate-400 font-medium">ID: 4520-22</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 text-sm text-slate-600">11º A</td>
+<td class="px-6 py-4 text-sm text-slate-500">Oct 24, 2023</td>
+<td class="px-6 py-4">
+<span class="px-3 py-1 rounded-full text-[10px] font-bold bg-blue-50 text-blue-700">Médico</span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-accent hover:text-accent/80 transition-colors">
+<span class="material-symbols-outlined text-lg">visibility</span>
+</button>
+</td>
+</tr>
+<tr class="hover:bg-slate-50/50 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<img alt="Student" class="w-8 h-8 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAmqLc-tg1IljOnKI3gr_bUu_A-sGgo4yRtZVyjToCqfPdiWcw34cwdcOaOao6s-y05gZY2e5aIX26mMxFNdHD6baJbRvxAu5ww2e-Xm7F5uaRY-mrCO9lwrHe6WchDAiTeSlkhOo88T2RWOlOQjKpryO9eZdkC4qmEpLzcfekjXbHGbNLL06wV1UvOJacQPo52KdmOLlZG7NFQ-YGvt8O9eh36H1oREIkYeNl5cX3RjcXS6RbYlCIrs5d2sL2YFBALORXMvfp2pvwJ"/>
+<div>
+<p class="text-sm font-bold text-primary">Lucía Mendez</p>
+<p class="text-[10px] text-slate-400 font-medium">ID: 4520-25</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 text-sm text-slate-600">10º B</td>
+<td class="px-6 py-4 text-sm text-slate-500">Oct 23, 2023</td>
+<td class="px-6 py-4">
+<span class="px-3 py-1 rounded-full text-[10px] font-bold bg-amber-50 text-amber-700">Familiar</span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-accent hover:text-accent/80 transition-colors">
+<span class="material-symbols-outlined text-lg">visibility</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="p-4 bg-slate-50 flex justify-center">
+<button class="text-xs font-bold text-slate-500 hover:text-primary transition-colors">Ver todos los registros</button>
+</div>
+</div>
+</div>
+<!-- Alertas (30%) -->
+<div class="lg:col-span-3">
+<div class="bg-white rounded-2xl border border-red-100 shadow-sm flex flex-col h-full">
+<div class="p-6 bg-red-50/30 border-b border-red-100 rounded-t-2xl">
+<h3 class="font-comfortaa text-lg text-red-800 font-bold flex items-center gap-2">
+<span class="material-symbols-outlined text-red-600">emergency_home</span>
+                        Alertas Recientes
+                    </h3>
+</div>
+<div class="p-4 space-y-4 overflow-y-auto max-h-[600px]">
+<!-- Card 1 -->
+<div class="p-5 rounded-xl bg-slate-50 border-l-4 border-red-500 shadow-sm relative group cursor-pointer hover:bg-white transition-all">
+<div class="flex justify-between items-start mb-2">
+<span class="text-[9px] font-bold uppercase tracking-wider bg-red-600 text-white px-2 py-0.5 rounded">Crítico</span>
+<span class="text-[10px] text-slate-400">Hace 15 min</span>
+</div>
+<p class="text-sm font-bold text-primary mb-1">Vocabulario inapropiado</p>
+<p class="text-[11px] text-slate-500 mb-4 italic">Chat grupal: "Fundación Caminos"</p>
+<div class="grid grid-cols-2 gap-2">
+<button class="py-2 bg-red-600 text-white rounded-lg text-[10px] font-bold hover:bg-red-700 transition-colors">Sanción</button>
+<button class="py-2 bg-white border border-slate-200 text-primary rounded-lg text-[10px] font-bold hover:bg-slate-50 transition-colors">Llamado</button>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="p-5 rounded-xl bg-slate-50 border-l-4 border-amber-500 shadow-sm relative group cursor-pointer hover:bg-white transition-all">
+<div class="flex justify-between items-start mb-2">
+<span class="text-[9px] font-bold uppercase tracking-wider bg-amber-500 text-white px-2 py-0.5 rounded">Moderado</span>
+<span class="text-[10px] text-slate-400">Hace 2 horas</span>
+</div>
+<p class="text-sm font-bold text-primary mb-1">Inasistencia injustificada</p>
+<p class="text-[11px] text-slate-500 mb-4 italic">Hospital Regional: Maria F. V.</p>
+<button class="w-full py-2 bg-white border border-amber-200 text-amber-700 rounded-lg text-[10px] font-bold hover:bg-amber-50 transition-colors">Llamado de atención</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer Navigation -->
+<nav class="fixed bottom-0 left-0 w-full z-50 bg-white border-t border-slate-100 shadow-[0_-10px_30px_rgba(0,0,0,0.04)] px-4 pb-safe h-24 flex items-center">
+<div class="max-w-4xl mx-auto w-full grid grid-cols-4 gap-3">
+<!-- Dashboard -->
+<div class="border border-dashed border-accent/40 rounded-xl p-1">
+<a class="flex flex-col items-center justify-center py-2 text-slate-400 hover:text-primary transition-colors group" href="#">
+<span class="material-symbols-outlined text-2xl group-hover:scale-110 transition-transform">dashboard</span>
+<span class="text-[11px] font-bold mt-0.5">Dashboard</span>
+</a>
+</div>
+<!-- Docentes -->
+<div class="border border-dashed border-accent/40 rounded-xl p-1">
+<a class="flex flex-col items-center justify-center py-2 text-slate-400 hover:text-primary transition-colors group" href="#">
+<span class="material-symbols-outlined text-2xl group-hover:scale-110 transition-transform">badge</span>
+<span class="text-[11px] font-bold mt-0.5">Docentes</span>
+</a>
+</div>
+<!-- Estudiantes (ACTIVE) -->
+<div class="border border-dashed border-accent/60 rounded-xl p-1 bg-accent/5">
+<a class="flex flex-col items-center justify-center py-2 px-3 bg-accent/15 rounded-lg text-accent" href="#">
+<span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 1;">school</span>
+<span class="text-[11px] font-extrabold mt-0.5">Estudiantes</span>
+</a>
+</div>
+<!-- Mensajes -->
+<div class="border border-dashed border-accent/40 rounded-xl p-1">
+<a class="flex flex-col items-center justify-center py-2 text-slate-400 hover:text-primary transition-colors group overflow-hidden" href="#">
+<span class="material-symbols-outlined text-2xl group-hover:scale-110 transition-transform">chat_bubble</span>
+<span class="text-[11px] font-bold mt-0.5 whitespace-nowrap">Mensajes</span>
+</a>
+</div>
+</div>
+</nav>
+<script>
+    // Subtle hover effect logic for action buttons
+    document.querySelectorAll('button').forEach(btn => {
+        btn.addEventListener('mousedown', () => btn.classList.add('scale-95'));
+        btn.addEventListener('mouseup', () => btn.classList.remove('scale-95'));
+    });
+</script>
+</body></html>
