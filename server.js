@@ -274,3 +274,78 @@ app.get('/admin/mensajes', (req, res) => {
 });
 
 module.exports = app;
+// ==========================================
+// RUTAS DE PÁGINAS CORREGIDAS PARA VERCEL
+// ==========================================
+
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'stitch_horasocial_pro_landing_page', 'bienvenido_a_horasocial_pro_2', 'code.html'));
+});
+
+app.get('/seleccion-rol', (req, res) => {
+    res.sendFile(path.join(__dirname, 'stitch_horasocial_pro_landing_page', 'selecci_n_de_rol_distribuci_n_expandida_vertical', 'code.html'));
+});
+
+app.get('/login', (req, res) => {
+    res.sendFile(path.join(__dirname, 'stitch_horasocial_pro_landing_page', 'login_estudiante_distribuci_n_centrada_y_logo_optimizado_2', 'code.html'));
+});
+
+app.get('/profesor/login', (req, res) => {
+    res.sendFile(path.join(__dirname, 'stitch_horasocial_pro_landing_page', 'login_profesor', 'code.html'));
+});
+
+app.get('/login_administrador', (req, res) => {
+    res.sendFile(path.join(__dirname, 'stitch_horasocial_pro_landing_page', 'login_administrador', 'code.html'));
+});
+
+app.get('/sobre', (req, res) => {
+    res.sendFile(path.join(__dirname, 'stitch_horasocial_pro_landing_page', 'sobre_horasocial_pro_identidad_y_prop_sito', 'code.html'));
+});
+
+app.get('/estudiante/dashboard', (req, res) => {
+    res.sendFile(path.join(__dirname, 'stitch_horasocial_pro_landing_page', 'dashboard_estudiante_navegaci_n_optimizada', 'code.html'));
+});
+
+app.get('/estudiante/agenda', (req, res) => {
+    res.sendFile(path.join(__dirname, 'stitch_horasocial_pro_landing_page', 'agenda_estudiante_junio_2026_premium', 'code.html'));
+});
+
+app.get('/estudiante/registro', (req, res) => {
+    res.sendFile(path.join(__dirname, 'stitch_horasocial_pro_landing_page', 'registro_de_asistencia_horasocial_pro', 'code.html'));
+});
+
+app.get('/estudiante/mensajes', (req, res) => {
+    res.sendFile(path.join(__dirname, 'stitch_horasocial_pro_landing_page', 'mis_mensajes_bandeja_de_entrada_estudiante_1', 'code.html'));
+});
+
+app.get('/maestro/dashboard', (req, res) => {
+    res.sendFile(path.join(__dirname, 'stitch_horasocial_pro_landing_page', 'dashboard_maestro_navegaci_n_y_cierre_de_sesi_n_optimizado', 'code.html'));
+});
+
+app.get('/maestro/estudiantes', (req, res) => {
+    res.sendFile(path.join(__dirname, 'stitch_horasocial_pro_landing_page', 'gesti_n_estudiantes_perfil_maestro', 'gesti_n_estudiantes_perfil_maestro', 'code.html'));
+});
+
+app.get('/maestro/tecnico', (req, res) => {
+    res.sendFile(path.join(__dirname, 'stitch_horasocial_pro_landing_page', 'gesti_n_t_cnica_perfil_maestro_2', 'code.html'));
+});
+
+app.get('/maestro/mensajes', (req, res) => {
+    res.sendFile(path.join(__dirname, 'stitch_horasocial_pro_landing_page', 'mensajes_e_interacci_n_perfil_maestro', 'code.html'));
+});
+
+app.get('/admin/dashboard', (req, res) => {
+    res.sendFile(path.join(__dirname, 'stitch_horasocial_pro_landing_page', 'dashboard_administrador_control_y_gesti_n_central', 'code.html'));
+});
+
+app.get('/admin/docentes', (req, res) => {
+    res.sendFile(path.join(__dirname, 'stitch_horasocial_pro_landing_page', 'coordinaci_n_y_ajuste_de_docentes_admin', 'code.html'));
+});
+
+app.get('/admin/alertas', (req, res) => {
+    res.sendFile(path.join(__dirname, 'stitch_horasocial_pro_landing_page', 'control_de_estudiantes_y_alertas_admin_versi_n_corregida', 'code.html'));
+});
+
+app.get('/admin/mensajes', (req, res) => {
+    res.sendFile(path.join(__dirname, 'stitch_horasocial_pro_landing_page', 'mensajer_a_y_canales_admin_horasocial_pro', 'code.html'));
+});
