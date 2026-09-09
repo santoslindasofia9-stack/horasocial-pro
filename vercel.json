@@ -17,7 +17,11 @@
           "agenda_estudiante_horasocial_pro/**",
           "registro_estudiante_horasocial_pro/**",
           "mensajes_estudiante_horasocial_pro/**",
-          "chat_maestro_estudiante_horasocial_pro/**"
+          "chat_maestro_estudiante_horasocial_pro/**",
+          "dashboard_maestro_horasocial_pro/**",
+          "stitch_horasocial_pro_landing_page/gesti_n_estudiantes_perfil_maestro/**",
+          "stitch_horasocial_pro_landing_page/gesti_n_t_cnica_perfil_maestro_2/**",
+          "stitch_horasocial_pro_landing_page/mensajes_e_interacci_n_perfil_maestro/**"
         ]
       }
     }

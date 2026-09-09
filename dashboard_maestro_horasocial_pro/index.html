@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport">
+<title>HORASOCIAL PRO - Panel del Maestro</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&amp;display=swap" rel="stylesheet">
+<style>
+  :root{
+    --sky-50:#f0f9ff; --sky-100:#e0f2fe; --sky-200:#bae6fd; --sky-300:#7dd3fc;
+    --sky-400:#38bdf8; --sky-500:#0ea5e9; --sky-600:#0284c7; --sky-700:#0369a1;
+    --navy-800:#075985; --navy-900:#0c4a6e; --ink:#0f2f44; --slate:#5b6b7c;
+    --card:#ffffff; --card-brd:#e6f0f9; --glass:rgba(255,255,255,.9); --radius:22px; --maxw:640px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html{scroll-behavior:smooth;overflow-x:hidden}
+  body{
+    font-family:'Inter','Plus Jakarta Sans','Segoe UI',system-ui,sans-serif;
+    color:var(--ink);background:#ffffff;position:relative;overflow-x:hidden;
+    min-height:100dvh;
+    padding:0 0 calc(120px + env(safe-area-inset-bottom));
+  }
+  h1,h2,h3,h4{font-family:'Plus Jakarta Sans',sans-serif}
+
+  /* ---------- ondas estilo selección de rol (toda la página) ---------- */
+  .flow-field{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;overflow:visible}
+  .flow-field svg{width:100%;height:100%;overflow:visible}
+  .wf-l{fill:none;stroke-width:0.9;vector-effect:non-scaling-stroke}
+  .wiggle{animation:flow-drift 38s ease-in-out infinite;will-change:transform}
+  @keyframes flow-drift{0%,100%{transform:translate(0,0)}20%{transform:translate(9px,-16px)}45%{transform:translate(19px,-6px)}70%{transform:translate(11px,6px)}}
+
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:22px 18px 10px;position:relative;z-index:1}
+  @media (min-width:720px){ :root{--maxw:920px} .wrap{padding:30px 26px 12px} }
+
+  /* ---------- header ---------- */
+  header{display:flex;align-items:center;gap:12px;padding:4px 2px 22px}
+  .avatar{width:56px;height:56px;border-radius:50%;flex:0 0 auto;position:relative;
+    filter:drop-shadow(0 8px 16px rgba(14,165,233,.35))}
+  .avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%;display:block}
+  .avatar::after{content:'';position:absolute;inset:-3px;border-radius:50%;
+    border:2.5px solid rgba(56,189,248,.45)}
+  .av-fb{display:none;width:100%;height:100%;border-radius:50%;align-items:center;justify-content:center;
+    background:linear-gradient(135deg,#38bdf8,#0369a1);color:#fff;
+    font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:19px;letter-spacing:.5px}
+  .hi{flex:1;min-width:0}
+  .hi h1{font-size:20px;font-weight:800;color:var(--navy-900);letter-spacing:-.2px}
+  .hi p{font-size:12px;color:var(--slate);font-weight:600;margin-top:3px}
+  .bell{position:relative;width:44px;height:44px;border-radius:14px;flex:0 0 auto;
+    background:var(--sky-50);border:1px solid var(--sky-200);color:var(--sky-700);
+    display:flex;align-items:center;justify-content:center;cursor:pointer;font-family:inherit;
+    transition:background .2s,box-shadow .2s,transform .12s}
+  .bell:hover{background:var(--sky-100);box-shadow:0 4px 12px rgba(2,132,199,.18)}
+  .bell:active{transform:scale(.94)}
+  .bell .material-symbols-outlined{font-size:22px}
+  .bell-dot{position:absolute;top:9px;right:10px;width:9px;height:9px;border-radius:50%;
+    background:#ef4444;border:2px solid #fff}
+  .logout{display:flex;align-items:center;gap:7px;text-decoration:none;
+    background:var(--sky-50);border:1px solid var(--sky-200);color:var(--sky-700);
+    padding:9px 13px;border-radius:999px;font-weight:800;font-size:12px;
+    transition:background .2s,box-shadow .2s,transform .12s;white-space:nowrap}
+  .logout:hover{background:var(--sky-100);box-shadow:0 4px 12px rgba(2,132,199,.18)}
+  .logout:active{transform:scale(.96)}
+  .logout .material-symbols-outlined{font-size:18px}
+  @media (max-width:430px){ .logout small{display:none} .logout{padding:10px} }
+
+  /* ---------- saludo ---------- */
+  .greet{margin:2px 0 24px;padding:0 4px}
+  .greet h2{font-size:22px;font-weight:800;color:var(--navy-900);letter-spacing:-.2px;line-height:1.25}
+  .greet p{font-size:13px;color:var(--slate);margin-top:7px;line-height:1.6;max-width:520px;font-weight:500}
+
+  /* ---------- sections ---------- */
+  section{margin-top:26px}
+  .sec-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;padding:0 4px}
+  .sec-head h3{font-size:16px;font-weight:800;color:var(--navy-900);display:flex;align-items:center;gap:8px}
+  .sec-head h3 .m{font-size:20px;color:var(--sky-500)}
+  .sec-head span{font-size:11.5px;color:var(--sky-600);font-weight:700}
+
+  /* ---------- stats grid ---------- */
+  .stats{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+  .stat{
+    background:var(--glass);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+    border:1px solid var(--card-brd);border-radius:20px;padding:18px 10px;text-align:center;
+    box-shadow:0 10px 28px rgba(3,105,161,.10);
+    display:flex;flex-direction:column;align-items:center;gap:5px;
+  }
+  .stat .m{font-size:26px;color:var(--sky-500)}
+  .stat b{font-size:25px;font-weight:800;color:var(--navy-900);line-height:1.1}
+  .stat small{font-size:11px;font-weight:700;color:var(--slate)}
+  .stat.accent .m{color:var(--sky-600)}
+  .stat.accent b{color:var(--sky-600)}
+
+  /* ---------- brigadas ---------- */
+  .brigades{display:grid;grid-template-columns:1fr;gap:14px}
+  .brigade{
+    background:var(--glass);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+    border:1px solid var(--card-brd);border-radius:var(--radius);padding:20px;
+    box-shadow:0 10px 24px rgba(3,105,161,.08);display:flex;flex-direction:column;gap:15px;
+  }
+  .brigade-top{display:flex;align-items:center;gap:13px}
+  .chip{width:48px;height:48px;border-radius:15px;flex:0 0 auto;
+    display:flex;align-items:center;justify-content:center;font-size:24px}
+  .chip.green{background:#d1fae5;color:#059669}
+  .chip.blue{background:#dbeafe;color:#2563eb}
+  .chip.purple{background:#ede9fe;color:#7c3aed}
+  .brigade-info{flex:1;min-width:0}
+  .brigade-info h4{font-size:15px;font-weight:800;color:var(--navy-900)}
+  .brigade-info small{font-size:12px;color:var(--slate);font-weight:600;display:block;margin-top:3px}
+  .bar-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px;
+    font-size:11.5px;font-weight:600;color:var(--slate)}
+  .bar-row b{font-size:12px;font-weight:800;color:var(--sky-600)}
+  .bar{height:8px;background:var(--sky-100);border-radius:99px;overflow:hidden}
+  .bar-fill{height:100%;border-radius:99px;
+    background:linear-gradient(90deg,var(--sky-400),var(--sky-600));
+    animation:bar-grow 1.2s cubic-bezier(.22,.9,.35,1) .15s both}
+  @keyframes bar-grow{from{width:0}}
+
+  /* ---------- accesos rápidos ---------- */
+  .quick{display:grid;grid-template-columns:1fr;gap:14px}
+  .qcard{
+    display:flex;align-items:center;gap:14px;padding:18px 20px;text-decoration:none;cursor:pointer;
+    background:var(--glass);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+    border:1px solid var(--card-brd);border-radius:20px;box-shadow:0 10px 24px rgba(3,105,161,.08);
+    transition:transform .12s,box-shadow .2s;
+  }
+  .qcard:hover{box-shadow:0 14px 30px rgba(3,105,161,.14);transform:translateY(-2px)}
+  .qcard:active{transform:scale(.98)}
+  .qico{width:48px;height:48px;border-radius:15px;flex:0 0 auto;
+    display:flex;align-items:center;justify-content:center;font-size:24px}
+  .qico.amber{background:#ffedd5;color:#ea580c}
+  .qico.emerald{background:#d1fae5;color:#059669}
+  .qinfo{flex:1;min-width:0}
+  .qinfo b{display:block;font-size:14.5px;font-weight:800;color:var(--navy-900)}
+  .qinfo small{font-size:12px;color:var(--slate);font-weight:600;display:block;margin-top:3px}
+  .qcard .arr{color:var(--sky-500);font-size:18px;flex:0 0 auto}
+
+  /* ---------- banner reporte ---------- */
+  .banner{
+    margin-top:26px;position:relative;overflow:hidden;display:flex;align-items:center;gap:18px;
+    background:linear-gradient(135deg,var(--navy-900),var(--navy-800));
+    border-radius:24px;padding:26px 24px;color:#fff;
+    box-shadow:0 14px 30px rgba(12,74,110,.28);
+  }
+  .banner .txt{flex:1;min-width:0;position:relative;z-index:1}
+  .banner h3{font-size:17px;font-weight:800;color:#fff}
+  .banner p{font-size:12.5px;margin-top:7px;line-height:1.55;color:rgba(255,255,255,.85);max-width:440px}
+  .banner-btn{
+    margin-top:16px;display:inline-flex;align-items:center;gap:8px;
+    background:#fff;color:var(--navy-900);border:0;border-radius:13px;padding:13px 18px;
+    font-family:inherit;font-weight:800;font-size:12.5px;cursor:pointer;
+    box-shadow:0 8px 18px rgba(0,0,0,.18);transition:transform .12s,box-shadow .2s;
+  }
+  .banner-btn:hover{box-shadow:0 12px 24px rgba(0,0,0,.24)}
+  .banner-btn:active{transform:scale(.97)}
+  .banner-btn .material-symbols-outlined{font-size:18px}
+  .banner .bico{position:absolute;right:-14px;bottom:-18px;font-size:150px;opacity:.12;transform:rotate(-8deg)}
+
+  /* ---------- bottom nav (glass + íconos, bien aireada) ---------- */
+  nav{
+    position:fixed;left:0;right:0;bottom:0;z-index:50;
+    background:rgba(255,255,255,.92);backdrop-filter:blur(14px);
+    border-top:1px solid #eaf3fb;box-shadow:0 -8px 26px rgba(3,105,161,.12);
+    border-radius:24px 24px 0 0;
+    padding:10px 12px calc(12px + env(safe-area-inset-bottom));
+  }
+  .nav-inner{max-width:var(--maxw);margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);column-gap:8px;padding:0 6px}
+  .nav-item{display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 4px;
+    border-radius:15px;text-decoration:none;color:var(--slate);font-size:10px;font-weight:700;min-width:0;
+    transition:transform .12s,color .2s}
+  .nav-item:active{transform:scale(.92)}
+  .nav-item .ic{width:48px;height:36px;display:flex;align-items:center;justify-content:center;
+    border-radius:13px;transition:background .2s,color .2s;color:#94a3b8}
+  .nav-item .ic .material-symbols-outlined{font-size:23px}
+  .nav-item small{font-size:10.5px;font-weight:700;letter-spacing:.2px}
+  .nav-item.active{color:var(--navy-900)}
+  .nav-item.active .ic{background:var(--navy-900);color:#fff}
+
+  /* toast */
+  #toast{position:fixed;left:16px;right:16px;bottom:calc(100px + env(safe-area-inset-bottom));
+    max-width:640px;margin:0 auto;background:var(--navy-900);color:#fff;text-align:center;
+    font-size:12.5px;font-weight:700;padding:13px 16px;border-radius:15px;opacity:0;
+    transform:translateY(12px);pointer-events:none;transition:opacity .25s,transform .25s;z-index:60;
+    box-shadow:0 10px 26px rgba(3,105,161,.30)}
+  #toast.show{opacity:1;transform:translateY(0)}
+
+  .material-symbols-outlined{
+    font-variation-settings:'FILL' 0,'wght' 500,'GRAD' 0,'opsz' 24;
+    user-select:none;
+  }
+
+  /* ---------- layout amplio ---------- */
+  @media (min-width:720px){
+    .stats{grid-template-columns:repeat(4,1fr);gap:14px}
+    .stat{padding:20px 10px}
+    .brigades{grid-template-columns:repeat(3,1fr)}
+    .quick{grid-template-columns:1fr 1fr}
+    .banner{padding:30px 28px}
+    .greet h2{font-size:24px}
+  }
+</style>
+</head>
+<body>
+
+  <!-- fondo: ondas estilo selección de rol, fluyendo por toda la página -->
+  <div class="flow-field wiggle" aria-hidden="true">
+    <svg viewBox="0 0 1600 900" preserveAspectRatio="none">
+      <defs>
+        <linearGradient id="gradField" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#cde9ff"/>
+          <stop offset="35%" stop-color="#9fd4ff"/>
+          <stop offset="70%" stop-color="#5fb4f7"/>
+          <stop offset="100%" stop-color="#7dbfc8"/>
+        </linearGradient>
+      </defs>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.11" transform="translate(0 6.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.14" transform="translate(11 24.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.17" transform="translate(22 43.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.2" transform="translate(33 61.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.22" transform="translate(44 80.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.25" transform="translate(55 98.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.27" transform="translate(66 117.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.3" transform="translate(77 135.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.32" transform="translate(88 154.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.34" transform="translate(99 172.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.37" transform="translate(110 191.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.39" transform="translate(121 209.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.41" transform="translate(132 228.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.42" transform="translate(143 246.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.44" transform="translate(154 265.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.46" transform="translate(165 283.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.47" transform="translate(176 302.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.48" transform="translate(187 320.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.49" transform="translate(198 339.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.5" transform="translate(209 357.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.51" transform="translate(220 376.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.51" transform="translate(231 394.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.52" transform="translate(242 413.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.52" transform="translate(253 431.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.52" transform="translate(264 450.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.51" transform="translate(275 468.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.51" transform="translate(286 487.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.5" transform="translate(297 505.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.49" transform="translate(308 524.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.48" transform="translate(319 542.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.47" transform="translate(330 561.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.46" transform="translate(341 579.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.44" transform="translate(352 598.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.42" transform="translate(363 616.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.41" transform="translate(374 635.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.39" transform="translate(385 653.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.37" transform="translate(396 672.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.34" transform="translate(407 690.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.32" transform="translate(418 709.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.3" transform="translate(429 727.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.27" transform="translate(440 746.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.25" transform="translate(451 764.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.22" transform="translate(462 783.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.2" transform="translate(473 801.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.17" transform="translate(484 820.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.14" transform="translate(495 838.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.11" transform="translate(506 857.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    </svg>
+  </div>
+
+<div class="wrap">
+
+  <!-- header -->
+  <header>
+    <div class="avatar" role="img" aria-label="Perfil de Maestro Ricardo">
+      <img id="avImg" alt="Foto de Maestro Ricardo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAsBKOgiv_kBEGjRdsLDTUZvI71zukRwIm4VDeUz7PNlZXgk-rbjdeD6dqKMmosd3_emj_ICwNW35ohfDVXeRh0Z9qFx0I4Zjb7jNHlals66RqOcXSkQu2MwkkciTFXkC95odUjko8VIPVa493BBrOY-WID8ZzD1PBV9U4Ja2q18Ov24D1q6vN3s3aoYWga0VydSZLaIpkbNGjcKqalA9cPOtjlGkZOSBrs-hPouXz3rf8bOc66iYv3e2gaqSDWmH1zI18tKalUSqva" onerror="this.style.display='none';var f=document.getElementById('avFallback');if(f){f.style.display='flex';}">
+      <div class="av-fb" id="avFallback">MR</div>
+    </div>
+    <div class="hi">
+      <h1>Maestro Ricardo</h1>
+      <p>Panel del Maestro</p>
+    </div>
+    <button class="bell" id="btnBell" type="button" aria-label="Notificaciones">
+      <span class="material-symbols-outlined">notifications</span>
+      <span class="bell-dot"></span>
+    </button>
+    <a class="logout" href="/seleccion-rol" title="Cerrar sesión" id="btnLogout">
+      <span class="material-symbols-outlined">logout</span><small>Cerrar sesión</small>
+    </a>
+  </header>
+
+  <!-- saludo -->
+  <section class="greet">
+    <h2>Panel de Control: Maestro Ricardo</h2>
+    <p>Bienvenido de nuevo. Aquí tienes el resumen de tus brigadas y el progreso de los estudiantes bajo tu supervisión.</p>
+  </section>
+
+  <!-- estadísticas -->
+  <section>
+    <div class="stats">
+      <div class="stat"><span class="m material-symbols-outlined">group</span><b>75</b><small>Estudiantes</small></div>
+      <div class="stat"><span class="m material-symbols-outlined">energy_savings_leaf</span><b>3</b><small>Brigadas</small></div>
+      <div class="stat"><span class="m material-symbols-outlined">schedule</span><b>1,240</b><small>Horas Totales</small></div>
+      <div class="stat accent"><span class="m material-symbols-outlined">pending_actions</span><b>12</b><small>Pendientes</small></div>
+    </div>
+  </section>
+
+  <!-- mis brigadas -->
+  <section>
+    <div class="sec-head"><h3><span class="m material-symbols-outlined">energy_savings_leaf</span>Mis Brigadas</h3><span>3 activas</span></div>
+    <div class="brigades">
+      <div class="brigade">
+        <div class="brigade-top">
+          <div class="chip green"><span class="material-symbols-outlined">energy_savings_leaf</span></div>
+          <div class="brigade-info">
+            <h4>Brigada Ambiental</h4>
+            <small>25 estudiantes activos</small>
+          </div>
+        </div>
+        <div>
+          <div class="bar-row"><span>Progreso de Brigada</span><b>65%</b></div>
+          <div class="bar"><div class="bar-fill" style="width:65%"></div></div>
+        </div>
+      </div>
+      <div class="brigade">
+        <div class="brigade-top">
+          <div class="chip blue"><span class="material-symbols-outlined">school</span></div>
+          <div class="brigade-info">
+            <h4>Apoyo Académico</h4>
+            <small>18 estudiantes activos</small>
+          </div>
+        </div>
+        <div>
+          <div class="bar-row"><span>Progreso de Brigada</span><b>40%</b></div>
+          <div class="bar"><div class="bar-fill" style="width:40%"></div></div>
+        </div>
+      </div>
+      <div class="brigade">
+        <div class="brigade-top">
+          <div class="chip purple"><span class="material-symbols-outlined">volunteer_activism</span></div>
+          <div class="brigade-info">
+            <h4>Servicios Comunitarios</h4>
+            <small>32 estudiantes activos</small>
+          </div>
+        </div>
+        <div>
+          <div class="bar-row"><span>Progreso de Brigada</span><b>80%</b></div>
+          <div class="bar"><div class="bar-fill" style="width:80%"></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- accesos rápidos -->
+  <section>
+    <div class="sec-head"><h3><span class="m material-symbols-outlined">bolt</span>Accesos rápidos</h3></div>
+    <div class="quick">
+      <a class="qcard" data-go data-file="../stitch_horasocial_pro_landing_page/gesti_n_estudiantes_perfil_maestro/code.html" data-served="/maestro/estudiantes" href="/maestro/estudiantes">
+        <span class="qico amber"><span class="material-symbols-outlined">how_to_reg</span></span>
+        <span class="qinfo"><b>Verificar Asistencia</b><small>12 pendientes hoy</small></span>
+        <span class="material-symbols-outlined arr">arrow_forward_ios</span>
+      </a>
+      <a class="qcard" data-go data-file="../stitch_horasocial_pro_landing_page/mensajes_e_interacci_n_perfil_maestro/code.html" data-served="/maestro/mensajes" href="/maestro/mensajes">
+        <span class="qico emerald"><span class="material-symbols-outlined">assignment_turned_in</span></span>
+        <span class="qinfo"><b>Aprobar Reportes</b><small>8 reportes nuevos</small></span>
+        <span class="material-symbols-outlined arr">arrow_forward_ios</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- banner reporte semanal -->
+  <section>
+    <div class="banner">
+      <div class="txt">
+        <h3>Reporte Semanal Disponible</h3>
+        <p>Ya puedes descargar el resumen detallado de actividades de la última semana académica.</p>
+        <button class="banner-btn" id="btnReport" type="button">
+          <span class="material-symbols-outlined">download</span> Descargar Reporte (PDF)
+        </button>
+      </div>
+      <span class="material-symbols-outlined bico">description</span>
+    </div>
+  </section>
+
+</div>
+
+<!-- nav inferior glass + íconos, bien distribuida -->
+<nav>
+  <div class="nav-inner">
+    <a class="nav-item active" data-go data-file="#" data-served="/maestro/dashboard" href="#"><span class="ic"><span class="material-symbols-outlined">grid_view</span></span><small>Panel</small></a>
+    <a class="nav-item" data-go data-file="../stitch_horasocial_pro_landing_page/gesti_n_estudiantes_perfil_maestro/code.html" data-served="/maestro/estudiantes" href="/maestro/estudiantes"><span class="ic"><span class="material-symbols-outlined">group</span></span><small>Estudiantes</small></a>
+    <a class="nav-item" data-go data-file="../stitch_horasocial_pro_landing_page/gesti_n_t_cnica_perfil_maestro_2/code.html" data-served="/maestro/tecnico" href="/maestro/tecnico"><span class="ic"><span class="material-symbols-outlined">manage_accounts</span></span><small>Técnica</small></a>
+    <a class="nav-item" data-go data-file="../stitch_horasocial_pro_landing_page/mensajes_e_interacci_n_perfil_maestro/code.html" data-served="/maestro/mensajes" href="/maestro/mensajes"><span class="ic"><span class="material-symbols-outlined">chat</span></span><small>Mensajes</small></a>
+  </div>
+</nav>
+
+<div id="toast"></div>
+
+<script>
+  (function(){
+    var $ = function(id){ return document.getElementById(id); };
+    var toastTimer = null;
+    function toast(msg){
+      var t = $('toast'); t.textContent = msg; t.classList.add('show');
+      clearTimeout(toastTimer); toastTimer = setTimeout(function(){ t.classList.remove('show'); }, 2600);
+    }
+    function isFile(){ return location.protocol === 'file:'; }
+    function go(fileHref, servedHref){ window.location.assign(isFile() ? fileHref : servedHref); }
+
+    /* avatar: refuerzo del onerror inline */
+    var avImg = $('avImg');
+    if (avImg){
+      avImg.addEventListener('error', function(){
+        avImg.style.display = 'none';
+        var fb = $('avFallback');
+        if (fb) fb.style.display = 'flex';
+      });
+    }
+
+    /* notificaciones */
+    var btnBell = $('btnBell');
+    if (btnBell) btnBell.addEventListener('click', function(){ toast('Sin notificaciones nuevas'); });
+
+    /* cerrar sesión: intercepción SIEMPRE (file o servido) */
+    var btnLogout = $('btnLogout');
+    if (btnLogout) btnLogout.addEventListener('click', function(e){
+      e.preventDefault();
+      go('../selecci_n_de_rol_distribuci_n_expandida_vertical/code.html', '/seleccion-rol');
+    });
+
+    /* enlaces con patrón file/served (nav y accesos rápidos) */
+    document.querySelectorAll('[data-go]').forEach(function(el){
+      el.addEventListener('click', function(e){
+        e.preventDefault();
+        go(el.getAttribute('data-file'), el.getAttribute('data-served'));
+      });
+    });
+
+    /* reporte semanal */
+    var btnReport = $('btnReport');
+    if (btnReport) btnReport.addEventListener('click', function(){ toast('Reporte semanal disponible próximamente'); });
+  })();
+</script>
+</body>
+</html>

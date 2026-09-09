@@ -265,11 +265,11 @@ app.get('/estudiante/chat', (req, res) => {
 });
 
 app.get('/maestro/dashboard', (req, res) => {
-    res.sendFile(path.join(__dirname, 'stitch_horasocial_pro_landing_page', 'dashboard_maestro_navegaci_n_y_cierre_de_sesi_n_optimizado', 'code.html'));
+    res.sendFile(path.join(__dirname, 'dashboard_maestro_horasocial_pro', 'index.html'));
 });
 
 app.get('/maestro/estudiantes', (req, res) => {
-    res.sendFile(path.join(__dirname, 'stitch_horasocial_pro_landing_page', 'gesti_n_estudiantes_perfil_maestro', 'gesti_n_estudiantes_perfil_maestro', 'code.html'));
+    res.sendFile(path.join(__dirname, 'stitch_horasocial_pro_landing_page', 'gesti_n_estudiantes_perfil_maestro', 'code.html'));
 });
 
 app.get('/maestro/tecnico', (req, res) => {
@@ -351,11 +351,11 @@ app.get('/estudiante/chat', (req, res) => {
 });
 
 app.get('/maestro/dashboard', (req, res) => {
-    res.sendFile(path.join(__dirname, 'stitch_horasocial_pro_landing_page', 'dashboard_maestro_navegaci_n_y_cierre_de_sesi_n_optimizado', 'code.html'));
+    res.sendFile(path.join(__dirname, 'dashboard_maestro_horasocial_pro', 'index.html'));
 });
 
 app.get('/maestro/estudiantes', (req, res) => {
-    res.sendFile(path.join(__dirname, 'stitch_horasocial_pro_landing_page', 'gesti_n_estudiantes_perfil_maestro', 'gesti_n_estudiantes_perfil_maestro', 'code.html'));
+    res.sendFile(path.join(__dirname, 'stitch_horasocial_pro_landing_page', 'gesti_n_estudiantes_perfil_maestro', 'code.html'));
 });
 
 app.get('/maestro/tecnico', (req, res) => {
