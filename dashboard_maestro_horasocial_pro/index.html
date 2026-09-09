@@ -279,6 +279,39 @@
   .att-row.done .vbtn{display:none}
   .vchip .material-symbols-outlined{font-size:15px}
 
+  /* ---------- aprobar reportes ---------- */
+  .rep-prog{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;
+    font-size:12px;font-weight:700;color:var(--slate)}
+  .rep-prog b{font-size:13px;font-weight:800;color:var(--sky-600)}
+  .rep-row{display:flex;align-items:center;gap:12px;padding:13px 14px;border:1px solid var(--card-brd);
+    border-radius:16px;margin-bottom:10px;background:#fff;
+    box-shadow:0 6px 16px rgba(3,105,161,.05)}
+  .rep-row.done{background:rgba(209,250,229,.42);border-color:#a7f3d0}
+  .rep-row.rejected{background:rgba(254,242,242,.55);border-color:#fecaca}
+  .rep-info{flex:1;min-width:0}
+  .rep-info b{display:block;font-size:13.5px;font-weight:800;color:var(--navy-900)}
+  .rep-info small{display:block;font-size:11.5px;color:var(--slate);font-weight:600;margin-top:3px}
+  .rep-btns{display:flex;align-items:center;gap:8px;flex:0 0 auto}
+  .rep-btn{display:inline-flex;align-items:center;gap:5px;border:0;border-radius:11px;padding:9px 12px;
+    font-family:inherit;font-size:11.5px;font-weight:800;cursor:pointer;color:#fff;
+    transition:transform .12s,box-shadow .2s}
+  .rep-btn:active{transform:scale(.94)}
+  .rep-btn .material-symbols-outlined{font-size:15px}
+  .rep-btn.ok{background:var(--sky-600)}
+  .rep-btn.ok:hover{background:var(--sky-700);box-shadow:0 6px 14px rgba(2,132,199,.3)}
+  .rep-btn.no{background:#fff;color:#b91c1c;border:1px solid #fecaca}
+  .rep-btn.no:hover{background:#fef2f2}
+  .rep-chip{display:inline-flex;align-items:center;gap:5px;border-radius:999px;
+    font-size:11px;font-weight:800;padding:6px 12px;white-space:nowrap}
+  .rep-chip.ok{background:#d1fae5;color:#047857}
+  .rep-chip.no{background:#fee2e2;color:#b91c1c}
+  .rep-chip .material-symbols-outlined{font-size:14px}
+  .rep-note{display:none;font-size:11.5px;font-weight:700;color:var(--slate);margin:4px 2px 10px}
+  .rep-empty{display:none;flex-direction:column;align-items:center;gap:8px;padding:28px 16px;text-align:center}
+  .rep-empty.show{display:flex}
+  .rep-empty .material-symbols-outlined{font-size:34px;color:var(--sky-300)}
+  .rep-empty span{font-size:12px;font-weight:700;color:var(--slate)}
+
   /* ---------- panel notificaciones ---------- */
   .notif-panel{
     position:fixed;top:78px;right:16px;z-index:90;width:min(320px,calc(100vw - 24px));
@@ -476,9 +509,9 @@
         <span class="qinfo"><b>Verificar Asistencia</b><small id="pendSmall">12 pendientes hoy</small></span>
         <span class="material-symbols-outlined arr">arrow_forward_ios</span>
       </a>
-      <a class="qcard" data-go data-file="../stitch_horasocial_pro_landing_page/mensajes_e_interacci_n_perfil_maestro/code.html" data-served="/maestro/mensajes" href="/maestro/mensajes">
+      <a class="qcard" id="btnReportes" href="#" role="button" aria-label="Aprobar reportes">
         <span class="qico emerald"><span class="material-symbols-outlined">assignment_turned_in</span></span>
-        <span class="qinfo"><b>Aprobar Reportes</b><small>8 reportes nuevos</small></span>
+        <span class="qinfo"><b>Aprobar Reportes</b><small id="repSmall">8 reportes nuevos</small></span>
         <span class="material-symbols-outlined arr">arrow_forward_ios</span>
       </a>
     </div>
@@ -544,6 +577,25 @@
       <div class="bar" style="margin-bottom:16px"><div class="bar-fill" id="attProgressBar" style="width:0%"></div></div>
       <div class="att-done" id="attAllDone"><span class="material-symbols-outlined">task_alt</span>Todo verificado</div>
       <div id="attList"></div>
+    </div>
+  </div>
+</div>
+
+<!-- modal: aprobar reportes -->
+<div class="modal-backdrop" id="modalReportes" role="dialog" aria-modal="true" aria-label="Aprobar Reportes">
+  <div class="modal" role="document">
+    <div class="modal-head">
+      <div>
+        <h3><span class="m material-symbols-outlined">assignment_turned_in</span>Aprobar Reportes</h3>
+        <p>Reportes de estudiantes pendientes de revisión</p>
+      </div>
+      <button class="modal-x" id="xReportes" type="button" aria-label="Cerrar"><span class="material-symbols-outlined">close</span></button>
+    </div>
+    <div class="modal-body">
+      <div class="rep-prog" id="repProgTxt"><span>Reportes pendientes</span><b>8</b></div>
+      <div class="rep-note" id="repDoneNote"></div>
+      <div class="rep-empty" id="repEmpty"><span class="material-symbols-outlined">task_alt</span><span>Sin reportes pendientes</span></div>
+      <div id="repList"></div>
     </div>
   </div>
 </div>
@@ -706,6 +758,7 @@
       document.body.style.overflow = 'hidden';
       if (m.id === 'modalActividades'){ renderActividades(actFocus); actFocus = null; }
       if (m.id === 'modalAsistencia') renderAsistencia();
+      if (m.id === 'modalReportes') renderReportes();
     }
     function cerrarModal(m){ if (!m) return; m.classList.remove('open'); document.body.style.overflow = ''; }
 
@@ -805,6 +858,79 @@
         '</div>';
       });
       list.innerHTML = html;
+    }
+
+    /* ---------- aprobar reportes ---------- */
+    var LS_REP = 'horasocial_maestro_reportes_v1';
+    function seedReportes(){
+      return [
+        { id: 1,  estudiante: 'Valentina Ospina',    actividad: 'Brigada Ambiental',      fecha: '8 sep',  horas: 4, estado: 'Pendiente' },
+        { id: 2,  estudiante: 'Samuel Rojas',        actividad: 'Brigada Ambiental',      fecha: '8 sep',  horas: 3, estado: 'Pendiente' },
+        { id: 3,  estudiante: 'Mariana Cárdenas',    actividad: 'Apoyo Académico',        fecha: '8 sep',  horas: 2, estado: 'Pendiente' },
+        { id: 4,  estudiante: 'Sebastián Gómez',     actividad: 'Servicios Comunitarios', fecha: '9 sep',  horas: 4, estado: 'Pendiente' },
+        { id: 5,  estudiante: 'Isabella Torres',     actividad: 'Brigada Ambiental',      fecha: '9 sep',  horas: 3, estado: 'Pendiente' },
+        { id: 6,  estudiante: 'Juan David Muñoz',    actividad: 'Apoyo Académico',        fecha: '9 sep',  horas: 2, estado: 'Pendiente' },
+        { id: 7,  estudiante: 'Sofía Ramírez',       actividad: 'Servicios Comunitarios', fecha: '10 sep', horas: 5, estado: 'Pendiente' },
+        { id: 8,  estudiante: 'Andrés Felipe Castro',actividad: 'Brigada Ambiental',      fecha: '10 sep', horas: 3, estado: 'Pendiente' }
+      ];
+    }
+    function cargarReportes(){
+      try{
+        var raw = localStorage.getItem(LS_REP);
+        if (!raw) throw 0;
+        var arr = JSON.parse(raw);
+        if (!Array.isArray(arr) || !arr.length) throw 0;
+        return arr;
+      }catch(e){
+        var s = seedReportes();
+        try{ localStorage.setItem(LS_REP, JSON.stringify(s)); }catch(e2){}
+        return s;
+      }
+    }
+    function guardarReportes(){ try{ localStorage.setItem(LS_REP, JSON.stringify(reps)); }catch(e){} }
+    function contarRep(arr, st){ var n = 0; arr.forEach(function(r){ if (r.estado === st) n++; }); return n; }
+    var reps = cargarReportes();
+
+    function updateRepCounter(){
+      var pend = contarRep(reps, 'Pendiente');
+      var s = $('repSmall');
+      if (s) s.textContent = pend === 0 ? 'Sin reportes pendientes' : pend + ' reportes nuevos';
+    }
+    function renderReportes(){
+      var list = $('repList'); if (!list) return;
+      var pend = contarRep(reps, 'Pendiente');
+      var ok = contarRep(reps, 'Aprobado');
+      var no = contarRep(reps, 'Rechazado');
+      var pt = $('repProgTxt');
+      if (pt) pt.innerHTML = '<span>Reportes pendientes</span><b>' + pend + '</b>';
+      var empty = $('repEmpty');
+      if (empty) empty.classList.toggle('show', pend === 0);
+      var html = '';
+      reps.forEach(function(r){
+        if (r.estado === 'Pendiente'){
+          html += '<div class="rep-row" data-id="' + r.id + '">' +
+            '<div class="rep-info"><b>' + esc(r.estudiante) + '</b>' +
+            '<small>' + esc(r.actividad) + ' · ' + esc(r.fecha) + ' · ' + r.horas + ' h</small></div>' +
+            '<div class="rep-btns">' +
+              '<button class="rep-btn ok" type="button" data-aprobar="' + r.id + '"><span class="material-symbols-outlined">check</span>Aprobar</button>' +
+              '<button class="rep-btn no" type="button" data-rechazar="' + r.id + '"><span class="material-symbols-outlined">close</span>Rechazar</button>' +
+            '</div></div>';
+        } else {
+          html += '<div class="rep-row ' + (r.estado === 'Aprobado' ? 'done' : 'rejected') + '" data-id="' + r.id + '">' +
+            '<div class="rep-info"><b>' + esc(r.estudiante) + '</b>' +
+            '<small>' + esc(r.actividad) + ' · ' + esc(r.fecha) + ' · ' + r.horas + ' h</small></div>' +
+            '<span class="rep-chip ' + (r.estado === 'Aprobado' ? 'ok' : 'no') + '"><span class="material-symbols-outlined">' + (r.estado === 'Aprobado' ? 'check' : 'close') + '</span>' + r.estado + '</span>' +
+          '</div>';
+        }
+      });
+      list.innerHTML = html;
+      var note = $('repDoneNote');
+      if (note){
+        var total = reps.length, doneCount = ok + no;
+        note.textContent = doneCount === 0 ? '' : doneCount + ' de ' + total + ' reportes revisados (' + ok + ' aprobados, ' + no + ' rechazados)';
+        note.style.display = doneCount === 0 ? 'none' : 'block';
+      }
+      updateRepCounter();
     }
 
     /* ---------- reportes ---------- */
@@ -960,13 +1086,35 @@
       btnVer.addEventListener('click', function(e){ e.preventDefault(); abrirModal($('modalAsistencia')); });
     }
 
-    var mA = $('modalActividades'), mS = $('modalAsistencia');
-    var xA = $('xActividades'), xS = $('xAsistencia');
+    var btnRep = $('btnReportes');
+    if (btnRep){
+      btnRep.addEventListener('click', function(e){ e.preventDefault(); abrirModal($('modalReportes')); });
+      keyOpen(btnRep, function(){ abrirModal($('modalReportes')); });
+    }
+    var repList = $('repList');
+    if (repList) repList.addEventListener('click', function(e){
+      var btn = e.target && e.target.closest ? e.target.closest('[data-aprobar],[data-rechazar]') : null;
+      if (!btn) return;
+      var aprobar = btn.hasAttribute('data-aprobar');
+      var id = parseInt(btn.getAttribute(aprobar ? 'data-aprobar' : 'data-rechazar'), 10);
+      var rec = null;
+      reps.forEach(function(r){ if (r.id === id) rec = r; });
+      if (!rec || rec.estado !== 'Pendiente') return;
+      rec.estado = aprobar ? 'Aprobado' : 'Rechazado';
+      guardarReportes();
+      renderReportes();
+      toast((aprobar ? 'Reporte aprobado: ' : 'Reporte rechazado: ') + rec.estudiante);
+    });
+
+    var mA = $('modalActividades'), mS = $('modalAsistencia'), mR = $('modalReportes');
+    var xA = $('xActividades'), xS = $('xAsistencia'), xR = $('xReportes');
     if (xA) xA.addEventListener('click', function(){ cerrarModal(mA); });
     if (xS) xS.addEventListener('click', function(){ cerrarModal(mS); });
+    if (xR) xR.addEventListener('click', function(){ cerrarModal(mR); });
     if (mA) mA.addEventListener('click', function(e){ if (e.target === mA) cerrarModal(mA); });
     if (mS) mS.addEventListener('click', function(e){ if (e.target === mS) cerrarModal(mS); });
-    document.addEventListener('keydown', function(e){ if (e.key === 'Escape'){ cerrarModal(mA); cerrarModal(mS); } });
+    if (mR) mR.addEventListener('click', function(e){ if (e.target === mR) cerrarModal(mR); });
+    document.addEventListener('keydown', function(e){ if (e.key === 'Escape'){ cerrarModal(mA); cerrarModal(mS); cerrarModal(mR); } });
 
     var attList = $('attList');
     if (attList) attList.addEventListener('click', function(e){
@@ -1018,6 +1166,7 @@
     /* ---------- estado inicial ---------- */
     actualizarContadores(pendientesDe(att));
     renderNotifs();
+    renderReportes();
   })();
 </script>
 </body>
