@@ -72,6 +72,25 @@ db.query(createTableQuery, (tableErr) => {
             console.log('Tabla solicitudes_recuperacion_maestros OK.');
         }
     });
+
+    const createAdminsTableQuery = `
+        CREATE TABLE IF NOT EXISTS solicitudes_recuperacion_administradores (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            usuario VARCHAR(50) NOT NULL,
+            nombre_completo VARCHAR(150) NOT NULL,
+            telefono VARCHAR(20) NOT NULL,
+            correo VARCHAR(150) NOT NULL,
+            fecha_solicitud TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            estado ENUM('Pendiente', 'Autorizado') DEFAULT 'Pendiente'
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+    `;
+    db.query(createAdminsTableQuery, (tableErr) => {
+        if (tableErr) {
+            console.error('Error al crear tabla administradores:', tableErr.message);
+        } else {
+            console.log('Tabla solicitudes_recuperacion_administradores OK.');
+        }
+    });
 });
 
 const SOLICITUDES_FILE = path.join(__dirname, 'solicitudes_recuperacion.json');
@@ -115,6 +134,28 @@ function saveLocalMaestroRequests(requests) {
         fs.writeFileSync(SOLICITUDES_MAESTROS_FILE, JSON.stringify(requests, null, 2), 'utf8');
     } catch (err) {
         console.error('Error escribiendo archivo local maestros:', err.message);
+    }
+}
+
+const SOLICITUDES_ADMINISTRADORES_FILE = path.join(__dirname, 'solicitudes_recuperacion_administradores.json');
+
+function getLocalAdminRequests() {
+    try {
+        if (fs.existsSync(SOLICITUDES_ADMINISTRADORES_FILE)) {
+            const data = fs.readFileSync(SOLICITUDES_ADMINISTRADORES_FILE, 'utf8');
+            return JSON.parse(data || '[]');
+        }
+    } catch (err) {
+        console.error('Error leyendo archivo local administradores:', err.message);
+    }
+    return [];
+}
+
+function saveLocalAdminRequests(requests) {
+    try {
+        fs.writeFileSync(SOLICITUDES_ADMINISTRADORES_FILE, JSON.stringify(requests, null, 2), 'utf8');
+    } catch (err) {
+        console.error('Error escribiendo archivo local administradores:', err.message);
     }
 }
 
@@ -365,6 +406,127 @@ app.post('/api/rechazar-solicitud-maestro', (req, res) => {
     }
 });
 
+app.post('/api/recuperar-contrasena-administrador', (req, res) => {
+    const { usuario, nombre, correo, telefono } = req.body;
+    if (!usuario || !nombre || !correo || !telefono) {
+        return res.status(400).json({ error: 'Todos los campos son obligatorios' });
+    }
+
+    const dbConnected = db && db.state !== 'disconnected';
+    
+    const saveRequestToLocal = () => {
+        const requests = getLocalAdminRequests();
+        const newRequest = {
+            id: Date.now(),
+            usuario,
+            nombre_completo: nombre,
+            correo,
+            telefono,
+            fecha_solicitud: new Date().toISOString(),
+            estado: 'Pendiente'
+        };
+        requests.push(newRequest);
+        saveLocalAdminRequests(requests);
+        res.json({ success: true, message: 'Solicitud enviada (Modo local)', id: newRequest.id });
+    };
+
+    if (dbConnected) {
+        const query = 'INSERT INTO solicitudes_recuperacion_administradores (usuario, nombre_completo, correo, telefono, estado) VALUES (?, ?, ?, ?, ?)';
+        db.query(query, [usuario, nombre, correo, telefono, 'Pendiente'], (err, result) => {
+            if (err) {
+                console.error('Error MySQL, recurriendo a local:', err.message);
+                saveRequestToLocal();
+            } else {
+                res.json({ success: true, message: 'Solicitud enviada', id: result.insertId });
+            }
+        });
+    } else {
+        saveRequestToLocal();
+    }
+});
+
+app.get('/api/solicitudes-recuperacion-administradores', (req, res) => {
+    const dbConnected = db && db.state !== 'disconnected';
+    if (dbConnected) {
+        db.query('SELECT * FROM solicitudes_recuperacion_administradores WHERE estado = "Pendiente" ORDER BY fecha_solicitud DESC', (err, results) => {
+            if (err) {
+                console.error('Error MySQL, recurriendo a local:', err.message);
+                res.json(getLocalAdminRequests().filter(r => r.estado === 'Pendiente'));
+            } else {
+                res.json(results);
+            }
+        });
+    } else {
+        res.json(getLocalAdminRequests().filter(r => r.estado === 'Pendiente'));
+    }
+});
+
+app.post('/api/autorizar-solicitud-administrador', (req, res) => {
+    const { id, usuario } = req.body;
+    if (!id) return res.status(400).json({ error: 'ID requerido' });
+
+    const dbConnected = db && db.state !== 'disconnected';
+    
+    const updateRequestLocal = () => {
+        const requests = getLocalAdminRequests();
+        const index = requests.findIndex(r => r.id === parseInt(id) || r.id === id);
+        if (index !== -1) {
+            requests[index].estado = 'Autorizado';
+            saveLocalAdminRequests(requests);
+            res.json({ success: true, message: 'Autorizado (local). Contraseña: 123456' });
+        } else {
+            res.status(404).json({ error: 'Solicitud no encontrada' });
+        }
+    };
+
+    if (dbConnected) {
+        db.query('UPDATE solicitudes_recuperacion_administradores SET estado = "Autorizado" WHERE id = ?', [id], (err, result) => {
+            if (err) {
+                console.error('Error MySQL, recurriendo a local:', err.message);
+                updateRequestLocal();
+            } else if (result.affectedRows === 0) {
+                updateRequestLocal();
+            } else {
+                res.json({ success: true, message: 'Autorizado. Contraseña: 123456' });
+            }
+        });
+    } else {
+        updateRequestLocal();
+    }
+});
+
+app.post('/api/rechazar-solicitud-administrador', (req, res) => {
+    const { id } = req.body;
+    if (!id) return res.status(400).json({ error: 'ID requerido' });
+
+    const dbConnected = db && db.state !== 'disconnected';
+    
+    const deleteRequestLocal = () => {
+        const requests = getLocalAdminRequests();
+        const index = requests.findIndex(r => r.id === parseInt(id) || r.id === id);
+        if (index !== -1) {
+            requests.splice(index, 1);
+            saveLocalAdminRequests(requests);
+            res.json({ success: true, message: 'Solicitud ignorada' });
+        } else {
+            res.status(404).json({ error: 'Solicitud no encontrada' });
+        }
+    };
+
+    if (dbConnected) {
+        db.query('DELETE FROM solicitudes_recuperacion_administradores WHERE id = ?', [id], (err) => {
+            if (err) {
+                console.error('Error MySQL, recurriendo a local:', err.message);
+                deleteRequestLocal();
+            } else {
+                res.json({ success: true, message: 'Solicitud ignorada' });
+            }
+        });
+    } else {
+        deleteRequestLocal();
+    }
+});
+
 // Ruta de ingreso desde el login de estudiante: valida que el usuario completó
 // el formulario y lo lleva al dashboard. La navegación real POST->redirect
 // permite que el navegador ofrezca guardar la contraseña.
@@ -384,6 +546,14 @@ app.post('/api/login-maestro', (req, res) => {
         return res.status(400).json({ error: 'Usuario y contraseña son obligatorios' });
     }
     res.redirect(302, '/maestro/dashboard');
+});
+
+app.post('/api/login-administrador', (req, res) => {
+    const { username, password } = req.body;
+    if (!username || !password) {
+        return res.status(400).json({ error: 'Usuario y contraseña son obligatorios' });
+    }
+    res.redirect(302, '/admin/dashboard');
 });
 
 // ==========================================
@@ -410,9 +580,17 @@ app.get('/profesor/recuperar-contrasena', (req, res) => {
     res.sendFile(path.join(__dirname, 'recuperar_contrasena_maestro_horasocial_pro', 'index.html'));
 });
 
+app.get('/admin/login', (req, res) => {
+    res.sendFile(path.join(__dirname, 'login_administrador_horasocial_pro', 'index.html'));
+});
+
+app.get('/admin/recuperar-contrasena', (req, res) => {
+    res.sendFile(path.join(__dirname, 'recuperar_contrasena_administrador_horasocial_pro', 'index.html'));
+});
+
 // ✅ RUTA LOGIN ADMINISTRADOR
 app.get('/login_administrador', (req, res) => {
-    res.sendFile(path.join(__dirname, 'stitch_horasocial_pro_landing_page', 'login_administrador', 'code.html'));
+    res.sendFile(path.join(__dirname, 'login_administrador_horasocial_pro', 'index.html'));
 });
 
 app.get('/sobre', (req, res) => {
@@ -505,8 +683,16 @@ app.get('/profesor/recuperar-contrasena', (req, res) => {
     res.sendFile(path.join(__dirname, 'recuperar_contrasena_maestro_horasocial_pro', 'index.html'));
 });
 
+app.get('/admin/login', (req, res) => {
+    res.sendFile(path.join(__dirname, 'login_administrador_horasocial_pro', 'index.html'));
+});
+
+app.get('/admin/recuperar-contrasena', (req, res) => {
+    res.sendFile(path.join(__dirname, 'recuperar_contrasena_administrador_horasocial_pro', 'index.html'));
+});
+
 app.get('/login_administrador', (req, res) => {
-    res.sendFile(path.join(__dirname, 'stitch_horasocial_pro_landing_page', 'login_administrador', 'code.html'));
+    res.sendFile(path.join(__dirname, 'login_administrador_horasocial_pro', 'index.html'));
 });
 
 app.get('/sobre', (req, res) => {

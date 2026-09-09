@@ -24,7 +24,9 @@
           "mensajes_maestro_horasocial_pro/**",
           "chat_maestro_horasocial_pro/**",
           "login_maestro_horasocial_pro/**",
-          "recuperar_contrasena_maestro_horasocial_pro/**"
+          "recuperar_contrasena_maestro_horasocial_pro/**",
+          "login_administrador_horasocial_pro/**",
+          "recuperar_contrasena_administrador_horasocial_pro/**"
         ]
       }
     }
@@ -36,6 +38,8 @@
     { "src": "/recuperar-contrasena", "destination": "/server.js" },
     { "src": "/profesor/login", "destination": "/server.js" },
     { "src": "/profesor/recuperar-contrasena", "destination": "/server.js" },
+    { "src": "/admin/login", "destination": "/server.js" },
+    { "src": "/admin/recuperar-contrasena", "destination": "/server.js" },
     { "src": "/login_administrador", "destination": "/server.js" },
     { "src": "/admin/dashboard", "destination": "/server.js" },
     { "src": "/admin/docentes", "destination": "/server.js" },

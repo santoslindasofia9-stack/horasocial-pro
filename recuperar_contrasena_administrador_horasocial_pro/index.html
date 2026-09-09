@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>HORASOCIAL PRO - Recuperar contraseña: administradores</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+    :root {
+      --royal-50: #EEF2FF;
+      --royal-100: #E0E7FF;
+      --royal-200: #C7D2FE;
+      --royal-300: #A5B4FC;
+      --royal-400: #818CF8;
+      --royal-500: #6366F1;
+      --royal-600: #4F46E5;
+      --royal-700: #4338CA;
+      --royal-800: #3730A3;
+      --royal-900: #312E81;
+      --ink: #1E1B4B;
+      --surface: #FFFFFF;
+      --muted: #45464D;
+      --muted-soft: #6B7280;
+      --line: #C9CCE8;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { min-height: 100%; }
+    body {
+      font-family: "Inter", ui-sans-serif, system-ui, sans-serif;
+      color: var(--ink);
+      background: var(--surface);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+      position: relative;
+    }
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      user-select: none;
+    }
+    /* Background wave field — same as welcome / role selection / login */
+    .flow-field {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 30%;
+      height: 40%;
+      z-index: 0;
+      pointer-events: none;
+      overflow: visible;
+    }
+    .flow-field svg {
+      display: block;
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+    }
+    .wf-l {
+      fill: none;
+      stroke-width: 0.9;
+      vector-effect: non-scaling-stroke;
+    }
+    .wiggle {
+      animation: flow-drift 38s ease-in-out infinite;
+      will-change: transform;
+    }
+    @keyframes flow-drift {
+      0%, 100% { transform: translate(0, 0); }
+      20% { transform: translate(9px, -16px); }
+      45% { transform: translate(19px, -6px); }
+      70% { transform: translate(11px, 6px); }
+    }
+    header, main, footer { position: relative; z-index: 1; }
+
+    /* Header */
+    .site-header {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 24px;
+    }
+    .site-header .logo {
+      height: 140px;
+      width: auto;
+      object-fit: contain;
+      border: 1.5px solid rgba(30, 27, 75, 0.75);
+      border-radius: 14px;
+      padding: 8px;
+      background: #fff;
+      margin-bottom: 24px;
+    }
+    .slogan {
+      text-align: center;
+      padding: 0 16px;
+      font-family: "Plus Jakarta Sans", sans-serif;
+      font-size: 20px;
+      line-height: 1.4;
+      font-weight: 700;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .slogan .line-1 { color: var(--ink); }
+    .slogan .line-2 { color: var(--royal-500); }
+
+    /* Recovery card */
+    .recovery-wrap {
+      flex: 1;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 20px;
+    }
+    .recovery-card {
+      width: 100%;
+      max-width: 460px;
+      background: #fff;
+      border: 1px solid rgba(201, 204, 232, 0.9);
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(30, 27, 75, 0.08);
+      padding: 32px;
+      text-align: center;
+    }
+    .recovery-card h1 {
+      font-family: "Plus Jakarta Sans", sans-serif;
+      font-size: 24px;
+      line-height: 1.3;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 8px;
+    }
+    .recovery-card .subtitle {
+      font-size: 14px;
+      line-height: 1.55;
+      color: var(--muted-soft);
+      margin-bottom: 24px;
+    }
+    .field {
+      margin-bottom: 14px;
+      text-align: left;
+    }
+    .field label {
+      display: block;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+    .input-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .input-wrap .icon {
+      position: absolute;
+      left: 14px;
+      color: var(--muted-soft);
+      font-size: 20px;
+      pointer-events: none;
+    }
+    .input-wrap input {
+      width: 100%;
+      padding: 13px 16px 13px 46px;
+      font-size: 15px;
+      font-family: "Inter", sans-serif;
+      color: var(--ink);
+      background: #F8FAFC;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      outline: none;
+      transition: border-color .2s ease, box-shadow .2s ease;
+    }
+    .input-wrap input::placeholder { color: rgba(107, 114, 128, 0.7); }
+    .input-wrap input:focus {
+      border-color: var(--royal-500);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.18);
+    }
+    .btn-enviar {
+      width: 100%;
+      padding: 13px;
+      font-family: "Inter", sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #fff;
+      background: linear-gradient(135deg, var(--royal-500), var(--royal-700));
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(79, 70, 229, 0.35);
+      transition: background .2s ease, transform .15s ease, box-shadow .2s ease;
+      margin-top: 6px;
+    }
+    .btn-enviar:hover { background: linear-gradient(135deg, var(--royal-400), var(--royal-600)); box-shadow: 0 4px 12px rgba(79, 70, 229, 0.45); }
+    .btn-enviar:active { transform: scale(0.98); }
+    .btn-enviar:disabled { opacity: 0.6; cursor: not-allowed; }
+    .back-link {
+      display: inline-block;
+      margin-top: 18px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--royal-600);
+      text-decoration: none;
+    }
+    .back-link:hover { text-decoration: underline; }
+    .msg {
+      display: none;
+      margin-top: 16px;
+      padding: 12px 14px;
+      border-radius: 10px;
+      font-size: 14px;
+      line-height: 1.5;
+      text-align: left;
+    }
+    .msg.ok { display: block; background: #E6F7EE; color: #0E5C22; border: 1px solid #B7E5C8; }
+    .msg.err { display: block; background: #FDECEA; color: #93000A; border: 1px solid #F5C6C0; }
+
+    /* Footer */
+    .site-footer {
+      width: 100%;
+      padding: 20px 32px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+    .site-footer .copy {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--muted-soft);
+    }
+    .site-footer nav { display: flex; gap: 20px; }
+    .site-footer nav a {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--muted-soft);
+      text-decoration: none;
+    }
+    .site-footer nav a:hover { color: var(--royal-500); }
+
+    @media (max-width: 640px) {
+      .site-header { padding-top: 20px; }
+      .site-header .logo { height: 120px; }
+      .recovery-card { padding: 24px 18px; }
+      .site-footer { justify-content: center; }
+    }
+</style>
+</head>
+<body>
+<!-- Background Wave Field: same central band as welcome / role selection / login -->
+<div class="flow-field wiggle" aria-hidden="true">
+<svg viewBox="0 0 1600 900" preserveAspectRatio="none">
+<defs>
+<linearGradient id="gradField" x1="0%" y1="0%" x2="100%" y2="100%">
+<stop offset="0%" stop-color="#e4e9ff"/>
+<stop offset="35%" stop-color="#c7d2fe"/>
+<stop offset="70%" stop-color="#818cf8"/>
+<stop offset="100%" stop-color="#6d28d9"/>
+</linearGradient>
+</defs>
+<path class="wf-l" stroke="url(#gradField)" opacity="0.11" transform="translate(0 6.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradField)" opacity="0.14" transform="translate(11 24.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradField)" opacity="0.17" transform="translate(22 43.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradField)" opacity="0.20" transform="translate(33 61.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradField)" opacity="0.22" transform="translate(44 80.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradField)" opacity="0.25" transform="translate(55 98.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradField)" opacity="0.27" transform="translate(66 117.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradField)" opacity="0.30" transform="translate(77 135.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradField)" opacity="0.32" transform="translate(88 154.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradField)" opacity="0.34" transform="translate(99 172.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradField)" opacity="0.37" transform="translate(110 191.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradField)" opacity="0.39" transform="translate(121 209.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradField)" opacity="0.41" transform="translate(132 228.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradField)" opacity="0.42" transform="translate(143 246.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradField)" opacity="0.44" transform="translate(154 265.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradField)" opacity="0.46" transform="translate(165 283.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradField)" opacity="0.47" transform="translate(176 302.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradField)" opacity="0.48" transform="translate(187 320.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradField)" opacity="0.49" transform="translate(198 339.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradField)" opacity="0.50" transform="translate(209 357.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradField)" opacity="0.51" transform="translate(220 376.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradField)" opacity="0.51" transform="translate(231 394.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradField)" opacity="0.52" transform="translate(242 413.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradField)" opacity="0.52" transform="translate(253 431.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradField)" opacity="0.52" transform="translate(264 450.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradField)" opacity="0.52" transform="translate(275 468.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradField)" opacity="0.51" transform="translate(286 487.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradField)" opacity="0.51" transform="translate(297 505.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradField)" opacity="0.50" transform="translate(308 524.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradField)" opacity="0.49" transform="translate(319 542.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradField)" opacity="0.48" transform="translate(330 561.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradField)" opacity="0.47" transform="translate(341 579.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradField)" opacity="0.46" transform="translate(352 598.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradField)" opacity="0.44" transform="translate(363 616.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradField)" opacity="0.42" transform="translate(374 635.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradField)" opacity="0.41" transform="translate(385 653.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradField)" opacity="0.39" transform="translate(396 672.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradField)" opacity="0.37" transform="translate(407 690.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradField)" opacity="0.34" transform="translate(418 709.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradField)" opacity="0.32" transform="translate(429 727.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradField)" opacity="0.30" transform="translate(440 746.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradField)" opacity="0.27" transform="translate(451 764.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradField)" opacity="0.25" transform="translate(462 783.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradField)" opacity="0.22" transform="translate(473 801.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradField)" opacity="0.20" transform="translate(484 820.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradField)" opacity="0.17" transform="translate(495 838.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradField)" opacity="0.14" transform="translate(506 857.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradField)" opacity="0.11" transform="translate(517 875.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+</svg>
+</div>
+
+<!-- Header: logo + slogan -->
+<header class="site-header">
+<img class="logo" alt="HORASOCIAL PRO Logo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBl0_W9o0isr1E81a1ecAaftLUFNSxWfoq4b2vQUpjiQJIGuEArx0ORA6uZeLxm4VwWZWYbxI31qfhIPVKxaidEz7wwBHPuS5AOaWO7vHr7LoOOcO_UVoMvFFWEAcllJ_HhnLwIEaJKAcEkGB9P7PVxfsnjDl_Xv6BUMooxWANxcRFdtFaOBVbxtyECYSl3ZkLhzSTsfzEfCBZUmL1g3hVO8rUpNIAMSP5j-a4s1waL7ePWk4Ia51DIBDexIXSwj2bjEfDFejB0NrOU"/>
+<p class="slogan">
+<span class="line-1">Formando líderes.</span>
+<span class="line-2">Trackeando tu impacto.</span>
+</p>
+</header>
+
+<!-- Recovery card: administradores -->
+<main class="recovery-wrap">
+<div class="recovery-card">
+<h1>Recuperar contraseña</h1>
+<p class="subtitle">Envía la solicitud con tus datos. Un responsable de recuperación la revisará y restablecerá tu acceso.</p>
+
+<form id="recoveryForm">
+<div class="field">
+<label for="usuario">Usuario</label>
+<div class="input-wrap">
+<span class="material-symbols-outlined icon">badge</span>
+<input id="usuario" name="usuario" type="text" placeholder="Usuario" autocomplete="username" required/>
+</div>
+</div>
+
+<div class="field">
+<label for="nombre">Nombre completo</label>
+<div class="input-wrap">
+<span class="material-symbols-outlined icon">person</span>
+<input id="nombre" name="nombre" type="text" placeholder="Nombre completo" autocomplete="name" required/>
+</div>
+</div>
+
+<div class="field">
+<label for="correo">Correo institucional</label>
+<div class="input-wrap">
+<span class="material-symbols-outlined icon">mail</span>
+<input id="correo" name="correo" type="email" placeholder="Correo institucional" autocomplete="email" required/>
+</div>
+</div>
+
+<div class="field">
+<label for="telefono">Teléfono</label>
+<div class="input-wrap">
+<span class="material-symbols-outlined icon">call</span>
+<input id="telefono" name="telefono" type="tel" placeholder="Teléfono" autocomplete="tel" required/>
+</div>
+</div>
+
+<button class="btn-enviar" type="submit">ENVIAR SOLICITUD</button>
+</form>
+
+<div class="msg" id="msgOk">Solicitud enviada. Un responsable de recuperación la revisará.</div>
+<div class="msg err" id="msgErr">No se pudo enviar la solicitud. Intente nuevamente.</div>
+
+<a class="back-link" id="backLink" href="/admin/login">← Volver al inicio de sesión</a>
+</div>
+</main>
+
+<!-- Footer -->
+<footer class="site-footer">
+<span class="copy">© 2024 Horasocial Pro. Professional Social Service Management.</span>
+<nav>
+<a href="#">Privacidad</a>
+<a href="#">Soporte</a>
+<a href="#">Términos</a>
+</nav>
+</footer>
+
+<script>
+document.getElementById('recoveryForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const form = e.target;
+  const btn = form.querySelector('.btn-enviar');
+  const msgOk = document.getElementById('msgOk');
+  const msgErr = document.getElementById('msgErr');
+  msgOk.style.display = 'none';
+  msgErr.style.display = 'none';
+
+  const usuario = document.getElementById('usuario').value.trim();
+  const nombre = document.getElementById('nombre').value.trim();
+  const correo = document.getElementById('correo').value.trim();
+  const telefono = document.getElementById('telefono').value.trim();
+
+  if (!usuario || !nombre || !correo || !telefono) {
+    msgErr.textContent = 'Complete todos los campos para enviar la solicitud.';
+    msgErr.style.display = 'block';
+    return;
+  }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correo)) {
+    msgErr.textContent = 'Ingrese un correo institucional válido.';
+    msgErr.style.display = 'block';
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'ENVIANDO...';
+
+  if (location.protocol === 'file:') {
+    try {
+      const list = JSON.parse(localStorage.getItem('horasocial_admin_solicitudes_v1')) || [];
+      list.push({
+        usuario: usuario,
+        nombre_completo: nombre,
+        correo: correo,
+        telefono: telefono,
+        fecha_solicitud: new Date().toISOString(),
+        estado: 'Pendiente'
+      });
+      localStorage.setItem('horasocial_admin_solicitudes_v1', JSON.stringify(list));
+      msgOk.style.display = 'block';
+      form.reset();
+    } catch (err) {
+      msgErr.style.display = 'block';
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'ENVIAR SOLICITUD';
+    }
+    return;
+  }
+
+  try {
+    const res = await fetch('/api/recuperar-contrasena-administrador', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ usuario, nombre, correo, telefono })
+    });
+    const data = await res.json().catch(() => ({}));
+    if (res.ok && data.success) {
+      msgOk.style.display = 'block';
+      form.reset();
+    } else {
+      msgErr.style.display = 'block';
+    }
+  } catch (err) {
+    msgErr.style.display = 'block';
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'ENVIAR SOLICITUD';
+  }
+});
+
+if (location.protocol === 'file:') {
+  document.getElementById('backLink').href = '../login_administrador_horasocial_pro/index.html';
+}
+</script>
+</body></html>
