@@ -164,7 +164,7 @@
   .yr-cell .yr-count{display:inline-flex;align-items:center;gap:4px;font-size:10.5px;font-weight:800;
     color:var(--sky-600);background:var(--sky-50);border-radius:999px;padding:3px 9px}
   .yr-cell .yr-count.none{color:var(--slate);background:transparent;border:1px dashed var(--sky-200)}
-  .yr-cell .yr-count .material-symbols-outlined{font-size:13px}
+  .yr-cell .yr-count i{width:6px;height:6px;border-radius:50%;background:currentColor;display:inline-block}
 
   /* ---------- lista de eventos ---------- */
   .ev-list{margin-top:2px}
@@ -194,11 +194,6 @@
   .ev-empty .material-symbols-outlined{font-size:38px;color:var(--sky-200);display:block;margin:0 auto 8px}
 
   /* ---------- todas las actividades ---------- */
-  .all-box h3{font-size:15.5px;font-weight:800;color:var(--navy-900);
-    display:flex;align-items:center;gap:8px;margin-bottom:12px}
-  .all-box h3 .material-symbols-outlined{font-size:19px;color:var(--sky-500)}
-  .all-box h3 .count{font-size:11px;color:var(--slate);font-weight:700;
-    background:var(--sky-50);border-radius:999px;padding:2px 10px}
   .all-summary{display:flex;flex-direction:column;gap:9px;
     background:linear-gradient(135deg,#f0f9ff,#e6f4fe);
     border:1px solid var(--sky-200);border-radius:16px;padding:14px 16px;margin-bottom:16px}
@@ -223,6 +218,33 @@
   .all-dot.pending{background:var(--amber-500)}
   .all-dot.done{background:var(--sky-200)}
   .all-dot.active{background:var(--green-500)}
+  .all-row.next{border-color:var(--sky-300);box-shadow:0 4px 12px rgba(2,132,199,.10)}
+  .next-pill{font-size:8.5px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;
+    color:var(--sky-600);background:var(--sky-50);border:1px solid var(--sky-200);
+    border-radius:999px;padding:2px 7px;flex:0 0 auto;white-space:nowrap}
+  .all-summary .as-actions{display:flex;align-items:center;gap:8px}
+  .as-btn{display:inline-flex;align-items:center;gap:5px;font:inherit;font-weight:800;font-size:11px;
+    color:#fff;background:linear-gradient(135deg,var(--sky-500),var(--sky-600));border:0;
+    border-radius:999px;padding:7px 12px;cursor:pointer;box-shadow:0 4px 10px rgba(2,132,199,.25);
+    transition:box-shadow .15s,transform .1s;white-space:nowrap}
+  .as-btn .material-symbols-outlined{font-size:15px}
+  .as-btn:hover{box-shadow:0 6px 14px rgba(2,132,199,.35)}
+  .as-btn:active{transform:scale(.94)}
+
+  /* ---------- pestañas hoy / pendientes / realizadas ---------- */
+  .all-tabs{display:flex;gap:6px;background:var(--sky-100);border:1px solid var(--sky-200);
+    border-radius:14px;padding:4px;margin-bottom:14px}
+  .all-tab{flex:1;display:flex;align-items:center;justify-content:center;gap:5px;
+    border:0;background:transparent;padding:9px 4px;border-radius:11px;
+    font-weight:800;font-size:11.5px;color:var(--slate);cursor:pointer;min-width:0;
+    transition:background .15s,color .15s,box-shadow .15s;white-space:nowrap}
+  .all-tab .material-symbols-outlined{font-size:16px;flex:0 0 auto}
+  .all-tab .tab-count{font-size:10px;font-weight:800;background:var(--sky-200);color:var(--sky-700);
+    border-radius:999px;padding:1px 7px;transition:background .15s,color .15s}
+  .all-tab.active{background:linear-gradient(135deg,var(--sky-500),var(--sky-600));color:#fff;
+    box-shadow:0 4px 12px rgba(2,132,199,.30)}
+  .all-tab.active .tab-count{background:rgba(255,255,255,.25);color:#fff}
+  @media (max-width:430px){ .all-tab{font-size:10.5px;gap:3px} .all-tab .material-symbols-outlined{font-size:15px} }
 
   /* ---------- nav inferior glass (misma barra que el dashboard) ---------- */
   nav{position:fixed;left:0;right:0;bottom:0;z-index:50;
@@ -255,6 +277,51 @@
     font-size:13px;font-weight:700;opacity:0;transition:opacity .25s,transform .25s;
     pointer-events:none;z-index:100;white-space:nowrap;box-shadow:0 6px 20px rgba(12,74,110,.3)}
   #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+  /* ---------- modal informe ---------- */
+  .modal-mask{position:fixed;inset:0;z-index:120;background:rgba(15,47,68,.45);
+    backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);
+    display:flex;align-items:flex-end;justify-content:center;opacity:0;visibility:hidden;
+    transition:opacity .22s,visibility .22s}
+  .modal-mask.open{opacity:1;visibility:visible}
+  .modal{width:100%;max-width:560px;max-height:82dvh;display:flex;flex-direction:column;
+    background:#fff;border-radius:24px 24px 0 0;box-shadow:0 -14px 40px rgba(3,105,161,.25);
+    transform:translateY(40px);transition:transform .25s ease;overflow:hidden}
+  .modal-mask.open .modal{transform:translateY(0)}
+  @media (min-width:720px){
+    .modal-mask{align-items:center;padding:20px}
+    .modal{border-radius:24px;transform:translateY(24px) scale(.96)}
+    .modal-mask.open .modal{transform:translateY(0) scale(1)}
+  }
+  .modal-head{display:flex;align-items:center;justify-content:space-between;gap:10px;
+    padding:16px 18px 14px;border-bottom:1px solid var(--card-brd);flex:0 0 auto}
+  .mh-title{display:flex;align-items:center;gap:11px;min-width:0}
+  .mh-title .material-symbols-outlined{font-size:26px;color:var(--sky-500);flex:0 0 auto}
+  .mh-title h3{font-size:16.5px;font-weight:800;color:var(--navy-900)}
+  .mh-title small{font-size:11px;color:var(--slate);font-weight:600}
+  .mh-close{width:34px;height:34px;border-radius:50%;border:1px solid var(--card-brd);
+    background:var(--sky-50);color:var(--slate);display:flex;align-items:center;justify-content:center;
+    cursor:pointer;transition:background .15s,transform .1s;flex:0 0 auto}
+  .mh-close:hover{background:var(--sky-100)}
+  .mh-close:active{transform:scale(.9)}
+  .mh-close .material-symbols-outlined{font-size:19px}
+  .modal-body{padding:14px 18px 22px;overflow-y:auto;-webkit-overflow-scrolling:touch;flex:1}
+  .rep-summary{display:flex;gap:10px;margin-bottom:16px}
+  .rep-stat{flex:1;background:linear-gradient(135deg,#f0f9ff,#e6f4fe);border:1px solid var(--sky-200);
+    border-radius:14px;padding:12px 10px;text-align:center}
+  .rep-stat b{display:block;font-size:17px;font-weight:800;color:var(--navy-900)}
+  .rep-stat small{font-size:9.5px;font-weight:700;color:var(--slate);text-transform:uppercase;letter-spacing:.4px}
+  .rep-month{margin-bottom:15px}
+  .rep-month h4{font-size:13px;font-weight:800;color:var(--navy-900);text-transform:capitalize;
+    display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+  .rep-month h4 span{color:var(--sky-600)}
+  .rep-row{display:flex;align-items:center;gap:9px;padding:8px 10px;border:1px solid var(--card-brd);
+    border-radius:11px;margin-bottom:6px;background:#fff}
+  .rep-row .rd{font-size:10.5px;font-weight:800;color:var(--sky-600);background:var(--sky-50);
+    border-radius:8px;padding:4px 7px;flex:0 0 auto}
+  .rep-row .rt{flex:1;min-width:0;font-size:12px;font-weight:700;color:var(--ink)}
+  .rep-row .rh{font-size:11px;font-weight:800;color:var(--sky-700);flex:0 0 auto}
+  .rep-foot{font-size:10.5px;color:var(--slate);font-weight:600;text-align:center;margin-top:4px}
 </style>
 </head>
 <body>
@@ -347,7 +414,7 @@
     <button class="seg-btn" data-view="dia"><span class="material-symbols-outlined">today</span>Día</button>
     <button class="seg-btn" data-view="semana"><span class="material-symbols-outlined">view_week</span>Semana</button>
     <button class="seg-btn active" data-view="mes"><span class="material-symbols-outlined">calendar_month</span>Mes</button>
-    <button class="seg-btn" data-view="ano"><span class="material-symbols-outlined">calendar_view_year</span>Año</button>
+    <button class="seg-btn" data-view="ano"><span class="material-symbols-outlined">calendar_view_month</span>Año</button>
   </div>
 
   <!-- barra de fecha -->
@@ -391,17 +458,30 @@
     <div class="yr-grid" id="yrGrid"></div>
   </div>
 
-  <!-- todas las actividades: resumen + hoy + pendientes + realizadas -->
+  <!-- todas las actividades: resumen + pestañas hoy / pendientes / realizadas -->
   <div class="all-box" style="margin-top:20px">
     <div class="all-summary" id="allSummary"></div>
-    <h3><span class="material-symbols-outlined">event_available</span>Hoy<span class="count" id="todayCount">0</span></h3>
+    <div class="all-tabs" id="allTabs">
+      <button class="all-tab active" data-tab="hoy"><span class="material-symbols-outlined">event_available</span>Hoy<span class="tab-count" id="todayCount">0</span></button>
+      <button class="all-tab" data-tab="pend"><span class="material-symbols-outlined">hourglass_top</span>Pendientes<span class="tab-count" id="pendCount">0</span></button>
+      <button class="all-tab" data-tab="done"><span class="material-symbols-outlined">task_alt</span>Realizadas<span class="tab-count" id="doneCount">0</span></button>
+    </div>
     <div id="todayList"></div>
-    <h3 style="margin-top:18px"><span class="material-symbols-outlined">hourglass_top</span>Pendientes<span class="count" id="pendCount">0</span></h3>
-    <div id="pendList"></div>
-    <h3 style="margin-top:18px"><span class="material-symbols-outlined">task_alt</span>Realizadas<span class="count" id="doneCount">0</span></h3>
-    <div id="doneList"></div>
+    <div id="pendList" style="display:none"></div>
+    <div id="doneList" style="display:none"></div>
   </div>
 
+</div>
+
+<!-- informe modal -->
+<div class="modal-mask" id="reportModal" aria-hidden="true">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="mh-title"><span class="material-symbols-outlined">assessment</span><div><h3>Mi Informe</h3><small id="repSub">Resumen de tus horas sociales</small></div></div>
+      <button class="mh-close" id="reportClose" title="Cerrar"><span class="material-symbols-outlined">close</span></button>
+    </div>
+    <div class="modal-body" id="reportBody"></div>
+  </div>
 </div>
 
 <!-- nav inferior -->
@@ -648,13 +728,27 @@
       var el = document.createElement('div');
       el.className = 'yr-cell' + (m === cursor.getMonth() ? ' active' : '');
       el.innerHTML = '<b>' + MONTHS[m] + '</b>' +
-        (count ? '<span class="yr-count"><span class="material-symbols-outlined">event</span>' + count + '</span>' : '<span class="yr-count none">—</span>');
+        (count ? '<span class="yr-count"><i></i>' + count + '</span>' : '<span class="yr-count none">—</span>');
       el.addEventListener('click', (function(mm){ return function(){ cursor = new Date(y, mm, 1); setView('mes'); }; })(m));
       grid.appendChild(el);
     }
   }
 
   /* ================= todas las actividades ================= */
+  var activeTab = 'hoy';
+  function setTab(t){
+    activeTab = t;
+    document.querySelectorAll('.all-tab').forEach(function(b){
+      b.classList.toggle('active', b.getAttribute('data-tab') === t);
+    });
+    $('todayList').style.display = (t === 'hoy') ? '' : 'none';
+    $('pendList').style.display = (t === 'pend') ? '' : 'none';
+    $('doneList').style.display = (t === 'done') ? '' : 'none';
+  }
+  document.querySelectorAll('.all-tab').forEach(function(b){
+    b.addEventListener('click', function(){ setTab(b.getAttribute('data-tab')); });
+  });
+
   function renderAllLists(){
     var today = events.filter(function(e){ return e.d === TODAY; });
     var pend = events.filter(function(e){ return e.status === 'pending'; })
@@ -669,9 +763,9 @@
     if (!today.length) th.innerHTML = evEmptyHTML('Hoy no tenés actividades programadas');
     else today.forEach(function(e){ th.innerHTML += evCardHTML(e); });
     if (!pend.length) ph.innerHTML = evEmptyHTML('No tenés actividades pendientes 🎉');
-    else pend.forEach(function(e){ ph.innerHTML += rowHTML(e); });
+    else pend.forEach(function(e, i){ ph.innerHTML += rowHTML(e, i === 0); });
     if (!done.length) dh.innerHTML = evEmptyHTML('Todavía no realizaste ninguna actividad');
-    else done.forEach(function(e){ dh.innerHTML += rowHTML(e); });
+    else done.forEach(function(e){ dh.innerHTML += rowHTML(e, false); });
     // resumen de progreso
     var hHechas = 0, hPor = 0;
     done.forEach(function(e){ hHechas += e.hours; });
@@ -679,19 +773,78 @@
     pend.forEach(function(e){ hPor += e.hours; });
     var pct = (hHechas + hPor) > 0 ? Math.round(hHechas / (hHechas + hPor) * 100) : 0;
     $('allSummary').innerHTML =
-      '<div class="as-top"><span>Progreso total</span><b>' + hHechas + ' h</b></div>' +
+      '<div class="as-top"><span>Progreso total</span><div class="as-actions"><b>' + hHechas + ' h</b>' +
+      '<button class="as-btn" id="reportBtn"><span class="material-symbols-outlined">description</span>Informe</button></div></div>' +
       '<div class="as-bar"><i style="width:' + pct + '%"></i></div>' +
       '<div class="as-sub"><span>' + done.length + ' actividades · ' + hHechas + ' h acumuladas</span><span>' + hPor + ' h por hacer</span></div>';
+    var rb = $('reportBtn');
+    if (rb) rb.addEventListener('click', openReport);
+    setTab(activeTab);
   }
-  function rowHTML(e){
+  function rowHTML(e, isNext){
     var dt = parseISO(e.d);
     var dot = e.status === 'active' ? 'active' : e.status === 'pending' ? 'pending' : 'done';
-    return '<div class="all-row">' +
+    var next = isNext ? '<span class="next-pill">Próxima</span>' : '';
+    return '<div class="all-row' + (isNext ? ' next' : '') + '">' +
       '<span class="slot"><b>' + dt.getDate() + '</b><small>' + MONTHS_SHORT[dt.getMonth()] + '</small></span>' +
       '<div class="all-t"><b>' + e.title + '</b><small>' + e.h + ' · ' + DAYS[dt.getDay()] + '</small></div>' +
-      '<span class="all-h">' + e.hours + ' h</span>' +
+      '<span class="all-h">' + e.hours + ' h</span>' + next +
       '<span class="all-dot ' + dot + '"></span></div>';
   }
+
+  /* ================= informe ================= */
+  function renderReport(){
+    var doneS = events.filter(function(e){ return e.status === 'done'; })
+      .sort(function(a, b){ return a.d < b.d ? -1 : 1; });
+    var hTotal = 0;
+    doneS.forEach(function(e){ hTotal += e.hours; });
+    var hLive = 0, hPend = 0;
+    events.forEach(function(e){
+      if (e.status === 'active') hLive += e.hours;
+      else if (e.status === 'pending') hPend += e.hours;
+    });
+    var pct = (hTotal + hLive + hPend) > 0 ? Math.round((hTotal + hLive) / (hTotal + hLive + hPend) * 100) : 0;
+    var groups = [];
+    doneS.forEach(function(e){
+      var k = e.d.slice(0, 7);
+      var g = groups.find(function(x){ return x.k === k; });
+      if (!g){ g = { k: k, items: [], h: 0 }; groups.push(g); }
+      g.items.push(e); g.h += e.hours;
+    });
+    var html =
+      '<div class="rep-summary">' +
+        '<div class="rep-stat"><b>' + doneS.length + '</b><small>Realizadas</small></div>' +
+        '<div class="rep-stat"><b>' + hTotal + ' h</b><small>Completadas</small></div>' +
+        '<div class="rep-stat"><b>' + pct + '%</b><small>Progreso</small></div>' +
+      '</div>';
+    if (!doneS.length){
+      html += '<div class="ev-empty"><span class="material-symbols-outlined">event_busy</span>Todavía no realizaste ninguna actividad</div>';
+    } else {
+      groups.forEach(function(g){
+        var dt = parseISO(g.k + '-01');
+        html += '<div class="rep-month"><h4>' + MONTHS[dt.getMonth()] + ' ' + dt.getFullYear() + '<span>' + g.h + ' h</span></h4>';
+        g.items.forEach(function(e){
+          var d = parseISO(e.d);
+          html += '<div class="rep-row"><span class="rd">' + pad(d.getDate()) + '/' + pad(d.getMonth()+1) + '</span>' +
+            '<span class="rt">' + e.title + '</span><span class="rh">' + e.hours + ' h</span></div>';
+        });
+        html += '</div>';
+      });
+    }
+    html += '<div class="rep-foot">' + hLive + ' h en curso hoy · ' + hPend + ' h pendientes por hacer</div>';
+    $('reportBody').innerHTML = html;
+  }
+  function openReport(){
+    renderReport();
+    $('reportModal').classList.add('open');
+    $('reportModal').setAttribute('aria-hidden', 'false');
+  }
+  function closeReport(){
+    $('reportModal').classList.remove('open');
+    $('reportModal').setAttribute('aria-hidden', 'true');
+  }
+  $('reportClose').addEventListener('click', closeReport);
+  $('reportModal').addEventListener('click', function(e){ if (e.target === $('reportModal')) closeReport(); });
 
   /* ================= navegación/fecha ================= */
   document.querySelectorAll('.seg-btn').forEach(function(b){
