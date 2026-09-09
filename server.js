@@ -451,8 +451,12 @@ app.get('/maestro/tecnico', (req, res) => {
     res.sendFile(path.join(__dirname, 'gestion_tecnica_maestro_horasocial_pro', 'index.html'));
 });
 
+app.get('/maestro/chat', (req, res) => {
+  res.sendFile(path.join(__dirname, 'chat_maestro_horasocial_pro', 'index.html'));
+});
+
 app.get('/maestro/mensajes', (req, res) => {
-    res.sendFile(path.join(__dirname, 'stitch_horasocial_pro_landing_page', 'mensajes_e_interacci_n_perfil_maestro', 'code.html'));
+    res.sendFile(path.join(__dirname, 'mensajes_maestro_horasocial_pro', 'index.html'));
 });
 
 app.get('/admin/dashboard', (req, res) => {
@@ -541,8 +545,12 @@ app.get('/maestro/tecnico', (req, res) => {
     res.sendFile(path.join(__dirname, 'gestion_tecnica_maestro_horasocial_pro', 'index.html'));
 });
 
+app.get('/maestro/chat', (req, res) => {
+  res.sendFile(path.join(__dirname, 'chat_maestro_horasocial_pro', 'index.html'));
+});
+
 app.get('/maestro/mensajes', (req, res) => {
-    res.sendFile(path.join(__dirname, 'stitch_horasocial_pro_landing_page', 'mensajes_e_interacci_n_perfil_maestro', 'code.html'));
+    res.sendFile(path.join(__dirname, 'mensajes_maestro_horasocial_pro', 'index.html'));
 });
 
 app.get('/admin/dashboard', (req, res) => {

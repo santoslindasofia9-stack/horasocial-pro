@@ -189,6 +189,64 @@
   .rep-empty span{font-size:12px;font-weight:700;color:var(--slate)}
   @media (max-width:430px){ .rep-btn{font-size:11px;padding:8px 10px} }
 
+  /* ---------- sesiones de taller ---------- */
+  .ses-card{display:flex;flex-direction:column;gap:10px;padding:16px;border:1px solid var(--card-brd);
+    border-radius:18px;background:var(--glass);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+    box-shadow:0 6px 16px rgba(3,105,161,.06);margin-bottom:10px}
+  .ses-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;flex-wrap:wrap}
+  .ses-tema{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:800;color:var(--sky-700);
+    background:var(--sky-100);border-radius:999px;padding:6px 12px;line-height:1.35}
+  .ses-tema .material-symbols-outlined{font-size:14px;flex:0 0 auto}
+  .ses-fecha{font-size:12.5px;font-weight:800;color:var(--navy-900);white-space:nowrap}
+  .ses-tags{display:flex;flex-wrap:wrap;gap:6px}
+  .ses-tag{font-size:10px;font-weight:800;padding:4px 10px;border-radius:999px;
+    background:var(--sky-50);color:var(--slate);border:1px solid var(--sky-100);white-space:nowrap;
+    display:inline-flex;align-items:center;gap:4px}
+  .ses-tag .material-symbols-outlined{font-size:12px}
+  .ses-tag.dur{background:#ede9fe;color:#6d28d9;border-color:#e9e2fc}
+  .ses-sts{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+  .ses-pip{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+    font-family:'Plus Jakarta Sans',sans-serif;font-size:10.5px;font-weight:800;letter-spacing:.2px;
+    background:linear-gradient(135deg,var(--sky-400),var(--sky-600));color:#fff;
+    box-shadow:0 4px 10px rgba(2,132,199,.22)}
+  .ses-sts span{font-size:11px;font-weight:700;color:var(--slate)}
+  .ses-btns{display:flex;gap:8px;flex-wrap:wrap}
+  .ses-btns .vbtn{padding:8px 13px}
+  .ses-done{margin-top:4px}
+  .ses-done-h{list-style:none;display:flex;align-items:center;gap:6px;font-size:11px;font-weight:800;
+    color:var(--slate);text-transform:uppercase;letter-spacing:.3px;margin:12px 4px 8px;cursor:pointer;
+    user-select:none}
+  .ses-done-h::-webkit-details-marker{display:none}
+  .ses-done-h:hover{color:var(--sky-600)}
+  .ses-done[open] .ses-done-h{margin-bottom:10px}
+  .ses-done .ses-card{opacity:.68;box-shadow:none;background:rgba(240,249,255,.75)}
+  .ses-st-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+  .ses-st-chip{border:1px solid var(--card-brd);background:#fff;border-radius:999px;padding:8px 13px;
+    font-family:inherit;font-size:11.5px;font-weight:800;color:var(--slate);cursor:pointer;
+    display:inline-flex;align-items:center;gap:7px;
+    transition:background .2s,color .2s,border-color .2s,box-shadow .2s,transform .12s}
+  .ses-st-chip:hover{border-color:var(--sky-300);color:var(--sky-700)}
+  .ses-st-chip:active{transform:scale(.96)}
+  .ses-st-chip.active{background:var(--sky-600);border-color:var(--sky-600);color:#fff;
+    box-shadow:0 6px 14px rgba(2,132,199,.25)}
+  .ses-st-chip .material-symbols-outlined{font-size:14px}
+
+  /* ---------- formularios ---------- */
+  .f-field{margin-bottom:14px}
+  .f-field label{display:block;font-size:11px;font-weight:800;color:var(--slate);
+    margin-bottom:6px;text-transform:uppercase;letter-spacing:.3px}
+  .f-field input,.f-field select,.f-field textarea{width:100%;padding:12px 14px;border:1px solid var(--card-brd);
+    border-radius:13px;background:#fff;font-family:inherit;font-size:14px;font-weight:600;
+    color:var(--ink);outline:none;transition:border-color .2s,box-shadow .2s}
+  .f-field input:focus,.f-field select:focus,.f-field textarea:focus{border-color:var(--sky-400);
+    box-shadow:0 0 0 3px rgba(56,189,248,.22)}
+  .f-field select{background-image:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%230284c7' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
+    background-repeat:no-repeat;background-position:right 14px center;padding-right:36px}
+  .f-field textarea{resize:vertical;min-height:82px;line-height:1.5}
+  .f-hint{font-size:11px;color:var(--slate);font-weight:600;margin-top:6px}
+  .f-row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  @media (max-width:430px){ .f-row2{grid-template-columns:1fr} }
+
   /* ---------- material educativo ---------- */
   .mat-card{display:flex;flex-direction:column;gap:12px;padding:16px;border:1px solid var(--card-brd);
     border-radius:18px;background:var(--glass);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
@@ -472,6 +530,19 @@
     <div id="techRepList"></div>
   </section>
 
+  <!-- programar sesiones de taller -->
+  <section>
+    <div class="sec-head">
+      <h3><span class="m material-symbols-outlined">event_available</span>Programar Sesiones de Taller</h3>
+      <button class="vbtn" id="btnNuevaSesion" type="button" style="padding:8px 12px"><span class="material-symbols-outlined">add</span>Nueva Sesión</button>
+    </div>
+    <div id="sesList"></div>
+    <details class="ses-done">
+      <summary class="ses-done-h" id="sesDoneH">Completadas (0)</summary>
+      <div id="sesDone"></div>
+    </details>
+  </section>
+
   <!-- material educativo -->
   <section>
     <div class="sec-head"><h3><span class="m material-symbols-outlined">library_books</span>Material Educativo</h3></div>
@@ -493,7 +564,7 @@
     <a class="nav-item" data-go data-file="../dashboard_maestro_horasocial_pro/index.html" data-served="/maestro/dashboard" href="/maestro/dashboard"><span class="ic"><span class="material-symbols-outlined">grid_view</span></span><small>Panel</small></a>
     <a class="nav-item" data-go data-file="../gestion_estudiantes_maestro_horasocial_pro/index.html" data-served="/maestro/estudiantes" href="/maestro/estudiantes"><span class="ic"><span class="material-symbols-outlined">group</span></span><small>Estudiantes</small></a>
     <a class="nav-item active" href="#"><span class="ic"><span class="material-symbols-outlined">manage_accounts</span></span><small>Técnica</small></a>
-    <a class="nav-item" data-go data-file="../stitch_horasocial_pro_landing_page/mensajes_e_interacci_n_perfil_maestro/code.html" data-served="/maestro/mensajes" href="/maestro/mensajes"><span class="ic"><span class="material-symbols-outlined">chat</span></span><small>Mensajes</small></a>
+    <a class="nav-item" data-go data-file="../mensajes_maestro_horasocial_pro/index.html" data-served="/maestro/mensajes" href="/maestro/mensajes"><span class="ic"><span class="material-symbols-outlined">chat</span></span><small>Mensajes</small></a>
   </div>
 </nav>
 
@@ -522,6 +593,70 @@
       <button class="modal-x" id="xMat" type="button" aria-label="Cerrar"><span class="material-symbols-outlined">close</span></button>
     </div>
     <div class="modal-body" id="matBody"></div>
+  </div>
+</div>
+
+<!-- modal: programar sesión de taller -->
+<div class="modal-backdrop" id="modalSesion" role="dialog" aria-modal="true" aria-label="Programar sesión de taller">
+  <div class="modal" role="document">
+    <div class="modal-head">
+      <div>
+        <h3><span class="m material-symbols-outlined">event_available</span>Nueva Sesión</h3>
+        <p>Programá una sesión de taller para tus estudiantes</p>
+      </div>
+      <button class="modal-x" id="xSesion" type="button" aria-label="Cerrar"><span class="material-symbols-outlined">close</span></button>
+    </div>
+    <div class="modal-body">
+      <div class="f-row2">
+        <div class="f-field">
+          <label for="sesFecha">Fecha</label>
+          <input id="sesFecha" type="date">
+        </div>
+        <div class="f-field">
+          <label for="sesHora">Hora</label>
+          <input id="sesHora" type="time">
+        </div>
+      </div>
+      <div class="f-row2">
+        <div class="f-field">
+          <label for="sesDur">Duración</label>
+          <select id="sesDur">
+            <option value="1 h">1 hora</option>
+            <option value="2 h" selected>2 horas</option>
+            <option value="3 h">3 horas</option>
+          </select>
+        </div>
+        <div class="f-field">
+          <label for="sesTaller">Taller</label>
+          <select id="sesTaller">
+            <option>Taller 1 · Soldadura</option>
+            <option>Taller 2 · Electricidad</option>
+            <option>Taller 3 · Carpintería</option>
+            <option>Bodega general</option>
+          </select>
+        </div>
+      </div>
+      <div class="f-field">
+        <label for="sesTema">Temática</label>
+        <select id="sesTema">
+          <option>Soldadura: unión de perfiles</option>
+          <option>Electricidad: circuitos básicos</option>
+          <option>Carpintería: maquetas en madera</option>
+          <option>Seguridad y bioseguridad</option>
+          <option>Proyecto libre de horas</option>
+        </select>
+      </div>
+      <div class="f-field">
+        <label>Estudiantes</label>
+        <div class="ses-st-chips" id="sesStList"></div>
+        <div class="f-hint" id="sesCount">Seleccionados: 0</div>
+      </div>
+      <div class="f-field">
+        <label for="sesNota">Nota (opcional)</label>
+        <textarea id="sesNota" maxlength="200" placeholder="Materiales, indicaciones o recordatorios de la sesión"></textarea>
+      </div>
+      <button class="vbtn full" id="btnSesSave" type="button"><span class="material-symbols-outlined">event_available</span>Programar sesión</button>
+    </div>
   </div>
 </div>
 
@@ -1001,6 +1136,227 @@
       }
     });
 
+    /* ---------- sesiones de taller ---------- */
+    var LS_SES = 'horasocial_maestro_sesiones_v1';
+    var DIAS = ['dom','lun','mar','mié','jue','vie','sáb'];
+    var ESTUDIANTES_SES = [
+      { id:'e1',  nombre:'Valentina Ospina',     iniciales:'VO' },
+      { id:'e2',  nombre:'Samuel Rojas',         iniciales:'SR' },
+      { id:'e3',  nombre:'Mariana Cárdenas',     iniciales:'MC' },
+      { id:'e4',  nombre:'Sebastián Gómez',      iniciales:'SG' },
+      { id:'e5',  nombre:'Isabella Torres',      iniciales:'IT' },
+      { id:'e6',  nombre:'Juan David Muñoz',     iniciales:'JM' },
+      { id:'e7',  nombre:'Sofía Ramírez',        iniciales:'SR' },
+      { id:'e8',  nombre:'Andrés Felipe Castro', iniciales:'AC' },
+      { id:'e9',  nombre:'Camila Arias',         iniciales:'CA' },
+      { id:'e10', nombre:'Nicolás Herrera',      iniciales:'NH' },
+      { id:'e11', nombre:'Laura Gutiérrez',      iniciales:'LG' },
+      { id:'e12', nombre:'Daniel Salazar',       iniciales:'DS' }
+    ];
+    function pad2Ses(n){ return (n < 10 ? '0' : '') + n; }
+    function hoyISO(){ var d = new Date(); return d.getFullYear() + '-' + pad2Ses(d.getMonth() + 1) + '-' + pad2Ses(d.getDate()); }
+    function fmtSesFecha(f){
+      var p = String(f).split('-');
+      var d = new Date(parseInt(p[0], 10), parseInt(p[1], 10) - 1, parseInt(p[2], 10));
+      return DIAS[d.getDay()] + ' ' + d.getDate() + ' ' + MESES[d.getMonth()];
+    }
+    function fmtHora12(h){
+      var p = String(h).split(':');
+      var hh = parseInt(p[0], 10) || 0, mm = p[1] || '00';
+      var ap = hh >= 12 ? 'PM' : 'AM';
+      var h12 = hh % 12; if (h12 === 0) h12 = 12;
+      return h12 + ':' + mm + ' ' + ap;
+    }
+    function seedSesiones(){
+      return [
+        { id: 1, fecha: '2026-09-11', hora: '10:00', dur: '2 h', tema: 'Soldadura: unión de perfiles', taller: 'Taller 1 · Soldadura',
+          estudiantes: [ { id:'e1', nombre:'Valentina Ospina', iniciales:'VO' }, { id:'e4', nombre:'Sebastián Gómez', iniciales:'SG' }, { id:'e6', nombre:'Juan David Muñoz', iniciales:'JM' } ],
+          estado: 'Programada', nota: '' },
+        { id: 2, fecha: '2026-09-14', hora: '14:00', dur: '1 h', tema: 'Seguridad y bioseguridad', taller: 'Bodega general',
+          estudiantes: [ { id:'e2', nombre:'Samuel Rojas', iniciales:'SR' }, { id:'e7', nombre:'Sofía Ramírez', iniciales:'SR' } ],
+          estado: 'Programada', nota: 'Llevar guantes de seguridad' },
+        { id: 3, fecha: '2026-09-04', hora: '09:00', dur: '3 h', tema: 'Electricidad: circuitos básicos', taller: 'Taller 2 · Electricidad',
+          estudiantes: [ { id:'e3', nombre:'Mariana Cárdenas', iniciales:'MC' }, { id:'e9', nombre:'Camila Arias', iniciales:'CA' }, { id:'e11', nombre:'Laura Gutiérrez', iniciales:'LG' } ],
+          estado: 'Completada', nota: 'Circuitos serie y paralelo terminados' }
+      ];
+    }
+    function cargarSesiones(){
+      try{
+        var raw = localStorage.getItem(LS_SES);
+        if (!raw) throw 0;
+        var arr = JSON.parse(raw);
+        if (!Array.isArray(arr) || !arr.length) throw 0;
+        return arr;
+      }catch(e){
+        var s = seedSesiones();
+        try{ localStorage.setItem(LS_SES, JSON.stringify(s)); }catch(e2){}
+        return s;
+      }
+    }
+    function guardarSesiones(){ try{ localStorage.setItem(LS_SES, JSON.stringify(sesiones)); }catch(e){} }
+    var sesiones = cargarSesiones();
+    function bySesId(id){ var r = null; sesiones.forEach(function(x){ if (x.id === id) r = x; }); return r; }
+    var sesSel = {};
+
+    function pipsSesion(ses){
+      var html = '';
+      ses.estudiantes.forEach(function(e){
+        html += '<span class="ses-pip" title="' + esc(e.nombre) + '">' + esc(e.iniciales) + '</span>';
+      });
+      var n = ses.estudiantes.length;
+      return html + '<span>' + n + (n === 1 ? ' estudiante' : ' estudiantes') + '</span>';
+    }
+    function renderSesiones(){
+      var box = $('sesList'); if (!box) return;
+      var prog = sesiones.filter(function(s){ return s.estado === 'Programada'; })
+        .sort(function(a, b){ return (a.fecha + ' ' + a.hora) > (b.fecha + ' ' + b.hora) ? 1 : -1; });
+      var comp = sesiones.filter(function(s){ return s.estado === 'Completada'; });
+      var html = '';
+      if (!prog.length){
+        html = '<div class="s-empty show"><span class="material-symbols-outlined">event</span><span>Sin sesiones programadas</span></div>';
+      }
+      prog.forEach(function(s){
+        html += '<div class="ses-card">' +
+          '<div class="ses-top">' +
+            '<span class="ses-tema"><span class="material-symbols-outlined">handyman</span>' + esc(s.tema) + '</span>' +
+            '<b class="ses-fecha">' + fmtSesFecha(s.fecha) + ' · ' + fmtHora12(s.hora) + '</b>' +
+          '</div>' +
+          '<div class="ses-tags">' +
+            '<span class="ses-tag"><span class="material-symbols-outlined">precision_manufacturing</span>' + esc(s.taller) + '</span>' +
+            '<span class="ses-tag dur"><span class="material-symbols-outlined">schedule</span>' + esc(s.dur) + '</span>' +
+          '</div>' +
+          '<div class="ses-sts">' + pipsSesion(s) + '</div>' +
+          '<div class="ses-btns">' +
+            '<button class="vbtn" type="button" data-com="' + s.id + '"><span class="material-symbols-outlined">check</span>Completar</button>' +
+            '<button class="tb-btn ghost" type="button" data-del="' + s.id + '"><span class="material-symbols-outlined">close</span>Cancelar</button>' +
+          '</div>' +
+        '</div>';
+      });
+      box.innerHTML = html;
+      var doneH = $('sesDoneH');
+      if (doneH) doneH.textContent = 'Completadas (' + comp.length + ')';
+      var doneBox = $('sesDone');
+      if (doneBox){
+        var dh = '';
+        comp.forEach(function(s){
+          dh += '<div class="ses-card">' +
+            '<div class="ses-top">' +
+              '<span class="ses-tema">' + esc(s.tema) + '</span>' +
+              '<b class="ses-fecha">' + fmtSesFecha(s.fecha) + ' · ' + fmtHora12(s.hora) + '</b>' +
+            '</div>' +
+            '<div class="ses-tags">' +
+              '<span class="ses-tag">' + esc(s.taller) + '</span>' +
+              '<span class="ses-tag dur">' + esc(s.dur) + '</span>' +
+            '</div>' +
+            '<div class="ses-sts">' + pipsSesion(s) + '</div>' +
+          '</div>';
+        });
+        doneBox.innerHTML = dh;
+      }
+    }
+
+    function renderChipsSes(){
+      var box = $('sesStList'); if (!box) return;
+      var html = '';
+      ESTUDIANTES_SES.forEach(function(s){
+        var act = !!sesSel[s.id];
+        html += '<button type="button" class="ses-st-chip' + (act ? ' active' : '') + '" data-sid="' + s.id + '">' +
+          '<span class="material-symbols-outlined">' + (act ? 'check_circle' : 'add_circle_outline') + '</span>' +
+          esc(s.nombre) + '</button>';
+      });
+      box.innerHTML = html;
+      var c = $('sesCount');
+      if (c){
+        var n = 0; for (var k in sesSel){ if (sesSel[k]) n++; }
+        c.textContent = 'Seleccionados: ' + n;
+      }
+    }
+    function abrirSesion(){
+      sesSel = {};
+      var f = $('sesFecha');
+      var h = $('sesHora');
+      if (f){ f.value = hoyISO(); f.min = hoyISO(); }
+      if (h) h.value = '';
+      var d = $('sesDur'); if (d) d.value = '2 h';
+      var t = $('sesTema'); if (t) t.selectedIndex = 0;
+      var ta = $('sesTaller'); if (ta) ta.selectedIndex = 0;
+      var n = $('sesNota'); if (n) n.value = '';
+      renderChipsSes();
+      abrirModal($('modalSesion'));
+    }
+    function guardarSesion(){
+      var f = $('sesFecha'), h = $('sesHora');
+      var fecha = f ? f.value : '', hora = h ? h.value : '';
+      if (!fecha){ toast('Elegí una fecha para la sesión'); return; }
+      if (fecha < hoyISO()){ toast('La fecha no puede ser anterior a hoy'); return; }
+      if (!hora){ toast('Elegí una hora para la sesión'); return; }
+      var elegidos = [];
+      ESTUDIANTES_SES.forEach(function(s){
+        if (sesSel[s.id]) elegidos.push({ id: s.id, nombre: s.nombre, iniciales: s.iniciales });
+      });
+      if (!elegidos.length){ toast('Seleccioná al menos un estudiante'); return; }
+      var d = $('sesDur'), t = $('sesTema'), ta = $('sesTaller'), n = $('sesNota');
+      var ses = {
+        id: Date.now(),
+        fecha: fecha,
+        hora: hora,
+        dur: d ? d.value : '2 h',
+        tema: t ? t.value : 'Soldadura: unión de perfiles',
+        taller: ta ? ta.value : 'Taller 1 · Soldadura',
+        estudiantes: elegidos,
+        estado: 'Programada',
+        nota: n ? n.value.trim() : ''
+      };
+      sesiones.push(ses);
+      guardarSesiones();
+      notifs.unshift({ id: Date.now() + 1, texto: 'Sesión programada: ' + ses.tema + ' · ' + fmtSesFecha(ses.fecha) + ' · ' + ses.hora, tiempo: 'hace un momento', leido: false });
+      guardarNotifs();
+      renderNotifs();
+      renderSesiones();
+      cerrarModal($('modalSesion'));
+      toast('Sesión programada');
+    }
+
+    /* ---------- bindings: sesiones ---------- */
+    var btnNuevaSesion = $('btnNuevaSesion');
+    if (btnNuevaSesion) btnNuevaSesion.addEventListener('click', abrirSesion);
+    var sesStList = $('sesStList');
+    if (sesStList) sesStList.addEventListener('click', function(e){
+      var chip = e.target && e.target.closest ? e.target.closest('.ses-st-chip') : null;
+      if (!chip || !sesStList.contains(chip)) return;
+      var id = chip.getAttribute('data-sid');
+      sesSel[id] = !sesSel[id];
+      renderChipsSes();
+    });
+    var btnSesSave = $('btnSesSave');
+    if (btnSesSave) btnSesSave.addEventListener('click', guardarSesion);
+    var sesList = $('sesList');
+    if (sesList) sesList.addEventListener('click', function(e){
+      var btn = e.target && e.target.closest ? e.target.closest('[data-com],[data-del]') : null;
+      if (!btn) return;
+      var id = parseInt(btn.getAttribute(btn.hasAttribute('data-com') ? 'data-com' : 'data-del'), 10);
+      var s = bySesId(id);
+      if (!s) return;
+      if (btn.hasAttribute('data-com')){
+        if (s.estado !== 'Programada') return;
+        s.estado = 'Completada';
+        guardarSesiones();
+        renderSesiones();
+        toast('Sesión completada: ' + s.tema);
+      } else {
+        sesiones = sesiones.filter(function(x){ return x.id !== id; });
+        guardarSesiones();
+        renderSesiones();
+        toast('Sesión cancelada');
+      }
+    });
+    var xSesion = $('xSesion'), mSesion = $('modalSesion');
+    if (xSesion) xSesion.addEventListener('click', function(){ cerrarModal(mSesion); });
+    if (mSesion) mSesion.addEventListener('click', function(e){ if (e.target === mSesion) cerrarModal(mSesion); });
+    document.addEventListener('keydown', function(e){
+      if (e.key === 'Escape') cerrarModal($('modalSesion'));
+    });
+
     /* ---------- bindings: exportar ---------- */
     var btnExp = $('btnExportInv');
     if (btnExp) btnExp.addEventListener('click', exportarCSV);
@@ -1043,6 +1399,7 @@
     renderTools();
     renderReps();
     renderMats();
+    renderSesiones();
     renderNotifs();
   })();
 </script>

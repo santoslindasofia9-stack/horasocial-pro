@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport">
+<title>HORASOCIAL PRO · Mis Mensajes</title>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&amp;display=swap" rel="stylesheet">
+<style>
+  :root{
+    --sky-50:#f0f9ff; --sky-100:#e0f2fe; --sky-200:#bae6fd; --sky-300:#7dd3fc;
+    --sky-400:#38bdf8; --sky-500:#0ea5e9; --sky-600:#0284c7; --sky-700:#0369a1;
+    --navy-800:#075985; --navy-900:#0c4a6e; --ink:#0f2f44; --slate:#5b6b7c;
+    --card:#ffffff; --card-brd:#e6f0f9; --radius:22px; --maxw:640px;
+    --green-500:#22c55e; --amber-500:#f59e0b; --red-400:#f87171; --red-500:#ef4444;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html{scroll-behavior:smooth;overflow-x:hidden}
+  body{
+    font-family:'Segoe UI',Inter,-apple-system,system-ui,sans-serif;
+    color:var(--ink);background:#ffffff;position:relative;overflow-x:hidden;
+    min-height:100dvh;
+    padding:0 0 calc(150px + env(safe-area-inset-bottom));
+  }
+
+  /* ---------- ondas EXACTAS del dashboard / agenda / registro ---------- */
+  .flow-field{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;overflow:visible}
+  .flow-field svg{width:100%;height:100%;overflow:visible}
+  .wf-l{fill:none;stroke-width:0.9;vector-effect:non-scaling-stroke}
+  .wiggle{animation:flow-drift 38s ease-in-out infinite;will-change:transform}
+  @keyframes flow-drift{0%,100%{transform:translate(0,0)}20%{transform:translate(9px,-16px)}45%{transform:translate(19px,-6px)}70%{transform:translate(11px,6px)}}
+
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:22px 18px 10px;position:relative;z-index:1}
+  @media (min-width:720px){ :root{--maxw:920px} .wrap{padding:30px 26px 12px} }
+
+  /* ---------- header ---------- */
+  header{display:flex;align-items:center;gap:14px;padding:4px 2px 18px}
+  .avatar{width:56px;height:56px;border-radius:50%;flex:0 0 auto;position:relative;
+    filter:drop-shadow(0 8px 16px rgba(14,165,233,.35))}
+  .avatar img{width:100%;height:100%;border-radius:50%;object-fit:cover;display:block;position:relative;z-index:1}
+  .avatar::after{content:'';position:absolute;inset:-3px;border-radius:50%;
+    border:2.5px solid rgba(56,189,248,.45)}
+  .av-fb{display:none;width:100%;height:100%;border-radius:50%;align-items:center;justify-content:center;
+    background:linear-gradient(135deg,#38bdf8,#0369a1);color:#fff;
+    font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:19px;letter-spacing:.5px;
+    position:relative;z-index:1}
+  .hi{flex:1;min-width:0}
+  .hi h1{font-size:22px;font-weight:800;color:var(--navy-900);letter-spacing:-.2px}
+  .hi p{font-size:12.5px;color:var(--slate);font-weight:600;margin-top:3px}
+  .logout{display:flex;align-items:center;gap:7px;text-decoration:none;
+    background:var(--sky-50);border:1px solid var(--sky-200);color:var(--sky-700);
+    padding:9px 13px;border-radius:999px;font-weight:800;font-size:12px;
+    transition:background .2s,box-shadow .2s,transform .12s;white-space:nowrap}
+  .logout:hover{background:var(--sky-100);box-shadow:0 4px 12px rgba(2,132,199,.18)}
+  .logout:active{transform:scale(.96)}
+  .logout .material-symbols-outlined{font-size:18px}
+  @media (max-width:430px){ .logout small{display:none} .logout{padding:10px} }
+
+  /* ---------- buscador ---------- */
+  .search{display:flex;align-items:center;gap:10px;background:var(--card);
+    border:1px solid var(--card-brd);border-radius:16px;padding:12px 15px;margin-bottom:16px;
+    box-shadow:0 6px 16px rgba(3,105,161,.06)}
+  .search .material-symbols-outlined{color:var(--sky-400);font-size:20px;flex:0 0 auto}
+  .search input{flex:1;min-width:0;border:0;outline:0;font:inherit;font-size:13.5px;
+    font-weight:600;color:var(--ink);background:transparent}
+  .search input::placeholder{color:#b6c2cf}
+
+  /* ---------- lista de estudiantes ---------- */
+  .section-head{display:flex;align-items:center;gap:8px;font-size:15.5px;font-weight:800;
+    color:var(--navy-900);margin:0 0 12px}
+  .section-head .material-symbols-outlined{font-size:19px;color:var(--sky-500)}
+  .m-list{display:flex;flex-direction:column;gap:9px}
+  .m-row{display:flex;align-items:center;gap:13px;background:var(--card);
+    border:1px solid var(--card-brd);border-radius:17px;padding:13px 14px;cursor:pointer;
+    text-decoration:none;box-shadow:0 6px 16px rgba(3,105,161,.06);
+    transition:transform .12s,box-shadow .2s,border-color .2s}
+  .m-row:hover{transform:translateY(-1px);box-shadow:0 10px 22px rgba(3,105,161,.12);border-color:var(--sky-200)}
+  .m-row:active{transform:scale(.98)}
+  .m-ava{width:50px;height:50px;border-radius:50%;flex:0 0 auto;display:flex;align-items:center;
+    justify-content:center;background:linear-gradient(135deg,var(--sky-500),var(--sky-600));
+    color:#fff;font-size:16px;font-weight:800;letter-spacing:.3px;
+    box-shadow:0 6px 14px rgba(2,132,199,.25);position:relative}
+  .m-ava .dot{position:absolute;right:1px;bottom:1px;width:12px;height:12px;border-radius:50%;
+    background:var(--green-500);border:2px solid #fff}
+  .m-ava.gray{background:linear-gradient(135deg,#94a3b8,#64748b);box-shadow:0 6px 14px rgba(100,116,139,.25)}
+  .m-t{flex:1;min-width:0}
+  .m-t b{display:block;font-size:13.8px;font-weight:800;color:var(--ink);white-space:nowrap;
+    overflow:hidden;text-overflow:ellipsis}
+  .m-t small{display:block;font-size:11px;font-weight:600;color:var(--sky-700);
+    margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .m-t .ult{display:block;font-size:11.5px;font-weight:600;color:var(--slate);margin-top:5px;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .m-t .ult b{display:inline;font-size:11.5px;font-weight:700;color:var(--ink)}
+  .m-right{flex:0 0 auto;display:flex;flex-direction:column;align-items:flex-end;gap:7px}
+  .m-right .hora{font-size:10px;font-weight:700;color:#b6c2cf}
+  .m-right .badge{min-width:19px;height:19px;border-radius:999px;background:var(--red-400);
+    color:#fff;font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center;
+    padding:0 5px}
+  .m-right .seen{font-size:10px;font-weight:700;color:var(--sky-400);display:flex;align-items:center;gap:3px}
+  .m-right .seen .material-symbols-outlined{font-size:13px}
+  .m-arrow{color:var(--sky-300);font-size:20px;flex:0 0 auto}
+  .empty{text-align:center;padding:26px 12px;color:var(--slate);font-size:12.5px;font-weight:600;
+    background:var(--card);border:1px dashed var(--sky-200);border-radius:16px}
+  .empty .material-symbols-outlined{font-size:28px;display:block;margin:0 auto 8px;color:var(--sky-300)}
+
+  /* ---------- nav inferior glass (misma barra) ---------- */
+  nav{position:fixed;left:0;right:0;bottom:0;z-index:50;
+    background:rgba(255,255,255,.92);backdrop-filter:blur(14px);
+    -webkit-backdrop-filter:blur(14px);
+    border-top:1px solid #eaf3fb;box-shadow:0 -8px 26px rgba(3,105,161,.12);
+    border-radius:24px 24px 0 0;
+    padding:10px 12px calc(12px + env(safe-area-inset-bottom))}
+  .nav-inner{max-width:var(--maxw);margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);
+    column-gap:8px;padding:0 6px}
+  .nav-item{display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 4px;
+    border-radius:15px;text-decoration:none;color:var(--slate);font-size:10px;font-weight:700;min-width:0;
+    transition:transform .12s,color .2s}
+  .nav-item:active{transform:scale(.92)}
+  .nav-item .ic{width:48px;height:36px;display:flex;align-items:center;justify-content:center;
+    border-radius:13px;transition:background .2s,color .2s;color:#94a3b8}
+  .nav-item .ic .material-symbols-outlined{font-size:23px}
+  .nav-item small{font-size:10.5px;font-weight:700;letter-spacing:.2px}
+  .nav-item.active{color:var(--navy-900)}
+  .nav-item.active .ic{background:var(--navy-900);color:#fff}
+
+  .material-symbols-outlined{
+    font-variation-settings:'FILL' 0,'wght' 500,'GRAD' 0,'opsz' 24;
+    user-select:none;
+  }
+
+  /* ---------- toast ---------- */
+  #toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%) translateY(20px);
+    background:var(--navy-900);color:#fff;padding:10px 22px;border-radius:999px;
+    font-size:13px;font-weight:700;opacity:0;transition:opacity .25s,transform .25s;
+    pointer-events:none;z-index:100;white-space:nowrap;box-shadow:0 6px 20px rgba(12,74,110,.3)}
+  #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+
+<!-- ondas EXACTAS del dashboard -->
+<div class="flow-field wiggle" aria-hidden="true">
+  <svg viewBox="0 0 1600 900" preserveAspectRatio="none">
+    <defs>
+      <linearGradient id="gradField" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#cde9ff"/>
+        <stop offset="35%" stop-color="#9fd4ff"/>
+        <stop offset="70%" stop-color="#5fb4f7"/>
+        <stop offset="100%" stop-color="#7dbfc8"/>
+      </linearGradient>
+    </defs>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.11" transform="translate(0 6.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.14" transform="translate(11 24.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.17" transform="translate(22 43.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.2" transform="translate(33 61.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.22" transform="translate(44 80.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.25" transform="translate(55 98.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.27" transform="translate(66 117.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.3" transform="translate(77 135.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.32" transform="translate(88 154.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.34" transform="translate(99 172.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.37" transform="translate(110 191.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.39" transform="translate(121 209.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.41" transform="translate(132 228.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.42" transform="translate(143 246.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.44" transform="translate(154 265.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.46" transform="translate(165 283.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.47" transform="translate(176 302.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.48" transform="translate(187 320.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.49" transform="translate(198 339.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.5" transform="translate(209 357.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.51" transform="translate(220 376.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.51" transform="translate(231 394.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.52" transform="translate(242 413.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.52" transform="translate(253 431.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.52" transform="translate(264 450.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.51" transform="translate(275 468.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.51" transform="translate(286 487.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.5" transform="translate(297 505.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.49" transform="translate(308 524.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.48" transform="translate(319 542.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.47" transform="translate(330 561.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.46" transform="translate(341 579.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.44" transform="translate(352 598.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.42" transform="translate(363 616.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.41" transform="translate(374 635.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.39" transform="translate(385 653.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.37" transform="translate(396 672.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.34" transform="translate(407 690.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.32" transform="translate(418 709.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.3" transform="translate(429 727.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.27" transform="translate(440 746.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.25" transform="translate(451 764.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.22" transform="translate(462 783.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.2" transform="translate(473 801.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.17" transform="translate(484 820.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.14" transform="translate(495 838.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.11" transform="translate(506 857.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+  </svg>
+</div>
+
+<div class="wrap">
+
+  <!-- header -->
+  <header>
+    <div class="avatar" role="img" aria-label="Perfil de Maestro Ricardo">
+      <img id="avImg" alt="Foto de Maestro Ricardo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAsBKOgiv_kBEGjRdsLDTUZvI71zukRwIm4VDeUz7PNlZXgk-rbjdeD6dqKMmosd3_emj_ICwNW35ohfDVXeRh0Z9qFx0I4Zjb7jNHlals66RqOcXSkQu2MwkkciTFXkC95odUjko8VIPVa493BBrOY-WID8ZzD1PBV9U4Ja2q18Ov24D1q6vN3s3aoYWga0VydSZLaIpkbNGjcKqalA9cPOtjlGkZOSBrs-hPouXz3rf8bOc66iYv3e2gaqSDWmH1zI18tKalUSqva" onerror="this.style.display='none';var f=document.getElementById('avFallback');if(f){f.style.display='flex';}">
+      <div class="av-fb" id="avFallback">MR</div>
+    </div>
+    <div class="hi">
+      <h1>Mis Mensajes</h1>
+      <p>Charlá con tus estudiantes de técnica</p>
+    </div>
+    <a class="logout" href="/seleccion-rol" title="Cerrar sesión" id="btnLogout">
+      <span class="material-symbols-outlined">logout</span>
+      <small>Salir</small>
+    </a>
+  </header>
+
+  <!-- buscador -->
+  <div class="search">
+    <span class="material-symbols-outlined">search</span>
+    <input id="searchInput" type="search" placeholder="Buscar estudiante o brigada..." autocomplete="off">
+  </div>
+
+  <!-- lista de estudiantes -->
+  <div class="section-head"><span class="material-symbols-outlined">group</span>Estudiantes · Colegio Alfredo Correa</div>
+  <div class="m-list" id="studentList"></div>
+
+</div>
+
+<!-- nav inferior -->
+<nav>
+  <div class="nav-inner">
+    <a class="nav-item" data-go data-file="../dashboard_maestro_horasocial_pro/index.html" data-served="/maestro/dashboard" href="/maestro/dashboard"><span class="ic"><span class="material-symbols-outlined">grid_view</span></span><small>Panel</small></a>
+    <a class="nav-item" data-go data-file="../gestion_estudiantes_maestro_horasocial_pro/index.html" data-served="/maestro/estudiantes" href="/maestro/estudiantes"><span class="ic"><span class="material-symbols-outlined">group</span></span><small>Estudiantes</small></a>
+    <a class="nav-item" data-go data-file="../gestion_tecnica_maestro_horasocial_pro/index.html" data-served="/maestro/tecnico" href="/maestro/tecnico"><span class="ic"><span class="material-symbols-outlined">manage_accounts</span></span><small>Técnica</small></a>
+    <a class="nav-item active" href="#"><span class="ic"><span class="material-symbols-outlined">chat</span></span><small>Mensajes</small></a>
+  </div>
+</nav>
+
+<div id="toast"></div>
+
+<script>
+(function(){
+  var $ = function(id){ return document.getElementById(id); };
+  var toastTimer = null;
+  function toast(msg){
+    var t = $('toast'); t.textContent = msg; t.classList.add('show');
+    clearTimeout(toastTimer); toastTimer = setTimeout(function(){ t.classList.remove('show'); }, 2600);
+  }
+  function isFile(){ return location.protocol === 'file:'; }
+  function go(fileHref, servedHref){ window.location.assign(isFile() ? fileHref : servedHref); }
+
+  /* ---------- catálogo de estudiantes (mismo que el chat del maestro) ---------- */
+  var ESTUDIANTES = [
+    {id:'e1', nombre:'Valentina Ospina', brigada:'Ambiental', iniciales:'VO', ult:'Buen trabajo, Valentina. Mandame las fotos y te registro las horas.', hora:'08:20', noLeidos:2, enLinea:true},
+    {id:'e2', nombre:'Samuel Rojas', brigada:'Ambiental', iniciales:'SR', ult:'Perfecto, allá estaré.', hora:'16:01', noLeidos:0, enLinea:false},
+    {id:'e3', nombre:'Mariana Cárdenas', brigada:'Académico', iniciales:'MC', ult:'Muchas gracias profe, ya la estoy mirando.', hora:'09:14', noLeidos:1, enLinea:true},
+    {id:'e4', nombre:'Sebastián Gómez', brigada:'Comunitario', iniciales:'SG', ult:'Sigue, a las 2 de la tarde en el Taller 3. No faltes.', hora:'18:30', noLeidos:0, enLinea:false},
+    {id:'e5', nombre:'Isabella Torres', brigada:'Ambiental', iniciales:'IT', ult:'Excelente, Isabella. Te sumo 4 horas al registro.', hora:'10:15', noLeidos:1, enLinea:true},
+    {id:'e6', nombre:'Juan David Muñoz', brigada:'Académico', iniciales:'JM', ult:'Pasá mañana por el taller y lo vemos con el multímetro.', hora:'14:02', noLeidos:0, enLinea:false},
+    {id:'e7', nombre:'Sofía Ramírez', brigada:'Comunitario', iniciales:'SR', ult:'Ya estamos preparando la maqueta del proyecto, profe.', hora:'11:52', noLeidos:0, enLinea:true},
+    {id:'e8', nombre:'Andrés Felipe Castro', brigada:'Ambiental', iniciales:'AC', ult:'Perfecto, Andrés. Te anoto el registro de hoy.', hora:'17:00', noLeidos:0, enLinea:false},
+    {id:'e9', nombre:'Camila Arias', brigada:'Académico', iniciales:'CA', ult:'Claro, Camila, después de la jornada de apoyo académico.', hora:'09:02', noLeidos:0, enLinea:true}
+  ];
+
+  /* ---------- estado de leídos ---------- */
+  var LS = { get:function(k,d){ try{ var v = localStorage.getItem(k); return v ? JSON.parse(v) : d; }catch(e){ return d; } },
+             set:function(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} } };
+  var leidos = LS.get('horasocial_maestro_msg_leidos_v1', {}); // {id:true}
+
+  function render(){
+    var box = $('studentList'); if (!box) return;
+    box.innerHTML = '';
+    var q = ($('searchInput').value || '').trim().toLowerCase();
+    var list = ESTUDIANTES.filter(function(s){
+      if (!q) return true;
+      return (s.nombre + ' ' + s.brigada).toLowerCase().indexOf(q) !== -1;
+    });
+    if (!list.length){
+      box.innerHTML = '<div class="empty"><span class="material-symbols-outlined">search_off</span>No hay estudiantes que coincidan con tu búsqueda.</div>';
+      return;
+    }
+    list.forEach(function(s){
+      var row = document.createElement('a');
+      row.className = 'm-row';
+      row.href = '#';
+      var noLeidos = leidos[s.id] ? 0 : s.noLeidos;
+      var badge = noLeidos > 0
+        ? '<span class="badge">' + noLeidos + '</span>'
+        : '<span class="seen"><span class="material-symbols-outlined">done_all</span>Visto</span>';
+      row.innerHTML =
+        '<span class="m-ava' + (s.enLinea ? '' : ' gray') + '">' + s.iniciales + (s.enLinea ? '<i class="dot"></i>' : '') + '</span>' +
+        '<div class="m-t"><b>' + s.nombre + '</b><small>' + s.brigada + ' · Colegio Alfredo Correa</small>' +
+          '<span class="ult">' + (noLeidos > 0 ? '<b>' + s.nombre + ':</b> ' : '') + s.ult + '</span></div>' +
+        '<div class="m-right"><span class="hora">' + s.hora + '</span>' + badge + '</div>' +
+        '<span class="m-arrow material-symbols-outlined">chevron_right</span>';
+      row.addEventListener('click', function(e){
+        e.preventDefault();
+        leidos[s.id] = true; LS.set('horasocial_maestro_msg_leidos_v1', leidos);
+        var target = (location.protocol === 'file:')
+          ? '../chat_maestro_horasocial_pro/index.html?id=' + s.id
+          : '/maestro/chat?id=' + s.id;
+        window.location.assign(target);
+      });
+      box.appendChild(row);
+    });
+  }
+  $('searchInput').addEventListener('input', render);
+
+  /* ---------- cerrar sesión: intercepción SIEMPRE (file o servido) ---------- */
+  var btnLogout = $('btnLogout');
+  if (btnLogout) btnLogout.addEventListener('click', function(e){
+    e.preventDefault();
+    go('../selecci_n_de_rol_distribuci_n_expandida_vertical/code.html', '/seleccion-rol');
+  });
+
+  /* ---------- enlaces con patrón file/served (nav) ---------- */
+  document.querySelectorAll('[data-go]').forEach(function(el){
+    el.addEventListener('click', function(e){
+      e.preventDefault();
+      go(el.getAttribute('data-file'), el.getAttribute('data-served'));
+    });
+  });
+
+  /* avatar: refuerzo del onerror inline */
+  var avImg = $('avImg');
+  if (avImg){
+    avImg.addEventListener('error', function(){
+      avImg.style.display = 'none';
+      var fb = $('avFallback');
+      if (fb) fb.style.display = 'flex';
+    });
+  }
+
+  render();
+})();
+</script>
+</body>
+</html>

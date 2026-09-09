@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport">
+<title>HORASOCIAL PRO · Chat con Estudiante</title>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&amp;display=swap" rel="stylesheet">
+<style>
+  :root{
+    --sky-50:#f0f9ff; --sky-100:#e0f2fe; --sky-200:#bae6fd; --sky-300:#7dd3fc;
+    --sky-400:#38bdf8; --sky-500:#0ea5e9; --sky-600:#0284c7; --sky-700:#0369a1;
+    --navy-800:#075985; --navy-900:#0c4a6e; --ink:#0f2f44; --slate:#5b6b7c;
+    --card:#ffffff; --card-brd:#e6f0f9; --radius:22px; --maxw:640px;
+    --green-500:#22c55e; --amber-500:#f59e0b; --red-400:#f87171; --red-500:#ef4444;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html{scroll-behavior:smooth;overflow-x:hidden}
+  body{
+    font-family:'Segoe UI',Inter,-apple-system,system-ui,sans-serif;
+    color:var(--ink);background:#ffffff;position:relative;overflow-x:hidden;
+    min-height:100dvh;
+  }
+
+  /* ---------- ondas EXACTAS del dashboard / agenda / registro / mensajes ---------- */
+  .flow-field{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;overflow:visible}
+  .flow-field svg{width:100%;height:100%;overflow:visible}
+  .wf-l{fill:none;stroke-width:0.9;vector-effect:non-scaling-stroke}
+  .wiggle{animation:flow-drift 38s ease-in-out infinite;will-change:transform}
+  @keyframes flow-drift{0%,100%{transform:translate(0,0)}20%{transform:translate(9px,-16px)}45%{transform:translate(19px,-6px)}70%{transform:translate(11px,6px)}}
+
+  /* ---------- header del chat ---------- */
+  .chat-head{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:11px;
+    background:rgba(255,255,255,.92);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+    border-bottom:1px solid #eaf3fb;padding:12px 14px calc(12px + env(safe-area-inset-top))}
+  @media (min-width:720px){ .chat-head{padding:14px 22px} }
+  .back{width:38px;height:38px;border-radius:12px;background:var(--sky-50);border:1px solid var(--sky-200);
+    color:var(--sky-700);display:flex;align-items:center;justify-content:center;cursor:pointer;
+    flex:0 0 auto;transition:background .15s,transform .1s;text-decoration:none}
+  .back:hover{background:var(--sky-100)}
+  .back:active{transform:scale(.92)}
+  .back .material-symbols-outlined{font-size:21px}
+  .c-ava{width:42px;height:42px;border-radius:50%;flex:0 0 auto;display:flex;align-items:center;
+    justify-content:center;background:linear-gradient(135deg,var(--sky-500),var(--sky-600));
+    color:#fff;font-size:13px;font-weight:800;letter-spacing:.3px;position:relative;
+    box-shadow:0 5px 12px rgba(2,132,199,.22)}
+  .c-ava .od{position:absolute;right:-1px;bottom:-1px;width:11px;height:11px;border-radius:50%;
+    background:var(--green-500);border:2px solid #fff}
+  .c-ava.off{background:linear-gradient(135deg,#94a3b8,#64748b);box-shadow:0 5px 12px rgba(100,116,139,.22)}
+  .c-info{flex:1;min-width:0}
+  .c-info b{display:block;font-size:14.5px;font-weight:800;color:var(--navy-900);
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .c-info small{display:block;font-size:11px;font-weight:700;color:var(--slate);margin-top:2px;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .c-info .online{color:var(--green-500);display:inline-flex;align-items:center;gap:4px}
+  .c-info .online i{width:6px;height:6px;border-radius:50%;background:var(--green-500);display:inline-block}
+  .c-info .offline{color:#94a3b8;display:inline-flex;align-items:center;gap:4px}
+  .mini-ava{position:relative;width:34px;height:34px;border-radius:50%;overflow:hidden;flex:0 0 auto;
+    filter:drop-shadow(0 4px 8px rgba(14,165,233,.3));background:var(--navy-900)}
+  .mini-ava img{width:100%;height:100%;border-radius:50%;object-fit:cover;display:block}
+  .mini-ava .fb{display:none;position:absolute;inset:0;border-radius:50%;
+    background:linear-gradient(135deg,#38bdf8,#0369a1);color:#fff;align-items:center;justify-content:center;
+    font-weight:800;font-size:13px;letter-spacing:.3px}
+
+  /* ---------- mensajes ---------- */
+  .msgs{max-width:var(--maxw);margin:0 auto;padding:18px 16px 130px;position:relative;z-index:1;
+    display:flex;flex-direction:column;gap:9px}
+  @media (min-width:720px){ .msgs{max-width:760px} }
+  .date-chip{align-self:center;font-size:10px;font-weight:800;color:var(--slate);
+    background:rgba(12,74,110,.06);padding:4px 12px;border-radius:999px;margin:4px 0}
+  .burbuja{max-width:78%;padding:10px 13px;border-radius:17px;font-size:13.5px;line-height:1.4;
+    position:relative;box-shadow:0 4px 12px rgba(3,105,161,.07);animation:popIn .22s ease}
+  @keyframes popIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+  .burbuja p{word-wrap:break-word;overflow-wrap:break-word;white-space:pre-wrap}
+  .burbuja span{display:block;font-size:9.5px;font-weight:700;margin-top:4px;text-align:right}
+  .burbuja.alum{align-self:flex-start;background:#fff;border:1px solid var(--card-brd);
+    border-top-left-radius:5px;color:var(--ink)}
+  .burbuja.alum span{color:#b6c2cf}
+  .burbuja.me{align-self:flex-end;background:linear-gradient(135deg,var(--sky-500),var(--sky-600));
+    color:#fff;border-top-right-radius:5px;box-shadow:0 6px 14px rgba(2,132,199,.20)}
+  .burbuja.me span{color:rgba(255,255,255,.75)}
+  .burbuja.escrib{background:var(--sky-50);border:1px solid var(--sky-200);align-self:flex-start;
+    padding:11px 14px}
+  .burbuja.escrib .dots{display:inline-flex;gap:4px}
+  .burbuja.escrib .dots i{width:6px;height:6px;border-radius:50%;background:var(--sky-500);
+    animation:bounce 1.2s infinite}
+  .burbuja.escrib .dots i:nth-child(2){animation-delay:.15s}
+  .burbuja.escrib .dots i:nth-child(3){animation-delay:.3s}
+  @keyframes bounce{0%,60%,100%{transform:translateY(0);opacity:.4}30%{transform:translateY(-4px);opacity:1}}
+
+  /* ---------- barra de escritura ---------- */
+  .inputbar{position:fixed;left:0;right:0;bottom:0;z-index:30;
+    background:rgba(255,255,255,.95);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+    border-top:1px solid #eaf3fb;box-shadow:0 -8px 26px rgba(3,105,161,.10);
+    padding:10px 14px calc(12px + env(safe-area-inset-bottom))}
+  .inputbar .in{max-width:var(--maxw);margin:0 auto;display:flex;gap:9px;align-items:flex-end}
+  @media (min-width:720px){ .inputbar .in{max-width:760px} }
+  .inputbar textarea{flex:1;min-width:0;border:1px solid var(--card-brd);border-radius:20px;
+    padding:11px 15px;font:inherit;font-size:13.5px;color:var(--ink);background:var(--sky-50);
+    outline:none;resize:none;max-height:110px;line-height:1.35}
+  .inputbar textarea:focus{border-color:var(--sky-300);box-shadow:0 0 0 3px rgba(56,189,248,.15)}
+  .btn-send{width:44px;height:44px;border-radius:50%;flex:0 0 auto;display:flex;align-items:center;
+    justify-content:center;background:linear-gradient(135deg,var(--sky-500),var(--sky-600));
+    border:0;color:#fff;cursor:pointer;box-shadow:0 6px 14px rgba(2,132,199,.25);
+    transition:transform .1s,opacity .15s}
+  .btn-send:active{transform:scale(.9)}
+  .btn-send:disabled{opacity:.45;cursor:not-allowed}
+  .btn-send .material-symbols-outlined{font-size:20px}
+  .hint{max-width:var(--maxw);margin:6px auto 0;font-size:10px;font-weight:600;color:#b6c2cf;
+    text-align:center}
+  @media (min-width:720px){ .hint{max-width:760px} }
+
+  .material-symbols-outlined{
+    font-variation-settings:'FILL' 0,'wght' 500,'GRAD' 0,'opsz' 24;
+    user-select:none;
+  }
+
+  /* ---------- toast ---------- */
+  #toast{position:fixed;bottom:110px;left:50%;transform:translateX(-50%) translateY(20px);
+    background:var(--navy-900);color:#fff;padding:10px 22px;border-radius:999px;
+    font-size:13px;font-weight:700;opacity:0;transition:opacity .25s,transform .25s;
+    pointer-events:none;z-index:100;white-space:nowrap;box-shadow:0 6px 20px rgba(12,74,110,.3)}
+  #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+
+<!-- ondas EXACTAS del dashboard -->
+<div class="flow-field wiggle" aria-hidden="true">
+  <svg viewBox="0 0 1600 900" preserveAspectRatio="none">
+    <defs>
+      <linearGradient id="gradField" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#cde9ff"/>
+        <stop offset="35%" stop-color="#9fd4ff"/>
+        <stop offset="70%" stop-color="#5fb4f7"/>
+        <stop offset="100%" stop-color="#7dbfc8"/>
+      </linearGradient>
+    </defs>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.11" transform="translate(0 6.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.14" transform="translate(11 24.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.17" transform="translate(22 43.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.2" transform="translate(33 61.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.22" transform="translate(44 80.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.25" transform="translate(55 98.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.27" transform="translate(66 117.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.3" transform="translate(77 135.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.32" transform="translate(88 154.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.34" transform="translate(99 172.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.37" transform="translate(110 191.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.39" transform="translate(121 209.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.41" transform="translate(132 228.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.42" transform="translate(143 246.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.44" transform="translate(154 265.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.46" transform="translate(165 283.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.47" transform="translate(176 302.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.48" transform="translate(187 320.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.49" transform="translate(198 339.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.5" transform="translate(209 357.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.51" transform="translate(220 376.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.51" transform="translate(231 394.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.52" transform="translate(242 413.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.52" transform="translate(253 431.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.52" transform="translate(264 450.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.51" transform="translate(275 468.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.51" transform="translate(286 487.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.5" transform="translate(297 505.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.49" transform="translate(308 524.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.48" transform="translate(319 542.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.47" transform="translate(330 561.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.46" transform="translate(341 579.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.44" transform="translate(352 598.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.42" transform="translate(363 616.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.41" transform="translate(374 635.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.39" transform="translate(385 653.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.37" transform="translate(396 672.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.34" transform="translate(407 690.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.32" transform="translate(418 709.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.3" transform="translate(429 727.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.27" transform="translate(440 746.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.25" transform="translate(451 764.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.22" transform="translate(462 783.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.2" transform="translate(473 801.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.17" transform="translate(484 820.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.14" transform="translate(495 838.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.11" transform="translate(506 857.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+  </svg>
+</div>
+
+<!-- header del chat -->
+<header class="chat-head">
+  <button class="back" id="btnBack" aria-label="Volver" type="button"><span class="material-symbols-outlined">arrow_back</span></button>
+  <span class="c-ava" id="tAva">--</span>
+  <div class="c-info">
+    <b id="tName">Estudiante</b>
+    <small id="tSub">Técnica</small>
+  </div>
+  <div class="mini-ava" role="img" aria-label="Perfil de Maestro Ricardo" title="Maestro Ricardo">
+    <img id="avImg" alt="Foto de Maestro Ricardo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAsBKOgiv_kBEGjRdsLDTUZvI71zukRwIm4VDeUz7PNlZXgk-rbjdeD6dqKMmosd3_emj_ICwNW35ohfDVXeRh0Z9qFx0I4Zjb7jNHlals66RqOcXSkQu2MwkkciTFXkC95odUjko8VIPVa493BBrOY-WID8ZzD1PBV9U4Ja2q18Ov24D1q6vN3s3aoYWga0VydSZLaIpkbNGjcKqalA9cPOtjlGkZOSBrs-hPouXz3rf8bOc66iYv3e2gaqSDWmH1zI18tKalUSqva" onerror="this.style.display='none';var f=document.getElementById('avFb');if(f){f.style.display='flex';}">
+    <span class="fb" id="avFb">MR</span>
+  </div>
+</header>
+
+<!-- mensajes -->
+<div class="msgs" id="msgs">
+  <div class="date-chip">Hoy</div>
+</div>
+
+<!-- barra de escritura -->
+<div class="inputbar">
+  <div class="in">
+    <textarea id="msjInput" rows="1" placeholder="Escribile a tu estudiante..." maxlength="500"></textarea>
+    <button class="btn-send" id="btnSend" aria-label="Enviar" type="button"><span class="material-symbols-outlined">send</span></button>
+  </div>
+  <div class="hint">El chat es un espacio formal con tus estudiantes. Las palabras inapropiadas se bloquean automáticamente.</div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+(function(){
+  var $ = function(id){ return document.getElementById(id); };
+  var toastTimer = null;
+  function toast(msg){
+    var t = $('toast'); t.textContent = msg; t.classList.add('show');
+    clearTimeout(toastTimer); toastTimer = setTimeout(function(){ t.classList.remove('show'); }, 2800);
+  }
+
+  /* ---------- catálogo de estudiantes (idéntico a la bandeja del maestro) ---------- */
+  var ESTUDIANTES = [
+    {id:'e1', nombre:'Valentina Ospina', brigada:'Brigada Ambiental', iniciales:'VO', enLinea:true},
+    {id:'e2', nombre:'Samuel Rojas', brigada:'Brigada Ambiental', iniciales:'SR', enLinea:false},
+    {id:'e3', nombre:'Mariana Cárdenas', brigada:'Apoyo Académico', iniciales:'MC', enLinea:true},
+    {id:'e4', nombre:'Sebastián Gómez', brigada:'Servicios Comunitarios', iniciales:'SG', enLinea:false},
+    {id:'e5', nombre:'Isabella Torres', brigada:'Brigada Ambiental', iniciales:'IT', enLinea:true},
+    {id:'e6', nombre:'Juan David Muñoz', brigada:'Apoyo Académico', iniciales:'JM', enLinea:false},
+    {id:'e7', nombre:'Sofía Ramírez', brigada:'Servicios Comunitarios', iniciales:'SR', enLinea:true},
+    {id:'e8', nombre:'Andrés Felipe Castro', brigada:'Brigada Ambiental', iniciales:'AC', enLinea:false},
+    {id:'e9', nombre:'Camila Arias', brigada:'Apoyo Académico', iniciales:'CA', enLinea:true},
+    {id:'e10', nombre:'Nicolás Herrera', brigada:'Servicios Comunitarios', iniciales:'NH', enLinea:false},
+    {id:'e11', nombre:'Laura Gutiérrez', brigada:'Apoyo Académico', iniciales:'LG', enLinea:true},
+    {id:'e12', nombre:'Daniel Salazar', brigada:'Servicios Comunitarios', iniciales:'DS', enLinea:false}
+  ];
+  var SEMILLAS = {
+    e1: [
+      {de:'alum', txt:'Profe, ya terminé de clasificar los residuos del patio y dejé el registro en la planilla.', h:'08:15'},
+      {de:'me', txt:'Buen trabajo, Valentina. Mandame las fotos y te registro las horas.', h:'08:20'}
+    ],
+    e2: [
+      {de:'me', txt:'Samuel, pasá por mi oficina a buscar los guantes para la jornada de limpieza.', h:'15:40'},
+      {de:'alum', txt:'Perfecto, allá estaré.', h:'16:01'}
+    ],
+    e3: [
+      {de:'alum', txt:'Profe, ¿la guía de matemáticas la arranco hoy o el lunes?', h:'09:10'},
+      {de:'me', txt:'Arrancá hoy con la primera parte, el lunes corregimos.', h:'09:12'},
+      {de:'alum', txt:'Muchas gracias profe, ya la estoy mirando.', h:'09:14'}
+    ],
+    e4: [
+      {de:'alum', txt:'Profe, ¿la entrega de la olla comunitaria sigue a las 2?', h:'18:28'},
+      {de:'me', txt:'Sigue, a las 2 de la tarde en el Taller 3. No faltes.', h:'18:30'}
+    ],
+    e5: [
+      {de:'alum', txt:'Hola profe, sembramos las 10 matas de la huerta escolar.', h:'10:12'},
+      {de:'me', txt:'Excelente, Isabella. Te sumo 4 horas al registro.', h:'10:15'}
+    ],
+    e6: [
+      {de:'me', txt:'Juan David, el circuito de ayer quedó con un corto. Revisalo con la guía de electro.', h:'13:58'},
+      {de:'alum', txt:'Profe, creo que el problema es el regulador.', h:'14:00'},
+      {de:'me', txt:'Pasá mañana por el taller y lo vemos con el multímetro.', h:'14:02'}
+    ],
+    e7: [
+      {de:'alum', txt:'Profe, ya armamos el cronograma de la biblioteca comunitaria.', h:'11:50'},
+      {de:'me', txt:'Perfecto, lo reviso hoy a la tarde.', h:'11:51'},
+      {de:'alum', txt:'Ya estamos preparando la maqueta del proyecto, profe.', h:'11:52'}
+    ],
+    e8: [
+      {de:'me', txt:'Andrés, registrá en el sistema las horas de la jornada de reciclaje.', h:'16:55'},
+      {de:'alum', txt:'Listo profe, quedaron cargadas las 3 horas.', h:'16:58'},
+      {de:'me', txt:'Perfecto, Andrés. Te anoto el registro de hoy.', h:'17:00'}
+    ],
+    e9: [
+      {de:'alum', txt:'Profe, terminé la tutoría con los de séptimo y les dejé ejercicios.', h:'08:55'},
+      {de:'me', txt:'Claro, Camila, después de la jornada de apoyo académico te confirmo las horas.', h:'09:02'}
+    ],
+    e10: [
+      {de:'me', txt:'Nicolás, el jueves hay jornada de poda en el parque. Llevá guantes y machete.', h:'10:05'},
+      {de:'alum', txt:'Anotado profe. ¿Necesito botas?', h:'10:20'},
+      {de:'me', txt:'Sí, botas cerradas y el chaleco de la brigada.', h:'10:22'}
+    ],
+    e11: [
+      {de:'alum', txt:'Profe, ¿puedo adelantar la maqueta del sistema solar con mis compañeras?', h:'13:40'},
+      {de:'me', txt:'Sí, Laura, pero primero el plano en papel para que lo revise.', h:'13:45'},
+      {de:'alum', txt:'Dale, mañana te lo muestro.', h:'13:47'}
+    ],
+    e12: [
+      {de:'me', txt:'Daniel, te toca el turno del domingo en la huerta de la parroquia.', h:'09:02'},
+      {de:'alum', txt:'Ok profe, voy con mi mamá y quedamos 2 horas.', h:'09:15'},
+      {de:'me', txt:'Genial. Registralo apenas termines.', h:'09:16'}
+    ]
+  };
+  var RESPUESTAS = [
+    'Profe, entendido, muchas gracias.',
+    'Dale profe, lo dejamos listo.',
+    'Perfecto, ahí lo hago.',
+    'Ok profe, quedo atento.'
+  ];
+
+  /* ---------- estudiante actual ---------- */
+  var id = (location.search.match(/[?&]id=([^&]+)/) || [null,'e1'])[1];
+  var al = null;
+  for (var i = 0; i < ESTUDIANTES.length; i++){ if (ESTUDIANTES[i].id === id){ al = ESTUDIANTES[i]; break; } }
+  if (!al) al = ESTUDIANTES[0];
+
+  $('tAva').textContent = al.iniciales;
+  if (!al.enLinea){
+    $('tAva').classList.add('off');
+    $('tSub').innerHTML = al.brigada + ' · <span class="offline"><i class="material-symbols-outlined" style="font-size:11px">schedule</i>Desconectado</span>';
+  } else {
+    $('tSub').innerHTML = al.brigada + ' · <span class="online"><i></i>En línea</span>';
+  }
+  $('tName').textContent = al.nombre;
+
+  /* ---------- persistencia del chat ---------- */
+  var LS = { get:function(k,d){ try{ var v = localStorage.getItem(k); return v ? JSON.parse(v) : d; }catch(e){ return d; } },
+             set:function(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} } };
+  var chats = LS.get('horasocial_maestro_chat_v1', {});
+  var chat = chats[al.id];
+  if (!chat){ chat = SEMILLAS[al.id] ? SEMILLAS[al.id].slice() : []; chats[al.id] = chat; LS.set('horasocial_maestro_chat_v1', chats); }
+
+  /* ---------- render ---------- */
+  var msgs = $('msgs'), input = $('msjInput');
+  function pad(n){ return (n < 10 ? '0' : '') + n; }
+  function ahora(){ var d = new Date(); return pad(d.getHours()) + ':' + pad(d.getMinutes()); }
+  function scrollBottom(){ window.scrollTo(0, document.body.scrollHeight); }
+  function renderBurbujas(){
+    var existentes = msgs.querySelectorAll('.burbuja');
+    existentes.forEach(function(b){ b.remove(); });
+    chat.forEach(function(msg){
+      var b = document.createElement('div');
+      b.className = 'burbuja ' + (msg.de === 'me' ? 'me' : 'alum');
+      var p = document.createElement('p'); p.textContent = msg.txt;
+      var s = document.createElement('span'); s.textContent = msg.h;
+      b.appendChild(p); b.appendChild(s);
+      msgs.appendChild(b);
+    });
+    scrollBottom();
+  }
+  renderBurbujas();
+
+  /* ---------- filtro de lenguaje (VERBATIM del chat existente) ---------- */
+  var PROHIBIDAS = ['culo','culos','puta','puto','putas','putos','putita','putear','puteada','puteadas','puterio',
+    'putazo','putazos','polla','pija','pijas','pijazo','pijazos','verga','vergas','vergazo','vergazos',
+    'mierda','mierdas','cagada','cagadas','cagar','cagado','cagon','cagona',
+    'pendejo','pendeja','pendejos','pendejas','pendejada','pendejadas',
+    'marica','maricon','maricones','mariconada','mariconadas',
+    'cabron','cabrona','cabronada','cabronadas','hijueputa','hijueputas',
+    'sorete','soretes','pelotudo','pelotuda','pelotudos','pelotudez','pelotudeces','pelotudisimo',
+    'boludo','boluda','boludos','boludez','boludeces','boludisimo','boludazo','recontraboludo','recontraboluda',
+    'choto','chota','chotos','chotas','chotear','choteada',
+    'concha','conchas','conchudo','conchuda','tarado','tarada','taradez',
+    'estupido','estupida','estupidos','estupidez','estupideces','idiota','idiotas',
+    'imbecil','imbeciles','imbecilidad','imbecilidades','gil','giles',
+    'poronga','porongas','porongo','pajero','pajera','pajeros','pajeras',
+    'forro','forra','forros','trolo','trola','trolos','mogolico','mogolica','mogolicos',
+    'culear','culeada','culeadas','culiar','culiado','culiada','culiao','hdp'];
+  var STEMS = ['bolud','pelotud','put','pendej','maricon','cabron','hijueput','porong','pajer','trol','mogol',
+    'mierd','chot','conch','gil','tarad','soret','cag','estupid','imbecil','verga','polla'];
+  var FRASES = ['hijo de puta','hija de puta','hijos de puta','hijas de puta','puta madre',
+    'la puta madre','me cago','concha de la lora','hijo de mil'];
+  function normalizar(s){
+    return s.toLowerCase()
+      .replace(/[áàäâ]/g,'a').replace(/[éèëê]/g,'e')
+      .replace(/[íìïî]/g,'i').replace(/[óòöô]/g,'o')
+      .replace(/[úùüû]/g,'u')
+      .replace(/0/g,'o').replace(/3/g,'e').replace(/1/g,'i')
+      .replace(/4/g,'a').replace(/5|7/g,'s').replace(/@/g,'a').replace(/\$/g,'s')
+      .replace(/v(?![aeiou])/g,'u');
+  }
+  function tokenLimpio(t){
+    return normalizar(t).replace(/[^a-z]/g,'');
+  }
+  function esProhibida(tok){
+    var t = tokenLimpio(tok);
+    if (PROHIBIDAS.indexOf(t) !== -1) return true;
+    for (var i = 0; i < STEMS.length; i++){
+      if (t.indexOf(STEMS[i]) === 0) return true;
+    }
+    return false;
+  }
+  function contieneProhibida(texto){
+    var partes = texto.split(/\s+/);
+    for (var i = 0; i < partes.length; i++){
+      if (esProhibida(partes[i])) return true;
+    }
+    var n = ' ' + normalizar(texto).replace(/\s+/g,' ') + ' ';
+    for (var j = 0; j < FRASES.length; j++){
+      if (n.indexOf(FRASES[j]) !== -1) return true;
+    }
+    return false;
+  }
+  /* la palabra prohibida se reemplaza por '***' y se avisa con toast */
+  function sanitizar(texto){
+    var partes = texto.split(/\s+/);
+    var salida = [];
+    for (var i = 0; i < partes.length; i++){
+      salida.push(esProhibida(partes[i]) ? '***' : partes[i]);
+    }
+    var res = salida.join(' ');
+    var norm = ' ' + normalizar(res).replace(/\s+/g,' ') + ' ';
+    for (var j = 0; j < FRASES.length; j++){
+      var idx = norm.indexOf(FRASES[j]);
+      while (idx !== -1){
+        var ini = idx - 1, fin = ini + FRASES[j].length;
+        res = res.slice(0, ini) + '***' + res.slice(fin);
+        norm = ' ' + normalizar(res).replace(/\s+/g,' ') + ' ';
+        idx = norm.indexOf(FRASES[j]);
+      }
+    }
+    return res.replace(/\s+/g,' ').trim();
+  }
+  input.addEventListener('input', function(){
+    var v = input.value;
+    if (!v) return;
+    if (contieneProhibida(v)){
+      input.value = sanitizar(v);
+      input.setSelectionRange(input.value.length, input.value.length);
+      toast('Esa palabra no está permitida en el chat');
+    }
+    autoGrow();
+  });
+  function autoGrow(){
+    input.style.height = 'auto';
+    input.style.height = Math.min(input.scrollHeight, 110) + 'px';
+  }
+
+  /* ---------- enviar ---------- */
+  function enviar(){
+    var texto = input.value.trim();
+    if (!texto) return;
+    if (contieneProhibida(texto)){
+      texto = sanitizar(texto);
+      toast('Tu mensaje contenía palabras no permitidas y fue filtrado');
+    }
+    chat.push({de:'me', txt:texto, h:ahora()});
+    chats[al.id] = chat; LS.set('horasocial_maestro_chat_v1', chats);
+    input.value = ''; autoGrow();
+    renderBurbujas();
+    /* respuesta simulada del estudiante */
+    var ec = document.createElement('div');
+    ec.className = 'burbuja alum escrib';
+    ec.innerHTML = '<span class="dots"><i></i><i></i><i></i></span>';
+    msgs.appendChild(ec); scrollBottom();
+    setTimeout(function(){
+      ec.remove();
+      var rta = RESPUESTAS[Math.floor(Math.random() * RESPUESTAS.length)];
+      chat.push({de:'alum', txt:rta, h:ahora()});
+      chats[al.id] = chat; LS.set('horasocial_maestro_chat_v1', chats);
+      renderBurbujas();
+    }, 1300);
+  }
+  $('btnSend').addEventListener('click', enviar);
+  input.addEventListener('keydown', function(e){
+    if (e.key === 'Enter' && !e.shiftKey){ e.preventDefault(); enviar(); }
+  });
+
+  /* ---------- volver a la bandeja ---------- */
+  $('btnBack').addEventListener('click', function(){
+    var target = (location.protocol === 'file:')
+      ? '../mensajes_maestro_horasocial_pro/index.html'
+      : '/maestro/mensajes';
+    window.location.assign(target);
+  });
+
+  /* avatar del maestro: fallback "MR" */
+  var avImg = $('avImg');
+  avImg.addEventListener('error', function(){
+    avImg.style.display = 'none';
+    var fb = $('avFb');
+    if (fb) fb.style.display = 'flex';
+  });
+})();
+</script>
+</body>
+</html>
