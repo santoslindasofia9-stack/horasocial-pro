@@ -89,10 +89,10 @@
   .datebar input[type=date]::-webkit-calendar-picker-indicator{cursor:pointer;opacity:.7}
 
   /* ---------- calendario mes ---------- */
-  .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center}
+  .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:7px 2px;text-align:center;justify-items:center}
   .cal-dh{font-size:10.5px;font-weight:700;color:var(--slate);text-transform:uppercase;padding:6px 0}
   .cal-dh.weekend{color:var(--sky-500)}
-  .cal-d{position:relative;height:40px;display:flex;align-items:center;justify-content:center;
+  .cal-d{position:relative;width:40px;height:40px;display:flex;align-items:center;justify-content:center;
     border-radius:50%;font-size:13.5px;font-weight:600;color:var(--ink);cursor:pointer;
     transition:background .12s,transform .1s}
   .cal-d:hover{background:var(--sky-50)}
@@ -110,6 +110,20 @@
   .cal-d.today.has-event::after{background:#fff}
   .cal-d.done-only::after{background:var(--slate);opacity:.5}
   .cal-d.pending::after{background:var(--amber-500);opacity:.9}
+  .cal-d.multi.has-event::after{display:none}
+  .cal-d .cnt{position:absolute;top:-4px;right:-4px;min-width:16px;height:16px;padding:0 3px;
+    border-radius:999px;background:var(--navy-900);color:#fff;font-size:9px;font-weight:800;
+    display:flex;align-items:center;justify-content:center;border:1.5px solid #fff;line-height:1}
+  .cal-toolbar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
+  .cal-stats{font-size:11.5px;color:var(--slate);font-weight:700;line-height:1.45}
+  .cal-stats b{color:var(--navy-900)}
+  .cal-today-btn{font:inherit;font-weight:800;font-size:11.5px;color:var(--sky-600);
+    background:var(--sky-50);border:1px solid var(--sky-200);border-radius:999px;
+    padding:7px 13px;cursor:pointer;transition:background .15s,transform .1s;display:flex;
+    align-items:center;gap:5px;white-space:nowrap}
+  .cal-today-btn:hover{background:var(--sky-100)}
+  .cal-today-btn:active{transform:scale(.94)}
+  .cal-today-btn .material-symbols-outlined{font-size:16px}
   .cal-legend{display:flex;justify-content:center;gap:16px;margin-top:12px;font-size:11px;
     font-weight:700;color:var(--slate)}
   .cal-legend span{display:flex;align-items:center;gap:5px}
@@ -318,6 +332,10 @@
   <!-- vista: mes (calendario) -->
   <div id="viewMes">
     <div class="card" style="padding:16px">
+      <div class="cal-toolbar">
+        <div class="cal-stats" id="calStats"></div>
+        <button class="cal-today-btn" id="calTodayBtn" title="Volver a hoy"><span class="material-symbols-outlined">today</span><span>Hoy</span></button>
+      </div>
       <div class="cal-grid" id="calGrid"></div>
       <div class="cal-legend">
         <span><i style="background:var(--sky-500)"></i>Hoy</span>
@@ -485,6 +503,13 @@
   function renderMes(){
     var y = cursor.getFullYear(), m = cursor.getMonth();
     var grid = $('calGrid'); grid.innerHTML = '';
+    // estadísticas del mes visible
+    var monthEvents = events.filter(function(e){ return e.d.indexOf(y + '-' + pad(m+1)) === 0; });
+    var hReal = 0, hPend = 0;
+    monthEvents.forEach(function(e){
+      if (e.status === 'done') hReal += e.hours; else if (e.status === 'active') hReal += e.hours; else hPend += e.hours;
+    });
+    $('calStats').innerHTML = '<b>' + monthEvents.length + '</b> actividades · <b>' + hReal + ' h</b> hechas · <b>' + hPend + ' h</b> por hacer';
     DAYS_SHORT.forEach(function(d, i){
       var el = document.createElement('div');
       el.className = 'cal-dh' + (i >= 5 ? ' weekend' : '');
@@ -504,16 +529,24 @@
       var ds = iso(new Date(y, m, d));
       var cls = 'cal-d';
       var st = soonestStatus(ds);
+      var cnt = evOn(ds).length;
       if (ds < TODAY) cls += ' past';
       if (ds === TODAY) cls += ' today';
       if (ds === iso(cursor) && ds !== TODAY) cls += ' selected';
       if (st) cls += ' has-event';
       if (st === 'done') cls += ' done-only';
       if (st === 'pending') cls += ' pending';
+      if (cnt >= 2) cls += ' multi';
       var el = document.createElement('div');
       el.className = cls;
       el.textContent = d;
       el.setAttribute('data-ds', ds);
+      if (cnt >= 2){
+        var badge = document.createElement('span');
+        badge.className = 'cnt';
+        badge.textContent = cnt;
+        el.appendChild(badge);
+      }
       el.addEventListener('click', function(){ cursor = parseISO(this.getAttribute('data-ds')); renderMes(); renderMesEvents(); });
       grid.appendChild(el);
     }
@@ -631,6 +664,11 @@
     else if (view === 'mes') d.setMonth(d.getMonth() + 1);
     else d.setFullYear(d.getFullYear() + 1);
     cursor = d; render(); toast('▶ Cambiaste de ' + (view === 'ano' ? 'año' : view));
+  });
+  $('calTodayBtn').addEventListener('click', function(){
+    cursor = parseISO(TODAY);
+    if (view !== 'mes') setView('mes'); else render();
+    toast('📅 Volviste a hoy');
   });
   var dateInput = $('dDate');
   dateInput.value = iso(cursor);
