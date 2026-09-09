@@ -188,6 +188,128 @@
     user-select:none;
   }
 
+  /* ---------- tarjetas clickables ---------- */
+  .stat.click{cursor:pointer;transition:transform .12s,box-shadow .2s,border-color .2s}
+  .stat.click:hover{box-shadow:0 14px 30px rgba(3,105,161,.16);border-color:var(--sky-300);transform:translateY(-2px)}
+  .stat.click:active{transform:scale(.97)}
+  .brigade.click{cursor:pointer;transition:transform .12s,box-shadow .2s,border-color .2s}
+  .brigade.click:hover{box-shadow:0 14px 30px rgba(3,105,161,.15);border-color:var(--sky-300);transform:translateY(-2px)}
+  .brigade.click:active{transform:scale(.99)}
+
+  /* ---------- modales (bottom-sheet mobile / centrado desktop) ---------- */
+  .modal-backdrop{
+    position:fixed;inset:0;z-index:80;display:flex;align-items:flex-end;justify-content:center;
+    background:rgba(15,23,42,.45);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+    opacity:0;visibility:hidden;transition:opacity .25s,visibility .25s;
+  }
+  .modal-backdrop.open{opacity:1;visibility:visible}
+  .modal{
+    width:100%;max-height:88dvh;overflow-y:auto;
+    background:var(--glass);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+    border:1px solid var(--card-brd);border-radius:24px 24px 0 0;
+    box-shadow:0 -12px 40px rgba(15,23,42,.18);
+    transform:translateY(28px);transition:transform .28s cubic-bezier(.22,.9,.35,1);
+  }
+  .modal-backdrop.open .modal{transform:translateY(0)}
+  .modal-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:20px 20px 14px}
+  .modal-head h3{font-size:18px;font-weight:800;color:var(--navy-900);display:flex;align-items:center;gap:9px}
+  .modal-head h3 .m{color:var(--sky-500);font-size:22px}
+  .modal-head p{font-size:12px;color:var(--slate);font-weight:600;margin-top:4px}
+  .modal-x{width:38px;height:38px;border-radius:12px;border:1px solid var(--card-brd);background:var(--sky-50);
+    color:var(--sky-700);display:flex;align-items:center;justify-content:center;cursor:pointer;font-family:inherit;flex:0 0 auto;
+    transition:background .2s,transform .12s}
+  .modal-x:hover{background:var(--sky-100)}
+  .modal-x:active{transform:scale(.9)}
+  .modal-x .material-symbols-outlined{font-size:20px}
+  .modal-body{padding:6px 20px 24px}
+  @media (min-width:720px){
+    .modal-backdrop{align-items:center}
+    .modal{max-width:660px;border-radius:24px;box-shadow:0 24px 60px rgba(15,23,42,.28)}
+  }
+
+  /* ---------- modal actividades ---------- */
+  .act-item{display:flex;flex-direction:column;gap:11px;padding:16px;border:1px solid var(--card-brd);border-radius:18px;
+    background:#fff;box-shadow:0 6px 16px rgba(3,105,161,.06);margin-bottom:12px;
+    transition:border-color .2s,box-shadow .2s}
+  .act-item.focused{border-color:var(--sky-400);box-shadow:0 0 0 3px rgba(56,189,248,.22)}
+  .act-top{display:flex;align-items:center;gap:12px}
+  .act-info{flex:1;min-width:0}
+  .act-info h4{font-size:14.5px;font-weight:800;color:var(--navy-900)}
+  .act-info small{font-size:11.5px;color:var(--slate);font-weight:600;display:block;margin-top:2px}
+  .st-chip{font-size:10.5px;font-weight:800;padding:5px 10px;border-radius:999px;white-space:nowrap}
+  .st-activa{background:#d1fae5;color:#047857}
+  .st-curso{background:#dbeafe;color:#1d4ed8}
+  .act-bars{display:flex;align-items:center;gap:12px}
+  .act-bars .bar{flex:1}
+  .act-bars b{font-size:12px;font-weight:800;color:var(--sky-600);white-space:nowrap}
+  .mini-h{font-size:10.5px;font-weight:800;color:var(--slate);letter-spacing:.3px;text-transform:uppercase;margin-top:2px}
+  .mini-list{border-top:1px dashed var(--card-brd);padding-top:9px;display:flex;flex-direction:column;gap:7px}
+  .mini-row{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:12px}
+  .mini-row b{font-weight:700;color:var(--ink)}
+  .mini-row span{color:var(--slate);font-weight:600;white-space:nowrap}
+  .mini-row .mt{color:var(--sky-600);font-weight:800;white-space:nowrap}
+  .spark{width:72px;height:24px;flex:0 0 auto}
+
+  /* ---------- modal asistencia ---------- */
+  .att-prog-txt{display:flex;justify-content:space-between;align-items:center;font-size:12px;font-weight:700;color:var(--slate);margin-bottom:7px}
+  .att-prog-txt b{color:var(--sky-600)}
+  .att-done{display:none;align-items:center;gap:10px;background:#d1fae5;border:1px solid #a7f3d0;color:#047857;
+    border-radius:15px;padding:13px 15px;font-size:13px;font-weight:800;margin-bottom:14px}
+  .att-done.show{display:flex}
+  .att-done .material-symbols-outlined{font-size:20px}
+  .att-row{display:flex;align-items:center;gap:12px;padding:13px 14px;border:1px solid var(--card-brd);
+    border-radius:16px;background:#fff;margin-bottom:10px;box-shadow:0 4px 12px rgba(3,105,161,.05);
+    transition:background .25s,border-color .25s}
+  .att-row.done{background:rgba(209,250,229,.42);border-color:#a7f3d0}
+  .att-info{flex:1;min-width:0}
+  .att-info b{display:block;font-size:13.5px;font-weight:800;color:var(--navy-900)}
+  .att-info small{font-size:11.5px;color:var(--slate);font-weight:600;display:block;margin-top:3px;line-height:1.45}
+  .t-chip{display:inline-block;font-size:10px;font-weight:800;padding:3px 8px;border-radius:999px;margin-left:6px;vertical-align:middle}
+  .t-normal{background:var(--sky-100);color:var(--sky-700)}
+  .t-excusa{background:#ffedd5;color:#c2410c}
+  .vbtn{display:inline-flex;align-items:center;gap:6px;background:var(--sky-600);color:#fff;border:0;border-radius:12px;
+    padding:10px 13px;font-family:inherit;font-size:11.5px;font-weight:800;cursor:pointer;flex:0 0 auto;
+    transition:background .2s,transform .12s,box-shadow .2s}
+  .vbtn:hover{background:var(--sky-700);box-shadow:0 6px 14px rgba(2,132,199,.3)}
+  .vbtn:active{transform:scale(.94)}
+  .vbtn .material-symbols-outlined{font-size:16px}
+  .vchip{display:none;align-items:center;gap:5px;background:#d1fae5;color:#047857;border-radius:999px;
+    padding:8px 12px;font-size:11px;font-weight:800;flex:0 0 auto}
+  .att-row.done .vchip{display:inline-flex}
+  .att-row.done .vbtn{display:none}
+  .vchip .material-symbols-outlined{font-size:15px}
+
+  /* ---------- panel notificaciones ---------- */
+  .notif-panel{
+    position:fixed;top:78px;right:16px;z-index:90;width:min(320px,calc(100vw - 24px));
+    background:var(--glass);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+    border:1px solid var(--card-brd);border-radius:20px;box-shadow:0 18px 44px rgba(15,23,42,.20);
+    opacity:0;visibility:hidden;transform:translateY(-8px) scale(.98);transform-origin:top right;
+    transition:opacity .22s,transform .22s,visibility .22s;overflow:hidden;
+  }
+  .notif-panel.show{opacity:1;visibility:visible;transform:translateY(0) scale(1)}
+  .notif-head{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:15px 16px 10px}
+  .notif-head b{font-size:14px;font-weight:800;color:var(--navy-900)}
+  .notif-head button{background:none;border:0;color:var(--sky-600);font-family:inherit;font-size:11px;font-weight:800;
+    cursor:pointer;padding:4px 6px;border-radius:8px}
+  .notif-head button:hover{background:var(--sky-100)}
+  .notif-list{max-height:min(340px,50dvh);overflow-y:auto;padding:0 8px 10px}
+  .notif-item{display:flex;align-items:flex-start;gap:10px;padding:12px 10px;border-radius:13px;cursor:pointer;
+    transition:background .15s}
+  .notif-item:hover{background:rgba(240,249,255,.9)}
+  .notif-item .n-txt{flex:1;min-width:0}
+  .notif-item .n-txt b{display:block;font-size:12.5px;font-weight:700;color:var(--ink);line-height:1.4}
+  .notif-item .n-txt small{font-size:10.5px;color:var(--slate);font-weight:600;display:block;margin-top:3px}
+  .notif-item .n-dot{width:8px;height:8px;border-radius:50%;background:var(--sky-500);flex:0 0 auto;margin-top:4px}
+  .notif-item.read .n-dot{background:#cbd5e1}
+  .notif-empty{display:flex;flex-direction:column;align-items:center;gap:8px;padding:28px 16px;text-align:center}
+  .notif-empty .material-symbols-outlined{font-size:34px;color:var(--sky-300)}
+  .notif-empty span{font-size:12px;font-weight:700;color:var(--slate)}
+
+  /* ---------- banner reporte: doble botón ---------- */
+  .banner-btns{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
+  .banner-btns .banner-btn{margin-top:0}
+
   /* ---------- layout amplio ---------- */
   @media (min-width:720px){
     .stats{grid-template-columns:repeat(4,1fr);gap:14px}
@@ -274,9 +396,9 @@
       <h1>Maestro Ricardo</h1>
       <p>Panel del Maestro</p>
     </div>
-    <button class="bell" id="btnBell" type="button" aria-label="Notificaciones">
+    <button class="bell" id="btnNotif" type="button" aria-label="Notificaciones">
       <span class="material-symbols-outlined">notifications</span>
-      <span class="bell-dot"></span>
+      <span class="bell-dot" id="notifDot"></span>
     </button>
     <a class="logout" href="/seleccion-rol" title="Cerrar sesión" id="btnLogout">
       <span class="material-symbols-outlined">logout</span><small>Cerrar sesión</small>
@@ -293,9 +415,9 @@
   <section>
     <div class="stats">
       <div class="stat"><span class="m material-symbols-outlined">group</span><b>75</b><small>Estudiantes</small></div>
-      <div class="stat"><span class="m material-symbols-outlined">energy_savings_leaf</span><b>3</b><small>Brigadas</small></div>
+      <div class="stat click" id="btnActividades" role="button" tabindex="0" aria-label="Ver mis actividades"><span class="m material-symbols-outlined">energy_savings_leaf</span><b>3</b><small>Actividades</small></div>
       <div class="stat"><span class="m material-symbols-outlined">schedule</span><b>1,240</b><small>Horas Totales</small></div>
-      <div class="stat accent"><span class="m material-symbols-outlined">pending_actions</span><b>12</b><small>Pendientes</small></div>
+      <div class="stat click accent" id="btnPendientes" role="button" tabindex="0" aria-label="Verificar asistencia"><span class="m material-symbols-outlined">pending_actions</span><b id="pendCount">12</b><small>Pendientes</small></div>
     </div>
   </section>
 
@@ -303,7 +425,7 @@
   <section>
     <div class="sec-head"><h3><span class="m material-symbols-outlined">energy_savings_leaf</span>Mis Brigadas</h3><span>3 activas</span></div>
     <div class="brigades">
-      <div class="brigade">
+      <div class="brigade click" data-act="ambiental" role="button" tabindex="0" aria-label="Ver Brigada Ambiental">
         <div class="brigade-top">
           <div class="chip green"><span class="material-symbols-outlined">energy_savings_leaf</span></div>
           <div class="brigade-info">
@@ -316,7 +438,7 @@
           <div class="bar"><div class="bar-fill" style="width:65%"></div></div>
         </div>
       </div>
-      <div class="brigade">
+      <div class="brigade click" data-act="academico" role="button" tabindex="0" aria-label="Ver Apoyo Académico">
         <div class="brigade-top">
           <div class="chip blue"><span class="material-symbols-outlined">school</span></div>
           <div class="brigade-info">
@@ -329,7 +451,7 @@
           <div class="bar"><div class="bar-fill" style="width:40%"></div></div>
         </div>
       </div>
-      <div class="brigade">
+      <div class="brigade click" data-act="comunitarios" role="button" tabindex="0" aria-label="Ver Servicios Comunitarios">
         <div class="brigade-top">
           <div class="chip purple"><span class="material-symbols-outlined">volunteer_activism</span></div>
           <div class="brigade-info">
@@ -338,8 +460,8 @@
           </div>
         </div>
         <div>
-          <div class="bar-row"><span>Progreso de Brigada</span><b>80%</b></div>
-          <div class="bar"><div class="bar-fill" style="width:80%"></div></div>
+          <div class="bar-row"><span>Progreso de Brigada</span><b>81%</b></div>
+          <div class="bar"><div class="bar-fill" style="width:81%"></div></div>
         </div>
       </div>
     </div>
@@ -349,9 +471,9 @@
   <section>
     <div class="sec-head"><h3><span class="m material-symbols-outlined">bolt</span>Accesos rápidos</h3></div>
     <div class="quick">
-      <a class="qcard" data-go data-file="../stitch_horasocial_pro_landing_page/gesti_n_estudiantes_perfil_maestro/code.html" data-served="/maestro/estudiantes" href="/maestro/estudiantes">
+      <a class="qcard" id="btnVerificar" href="/maestro/estudiantes" role="button" aria-label="Verificar asistencia">
         <span class="qico amber"><span class="material-symbols-outlined">how_to_reg</span></span>
-        <span class="qinfo"><b>Verificar Asistencia</b><small>12 pendientes hoy</small></span>
+        <span class="qinfo"><b>Verificar Asistencia</b><small id="pendSmall">12 pendientes hoy</small></span>
         <span class="material-symbols-outlined arr">arrow_forward_ios</span>
       </a>
       <a class="qcard" data-go data-file="../stitch_horasocial_pro_landing_page/mensajes_e_interacci_n_perfil_maestro/code.html" data-served="/maestro/mensajes" href="/maestro/mensajes">
@@ -368,9 +490,14 @@
       <div class="txt">
         <h3>Reporte Semanal Disponible</h3>
         <p>Ya puedes descargar el resumen detallado de actividades de la última semana académica.</p>
-        <button class="banner-btn" id="btnReport" type="button">
-          <span class="material-symbols-outlined">download</span> Descargar Reporte (PDF)
-        </button>
+        <div class="banner-btns">
+          <button class="banner-btn" id="btnReportSemanal" type="button">
+            <span class="material-symbols-outlined">picture_as_pdf</span> Reporte Semanal (PDF)
+          </button>
+          <button class="banner-btn" id="btnReportMensual" type="button">
+            <span class="material-symbols-outlined">calendar_month</span> Reporte Mensual (PDF)
+          </button>
+        </div>
       </div>
       <span class="material-symbols-outlined bico">description</span>
     </div>
@@ -388,8 +515,51 @@
   </div>
 </nav>
 
+<!-- modal: mis actividades -->
+<div class="modal-backdrop" id="modalActividades" role="dialog" aria-modal="true" aria-label="Mis Actividades">
+  <div class="modal" role="document">
+    <div class="modal-head">
+      <div>
+        <h3><span class="m material-symbols-outlined">energy_savings_leaf</span>Mis Actividades</h3>
+        <p>Resumen de las 3 brigadas bajo tu supervisión</p>
+      </div>
+      <button class="modal-x" id="xActividades" type="button" aria-label="Cerrar"><span class="material-symbols-outlined">close</span></button>
+    </div>
+    <div class="modal-body" id="actList"></div>
+  </div>
+</div>
+
+<!-- modal: verificar asistencia -->
+<div class="modal-backdrop" id="modalAsistencia" role="dialog" aria-modal="true" aria-label="Verificar Asistencia">
+  <div class="modal" role="document">
+    <div class="modal-head">
+      <div>
+        <h3><span class="m material-symbols-outlined">how_to_reg</span>Verificar Asistencia</h3>
+        <p>Registros de asistencia pendientes de hoy</p>
+      </div>
+      <button class="modal-x" id="xAsistencia" type="button" aria-label="Cerrar"><span class="material-symbols-outlined">close</span></button>
+    </div>
+    <div class="modal-body">
+      <div class="att-prog-txt" id="attProgressTxt"><span>Progreso de verificación</span><b>0 de 12 verificadas</b></div>
+      <div class="bar" style="margin-bottom:16px"><div class="bar-fill" id="attProgressBar" style="width:0%"></div></div>
+      <div class="att-done" id="attAllDone"><span class="material-symbols-outlined">task_alt</span>Todo verificado</div>
+      <div id="attList"></div>
+    </div>
+  </div>
+</div>
+
+<!-- panel de notificaciones -->
+<div class="notif-panel" id="notifPanel" role="dialog" aria-label="Notificaciones">
+  <div class="notif-head">
+    <b>Notificaciones</b>
+    <button id="btnNotifRead" type="button">Marcar todas como leídas</button>
+  </div>
+  <div class="notif-list" id="notifList"></div>
+</div>
+
 <div id="toast"></div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
   (function(){
     var $ = function(id){ return document.getElementById(id); };
@@ -411,10 +581,6 @@
       });
     }
 
-    /* notificaciones */
-    var btnBell = $('btnBell');
-    if (btnBell) btnBell.addEventListener('click', function(){ toast('Sin notificaciones nuevas'); });
-
     /* cerrar sesión: intercepción SIEMPRE (file o servido) */
     var btnLogout = $('btnLogout');
     if (btnLogout) btnLogout.addEventListener('click', function(e){
@@ -430,9 +596,428 @@
       });
     });
 
-    /* reporte semanal */
-    var btnReport = $('btnReport');
-    if (btnReport) btnReport.addEventListener('click', function(){ toast('Reporte semanal disponible próximamente'); });
+    var LS_ATT = 'horasocial_maestro_asistencia_v1';
+    var LS_NOTIF = 'horasocial_maestro_notif_v1';
+    var MESES = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+    var DIAS = ['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];
+
+    function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+    function pad2(n){ return (n < 10 ? '0' : '') + n; }
+    function keyOpen(el, fn){ if (!el) return; el.addEventListener('keydown', function(e){ if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); fn(); } }); }
+
+    /* ---------- actividades ---------- */
+    var ACTIVIDADES = [
+      {
+        id: 'ambiental', nombre: 'Brigada Ambiental', sub: '25 estudiantes activos',
+        chip: 'energy_savings_leaf', cls: 'green', estado: 'Activa',
+        estudiantes: 25, horas: 97, meta: 150, spark: [30, 42, 58, 70, 84, 97],
+        movs: [
+          { f: '8 sep', e: 'Valentina Ospina', h: '4 h' },
+          { f: '5 sep', e: 'Samuel Rojas', h: '3 h' },
+          { f: '3 sep', e: 'Mariana Cárdenas', h: '5 h' }
+        ]
+      },
+      {
+        id: 'academico', nombre: 'Apoyo Académico', sub: '18 estudiantes activos',
+        chip: 'school', cls: 'blue', estado: 'En curso',
+        estudiantes: 18, horas: 54, meta: 135, spark: [14, 22, 33, 40, 46, 54],
+        movs: [
+          { f: '9 sep', e: 'Juan David Muñoz', h: '2 h' },
+          { f: '7 sep', e: 'Camila Arias', h: '3 h' }
+        ]
+      },
+      {
+        id: 'comunitarios', nombre: 'Servicios Comunitarios', sub: '32 estudiantes activos',
+        chip: 'volunteer_activism', cls: 'purple', estado: 'Activa',
+        estudiantes: 32, horas: 121, meta: 150, spark: [55, 70, 88, 100, 112, 121],
+        movs: [
+          { f: '8 sep', e: 'Sofía Ramírez', h: '5 h' },
+          { f: '6 sep', e: 'Sebastián Gómez', h: '4 h' },
+          { f: '2 sep', e: 'Andrés Felipe Castro', h: '3 h' }
+        ]
+      }
+    ];
+    function pctAct(a){ return Math.round(a.horas / a.meta * 100); }
+
+    /* ---------- asistencia en localStorage ---------- */
+    function seedAsistencia(){
+      return [
+        { id: 1,  nombre: 'Valentina Ospina',      actividad: 'Brigada Ambiental',      fecha: '8 sep',  horas: 4, tipo: 'normal', v: false },
+        { id: 2,  nombre: 'Samuel Rojas',          actividad: 'Brigada Ambiental',      fecha: '8 sep',  horas: 3, tipo: 'normal', v: false },
+        { id: 3,  nombre: 'Mariana Cárdenas',      actividad: 'Apoyo Académico',        fecha: '8 sep',  horas: 2, tipo: 'excusa', v: false },
+        { id: 4,  nombre: 'Sebastián Gómez',       actividad: 'Servicios Comunitarios', fecha: '8 sep',  horas: 4, tipo: 'normal', v: false },
+        { id: 5,  nombre: 'Isabella Torres',       actividad: 'Brigada Ambiental',      fecha: '9 sep',  horas: 3, tipo: 'excusa', v: false },
+        { id: 6,  nombre: 'Juan David Muñoz',      actividad: 'Apoyo Académico',        fecha: '9 sep',  horas: 2, tipo: 'normal', v: false },
+        { id: 7,  nombre: 'Sofía Ramírez',         actividad: 'Servicios Comunitarios', fecha: '9 sep',  horas: 5, tipo: 'normal', v: false },
+        { id: 8,  nombre: 'Andrés Felipe Castro',  actividad: 'Brigada Ambiental',      fecha: '9 sep',  horas: 3, tipo: 'normal', v: false },
+        { id: 9,  nombre: 'Camila Arias',          actividad: 'Apoyo Académico',        fecha: '9 sep',  horas: 2, tipo: 'normal', v: false },
+        { id: 10, nombre: 'Nicolás Herrera',       actividad: 'Servicios Comunitarios', fecha: '10 sep', horas: 4, tipo: 'excusa', v: false },
+        { id: 11, nombre: 'Laura Gutiérrez',       actividad: 'Brigada Ambiental',      fecha: '10 sep', horas: 3, tipo: 'normal', v: false },
+        { id: 12, nombre: 'Daniel Salazar',        actividad: 'Apoyo Académico',        fecha: '10 sep', horas: 2, tipo: 'normal', v: false }
+      ];
+    }
+    function cargarAsistencia(){
+      try{
+        var raw = localStorage.getItem(LS_ATT);
+        if (!raw) throw 0;
+        var arr = JSON.parse(raw);
+        if (!Array.isArray(arr) || !arr.length) throw 0;
+        return arr;
+      }catch(e){
+        var s = seedAsistencia();
+        try{ localStorage.setItem(LS_ATT, JSON.stringify(s)); }catch(e2){}
+        return s;
+      }
+    }
+    function guardarAsistencia(arr){ try{ localStorage.setItem(LS_ATT, JSON.stringify(arr)); }catch(e){} }
+    function pendientesDe(arr){ var n = 0; arr.forEach(function(r){ if (!r.v) n++; }); return n; }
+    var att = cargarAsistencia();
+
+    /* ---------- notificaciones en localStorage ---------- */
+    function seedNotifs(){
+      return [
+        { id: 1, texto: '3 estudiantes esperan verificación de asistencia', tiempo: 'hace 5 min',  leido: false },
+        { id: 2, texto: 'Brigada Ambiental registró 5 horas nuevas',        tiempo: 'hace 2 h',    leido: false },
+        { id: 3, texto: 'Nuevo reporte de Apoyo Académico',                 tiempo: 'ayer',        leido: false },
+        { id: 4, texto: 'Solicitud de excusa recibida: Juan Pérez',         tiempo: 'hace 2 días', leido: false }
+      ];
+    }
+    function cargarNotifs(){
+      try{
+        var raw = localStorage.getItem(LS_NOTIF);
+        if (!raw) throw 0;
+        var arr = JSON.parse(raw);
+        if (!Array.isArray(arr) || !arr.length) throw 0;
+        return arr;
+      }catch(e){
+        var s = seedNotifs();
+        try{ localStorage.setItem(LS_NOTIF, JSON.stringify(s)); }catch(e2){}
+        return s;
+      }
+    }
+    var notifs = cargarNotifs();
+    function guardarNotifs(){ try{ localStorage.setItem(LS_NOTIF, JSON.stringify(notifs)); }catch(e){} }
+
+    /* ---------- modales ---------- */
+    var actFocus = null;
+    function abrirModal(m){
+      if (!m) return;
+      m.classList.add('open');
+      document.body.style.overflow = 'hidden';
+      if (m.id === 'modalActividades'){ renderActividades(actFocus); actFocus = null; }
+      if (m.id === 'modalAsistencia') renderAsistencia();
+    }
+    function cerrarModal(m){ if (!m) return; m.classList.remove('open'); document.body.style.overflow = ''; }
+
+    /* ---------- render actividades + sparkline ---------- */
+    function sparkSVG(arr, color){
+      var n = arr.length, max = 0;
+      arr.forEach(function(v){ if (v > max) max = v; });
+      var pts = [];
+      arr.forEach(function(v, i){
+        var x = i * (100 / (n - 1));
+        var y = 26 - (v / max) * 22;
+        pts.push(x.toFixed(1) + ',' + y.toFixed(1));
+      });
+      var lx = 100, ly = 26 - (arr[n - 1] / max) * 22;
+      return '<svg class="spark" viewBox="0 0 100 28" preserveAspectRatio="none" aria-hidden="true">' +
+        '<polyline points="' + pts.join(' ') + '" fill="none" stroke="' + color + '" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>' +
+        '<circle cx="' + lx.toFixed(1) + '" cy="' + ly.toFixed(1) + '" r="2.6" fill="' + color + '"/></svg>';
+    }
+    function renderActividades(focusId){
+      var box = $('actList'); if (!box) return;
+      var html = '';
+      ACTIVIDADES.forEach(function(a){
+        var p = pctAct(a);
+        var colorHex = a.cls === 'green' ? '#059669' : (a.cls === 'blue' ? '#2563eb' : '#7c3aed');
+        var movs = '';
+        a.movs.forEach(function(m){
+          movs += '<div class="mini-row"><b>' + esc(m.e) + '</b><span>' + esc(m.f) + '</span><span class="mt">' + esc(m.h) + '</span></div>';
+        });
+        html += '<div class="act-item' + (a.id === focusId ? ' focused' : '') + '" id="act-' + a.id + '">' +
+          '<div class="act-top">' +
+            '<div class="chip ' + a.cls + '"><span class="material-symbols-outlined">' + a.chip + '</span></div>' +
+            '<div class="act-info"><h4>' + esc(a.nombre) + '</h4><small>' + esc(a.sub) + '</small></div>' +
+            '<span class="st-chip ' + (a.estado === 'Activa' ? 'st-activa' : 'st-curso') + '">' + a.estado + '</span>' +
+          '</div>' +
+          '<div class="act-bars">' + sparkSVG(a.spark, colorHex) +
+            '<div class="bar"><div class="bar-fill" style="width:' + p + '%"></div></div>' +
+            '<b>' + p + '%</b>' +
+          '</div>' +
+          '<div class="bar-row"><span>' + a.horas + ' / ' + a.meta + ' h acumuladas</span><b>' + a.estudiantes + ' estudiantes</b></div>' +
+          '<div class="mini-h">Movimientos recientes</div>' +
+          '<div class="mini-list">' + movs + '</div>' +
+        '</div>';
+      });
+      box.innerHTML = html;
+      if (focusId){
+        var el = $('act-' + focusId);
+        if (el && el.scrollIntoView){ setTimeout(function(){ el.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }, 60); }
+      }
+    }
+
+    /* ---------- render asistencia ---------- */
+    function actualizarContadores(pend){
+      var c = $('pendCount'); if (c) c.textContent = pend;
+      var s = $('pendSmall'); if (s) s.textContent = pend === 0 ? 'Sin pendientes hoy' : pend + ' pendientes hoy';
+    }
+    function renderAsistencia(){
+      var list = $('attList'); if (!list) return;
+      var done = 0;
+      att.forEach(function(r){ if (r.v) done++; });
+      var pend = att.length - done;
+      var pt = $('attProgressTxt'), pb = $('attProgressBar'), all = $('attAllDone');
+      if (pt) pt.innerHTML = '<span>Progreso de verificación</span><b>' + done + ' de ' + att.length + ' verificadas</b>';
+      if (pb) pb.style.width = (att.length ? Math.round(done / att.length * 100) : 0) + '%';
+      if (all) all.classList.toggle('show', pend === 0);
+      var html = '';
+      att.forEach(function(r){
+        var tcls = r.tipo === 'excusa' ? 't-chip t-excusa' : 't-chip t-normal';
+        var ttxt = r.tipo === 'excusa' ? 'Excusa' : 'Normal';
+        html += '<div class="att-row' + (r.v ? ' done' : '') + '" data-id="' + r.id + '">' +
+          '<div class="att-info"><b>' + esc(r.nombre) + '</b>' +
+          '<small>' + esc(r.actividad) + ' · ' + esc(r.fecha) + ' · ' + r.horas + ' h<span class="' + tcls + '">' + ttxt + '</span></small></div>' +
+          (r.v
+            ? '<span class="vchip"><span class="material-symbols-outlined">check</span>Verificada</span>'
+            : '<button class="vbtn" type="button" data-verify="' + r.id + '"><span class="material-symbols-outlined">check</span>Verificar</button>') +
+        '</div>';
+      });
+      list.innerHTML = html;
+      actualizarContadores(pend);
+    }
+
+    /* ---------- render notificaciones ---------- */
+    function renderNotifs(){
+      var list = $('notifList'); if (!list) return;
+      var unread = 0;
+      notifs.forEach(function(n){ if (!n.leido) unread++; });
+      var dot = $('notifDot');
+      if (dot) dot.style.display = unread ? 'block' : 'none';
+      if (!unread){
+        list.innerHTML = '<div class="notif-empty"><span class="material-symbols-outlined">notifications_off</span><span>Sin notificaciones nuevas</span></div>';
+        return;
+      }
+      var html = '';
+      notifs.forEach(function(n){
+        html += '<div class="notif-item' + (n.leido ? ' read' : '') + '" data-id="' + n.id + '">' +
+          '<span class="n-dot"></span>' +
+          '<div class="n-txt"><b>' + esc(n.texto) + '</b><small>' + esc(n.tiempo) + '</small></div>' +
+        '</div>';
+      });
+      list.innerHTML = html;
+    }
+
+    /* ---------- reportes ---------- */
+    function fEsp(d){ return DIAS[d.getDay()] + ' ' + d.getDate() + ' de ' + MESES[d.getMonth()]; }
+    function rangoSemanal(){
+      var hoy = new Date();
+      var dif = hoy.getDay() === 0 ? -6 : 1 - hoy.getDay();
+      var lun = new Date(hoy);
+      lun.setDate(hoy.getDate() + dif);
+      var dom = new Date(lun);
+      dom.setDate(lun.getDate() + 6);
+      return fEsp(lun) + ' al ' + fEsp(dom);
+    }
+    function rangoMensual(){
+      var h = new Date();
+      return MESES[h.getMonth()] + ' de ' + h.getFullYear();
+    }
+    function datosReporte(){
+      var acts = [];
+      ACTIVIDADES.forEach(function(a){ acts.push({ nombre: a.nombre, estudiantes: a.estudiantes, horas: a.horas, pct: pctAct(a) }); });
+      return { estudiantes: 75, actividades: acts, horasTotales: 1240, pendientes: pendientesDe(att) };
+    }
+    function pdfGenerar(tipo){
+      var d = datosReporte();
+      var doc = new window.jspdf.jsPDF();
+      var esSemanal = tipo === 'semanal';
+
+      /* barra superior navy */
+      doc.setFillColor(12, 74, 110);
+      doc.rect(0, 0, 210, 34, 'F');
+      doc.setTextColor(255, 255, 255);
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(14);
+      doc.text('HORASOCIAL PRO', 14, 14);
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(9.5);
+      doc.text('Gestión de Servicio Social Escolar', 14, 21);
+
+      /* título + período */
+      doc.setTextColor(12, 74, 110);
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(19);
+      doc.text(esSemanal ? 'Reporte Semanal' : 'Reporte Mensual', 14, 46);
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(10.5);
+      doc.setTextColor(91, 107, 124);
+      doc.text('Período: ' + (esSemanal ? rangoSemanal() : rangoMensual()), 14, 53);
+
+      doc.setDrawColor(230, 240, 249);
+      doc.line(14, 60, 196, 60);
+
+      /* resumen */
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(12.5);
+      doc.setTextColor(12, 74, 110);
+      doc.text('Resumen', 14, 70);
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(10.5);
+      doc.setTextColor(15, 47, 68);
+      doc.text('Estudiantes: ' + d.estudiantes, 14, 79);
+      doc.text('Actividades: ' + d.actividades.length, 14, 86);
+      doc.text('Horas totales: ' + d.horasTotales, 14, 93);
+      doc.text('Pendientes: ' + d.pendientes, 14, 100);
+
+      /* tabla actividades */
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(12.5);
+      doc.setTextColor(12, 74, 110);
+      doc.text('Actividades', 110, 70);
+      doc.setFillColor(240, 249, 255);
+      doc.rect(110, 76, 82, 7, 'F');
+      doc.setFontSize(8.5);
+      doc.setTextColor(2, 132, 199);
+      doc.text('Actividad', 113, 81);
+      doc.text('Est.', 163, 81);
+      doc.text('Horas', 175, 81);
+      doc.text('%', 187, 81);
+      doc.setFont('helvetica', 'normal');
+      var y = 87;
+      d.actividades.forEach(function(a, i){
+        if (i % 2 === 1){ doc.setFillColor(248, 252, 254); doc.rect(110, y - 4.5, 82, 7, 'F'); }
+        doc.setTextColor(15, 47, 68);
+        doc.text(a.nombre, 113, y);
+        doc.text(String(a.estudiantes), 163, y);
+        doc.text(String(a.horas), 175, y);
+        doc.text(a.pct + '%', 187, y);
+        y += 7;
+      });
+
+      /* pie */
+      var ahora = new Date();
+      doc.setDrawColor(230, 240, 249);
+      doc.line(14, 285, 196, 285);
+      doc.setFontSize(9);
+      doc.setTextColor(91, 107, 124);
+      doc.text('Generado el ' + ahora.getDate() + ' de ' + MESES[ahora.getMonth()] + ' de ' + ahora.getFullYear() + ' a las ' + pad2(ahora.getHours()) + ':' + pad2(ahora.getMinutes()), 14, 292);
+      doc.setFont('helvetica', 'bold');
+      doc.setTextColor(2, 132, 199);
+      doc.text('HORASOCIAL PRO · Gestión de Servicio Social Escolar', 14, 297);
+
+      doc.save(esSemanal ? 'Reporte_Semanal_HorasocialPro.pdf' : 'Reporte_Mensual_HorasocialPro.pdf');
+    }
+    function txtGenerar(tipo){
+      var d = datosReporte();
+      var ahora = new Date();
+      var esSemanal = tipo === 'semanal';
+      var L = [];
+      L.push('HORASOCIAL PRO');
+      L.push(esSemanal ? 'Reporte Semanal' : 'Reporte Mensual');
+      L.push('Período: ' + (esSemanal ? rangoSemanal() : rangoMensual()));
+      L.push('');
+      L.push('Resumen');
+      L.push('- Estudiantes: ' + d.estudiantes);
+      L.push('- Actividades: ' + d.actividades.length);
+      L.push('- Horas totales: ' + d.horasTotales);
+      L.push('- Pendientes: ' + d.pendientes);
+      L.push('');
+      L.push('Actividades');
+      d.actividades.forEach(function(a){
+        L.push('- ' + a.nombre + ' - ' + a.estudiantes + ' estudiantes, ' + a.horas + ' h, ' + a.pct + '%');
+      });
+      L.push('');
+      L.push('Generado el ' + ahora.getDate() + ' de ' + MESES[ahora.getMonth()] + ' de ' + ahora.getFullYear() + ' a las ' + pad2(ahora.getHours()) + ':' + pad2(ahora.getMinutes()));
+      L.push('HORASOCIAL PRO · Gestión de Servicio Social Escolar');
+      var blob = new Blob([L.join('\r\n')], { type: 'text/plain;charset=utf-8' });
+      var a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = esSemanal ? 'Reporte_Semanal_HorasocialPro.txt' : 'Reporte_Mensual_HorasocialPro.txt';
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); }, 400);
+    }
+    function generarReporte(tipo){
+      var ok = typeof window.jspdf !== 'undefined' && typeof window.jspdf.jsPDF === 'function';
+      if (ok){ pdfGenerar(tipo); } else { txtGenerar(tipo); }
+      toast(tipo === 'semanal' ? 'Reporte semanal descargado' : 'Reporte mensual descargado');
+    }
+
+    /* ---------- bindings ---------- */
+    var btnAct = $('btnActividades'), btnPend = $('btnPendientes');
+    if (btnAct){ btnAct.addEventListener('click', function(){ abrirModal($('modalActividades')); }); keyOpen(btnAct, function(){ abrirModal($('modalActividades')); }); }
+    if (btnPend){ btnPend.addEventListener('click', function(){ abrirModal($('modalAsistencia')); }); keyOpen(btnPend, function(){ abrirModal($('modalAsistencia')); }); }
+
+    document.querySelectorAll('.brigade.click').forEach(function(c){
+      var act = c.getAttribute('data-act');
+      var open = function(){ actFocus = act; abrirModal($('modalActividades')); };
+      c.addEventListener('click', open);
+      keyOpen(c, open);
+    });
+
+    var btnVer = $('btnVerificar');
+    if (btnVer){
+      btnVer.addEventListener('click', function(e){ e.preventDefault(); abrirModal($('modalAsistencia')); });
+    }
+
+    var mA = $('modalActividades'), mS = $('modalAsistencia');
+    var xA = $('xActividades'), xS = $('xAsistencia');
+    if (xA) xA.addEventListener('click', function(){ cerrarModal(mA); });
+    if (xS) xS.addEventListener('click', function(){ cerrarModal(mS); });
+    if (mA) mA.addEventListener('click', function(e){ if (e.target === mA) cerrarModal(mA); });
+    if (mS) mS.addEventListener('click', function(e){ if (e.target === mS) cerrarModal(mS); });
+    document.addEventListener('keydown', function(e){ if (e.key === 'Escape'){ cerrarModal(mA); cerrarModal(mS); } });
+
+    var attList = $('attList');
+    if (attList) attList.addEventListener('click', function(e){
+      var btn = e.target && e.target.closest ? e.target.closest('[data-verify]') : null;
+      if (!btn) return;
+      var id = parseInt(btn.getAttribute('data-verify'), 10);
+      var rec = null;
+      att.forEach(function(r){ if (r.id === id) rec = r; });
+      if (!rec || rec.v) return;
+      rec.v = true;
+      guardarAsistencia(att);
+      var pend = pendientesDe(att);
+      actualizarContadores(pend);
+      var row = btn.closest('.att-row');
+      if (row){ row.classList.add('done'); btn.outerHTML = '<span class="vchip"><span class="material-symbols-outlined">check</span>Verificada</span>'; }
+      var done = att.length - pend;
+      var pt = $('attProgressTxt'), pb = $('attProgressBar'), all = $('attAllDone');
+      if (pt) pt.innerHTML = '<span>Progreso de verificación</span><b>' + done + ' de ' + att.length + ' verificadas</b>';
+      if (pb) pb.style.width = (att.length ? Math.round(done / att.length * 100) : 0) + '%';
+      if (all) all.classList.toggle('show', pend === 0);
+      toast('Asistencia verificada: ' + rec.nombre);
+    });
+
+    var btnNotif = $('btnNotif'), panel = $('notifPanel');
+    if (btnNotif) btnNotif.addEventListener('click', function(e){ e.stopPropagation(); if (panel) panel.classList.toggle('show'); });
+    document.addEventListener('click', function(e){
+      if (panel && panel.classList.contains('show') && !panel.contains(e.target) && btnNotif && !btnNotif.contains(e.target)) panel.classList.remove('show');
+    });
+    var notifList = $('notifList');
+    if (notifList) notifList.addEventListener('click', function(e){
+      var item = e.target && e.target.closest ? e.target.closest('.notif-item') : null;
+      if (!item) return;
+      var id = parseInt(item.getAttribute('data-id'), 10);
+      notifs.forEach(function(n){ if (n.id === id) n.leido = true; });
+      guardarNotifs(); renderNotifs();
+    });
+    var btnNotifRead = $('btnNotifRead');
+    if (btnNotifRead) btnNotifRead.addEventListener('click', function(e){
+      e.stopPropagation();
+      notifs.forEach(function(n){ n.leido = true; });
+      guardarNotifs(); renderNotifs();
+      toast('Notificaciones marcadas como leídas');
+    });
+
+    var btnRS = $('btnReportSemanal'), btnRM = $('btnReportMensual');
+    if (btnRS) btnRS.addEventListener('click', function(){ generarReporte('semanal'); });
+    if (btnRM) btnRM.addEventListener('click', function(){ generarReporte('mensual'); });
+
+    /* ---------- estado inicial ---------- */
+    actualizarContadores(pendientesDe(att));
+    renderNotifs();
   })();
 </script>
 </body>
