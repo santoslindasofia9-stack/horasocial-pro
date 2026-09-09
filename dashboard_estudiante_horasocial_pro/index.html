@@ -35,6 +35,7 @@
   header{display:flex;align-items:center;gap:14px;padding:4px 2px 22px}
   .avatar{width:56px;height:56px;border-radius:50%;flex:0 0 auto;position:relative;
     filter:drop-shadow(0 8px 16px rgba(14,165,233,.35))}
+  .avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%;display:block}
   .avatar svg{width:100%;height:100%;display:block}
   .avatar::after{content:'';position:absolute;inset:-3px;border-radius:50%;
     border:2.5px solid rgba(56,189,248,.45)}
@@ -330,7 +331,9 @@
   <!-- header -->
   <header>
     <div class="avatar" role="img" aria-label="Perfil de Alex">
-      <svg viewBox="0 0 64 64">
+      <img id="avImg" src="https://i.pravatar.cc/300?img=32" alt="Perfil de Alex"
+           onerror="this.style.display='none';document.getElementById('avSvgFallback').style.display='block'">
+      <svg id="avSvgFallback" viewBox="0 0 64 64" style="display:none">
         <defs><linearGradient id="avG" x1="0" y1="0" x2="1" y2="1">
           <stop offset="0" stop-color="#38bdf8"/><stop offset="1" stop-color="#0369a1"/>
         </linearGradient></defs>
@@ -343,7 +346,7 @@
       <h1>¡Hola, Alex!</h1>
       <p>Grado 11 · Institución Educativa</p>
     </div>
-    <a class="logout" href="/seleccion-rol" title="Cerrar sesión">
+    <a class="logout" href="/seleccion-rol" title="Cerrar sesión" id="btnLogout">
       <span class="material-symbols-outlined">logout</span><small>Cerrar sesión</small>
     </a>
   </header>
@@ -630,6 +633,16 @@
       toast('📄 Reporte generado');
     });
     $('btnDlTop').addEventListener('click', downloadReport);
+
+    /* ---------- cerrar sesión ---------- */
+    var btnLogout = $('btnLogout');
+    if (btnLogout) btnLogout.addEventListener('click', function(e){
+      // si el dashboard se abre directo (file://), usar ruta relativa a la carpeta de selección de rol
+      if (location.protocol === 'file:'){
+        e.preventDefault();
+        location.href = '../selecci_n_de_rol_distribuci_n_expandida_vertical/code.html';
+      }
+    });
   })();
 </script>
 </body>
