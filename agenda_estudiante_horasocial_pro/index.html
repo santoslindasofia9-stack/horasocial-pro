@@ -11,10 +11,10 @@
     --sky-400:#38bdf8; --sky-500:#0ea5e9; --sky-600:#0284c7; --sky-700:#0369a1;
     --navy-800:#075985; --navy-900:#0c4a6e; --ink:#0f2f44; --slate:#5b6b7c;
     --card:#ffffff; --card-brd:#e6f0f9; --radius:22px; --maxw:640px;
-    --green-500:#22c55e; --amber-500:#f59e0b;
+    --green-500:#22c55e; --amber-500:#f59e0b; --red-400:#f87171;
   }
   *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-  html{scroll-behavior:smooth}
+  html{scroll-behavior:smooth;overflow-x:hidden}
   body{
     font-family:'Segoe UI',Inter,-apple-system,system-ui,sans-serif;
     color:var(--ink);background:#ffffff;position:relative;overflow-x:hidden;
@@ -22,7 +22,7 @@
     padding:0 0 calc(150px + env(safe-area-inset-bottom));
   }
 
-  /* ---------- ondas estilo selección de rol ---------- */
+  /* ---------- ondas EXACTAS del dashboard ---------- */
   .flow-field{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;overflow:visible}
   .flow-field svg{width:100%;height:100%;overflow:visible}
   .wf-l{fill:none;stroke-width:0.9;vector-effect:non-scaling-stroke}
@@ -33,7 +33,7 @@
   @media (min-width:720px){ :root{--maxw:920px} .wrap{padding:30px 26px 12px} }
 
   /* ---------- header ---------- */
-  header{display:flex;align-items:center;gap:14px;padding:4px 2px 22px}
+  header{display:flex;align-items:center;gap:14px;padding:4px 2px 18px}
   .avatar{width:56px;height:56px;border-radius:50%;flex:0 0 auto;position:relative;
     filter:drop-shadow(0 8px 16px rgba(14,165,233,.35))}
   .avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%;display:block}
@@ -55,25 +55,43 @@
   /* ---------- card base ---------- */
   .card{
     background:var(--card);border:1px solid var(--card-brd);
-    border-radius:var(--radius);padding:20px;
+    border-radius:var(--radius);padding:18px;margin-bottom:16px;
     box-shadow:0 12px 30px rgba(3,105,161,.10);
   }
 
-  /* ---------- calendar ---------- */
-  .cal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
-  .cal-head h2{font-size:18px;font-weight:800;color:var(--navy-900)}
-  .cal-nav{display:flex;gap:6px}
-  .cal-nav button{
-    width:36px;height:36px;border-radius:50%;border:1px solid var(--card-brd);
-    background:var(--sky-50);display:flex;align-items:center;justify-content:center;
-    cursor:pointer;color:var(--sky-600);font-weight:700;
-    transition:background .15s,transform .1s}
-  .cal-nav button:hover{background:var(--sky-100)}
-  .cal-nav button:active{transform:scale(.9)}
-  .cal-nav button .material-symbols-outlined{font-size:20px}
+  /* ---------- segmented control vistas ---------- */
+  .seg{display:flex;background:var(--sky-100);border:1px solid var(--sky-200);
+    border-radius:14px;padding:4px;margin-bottom:16px;gap:4px}
+  .seg-btn{flex:1;display:flex;align-items:center;justify-content:center;gap:4px;
+    border:0;background:transparent;padding:9px 4px;border-radius:11px;
+    font-weight:700;font-size:12px;color:var(--slate);cursor:pointer;
+    transition:background .15s,color .15s,box-shadow .15s}
+  .seg-btn .material-symbols-outlined{font-size:17px}
+  .seg-btn.active{background:linear-gradient(135deg,var(--sky-500),var(--sky-600));
+    color:#fff;box-shadow:0 4px 12px rgba(2,132,199,.30)}
+  @media (max-width:430px){ .seg-btn{font-size:11px} .seg-btn .material-symbols-outlined{font-size:16px} }
 
+  /* ---------- barra de fecha ---------- */
+  .datebar{display:flex;align-items:center;gap:8px;margin-bottom:14px}
+  .datebar .dnav{width:38px;height:38px;border-radius:50%;border:1px solid var(--card-brd);
+    background:var(--sky-50);display:flex;align-items:center;justify-content:center;
+    cursor:pointer;color:var(--sky-600);font-weight:700;transition:background .15s,transform .1s;
+    flex:0 0 auto}
+  .datebar .dnav:hover{background:var(--sky-100)}
+  .datebar .dnav:active{transform:scale(.9)}
+  .datebar .dnav .material-symbols-outlined{font-size:20px}
+  .datebar .dlabel{flex:1;text-align:center;font-size:14.5px;font-weight:800;color:var(--navy-900);
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .datebar input[type=date]{
+    font:inherit;font-weight:700;font-size:12px;color:var(--sky-700);
+    background:var(--sky-50);border:1px solid var(--sky-200);border-radius:10px;
+    padding:7px 8px;flex:0 0 auto;max-width:142px;cursor:pointer}
+  .datebar input[type=date]::-webkit-calendar-picker-indicator{cursor:pointer;opacity:.7}
+
+  /* ---------- calendario mes ---------- */
   .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center}
   .cal-dh{font-size:10.5px;font-weight:700;color:var(--slate);text-transform:uppercase;padding:6px 0}
+  .cal-dh.weekend{color:var(--sky-500)}
   .cal-d{position:relative;height:40px;display:flex;align-items:center;justify-content:center;
     border-radius:50%;font-size:13.5px;font-weight:600;color:var(--ink);cursor:pointer;
     transition:background .12s,transform .1s}
@@ -81,7 +99,8 @@
   .cal-d:active{transform:scale(.88)}
   .cal-d.empty{cursor:default}
   .cal-d.empty:hover{background:transparent}
-  .cal-d.past{color:var(--slate);opacity:.55}
+  .cal-d.next-month{color:var(--sky-200);cursor:default}
+  .cal-d.next-month:hover{background:transparent}
   .cal-d.today{background:var(--sky-400);color:#fff;font-weight:800;
     box-shadow:0 4px 14px rgba(14,165,233,.35)}
   .cal-d.today:hover{background:var(--sky-500)}
@@ -89,44 +108,87 @@
   .cal-d.has-event::after{content:'';position:absolute;bottom:3px;left:50%;transform:translateX(-50%);
     width:5px;height:5px;border-radius:50%;background:var(--sky-500)}
   .cal-d.today.has-event::after{background:#fff}
-  .cal-d.past.has-event::after{background:var(--slate);opacity:.6}
-  .cal-d.next-month{color:var(--sky-200);cursor:default}
-  .cal-d.next-month:hover{background:transparent}
+  .cal-d.done-only::after{background:var(--slate);opacity:.5}
+  .cal-d.pending::after{background:var(--amber-500);opacity:.9}
+  .cal-legend{display:flex;justify-content:center;gap:16px;margin-top:12px;font-size:11px;
+    font-weight:700;color:var(--slate)}
+  .cal-legend span{display:flex;align-items:center;gap:5px}
+  .cal-legend i{width:7px;height:7px;border-radius:50%;display:inline-block}
 
-  /* ---------- events list ---------- */
-  .ev-section{margin-top:20px}
-  .ev-section h3{font-size:16px;font-weight:800;color:var(--navy-900);margin-bottom:12px}
-  .ev-date-label{font-size:12px;color:var(--slate);font-weight:700;margin-bottom:10px}
-  .ev-card{
-    display:flex;gap:14px;align-items:flex-start;
+  /* ---------- vista semana ---------- */
+  .week-day{display:flex;align-items:center;gap:10px;padding:11px 12px;margin-bottom:8px;
+    background:var(--card);border:1px solid var(--card-brd);border-radius:14px;
+    cursor:pointer;transition:box-shadow .12s,transform .1s}
+  .week-day:active{transform:scale(.98)}
+  .week-day .wd-pill{width:44px;height:44px;border-radius:12px;flex:0 0 auto;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    background:var(--sky-50);color:var(--sky-700)}
+  .week-day.active .wd-pill{background:var(--sky-400);color:#fff}
+  .week-day .wd-num{font-size:16px;font-weight:800;line-height:1}
+  .week-day .wd-name{font-size:9.5px;font-weight:800;text-transform:uppercase;letter-spacing:.3px}
+  .week-day .wd-info{flex:1;min-width:0}
+  .week-day .wd-info b{display:block;font-size:12.5px;color:var(--ink)}
+  .week-day .wd-info small{font-size:11px;color:var(--slate);font-weight:600}
+  .week-day .wd-dot{width:8px;height:8px;border-radius:50%;flex:0 0 auto}
+  .wd-dot.blue{background:var(--sky-500)} .wd-dot.green{background:var(--green-500)}
+  .wd-dot.amber{background:var(--amber-500)} .wd-dot.gray{background:var(--card-brd)}
+
+  /* ---------- vista año ---------- */
+  .yr-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+  @media (min-width:560px){ .yr-grid{grid-template-columns:repeat(4,1fr)} }
+  .yr-cell{background:var(--card);border:1px solid var(--card-brd);border-radius:16px;
+    padding:12px 8px 10px;cursor:pointer;text-align:center;transition:box-shadow .12s,transform .1s}
+  .yr-cell:active{transform:scale(.96)}
+  .yr-cell.active{background:var(--sky-100);border-color:var(--sky-300)}
+  .yr-cell b{display:block;font-size:12.5px;font-weight:800;color:var(--navy-900);
+    text-transform:capitalize;margin-bottom:6px}
+  .yr-cell .yr-count{display:inline-flex;align-items:center;gap:4px;font-size:10.5px;font-weight:800;
+    color:var(--sky-600);background:var(--sky-50);border-radius:999px;padding:3px 9px}
+  .yr-cell .yr-count .material-symbols-outlined{font-size:13px}
+
+  /* ---------- lista de eventos ---------- */
+  .ev-list{margin-top:2px}
+  .ev-card{display:flex;gap:13px;align-items:flex-start;
     background:var(--card);border:1px solid var(--card-brd);
-    border-radius:18px;padding:16px;margin-bottom:10px;
-    box-shadow:0 4px 14px rgba(3,105,161,.07);
-    transition:transform .12s}
+    border-radius:16px;padding:14px;margin-bottom:10px;
+    box-shadow:0 4px 14px rgba(3,105,161,.07);transition:transform .12s}
   .ev-card:active{transform:scale(.98)}
-  .ev-icon{
-    width:44px;height:44px;border-radius:50%;flex:0 0 auto;
+  .ev-icon{width:42px;height:42px;border-radius:50%;flex:0 0 auto;
     display:flex;align-items:center;justify-content:center;color:#fff}
   .ev-icon.blue{background:var(--navy-900)}
   .ev-icon.green{background:var(--green-500)}
   .ev-icon.amber{background:var(--amber-500)}
+  .ev-icon.gray{background:var(--slate)}
   .ev-body{flex:1;min-width:0}
-  .ev-body h4{font-size:14.5px;font-weight:700;color:var(--ink);margin-bottom:3px}
-  .ev-row{display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--slate);margin-top:3px}
-  .ev-row .material-symbols-outlined{font-size:15px;color:var(--sky-500)}
-  .ev-pill{
-    display:inline-block;font-size:10.5px;font-weight:800;letter-spacing:.3px;
-    padding:3px 10px;border-radius:999px;text-transform:uppercase}
+  .ev-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
+  .ev-body h4{font-size:14px;font-weight:700;color:var(--ink)}
+  .ev-row{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--slate);margin-top:3px}
+  .ev-row .material-symbols-outlined{font-size:14px;color:var(--sky-500)}
+  .ev-pill{display:inline-block;font-size:10px;font-weight:800;letter-spacing:.3px;
+    padding:3px 9px;border-radius:999px;text-transform:uppercase;white-space:nowrap}
   .ev-pill.done{background:var(--sky-100);color:var(--sky-700)}
   .ev-pill.active{background:var(--green-500);color:#fff}
   .ev-pill.pending{background:#fef3c7;color:#92400e}
-  .ev-pill.next{background:var(--sky-50);color:var(--sky-600)}
-  .ev-empty{
-    text-align:center;padding:32px 16px;color:var(--slate);font-size:14px;font-weight:600;
-    background:var(--card);border:1px dashed var(--card-brd);border-radius:18px}
-  .ev-empty .material-symbols-outlined{font-size:40px;color:var(--sky-200);display:block;margin:0 auto 8px}
+  .ev-empty{text-align:center;padding:28px 14px;color:var(--slate);font-size:13.5px;font-weight:600;
+    background:var(--card);border:1px dashed var(--card-brd);border-radius:16px}
+  .ev-empty .material-symbols-outlined{font-size:38px;color:var(--sky-200);display:block;margin:0 auto 8px}
 
-  /* ---------- nav inferior glass + íconos ---------- */
+  /* ---------- todas las actividades ---------- */
+  .all-box h3{font-size:15.5px;font-weight:800;color:var(--navy-900);
+    display:flex;align-items:center;gap:8px;margin-bottom:12px}
+  .all-box h3 .count{font-size:11px;color:var(--slate);font-weight:700;
+    background:var(--sky-50);border-radius:999px;padding:2px 10px}
+  .all-row{display:flex;gap:10px;align-items:center;padding:10px 12px;margin-bottom:7px;
+    background:var(--card);border:1px solid var(--card-brd);border-radius:13px}
+  .all-row .slot{font-size:11px;font-weight:800;color:var(--sky-600);
+    background:var(--sky-50);border-radius:9px;padding:5px 8px;flex:0 0 auto;min-width:44px;
+    text-align:center}
+  .all-row .all-t{flex:1;min-width:0}
+  .all-row .all-t b{display:block;font-size:12.5px;color:var(--ink);font-weight:700}
+  .all-row .all-t small{font-size:11px;color:var(--slate);font-weight:600}
+  .all-row .all-h{font-size:11.5px;font-weight:800;color:var(--sky-700);flex:0 0 auto}
+
+  /* ---------- nav inferior glass ---------- */
   nav{position:fixed;bottom:0;left:0;right:0;z-index:50;
     background:rgba(255,255,255,.72);backdrop-filter:blur(18px) saturate(1.6);
     -webkit-backdrop-filter:blur(18px) saturate(1.6);
@@ -145,8 +207,7 @@
   .nav-item.active .ic{background:var(--navy-900);color:#fff}
 
   /* ---------- toast ---------- */
-  #toast{
-    position:fixed;bottom:100px;left:50%;transform:translateX(-50%) translateY(20px);
+  #toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%) translateY(20px);
     background:var(--navy-900);color:#fff;padding:10px 22px;border-radius:999px;
     font-size:13px;font-weight:700;opacity:0;transition:opacity .25s,transform .25s;
     pointer-events:none;z-index:100;white-space:nowrap;box-shadow:0 6px 20px rgba(12,74,110,.3)}
@@ -155,73 +216,66 @@
 </head>
 <body>
 
-<!-- ondas fondo -->
-<div class="flow-field"><svg preserveAspectRatio="none" viewBox="0 0 1440 900" xmlns="http://www.w3.org/2000/svg">
-<g class="wiggle" opacity=".35">
-<path class="wf-l" d="M0 420C120 388 240 320 360 310S600 370 720 400S960 440 1080 420S1320 360 1440 380" stroke="#38bdf8"/>
-<path class="wf-l" d="M0 460C144 490 288 540 432 530S720 480 864 460S1152 410 1296 430S1440 470 1440 470" stroke="#0ea5e9"/>
-<path class="wf-l" d="M0 500C180 480 360 430 540 440S900 520 1080 530S1260 490 1440 510" stroke="#7dd3fc"/>
-<path class="wf-l" d="M0 540C200 560 400 590 600 570S1000 520 1200 540S1440 580 1440 580" stroke="#0284c7"/>
-<path class="wf-l" d="M0 340C160 310 320 260 480 270S800 340 960 360S1120 330 1280 310S1440 350 1440 350" stroke="#bae6fd"/>
-<path class="wf-l" d="M0 380C100 360 200 300 300 310S500 380 600 400S800 430 900 410S1100 360 1200 370S1440 400 1440 400" stroke="#e0f2fe"/>
-<path class="wf-l" d="M0 440C130 470 260 510 390 500S650 450 780 430S1040 390 1170 410S1380 460 1440 450" stroke="#38bdf8"/>
-<path class="wf-l" d="M0 480C150 460 300 410 450 420S750 490 900 510S1200 530 1350 500S1440 490 1440 490" stroke="#0ea5e9"/>
-<path class="wf-l" d="M0 520C170 540 340 580 510 570S850 510 1020 500S1190 520 1360 540S1440 530 1440 530" stroke="#7dd3fc"/>
-<path class="wf-l" d="M0 360C140 340 280 290 420 300S700 370 840 390S1120 400 1260 380S1440 360 1440 360" stroke="#0284c7"/>
-<path class="wf-l" d="M0 400C160 420 320 460 480 450S800 390 960 380S1120 410 1280 430S1440 400 1440 400" stroke="#bae6fd"/>
-<path class="wf-l" d="M0 450C120 430 240 380 360 390S600 460 720 480S960 500 1080 480S1320 440 1440 460" stroke="#e0f2fe"/>
-<path class="wf-l" d="M0 510C180 530 360 570 540 560S900 500 1080 490S1260 510 1440 530" stroke="#38bdf8"/>
-<path class="wf-l" d="M0 550C200 540 400 510 600 520S1000 570 1200 560S1440 540 1440 540" stroke="#0ea5e9"/>
-<path class="wf-l" d="M0 320C150 300 300 250 450 260S750 330 900 350S1200 360 1350 340S1440 320 1440 320" stroke="#7dd3fc"/>
-<path class="wf-l" d="M0 350C130 330 260 280 390 290S650 360 780 380S1040 400 1170 380S1380 340 1440 350" stroke="#0284c7"/>
-<path class="wf-l" d="M0 390C170 410 340 450 510 440S850 380 1020 370S1190 390 1360 410S1440 390 1440 390" stroke="#bae6fd"/>
-<path class="wf-l" d="M0 430C150 410 300 360 450 370S750 440 900 460S1200 480 1350 460S1440 430 1440 430" stroke="#e0f2fe"/>
-<path class="wf-l" d="M0 470C120 490 240 530 360 520S600 460 720 450S960 470 1080 490S1320 510 1440 490" stroke="#38bdf8"/>
-<path class="wf-l" d="M0 530C200 510 400 460 600 470S1000 540 1200 550S1440 520 1440 520" stroke="#0ea5e9"/>
-<path class="wf-l" d="M0 290C160 270 320 220 480 230S800 300 960 320S1120 290 1280 270S1440 300 1440 300" stroke="#7dd3fc"/>
-<path class="wf-l" d="M0 330C140 350 280 400 420 390S700 320 840 310S1120 340 1260 360S1440 330 1440 330" stroke="#0284c7"/>
-<path class="wf-l" d="M0 370C170 350 340 300 510 310S850 380 1020 400S1190 370 1360 350S1440 380 1440 380" stroke="#bae6fd"/>
-<path class="wf-l" d="M0 410C150 430 300 470 450 460S750 400 900 390S1200 420 1350 440S1440 410 1440 410" stroke="#e0f2fe"/>
-<path class="wf-l" d="M0 460C120 440 240 390 360 400S600 470 720 490S960 510 1080 490S1320 450 1440 470" stroke="#38bdf8"/>
-<path class="wf-l" d="M0 500C200 520 400 560 600 550S1000 490 1200 480S1440 510 1440 510" stroke="#0ea5e9"/>
-<path class="wf-l" d="M0 310C150 290 300 240 450 250S750 320 900 340S1200 350 1350 330S1440 310 1440 310" stroke="#7dd3fc"/>
-<path class="wf-l" d="M0 345C130 325 260 275 390 285S650 355 780 375S1040 395 1170 375S1380 335 1440 345" stroke="#0284c7"/>
-<path class="wf-l" d="M0 385C170 405 340 445 510 435S850 375 1020 365S1190 385 1360 405S1440 385 1440 385" stroke="#bae6fd"/>
-<path class="wf-l" d="M0 425C150 405 300 355 450 365S750 435 900 455S1200 475 1350 455S1440 425 1440 425" stroke="#e0f2fe"/>
-<path class="wf-l" d="M0 465C120 485 240 525 360 515S600 455 720 445S960 465 1080 485S1320 505 1440 485" stroke="#38bdf8"/>
-<path class="wf-l" d="M0 515C200 495 400 445 600 455S1000 525 1200 535S1440 505 1440 505" stroke="#0ea5e9"/>
-<path class="wf-l" d="M0 280C160 260 320 210 480 220S800 290 960 310S1120 280 1280 260S1440 290 1440 290" stroke="#7dd3fc"/>
-<path class="wf-l" d="M0 320C140 340 280 390 420 380S700 310 840 300S1120 330 1260 350S1440 320 1440 320" stroke="#0284c7"/>
-<path class="wf-l" d="M0 360C170 340 340 290 510 300S850 370 1020 390S1190 360 1360 340S1440 370 1440 370" stroke="#bae6fd"/>
-<path class="wf-l" d="M0 400C150 420 300 460 450 450S750 390 900 380S1200 410 1350 430S1440 400 1440 400" stroke="#e0f2fe"/>
-<path class="wf-l" d="M0 450C120 430 240 380 360 390S600 460 720 480S960 500 1080 480S1320 440 1440 460" stroke="#38bdf8"/>
-<path class="wf-l" d="M0 500C200 520 400 560 600 550S1000 490 1200 480S1440 510 1440 510" stroke="#0ea5e9"/>
-<path class="wf-l" d="M0 270C150 250 300 200 450 210S750 280 900 300S1200 310 1350 290S1440 270 1440 270" stroke="#7dd3fc"/>
-<path class="wf-l" d="M0 305C130 285 260 235 390 245S650 315 780 335S1040 355 1170 335S1380 295 1440 305" stroke="#0284c7"/>
-<path class="wf-l" d="M0 345C170 365 340 405 510 395S850 335 1020 325S1190 345 1360 365S1440 345 1440 345" stroke="#bae6fd"/>
-<path class="wf-l" d="M0 385C150 365 300 315 450 325S750 395 900 415S1200 435 1350 415S1440 385 1440 385" stroke="#e0f2fe"/>
-<path class="wf-l" d="M0 430C120 450 240 490 360 480S600 420 720 410S960 430 1080 450S1320 470 1440 450" stroke="#38bdf8"/>
-<path class="wf-l" d="M0 480C200 460 400 410 600 420S1000 490 1200 500S1440 470 1440 470" stroke="#0ea5e9"/>
-<path class="wf-l" d="M0 260C160 240 320 190 480 200S800 270 960 290S1120 260 1280 240S1440 270 1440 270" stroke="#7dd3fc"/>
-<path class="wf-l" d="M0 295C140 315 280 365 420 355S700 285 840 275S1120 305 1260 325S1440 295 1440 295" stroke="#0284c7"/>
-<path class="wf-l" d="M0 335C170 315 340 265 510 275S850 345 1020 365S1190 335 1360 315S1440 345 1440 345" stroke="#bae6fd"/>
-<path class="wf-l" d="M0 375C150 395 300 435 450 425S750 365 900 355S1200 385 1350 405S1440 375 1440 375" stroke="#e0f2fe"/>
-<path class="wf-l" d="M0 420C120 400 240 350 360 360S600 430 720 450S960 470 1080 450S1320 410 1440 430" stroke="#38bdf8"/>
-<path class="wf-l" d="M0 470C200 490 400 530 600 520S1000 460 1200 450S1440 480 1440 480" stroke="#0ea5e9"/>
-<path class="wf-l" d="M0 250C150 230 300 180 450 190S750 260 900 280S1200 290 1350 270S1440 250 1440 250" stroke="#7dd3fc"/>
-<path class="wf-l" d="M0 285C130 265 260 215 390 225S650 295 780 315S1040 335 1170 315S1380 275 1440 285" stroke="#0284c7"/>
-<path class="wf-l" d="M0 325C170 345 340 385 510 375S850 315 1020 305S1190 325 1360 345S1440 325 1440 325" stroke="#bae6fd"/>
-<path class="wf-l" d="M0 365C150 345 300 295 450 305S750 375 900 395S1200 415 1350 395S1440 365 1440 365" stroke="#e0f2fe"/>
-<path class="wf-l" d="M0 410C120 430 240 470 360 460S600 400 720 390S960 410 1080 430S1320 450 1440 430" stroke="#38bdf8"/>
-<path class="wf-l" d="M0 460C200 440 400 390 600 400S1000 470 1200 480S1440 450 1440 450" stroke="#0ea5e9"/>
-<path class="wf-l" d="M0 555C170 575 340 615 510 605S850 545 1020 535S1190 555 1360 575S1440 555 1440 555" stroke="#e0f2fe"/>
-<path class="wf-l" d="M0 590C150 570 300 520 450 530S750 600 900 620S1200 640 1350 620S1440 590 1440 590" stroke="#38bdf8"/>
-<path class="wf-l" d="M0 615C120 635 240 675 360 665S600 605 720 595S960 615 1080 635S1320 655 1440 635" stroke="#0ea5e9"/>
-<path class="wf-l" d="M0 240C140 220 280 170 420 180S700 250 840 270S1120 280 1260 260S1440 240 1440 240" stroke="#bae6fd"/>
-<path class="wf-l" d="M0 275C170 295 340 335 510 325S850 265 1020 255S1190 275 1360 295S1440 275 1440 275" stroke="#7dd3fc"/>
-<path class="wf-l" d="M0 315C150 295 300 245 450 255S750 325 900 345S1200 365 1350 345S1440 315 1440 315" stroke="#0284c7"/>
-<path class="wf-l" d="M0 355C120 375 240 415 360 405S600 345 720 335S960 355 1080 375S1320 395 1440 375" stroke="#e0f2fe"/>
-</g></svg></div>
+<!-- ondas EXACTAS del dashboard -->
+<div class="flow-field wiggle" aria-hidden="true">
+  <svg viewBox="0 0 1600 900" preserveAspectRatio="none">
+    <defs>
+      <linearGradient id="gradField" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#cde9ff"/>
+        <stop offset="35%" stop-color="#9fd4ff"/>
+        <stop offset="70%" stop-color="#5fb4f7"/>
+        <stop offset="100%" stop-color="#7dbfc8"/>
+      </linearGradient>
+    </defs>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.11" transform="translate(0 6.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.14" transform="translate(11 24.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.17" transform="translate(22 43.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.2" transform="translate(33 61.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.22" transform="translate(44 80.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.25" transform="translate(55 98.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.27" transform="translate(66 117.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.3" transform="translate(77 135.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.32" transform="translate(88 154.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.34" transform="translate(99 172.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.37" transform="translate(110 191.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.39" transform="translate(121 209.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.41" transform="translate(132 228.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.42" transform="translate(143 246.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.44" transform="translate(154 265.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.46" transform="translate(165 283.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.47" transform="translate(176 302.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.48" transform="translate(187 320.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.49" transform="translate(198 339.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.5" transform="translate(209 357.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.51" transform="translate(220 376.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.51" transform="translate(231 394.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.52" transform="translate(242 413.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.52" transform="translate(253 431.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.52" transform="translate(264 450.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.51" transform="translate(275 468.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.51" transform="translate(286 487.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.5" transform="translate(297 505.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.49" transform="translate(308 524.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.48" transform="translate(319 542.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.47" transform="translate(330 561.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.46" transform="translate(341 579.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.44" transform="translate(352 598.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.42" transform="translate(363 616.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.41" transform="translate(374 635.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.39" transform="translate(385 653.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.37" transform="translate(396 672.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.34" transform="translate(407 690.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.32" transform="translate(418 709.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.3" transform="translate(429 727.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.27" transform="translate(440 746.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.25" transform="translate(451 764.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.22" transform="translate(462 783.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.2" transform="translate(473 801.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.17" transform="translate(484 820.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.14" transform="translate(495 838.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    <path class="wf-l" stroke="url(#gradField)" opacity="0.11" transform="translate(506 857.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+  </svg>
+</div>
 
 <div class="wrap">
 
@@ -237,7 +291,7 @@
     </div>
     <div class="hi">
       <h1>Mi Agenda</h1>
-      <p>Septiembre 2026</p>
+      <p id="subTitle">Organizá tus horas sociales</p>
     </div>
     <a class="logout" href="/seleccion-rol" title="Cerrar sesión" id="btnLogout">
       <span class="material-symbols-outlined">logout</span>
@@ -245,22 +299,57 @@
     </a>
   </header>
 
-  <!-- calendario -->
-  <div class="card" style="margin-bottom:18px">
-    <div class="cal-head">
-      <h2 id="calTitle">Septiembre 2026</h2>
-      <div class="cal-nav">
-        <button id="calPrev" title="Mes anterior"><span class="material-symbols-outlined">chevron_left</span></button>
-        <button id="calNext" title="Mes siguiente"><span class="material-symbols-outlined">chevron_right</span></button>
-      </div>
-    </div>
-    <div class="cal-grid" id="calGrid"></div>
+  <!-- vistas: día · semana · mes · año -->
+  <div class="seg" id="segView">
+    <button class="seg-btn" data-view="dia"><span class="material-symbols-outlined">today</span>Día</button>
+    <button class="seg-btn" data-view="semana"><span class="material-symbols-outlined">view_week</span>Semana</button>
+    <button class="seg-btn active" data-view="mes"><span class="material-symbols-outlined">calendar_month</span>Mes</button>
+    <button class="seg-btn" data-view="ano"><span class="material-symbols-outlined">calendar_view_year</span>Año</button>
   </div>
 
-  <!-- eventos del día -->
-  <div class="ev-section">
-    <div class="ev-date-label" id="evDateLabel">Hoy · martes 8 de septiembre</div>
-    <div id="evList"></div>
+  <!-- barra de fecha -->
+  <div class="datebar">
+    <button class="dnav" id="dPrev" title="Anterior"><span class="material-symbols-outlined">chevron_left</span></button>
+    <div class="dlabel" id="dLabel">Septiembre 2026</div>
+    <button class="dnav" id="dNext" title="Siguiente"><span class="material-symbols-outlined">chevron_right</span></button>
+    <input type="date" id="dDate" title="Cambiar fecha manualmente">
+  </div>
+
+  <!-- vista: mes (calendario) -->
+  <div id="viewMes">
+    <div class="card" style="padding:16px">
+      <div class="cal-grid" id="calGrid"></div>
+      <div class="cal-legend">
+        <span><i style="background:var(--sky-500)"></i>Hoy</span>
+        <span><i style="background:var(--sky-200)"></i>Realizada</span>
+        <span><i style="background:var(--amber-500)"></i>Pendiente</span>
+      </div>
+    </div>
+    <div class="ev-list" id="mesEvents"></div>
+  </div>
+
+  <!-- vista: semana -->
+  <div id="viewSemana" style="display:none">
+    <div class="card" style="padding:12px" id="weekDays"></div>
+    <div class="ev-list" id="semanaEvents" style="margin-top:14px"></div>
+  </div>
+
+  <!-- vista: día -->
+  <div id="viewDia" style="display:none">
+    <div class="ev-list" id="diaEvents"></div>
+  </div>
+
+  <!-- vista: año -->
+  <div id="viewAno" style="display:none">
+    <div class="yr-grid" id="yrGrid"></div>
+  </div>
+
+  <!-- todas las actividades -->
+  <div class="all-box" style="margin-top:20px">
+    <h3 id="pendTitle">⏳ Pendientes <span class="count" id="pendCount">0</span></h3>
+    <div id="pendList"></div>
+    <h3 style="margin-top:18px">✅ Realizadas <span class="count" id="doneCount">0</span></h3>
+    <div id="doneList"></div>
   </div>
 
 </div>
@@ -286,147 +375,270 @@
     clearTimeout(toastTimer); toastTimer = setTimeout(function(){ t.classList.remove('show'); }, 2600);
   }
 
-  /* ---------- datos de actividades ---------- */
-  var TODAY = 8; // 8 septiembre 2026
-  var events = {
-    1:{title:'Jornada de bienvenida',time:'8:00 – 12:00',loc:'Auditorio principal',status:'done',icon:'waving_hand',color:'blue'},
-    3:{title:'Campaña de reciclaje',time:'8:00 – 12:00',loc:'Zona verde del campus',status:'done',icon:'recycling',color:'green'},
-    5:{title:'Pintura de mural',time:'9:00 – 11:00',loc:'Patio central',status:'done',icon:'palette',color:'blue'},
-    8:{title:'Biblioteca escolar',time:'8:00 – 12:00',loc:'Biblioteca Alfredo Correa',status:'active',icon:'menu_book',color:'blue'},
-    10:{title:'Entrega de donaciones',time:'8:00 – 10:00',loc:'Sede comunal Barrio Norte',status:'pending',icon:'volunteer_activism',color:'amber'},
-    12:{title:'Huerta escolar',time:'9:00 – 11:00',loc:'Terraza del colegio',status:'pending',icon:'yard',color:'green'},
-    15:{title:'Primeros auxilios',time:'8:00 – 12:00',loc:'Salón de salud',status:'pending',icon:'first_health',color:'amber'},
-    17:{title:'Lectura a primaria',time:'8:00 – 10:00',loc:'IEP San Martín',status:'pending',icon:'auto_stories',color:'blue'},
-    19:{title:'Reforestación',time:'9:00 – 11:00',loc:'Cerro del Este',status:'pending',icon:'forest',color:'green'},
-    22:{title:'Apadrinamiento de lectura',time:'8:00 – 12:00',loc:'Biblioteca escolar',status:'pending',icon:'rate_review',color:'blue'},
-    24:{title:'Donación de útiles',time:'8:00 – 10:00',loc:'Sede comunal Barrio Norte',status:'pending',icon:'school',color:'amber'},
-    26:{title:'Mural comunitario',time:'9:00 – 11:00',loc:'Plaza del barrio',status:'pending',icon:'brush',color:'blue'},
-    29:{title:'Jornada ambiental',time:'8:00 – 12:00',loc:'Parque ecológico',status:'pending',icon:'eco',color:'green'}
-  };
-  // eventos de otros días para completar la grilla (sin mostrar en detalle)
-  var eventDays = Object.keys(events).map(Number);
+  /* ================= datos ================= */
+  // fecha de "hoy" en la historia
+  var TODAY = '2026-09-08';
 
-  var STATUS_LABEL = {done:'Completada',active:'En curso',pending:'Pendiente'};
-  var STATUS_PILL = {done:'done',active:'active',pending:'pending'};
+  var events = [
+    // ---------- REALIZADAS (40 h) ----------
+    {d:'2026-07-18', h:'04:00 – 06:00', title:'Reforestación', loc:'Cerro del Este', icon:'forest', color:'green', status:'done', hours:2},
+    {d:'2026-07-21', h:'08:00 – 10:00', title:'Lectura a primaria', loc:'IEP San Martín', icon:'auto_stories', color:'blue', status:'done', hours:2},
+    {d:'2026-07-24', h:'08:00 – 10:00', title:'Donación de útiles', loc:'Sede comunal Barrio Norte', icon:'school', color:'amber', status:'done', hours:2},
+    {d:'2026-07-31', h:'09:00 – 11:00', title:'Limpieza parque central', loc:'Parque Central', icon:'cleaning_services', color:'green', status:'done', hours:2},
+    {d:'2026-08-01', h:'09:00 – 11:00', title:'Huerta escolar', loc:'Terraza del colegio', icon:'yard', color:'green', status:'done', hours:2},
+    {d:'2026-08-03', h:'08:00 – 09:00', title:'Biblioteca escolar', loc:'Biblioteca Alfredo Correa', icon:'menu_book', color:'blue', status:'done', hours:1},
+    {d:'2026-08-05', h:'08:00 – 09:00', title:'Campaña de reciclaje', loc:'Zona verde del campus', icon:'recycling', color:'green', status:'done', hours:1},
+    {d:'2026-08-08', h:'09:00 – 11:00', title:'Jornada ambiental', loc:'Parque ecológico', icon:'eco', color:'green', status:'done', hours:2},
+    {d:'2026-08-14', h:'08:00 – 12:00', title:'Mural comunitario', loc:'Plaza del barrio', icon:'brush', color:'blue', status:'done', hours:4},
+    {d:'2026-08-19', h:'08:00 – 10:00', title:'Campaña de reciclaje', loc:'Zona verde del campus', icon:'recycling', color:'green', status:'done', hours:2},
+    {d:'2026-08-22', h:'08:00 – 10:00', title:'Apadrinamiento de lectura', loc:'Biblioteca escolar', icon:'rate_review', color:'blue', status:'done', hours:2},
+    {d:'2026-08-27', h:'08:00 – 12:00', title:'Vacunación canina', loc:'Canil municipal', icon:'pets', color:'amber', status:'done', hours:4},
+    {d:'2026-08-28', h:'09:00 – 10:00', title:'Limpieza de canchas', loc:'Canchas del barrio', icon:'sports_soccer', color:'green', status:'done', hours:1},
+    {d:'2026-08-29', h:'09:00 – 11:00', title:'Huerta escolar', loc:'Terraza del colegio', icon:'yard', color:'green', status:'done', hours:2},
+    {d:'2026-08-31', h:'08:00 – 12:00', title:'Primeros auxilios', loc:'Salón de salud', icon:'first_health', color:'amber', status:'done', hours:4},
+    {d:'2026-09-02', h:'08:00 – 10:00', title:'Biblioteca escolar', loc:'Biblioteca Alfredo Correa', icon:'menu_book', color:'blue', status:'done', hours:2},
+    {d:'2026-09-03', h:'08:00 – 10:00', title:'Campaña de reciclaje', loc:'Zona verde del campus', icon:'recycling', color:'green', status:'done', hours:2},
+    {d:'2026-09-04', h:'08:00 – 09:00', title:'Entrega de donaciones', loc:'Sede comunal Barrio Norte', icon:'volunteer_activism', color:'amber', status:'done', hours:1},
+    {d:'2026-09-05', h:'09:00 – 11:00', title:'Pintura de mural', loc:'Patio central', icon:'palette', color:'blue', status:'done', hours:2},
+    // ---------- HOY (en curso) ----------
+    {d:'2026-09-08', h:'08:00 – 12:00', title:'Biblioteca escolar', loc:'Biblioteca Alfredo Correa', icon:'menu_book', color:'blue', status:'active', hours:4},
+    // ---------- PENDIENTES ----------
+    {d:'2026-09-10', h:'08:00 – 10:00', title:'Entrega de donaciones', loc:'Sede comunal Barrio Norte', icon:'volunteer_activism', color:'amber', status:'pending', hours:2},
+    {d:'2026-09-12', h:'09:00 – 11:00', title:'Huerta escolar', loc:'Terraza del colegio', icon:'yard', color:'green', status:'pending', hours:2},
+    {d:'2026-09-15', h:'08:00 – 12:00', title:'Primeros auxilios', loc:'Salón de salud', icon:'first_health', color:'amber', status:'pending', hours:4},
+    {d:'2026-09-17', h:'08:00 – 10:00', title:'Lectura a primaria', loc:'IEP San Martín', icon:'auto_stories', color:'blue', status:'pending', hours:2},
+    {d:'2026-09-19', h:'09:00 – 11:00', title:'Reforestación', loc:'Cerro del Este', icon:'forest', color:'green', status:'pending', hours:2},
+    {d:'2026-09-22', h:'08:00 – 12:00', title:'Apadrinamiento de lectura', loc:'Biblioteca escolar', icon:'rate_review', color:'blue', status:'pending', hours:4},
+    {d:'2026-09-24', h:'08:00 – 10:00', title:'Donación de útiles', loc:'Sede comunal Barrio Norte', icon:'school', color:'amber', status:'pending', hours:2},
+    {d:'2026-09-26', h:'09:00 – 11:00', title:'Mural comunitario', loc:'Plaza del barrio', icon:'brush', color:'blue', status:'pending', hours:2},
+    {d:'2026-09-29', h:'08:00 – 12:00', title:'Jornada ambiental', loc:'Parque ecológico', icon:'eco', color:'green', status:'pending', hours:4},
+    {d:'2026-10-01', h:'08:00 – 10:00', title:'Campaña de reciclaje', loc:'Zona verde del campus', icon:'recycling', color:'green', status:'pending', hours:2},
+    {d:'2026-10-03', h:'09:00 – 11:00', title:'Huerta escolar', loc:'Terraza del colegio', icon:'yard', color:'green', status:'pending', hours:2},
+    {d:'2026-10-06', h:'08:00 – 12:00', title:'Biblioteca escolar', loc:'Biblioteca Alfredo Correa', icon:'menu_book', color:'blue', status:'pending', hours:4},
+    {d:'2026-10-08', h:'08:00 – 10:00', title:'Jornada de clausura', loc:'Auditorio principal', icon:'celebration', color:'amber', status:'pending', hours:2}
+  ];
 
   var MONTHS = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
-  var DAYS = ['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];
+  var MONTHS_SHORT = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+  var DAYS = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
   var DAYS_SHORT = ['Do','Lu','Ma','Mi','Ju','Vi','Sa'];
+  var STATUS_LABEL = {done:'Realizada',active:'En curso',pending:'Pendiente'};
+  var STATUS_PILL = {done:'done',active:'active',pending:'pending'};
 
-  var viewMonth = 8; // 0-indexed: septiembre = 8
-  var viewYear = 2026;
-  var selectedDay = TODAY;
+  function pad(n){ return (n < 10 ? '0' : '') + n; }
+  function iso(dt){ return dt.getFullYear() + '-' + pad(dt.getMonth()+1) + '-' + pad(dt.getDate()); }
+  function parseISO(s){ var p = s.split('-'); return new Date(+p[0], +p[1]-1, +p[2]); }
+  // fecha base del cursor (para navegar vistas)
+  var cursor = parseISO('2026-09-08');
+  var view = 'mes';
 
-  function daysInMonth(m,y){ return new Date(y,m+1,0).getDate(); }
-  function startDayOfWeek(m,y){ return new Date(y,m,1).getDay(); }
+  function evOn(d){ return events.filter(function(e){ return e.d === d; }); }
+  function soonestStatus(dd){
+    var evs = evOn(dd);
+    if (!evs.length) return null;
+    if (evs.some(function(e){ return e.status === 'active'; })) return 'active';
+    if (evs.some(function(e){ return e.status === 'pending'; })) return 'pending';
+    return 'done';
+  }
 
-  function renderCalendar(){
-    var grid = $('calGrid');
-    grid.innerHTML = '';
-    $('calTitle').textContent = MONTHS[viewMonth].charAt(0).toUpperCase() + MONTHS[viewMonth].slice(1) + ' ' + viewYear;
-    // weekday headers
-    DAYS_SHORT.forEach(function(d,i){
+  /* ================= helpers UI ================= */
+  function evCardHTML(e){
+    return '<div class="ev-card">' +
+      '<div class="ev-icon ' + e.color + '"><span class="material-symbols-outlined" style="font-size:21px">' + e.icon + '</span></div>' +
+      '<div class="ev-body">' +
+        '<div class="ev-top"><h4>' + e.title + '</h4>' +
+        '<span class="ev-pill ' + STATUS_PILL[e.status] + '">' + STATUS_LABEL[e.status] + '</span></div>' +
+        '<div class="ev-row"><span class="material-symbols-outlined">schedule</span>' + e.h + '</div>' +
+        '<div class="ev-row"><span class="material-symbols-outlined">location_on</span>' + e.loc + '</div>' +
+      '</div></div>';
+  }
+  function evEmptyHTML(msg){
+    return '<div class="ev-empty"><span class="material-symbols-outlined">event_busy</span>' + msg + '</div>';
+  }
+  function fmtLong(dt){
+    return DAYS[dt.getDay()] + ' ' + dt.getDate() + ' de ' + MONTHS[dt.getMonth()];
+  }
+
+  /* ================= vistas ================= */
+  function setView(v){
+    view = v;
+    document.querySelectorAll('.seg-btn').forEach(function(b){
+      b.classList.toggle('active', b.getAttribute('data-view') === v);
+    });
+    $('viewMes').style.display = (v === 'mes') ? '' : 'none';
+    $('viewSemana').style.display = (v === 'semana') ? '' : 'none';
+    $('viewDia').style.display = (v === 'dia') ? '' : 'none';
+    $('viewAno').style.display = (v === 'ano') ? '' : 'none';
+    render();
+  }
+
+  function render(){
+    var dt = cursor;
+    if (view === 'mes') { $('dLabel').textContent = MONTHS[dt.getMonth()].charAt(0).toUpperCase() + MONTHS[dt.getMonth()].slice(1) + ' ' + dt.getFullYear(); renderMes(); }
+    else if (view === 'semana') { $('dLabel').textContent = 'Semana del ' + dt.getDate() + ' ' + MONTHS_SHORT[dt.getMonth()]; renderSemana(); }
+    else if (view === 'dia') { $('dLabel').textContent = fmtLong(dt); renderDia(); }
+    else { $('dLabel').textContent = 'Año ' + dt.getFullYear(); renderAno(); }
+    renderAllLists();
+  }
+
+  /* -------- mes -------- */
+  function renderMes(){
+    var y = cursor.getFullYear(), m = cursor.getMonth();
+    var grid = $('calGrid'); grid.innerHTML = '';
+    DAYS_SHORT.forEach(function(d, i){
       var el = document.createElement('div');
-      el.className = 'cal-dh';
+      el.className = 'cal-dh' + (i >= 5 ? ' weekend' : '');
       el.textContent = d;
-      if (i >= 5) el.style.color = 'var(--sky-500)';
       grid.appendChild(el);
     });
-    var total = daysInMonth(viewMonth, viewYear);
-    var start = startDayOfWeek(viewMonth, viewYear);
-    var prevTotal = daysInMonth(viewMonth - 1 < 0 ? 11 : viewMonth - 1, viewMonth - 1 < 0 ? viewYear - 1 : viewYear);
-
-    // previous month trailing days
+    var total = new Date(y, m+1, 0).getDate();
+    var start = new Date(y, m, 1).getDay();
+    var prevTotal = new Date(y, m, 0).getDate();
     for (var p = start - 1; p >= 0; p--){
       var el = document.createElement('div');
       el.className = 'cal-d next-month';
       el.textContent = prevTotal - p;
       grid.appendChild(el);
     }
-
-    // current month
-    var isCurrentMonth = (viewMonth === 8 && viewYear === 2026);
     for (var d = 1; d <= total; d++){
-      var el = document.createElement('div');
+      var ds = iso(new Date(y, m, d));
       var cls = 'cal-d';
-      var isPast = isCurrentMonth && d < TODAY;
-      var isToday = isCurrentMonth && d === TODAY;
-      var isSelected = d === selectedDay && !isToday;
-      var hasEvent = eventDays.indexOf(d) !== -1;
-      if (isPast) cls += ' past';
-      if (isToday) cls += ' today';
-      if (isSelected) cls += ' selected';
-      if (hasEvent) cls += ' has-event';
+      var st = soonestStatus(ds);
+      if (ds < TODAY) cls += ' past';
+      if (ds === TODAY) cls += ' today';
+      if (ds === iso(cursor) && ds !== TODAY) cls += ' selected';
+      if (st) cls += ' has-event';
+      if (st === 'done') cls += ' done-only';
+      if (st === 'pending') cls += ' pending';
+      var el = document.createElement('div');
       el.className = cls;
       el.textContent = d;
-      el.setAttribute('data-day', d);
-      if (!isPast || isToday) el.addEventListener('click', onDayClick);
+      el.setAttribute('data-ds', ds);
+      el.addEventListener('click', function(){ cursor = parseISO(this.getAttribute('data-ds')); renderMes(); renderMesEvents(); });
       grid.appendChild(el);
     }
-
-    // next month leading days
-    var filled = start + total;
-    var next = 1;
+    var filled = start + total, nx = 1;
     while (filled < 42){
       var el = document.createElement('div');
       el.className = 'cal-d next-month';
-      el.textContent = next++;
+      el.textContent = nx++;
+      grid.appendChild(el); filled++;
+    }
+    renderMesEvents();
+  }
+  function renderMesEvents(){
+    var box = $('mesEvents'); box.innerHTML = '';
+    var evs = evOn(iso(cursor));
+    if (!evs.length){ box.innerHTML = evEmptyHTML('Sin actividades este día'); return; }
+    evs.forEach(function(e){ box.innerHTML += evCardHTML(e); });
+  }
+
+  /* -------- semana -------- */
+  function renderSemana(){
+    var box = $('weekDays'); box.innerHTML = '';
+    var monday = new Date(cursor);
+    var diff = (cursor.getDay() + 6) % 7; // 0=lunes
+    monday.setDate(cursor.getDate() - diff);
+    var days = [];
+    for (var i = 0; i < 7; i++){
+      var dt = new Date(monday); dt.setDate(monday.getDate() + i);
+      days.push(dt);
+    }
+    var todayIdx = days.findIndex(function(dt){ return dt.getDay() === 1; }); // placeholder
+    days.forEach(function(dt){
+      var ds = iso(dt);
+      var st = soonestStatus(ds);
+      var el = document.createElement('div');
+      el.className = 'week-day' + (ds === iso(cursor) ? ' active' : '');
+      var dot = st ? '<span class="wd-dot ' + (st === 'done' ? 'blue' : st === 'active' ? 'green' : 'amber') + '"></span>' : '<span class="wd-dot gray"></span>';
+      el.innerHTML =
+        '<div class="wd-pill"><span class="wd-num">' + dt.getDate() + '</span><span class="wd-name">' + DAYS_SHORT[dt.getDay()] + '</span></div>' +
+        '<div class="wd-info"><b>' + (ds === TODAY ? 'Hoy' : DAYS[dt.getDay()]) + '</b>' +
+        '<small>' + (st ? (st === 'done' ? 'Realizada' : st === 'active' ? 'En curso' : 'Pendiente') : 'Sin actividades') + '</small></div>' +
+        dot;
+      el.addEventListener('click', (function(ds){ return function(){ cursor = parseISO(ds); render(); }; })(ds));
+      box.appendChild(el);
+    });
+
+    var evs = evOn(iso(cursor));
+    var eb = $('semanaEvents'); eb.innerHTML = '';
+    if (!evs.length){ eb.innerHTML = evEmptyHTML('Sin actividades el ' + fmtLong(cursor)); return; }
+    evs.forEach(function(e){ eb.innerHTML += evCardHTML(e); });
+  }
+
+  /* -------- día -------- */
+  function renderDia(){
+    var box = $('diaEvents'); box.innerHTML = '';
+    var evs = evOn(iso(cursor));
+    if (!evs.length){ box.innerHTML = evEmptyHTML('Sin actividades el ' + fmtLong(cursor)); return; }
+    evs.forEach(function(e){ box.innerHTML += evCardHTML(e); });
+  }
+
+  /* -------- año -------- */
+  function renderAno(){
+    var y = cursor.getFullYear();
+    var grid = $('yrGrid'); grid.innerHTML = '';
+    for (var m = 0; m < 12; m++){
+      var count = events.filter(function(e){ return e.d.indexOf(y + '-' + pad(m+1)) === 0; }).length;
+      var el = document.createElement('div');
+      el.className = 'yr-cell' + (m === cursor.getMonth() ? ' active' : '');
+      el.innerHTML = '<b>' + MONTHS_SHORT[m] + '</b>' +
+        (count ? '<span class="yr-count"><span class="material-symbols-outlined">event</span>' + count + '</span>' : '<span class="yr-count" style="color:var(--slate)">—</span>');
+      el.addEventListener('click', (function(mm){ return function(){ cursor = new Date(y, mm, 1); setView('mes'); }; })(m));
       grid.appendChild(el);
-      filled++;
     }
   }
 
-  function onDayClick(){
-    var day = parseInt(this.getAttribute('data-day'), 10);
-    selectedDay = day;
-    renderCalendar();
-    renderEvents(day);
-    toast('📅 ' + day + ' de ' + MONTHS[viewMonth]);
-  }
-
-  function renderEvents(day){
-    var label = $('evDateLabel');
-    var list = $('evList');
-    var dayName = DAYS[new Date(viewYear, viewMonth, day).getDay()];
-    label.textContent = (day === TODAY ? 'Hoy · ' : '') + dayName + ' ' + day + ' de ' + MONTHS[viewMonth];
-
-    list.innerHTML = '';
-    var ev = events[day];
-    if (!ev) {
-      list.innerHTML = '<div class="ev-empty"><span class="material-symbols-outlined">event_busy</span>Sin actividades este día</div>';
-      return;
+  /* ================= todas las actividades ================= */
+  function renderAllLists(){
+    var pend = events.filter(function(e){ return e.status === 'pending' || e.status === 'active'; })
+      .sort(function(a, b){ return a.d < b.d ? -1 : 1; });
+    var done = events.filter(function(e){ return e.status === 'done'; })
+      .sort(function(a, b){ return a.d > b.d ? -1 : 1; });
+    $('pendCount').textContent = pend.length;
+    $('doneCount').textContent = done.length;
+    var ph = $('pendList'), dh = $('doneList');
+    ph.innerHTML = ''; dh.innerHTML = '';
+    function rowHTML(e){
+      var dt = parseISO(e.d);
+      return '<div class="all-row">' +
+        '<span class="slot">' + pad(dt.getDate()) + '/' + pad(dt.getMonth()+1) + '</span>' +
+        '<div class="all-t"><b>' + e.title + '</b><small>' + e.h + ' · ' + MONTHS_SHORT[dt.getMonth()] + ' ' + dt.getDate() + '</small></div>' +
+        '<span class="all-h">' + e.hours + ' h</span></div>';
     }
-    var card = document.createElement('div');
-    card.className = 'ev-card';
-    card.innerHTML =
-      '<div class="ev-icon ' + ev.color + '"><span class="material-symbols-outlined" style="font-size:22px">' + ev.icon + '</span></div>' +
-      '<div class="ev-body">' +
-        '<div style="display:flex;align-items:center;justify-content:space-between;gap:8px">' +
-          '<h4>' + ev.title + '</h4>' +
-          '<span class="ev-pill ' + STATUS_PILL[ev.status] + '">' + STATUS_LABEL[ev.status] + '</span>' +
-        '</div>' +
-        '<div class="ev-row"><span class="material-symbols-outlined">schedule</span>' + ev.time + '</div>' +
-        '<div class="ev-row"><span class="material-symbols-outlined">location_on</span>' + ev.loc + '</div>' +
-      '</div>';
-    list.appendChild(card);
+    if (!pend.length) ph.innerHTML = evEmptyHTML('No tenés actividades pendientes 🎉');
+    else pend.forEach(function(e){ ph.innerHTML += rowHTML(e); });
+    if (!done.length) dh.innerHTML = evEmptyHTML('Todavía no realizaste ninguna actividad');
+    else done.forEach(function(e){ dh.innerHTML += rowHTML(e); });
   }
 
-  /* ---------- navegación de mes ---------- */
-  $('calPrev').addEventListener('click', function(){
-    viewMonth--;
-    if (viewMonth < 0){ viewMonth = 11; viewYear--; }
-    selectedDay = 1;
-    renderCalendar();
-    renderEvents(1);
-    toast('← ' + MONTHS[viewMonth]);
+  /* ================= navegación/fecha ================= */
+  document.querySelectorAll('.seg-btn').forEach(function(b){
+    b.addEventListener('click', function(){ setView(b.getAttribute('data-view')); });
   });
-  $('calNext').addEventListener('click', function(){
-    viewMonth++;
-    if (viewMonth > 11){ viewMonth = 0; viewYear++; }
-    selectedDay = 1;
-    renderCalendar();
-    renderEvents(1);
-    toast('→ ' + MONTHS[viewMonth]);
+  $('dPrev').addEventListener('click', function(){
+    var d = new Date(cursor);
+    if (view === 'dia') d.setDate(d.getDate() - 1);
+    else if (view === 'semana') d.setDate(d.getDate() - 7);
+    else if (view === 'mes') d.setMonth(d.getMonth() - 1);
+    else d.setFullYear(d.getFullYear() - 1);
+    cursor = d; render(); toast('◀ Cambiaste de ' + (view === 'ano' ? 'año' : view));
+  });
+  $('dNext').addEventListener('click', function(){
+    var d = new Date(cursor);
+    if (view === 'dia') d.setDate(d.getDate() + 1);
+    else if (view === 'semana') d.setDate(d.getDate() + 7);
+    else if (view === 'mes') d.setMonth(d.getMonth() + 1);
+    else d.setFullYear(d.getFullYear() + 1);
+    cursor = d; render(); toast('▶ Cambiaste de ' + (view === 'ano' ? 'año' : view));
+  });
+  var dateInput = $('dDate');
+  dateInput.value = iso(cursor);
+  dateInput.addEventListener('change', function(){
+    if (!dateInput.value) return;
+    cursor = parseISO(dateInput.value);
+    if (view === 'mes') cursor.setDate(cursor.getDate()); // keep day
+    render(); toast('📅 Fecha cambiada');
   });
 
   /* ---------- cerrar sesión ---------- */
@@ -440,8 +652,7 @@
   });
 
   /* ---------- init ---------- */
-  renderCalendar();
-  renderEvents(TODAY);
+  render();
 })();
 </script>
 </body>
