@@ -19,6 +19,7 @@
           "mensajes_estudiante_horasocial_pro/**",
           "chat_maestro_estudiante_horasocial_pro/**",
           "dashboard_maestro_horasocial_pro/**",
+          "gestion_estudiantes_maestro_horasocial_pro/**",
           "login_maestro_horasocial_pro/**",
           "recuperar_contrasena_maestro_horasocial_pro/**",
           "stitch_horasocial_pro_landing_page/gesti_n_estudiantes_perfil_maestro/**",

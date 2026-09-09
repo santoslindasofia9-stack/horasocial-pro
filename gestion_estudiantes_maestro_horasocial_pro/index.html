@@ -1,0 +1,1018 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport">
+<title>HORASOCIAL PRO - Gestión de Estudiantes</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&amp;display=swap" rel="stylesheet">
+<style>
+  :root{
+    --sky-50:#f0f9ff; --sky-100:#e0f2fe; --sky-200:#bae6fd; --sky-300:#7dd3fc;
+    --sky-400:#38bdf8; --sky-500:#0ea5e9; --sky-600:#0284c7; --sky-700:#0369a1;
+    --navy-800:#075985; --navy-900:#0c4a6e; --ink:#0f2f44; --slate:#5b6b7c;
+    --card:#ffffff; --card-brd:#e6f0f9; --glass:rgba(255,255,255,.9); --radius:22px; --maxw:640px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html{scroll-behavior:smooth;overflow-x:hidden}
+  body{
+    font-family:'Inter','Plus Jakarta Sans','Segoe UI',system-ui,sans-serif;
+    color:var(--ink);background:#ffffff;position:relative;overflow-x:hidden;
+    min-height:100dvh;
+    padding:0 0 calc(120px + env(safe-area-inset-bottom));
+  }
+  h1,h2,h3,h4{font-family:'Plus Jakarta Sans',sans-serif}
+
+  /* ---------- ondas estilo selección de rol (toda la página) ---------- */
+  .flow-field{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;overflow:visible}
+  .flow-field svg{width:100%;height:100%;overflow:visible}
+  .wf-l{fill:none;stroke-width:0.9;vector-effect:non-scaling-stroke}
+  .wiggle{animation:flow-drift 38s ease-in-out infinite;will-change:transform}
+  @keyframes flow-drift{0%,100%{transform:translate(0,0)}20%{transform:translate(9px,-16px)}45%{transform:translate(19px,-6px)}70%{transform:translate(11px,6px)}}
+
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:22px 18px 10px;position:relative;z-index:1}
+  @media (min-width:720px){ :root{--maxw:920px} .wrap{padding:30px 26px 12px} }
+
+  /* ---------- header ---------- */
+  header{display:flex;align-items:center;gap:12px;padding:4px 2px 22px}
+  .avatar{width:56px;height:56px;border-radius:50%;flex:0 0 auto;position:relative;
+    filter:drop-shadow(0 8px 16px rgba(14,165,233,.35))}
+  .avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%;display:block}
+  .avatar::after{content:'';position:absolute;inset:-3px;border-radius:50%;
+    border:2.5px solid rgba(56,189,248,.45)}
+  .av-fb{display:none;width:100%;height:100%;border-radius:50%;align-items:center;justify-content:center;
+    background:linear-gradient(135deg,#38bdf8,#0369a1);color:#fff;
+    font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:19px;letter-spacing:.5px}
+  .hi{flex:1;min-width:0}
+  .hi h1{font-size:20px;font-weight:800;color:var(--navy-900);letter-spacing:-.2px}
+  .hi p{font-size:12px;color:var(--slate);font-weight:600;margin-top:3px}
+  .bell{position:relative;width:44px;height:44px;border-radius:14px;flex:0 0 auto;
+    background:var(--sky-50);border:1px solid var(--sky-200);color:var(--sky-700);
+    display:flex;align-items:center;justify-content:center;cursor:pointer;font-family:inherit;
+    transition:background .2s,box-shadow .2s,transform .12s}
+  .bell:hover{background:var(--sky-100);box-shadow:0 4px 12px rgba(2,132,199,.18)}
+  .bell:active{transform:scale(.94)}
+  .bell .material-symbols-outlined{font-size:22px}
+  .bell-dot{position:absolute;top:9px;right:10px;width:9px;height:9px;border-radius:50%;
+    background:#ef4444;border:2px solid #fff}
+  .logout{display:flex;align-items:center;gap:7px;text-decoration:none;
+    background:var(--sky-50);border:1px solid var(--sky-200);color:var(--sky-700);
+    padding:9px 13px;border-radius:999px;font-weight:800;font-size:12px;
+    transition:background .2s,box-shadow .2s,transform .12s;white-space:nowrap}
+  .logout:hover{background:var(--sky-100);box-shadow:0 4px 12px rgba(2,132,199,.18)}
+  .logout:active{transform:scale(.96)}
+  .logout .material-symbols-outlined{font-size:18px}
+  @media (max-width:430px){ .logout small{display:none} .logout{padding:10px} }
+
+  /* ---------- sections ---------- */
+  section{margin-top:26px}
+  .sec-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;padding:0 4px}
+  .sec-head h3{font-size:16px;font-weight:800;color:var(--navy-900);display:flex;align-items:center;gap:8px}
+  .sec-head h3 .m{font-size:20px;color:var(--sky-500)}
+  .sec-head span{font-size:11.5px;color:var(--sky-600);font-weight:700}
+
+  /* ---------- botón exportar ---------- */
+  .exp-btn{display:inline-flex;align-items:center;gap:6px;background:var(--sky-50);
+    border:1px solid var(--sky-200);color:var(--sky-700);border-radius:999px;
+    padding:8px 13px;font-family:inherit;font-size:11.5px;font-weight:800;cursor:pointer;
+    white-space:nowrap;transition:background .2s,box-shadow .2s,transform .12s}
+  .exp-btn:hover{background:var(--sky-100);box-shadow:0 4px 12px rgba(2,132,199,.18)}
+  .exp-btn:active{transform:scale(.95)}
+  .exp-btn .material-symbols-outlined{font-size:16px}
+
+  /* ---------- tarjeta de perfil del maestro ---------- */
+  .pro-card{
+    background:var(--glass);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+    border:1px solid var(--card-brd);border-radius:var(--radius);padding:22px;
+    box-shadow:0 10px 24px rgba(3,105,161,.08);display:flex;flex-direction:column;gap:16px;
+  }
+  .pro-top{display:flex;align-items:center;gap:16px}
+  .pro-av{width:96px;height:96px;border-radius:50%;flex:0 0 auto;padding:4px;
+    background:linear-gradient(135deg,#7dd3fc,#38bdf8,#0284c7);
+    filter:drop-shadow(0 8px 18px rgba(14,165,233,.35))}
+  .pro-av img{width:100%;height:100%;object-fit:cover;border-radius:50%;display:block;
+    border:3px solid #fff}
+  .pro-av .av-fb{font-size:28px}
+  .pro-info{flex:1;min-width:0}
+  .pro-info h4{font-size:20px;font-weight:800;color:var(--navy-900);letter-spacing:-.2px}
+  .pro-chip{display:inline-flex;align-items:center;gap:6px;margin-top:8px;
+    background:var(--sky-100);color:var(--sky-700);border-radius:999px;
+    padding:6px 12px;font-size:11px;font-weight:800}
+  .pro-chip .material-symbols-outlined{font-size:14px}
+  .pro-contact{display:flex;flex-direction:column;gap:9px;padding-top:4px}
+  .pro-citem{display:flex;align-items:center;gap:10px;font-size:12.5px;font-weight:600;color:var(--ink)}
+  .pro-citem .material-symbols-outlined{font-size:16px;color:var(--sky-500);flex:0 0 auto}
+  .pro-citem span{min-width:0}
+  .pro-card .vbtn{align-self:flex-start}
+
+  /* ---------- stats grid ---------- */
+  .stats{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+  .stat{
+    background:var(--glass);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+    border:1px solid var(--card-brd);border-radius:20px;padding:18px 10px;text-align:center;
+    box-shadow:0 10px 28px rgba(3,105,161,.10);
+    display:flex;flex-direction:column;align-items:center;gap:5px;
+  }
+  .stat .m{font-size:26px;color:var(--sky-500)}
+  .stat b{font-size:25px;font-weight:800;color:var(--navy-900);line-height:1.1}
+  .stat small{font-size:11px;font-weight:700;color:var(--slate)}
+  .stat.accent .m{color:var(--sky-600)}
+  .stat.accent b{color:var(--sky-600)}
+
+  /* ---------- buscador ---------- */
+  .search{position:relative;margin-bottom:14px}
+  .search .m{position:absolute;left:14px;top:50%;transform:translateY(-50%);
+    color:var(--sky-500);font-size:20px;pointer-events:none}
+  .search input{width:100%;padding:13px 16px 13px 42px;border:1px solid var(--card-brd);
+    border-radius:15px;background:var(--glass);backdrop-filter:blur(12px);
+    font-family:inherit;font-size:13.5px;font-weight:600;color:var(--ink);outline:none;
+    box-shadow:0 6px 16px rgba(3,105,161,.06);transition:border-color .2s,box-shadow .2s}
+  .search input:focus{border-color:var(--sky-400);box-shadow:0 0 0 3px rgba(56,189,248,.22)}
+  .search input::placeholder{color:#94a3b8}
+
+  /* ---------- chips de filtro ---------- */
+  .filter-chips{display:flex;flex-wrap:wrap;gap:8px;padding:0 4px}
+  .filter-chips .chip{width:auto;height:auto;display:inline-flex;align-items:center;justify-content:center;
+    padding:8px 14px;border-radius:999px;font-size:11.5px;font-weight:800;
+    border:1px solid var(--card-brd);background:#fff;color:var(--slate);
+    cursor:pointer;font-family:inherit;box-shadow:none;
+    transition:background .2s,color .2s,border-color .2s,box-shadow .2s,transform .12s}
+  .filter-chips .chip:hover{border-color:var(--sky-300);color:var(--sky-700)}
+  .filter-chips .chip:active{transform:scale(.96)}
+  .filter-chips .chip.active{background:var(--sky-600);border-color:var(--sky-600);color:#fff;
+    box-shadow:0 6px 14px rgba(2,132,199,.25)}
+
+  .chip{width:48px;height:48px;border-radius:15px;flex:0 0 auto;
+    display:flex;align-items:center;justify-content:center;font-size:24px}
+  .chip.green{background:#d1fae5;color:#059669}
+  .chip.blue{background:#dbeafe;color:#2563eb}
+  .chip.purple{background:#ede9fe;color:#7c3aed}
+
+  /* ---------- barras de progreso ---------- */
+  .bar-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px;
+    font-size:11.5px;font-weight:600;color:var(--slate)}
+  .bar-row b{font-size:12px;font-weight:800;color:var(--sky-600)}
+  .bar{height:8px;background:var(--sky-100);border-radius:99px;overflow:hidden}
+  .bar-fill{height:100%;border-radius:99px;
+    background:linear-gradient(90deg,var(--sky-400),var(--sky-600));
+    animation:bar-grow 1.2s cubic-bezier(.22,.9,.35,1) .15s both}
+  @keyframes bar-grow{from{width:0}}
+
+  /* ---------- lista de estudiantes ---------- */
+  .s-row{display:flex;align-items:center;gap:12px;padding:14px 16px;
+    border:1px solid var(--card-brd);border-radius:18px;
+    background:var(--glass);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+    box-shadow:0 6px 16px rgba(3,105,161,.06);margin-bottom:10px;
+    transition:transform .12s,box-shadow .2s}
+  .s-row:active{transform:scale(.99)}
+  .s-av{width:44px;height:44px;border-radius:50%;flex:0 0 auto;
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:14px;letter-spacing:.3px}
+  .s-av.ba{background:#d1fae5;color:#059669}
+  .s-av.aa{background:#dbeafe;color:#2563eb}
+  .s-av.sc{background:#ede9fe;color:#7c3aed}
+  .s-info{flex:1;min-width:0}
+  .s-info b{display:block;font-size:13.5px;font-weight:800;color:var(--navy-900)}
+  .s-info small{font-size:11px;color:var(--slate);font-weight:700;display:block;margin-top:2px}
+  .s-bar{display:flex;align-items:center;gap:8px;margin-top:8px}
+  .s-bar .bar{flex:1;height:6px}
+  .s-bar span{font-size:10px;font-weight:800;color:var(--sky-600);white-space:nowrap}
+  .s-side{flex:0 0 auto;display:flex;flex-direction:column;align-items:flex-end;gap:7px}
+  .s-tags{display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end}
+  .b-chip{font-size:9.5px;font-weight:800;padding:4px 8px;border-radius:999px;white-space:nowrap}
+  .b-chip.ba{background:#d1fae5;color:#047857}
+  .b-chip.aa{background:#dbeafe;color:#1d4ed8}
+  .b-chip.sc{background:#ede9fe;color:#6d28d9}
+  .s-chip{font-size:10px;font-weight:800;padding:4px 9px;border-radius:999px;white-space:nowrap}
+  .s-chip.ok{background:#d1fae5;color:#047857}
+  .s-chip.pend{background:#fef3c7;color:#b45309}
+  .s-chip.exc{background:#fee2e2;color:#b91c1c}
+  .s-btns{display:flex;gap:6px}
+  .btn-ico{width:34px;height:34px;border-radius:11px;border:1px solid var(--card-brd);
+    background:var(--sky-50);color:var(--sky-700);display:flex;align-items:center;justify-content:center;
+    cursor:pointer;font-family:inherit;
+    transition:background .2s,transform .12s,box-shadow .2s}
+  .btn-ico:hover{background:var(--sky-100);box-shadow:0 4px 10px rgba(2,132,199,.16)}
+  .btn-ico:active{transform:scale(.9)}
+  .btn-ico .material-symbols-outlined{font-size:17px}
+  .btn-ico.accent{background:var(--sky-600);border-color:var(--sky-600);color:#fff}
+  .btn-ico.accent:hover{background:var(--sky-700)}
+  .s-empty{display:none;flex-direction:column;align-items:center;gap:8px;padding:28px 16px;text-align:center}
+  .s-empty.show{display:flex}
+  .s-empty .material-symbols-outlined{font-size:34px;color:var(--sky-300)}
+  .s-empty span{font-size:12px;font-weight:700;color:var(--slate)}
+  @media (max-width:430px){
+    .s-tags .b-chip{display:none}
+    .s-row{gap:10px;padding:12px 12px}
+  }
+
+  /* ---------- bottom nav (glass + íconos, bien aireada) ---------- */
+  nav{
+    position:fixed;left:0;right:0;bottom:0;z-index:50;
+    background:rgba(255,255,255,.92);backdrop-filter:blur(14px);
+    border-top:1px solid #eaf3fb;box-shadow:0 -8px 26px rgba(3,105,161,.12);
+    border-radius:24px 24px 0 0;
+    padding:10px 12px calc(12px + env(safe-area-inset-bottom));
+  }
+  .nav-inner{max-width:var(--maxw);margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);column-gap:8px;padding:0 6px}
+  .nav-item{display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 4px;
+    border-radius:15px;text-decoration:none;color:var(--slate);font-size:10px;font-weight:700;min-width:0;
+    transition:transform .12s,color .2s}
+  .nav-item:active{transform:scale(.92)}
+  .nav-item .ic{width:48px;height:36px;display:flex;align-items:center;justify-content:center;
+    border-radius:13px;transition:background .2s,color .2s;color:#94a3b8}
+  .nav-item .ic .material-symbols-outlined{font-size:23px}
+  .nav-item small{font-size:10.5px;font-weight:700;letter-spacing:.2px}
+  .nav-item.active{color:var(--navy-900)}
+  .nav-item.active .ic{background:var(--navy-900);color:#fff}
+
+  /* toast */
+  #toast{position:fixed;left:16px;right:16px;bottom:calc(100px + env(safe-area-inset-bottom));
+    max-width:640px;margin:0 auto;background:var(--navy-900);color:#fff;text-align:center;
+    font-size:12.5px;font-weight:700;padding:13px 16px;border-radius:15px;opacity:0;
+    transform:translateY(12px);pointer-events:none;transition:opacity .25s,transform .25s;z-index:60;
+    box-shadow:0 10px 26px rgba(3,105,161,.30)}
+  #toast.show{opacity:1;transform:translateY(0)}
+
+  .material-symbols-outlined{
+    font-variation-settings:'FILL' 0,'wght' 500,'GRAD' 0,'opsz' 24;
+    user-select:none;
+  }
+
+  /* ---------- modales (bottom-sheet mobile / centrado desktop) ---------- */
+  .modal-backdrop{
+    position:fixed;inset:0;z-index:80;display:flex;align-items:flex-end;justify-content:center;
+    background:rgba(15,23,42,.45);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+    opacity:0;visibility:hidden;transition:opacity .25s,visibility .25s;
+  }
+  .modal-backdrop.open{opacity:1;visibility:visible}
+  .modal{
+    width:100%;max-height:88dvh;overflow-y:auto;
+    background:var(--glass);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+    border:1px solid var(--card-brd);border-radius:24px 24px 0 0;
+    box-shadow:0 -12px 40px rgba(15,23,42,.18);
+    transform:translateY(28px);transition:transform .28s cubic-bezier(.22,.9,.35,1);
+  }
+  .modal-backdrop.open .modal{transform:translateY(0)}
+  .modal-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:20px 20px 14px}
+  .modal-head h3{font-size:18px;font-weight:800;color:var(--navy-900);display:flex;align-items:center;gap:9px}
+  .modal-head h3 .m{color:var(--sky-500);font-size:22px}
+  .modal-head p{font-size:12px;color:var(--slate);font-weight:600;margin-top:4px}
+  .modal-x{width:38px;height:38px;border-radius:12px;border:1px solid var(--card-brd);background:var(--sky-50);
+    color:var(--sky-700);display:flex;align-items:center;justify-content:center;cursor:pointer;font-family:inherit;flex:0 0 auto;
+    transition:background .2s,transform .12s}
+  .modal-x:hover{background:var(--sky-100)}
+  .modal-x:active{transform:scale(.9)}
+  .modal-x .material-symbols-outlined{font-size:20px}
+  .modal-body{padding:6px 20px 24px}
+  @media (min-width:720px){
+    .modal-backdrop{align-items:center}
+    .modal{max-width:660px;border-radius:24px;box-shadow:0 24px 60px rgba(15,23,42,.28)}
+  }
+
+  /* ---------- modal perfil estudiante ---------- */
+  .phero{display:flex;align-items:center;gap:14px;padding:6px 2px 16px}
+  .phero .s-av{width:58px;height:58px;font-size:19px}
+  .phero div{flex:1;min-width:0}
+  .phero b{display:block;font-size:16.5px;font-weight:800;color:var(--navy-900);letter-spacing:-.2px}
+  .phero small{font-size:11.5px;color:var(--slate);font-weight:700;display:block;margin-top:3px}
+  .pinfo{display:flex;flex-direction:column;gap:8px;padding:14px 0;border-top:1px dashed var(--card-brd)}
+  .pinfo-row{display:flex;align-items:center;gap:10px;font-size:12.5px;font-weight:600;color:var(--ink)}
+  .pinfo-row .material-symbols-outlined{font-size:16px;color:var(--sky-500);flex:0 0 auto}
+  .pinfo-row span{min-width:0}
+  .pbar{padding:14px 0;border-top:1px dashed var(--card-brd)}
+  .mov-h{font-size:10.5px;font-weight:800;color:var(--slate);letter-spacing:.3px;text-transform:uppercase;margin:16px 0 8px}
+  .mov-row{display:flex;align-items:center;justify-content:space-between;gap:10px;
+    padding:11px 13px;border:1px solid var(--card-brd);border-radius:13px;background:#fff;
+    margin-bottom:8px;box-shadow:0 4px 10px rgba(3,105,161,.05)}
+  .mov-row .mv-txt{flex:1;min-width:0}
+  .mov-row .mv-f{display:block;font-size:12px;font-weight:800;color:var(--ink)}
+  .mov-row .mv-txt small{font-size:11px;color:var(--slate);font-weight:600;display:block;margin-top:2px}
+  .mov-row .mv-h{font-size:12.5px;font-weight:800;color:var(--sky-600);white-space:nowrap}
+  .exc-box{padding-top:14px;border-top:1px dashed var(--card-brd);display:flex;flex-direction:column;gap:9px}
+  .exc-box p{font-size:12px;font-weight:700;color:var(--slate);line-height:1.5}
+  .vbtn{display:inline-flex;align-items:center;gap:6px;background:var(--sky-600);color:#fff;border:0;border-radius:12px;
+    padding:10px 13px;font-family:inherit;font-size:11.5px;font-weight:800;cursor:pointer;flex:0 0 auto;
+    transition:background .2s,transform .12s,box-shadow .2s}
+  .vbtn:hover{background:var(--sky-700);box-shadow:0 6px 14px rgba(2,132,199,.3)}
+  .vbtn:active{transform:scale(.94)}
+  .vbtn .material-symbols-outlined{font-size:16px}
+  .vbtn.full{width:100%;justify-content:center;padding:13px}
+
+  /* ---------- formularios ---------- */
+  .f-field{margin-bottom:14px}
+  .f-field label{display:block;font-size:11px;font-weight:800;color:var(--slate);
+    margin-bottom:6px;text-transform:uppercase;letter-spacing:.3px}
+  .f-field input{width:100%;padding:12px 14px;border:1px solid var(--card-brd);
+    border-radius:13px;background:#fff;font-family:inherit;font-size:14px;font-weight:600;
+    color:var(--ink);outline:none;transition:border-color .2s,box-shadow .2s}
+  .f-field input:focus{border-color:var(--sky-400);box-shadow:0 0 0 3px rgba(56,189,248,.22)}
+  .f-hint{font-size:11px;color:var(--slate);font-weight:600;margin-top:5px}
+
+  /* ---------- panel notificaciones ---------- */
+  .notif-panel{
+    position:fixed;top:78px;right:16px;z-index:90;width:min(320px,calc(100vw - 24px));
+    background:var(--glass);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+    border:1px solid var(--card-brd);border-radius:20px;box-shadow:0 18px 44px rgba(15,23,42,.20);
+    opacity:0;visibility:hidden;transform:translateY(-8px) scale(.98);transform-origin:top right;
+    transition:opacity .22s,transform .22s,visibility .22s;overflow:hidden;
+  }
+  .notif-panel.show{opacity:1;visibility:visible;transform:translateY(0) scale(1)}
+  .notif-head{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:15px 16px 10px}
+  .notif-head b{font-size:14px;font-weight:800;color:var(--navy-900)}
+  .notif-head button{background:none;border:0;color:var(--sky-600);font-family:inherit;font-size:11px;font-weight:800;
+    cursor:pointer;padding:4px 6px;border-radius:8px}
+  .notif-head button:hover{background:var(--sky-100)}
+  .notif-list{max-height:min(340px,50dvh);overflow-y:auto;padding:0 8px 10px}
+  .notif-item{display:flex;align-items:flex-start;gap:10px;padding:12px 10px;border-radius:13px;cursor:pointer;
+    transition:background .15s}
+  .notif-item:hover{background:rgba(240,249,255,.9)}
+  .notif-item .n-txt{flex:1;min-width:0}
+  .notif-item .n-txt b{display:block;font-size:12.5px;font-weight:700;color:var(--ink);line-height:1.4}
+  .notif-item .n-txt small{font-size:10.5px;color:var(--slate);font-weight:600;display:block;margin-top:3px}
+  .notif-item .n-dot{width:8px;height:8px;border-radius:50%;background:var(--sky-500);flex:0 0 auto;margin-top:4px}
+  .notif-item.read .n-dot{background:#cbd5e1}
+  .notif-empty{display:flex;flex-direction:column;align-items:center;gap:8px;padding:28px 16px;text-align:center}
+  .notif-empty .material-symbols-outlined{font-size:34px;color:var(--sky-300)}
+  .notif-empty span{font-size:12px;font-weight:700;color:var(--slate)}
+
+  /* ---------- layout amplio ---------- */
+  @media (min-width:720px){
+    .stats{grid-template-columns:repeat(4,1fr);gap:14px}
+    .stat{padding:20px 10px}
+    .pro-card{flex-direction:row;align-items:center;justify-content:space-between}
+    .pro-contact{flex:1;max-width:340px}
+    .pro-card .vbtn{align-self:center}
+  }
+</style>
+</head>
+<body>
+
+  <!-- fondo: ondas estilo selección de rol, fluyendo por toda la página -->
+  <div class="flow-field wiggle" aria-hidden="true">
+    <svg viewBox="0 0 1600 900" preserveAspectRatio="none">
+      <defs>
+        <linearGradient id="gradField" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#cde9ff"/>
+          <stop offset="35%" stop-color="#9fd4ff"/>
+          <stop offset="70%" stop-color="#5fb4f7"/>
+          <stop offset="100%" stop-color="#7dbfc8"/>
+        </linearGradient>
+      </defs>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.11" transform="translate(0 6.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.14" transform="translate(11 24.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.17" transform="translate(22 43.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.2" transform="translate(33 61.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.22" transform="translate(44 80.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.25" transform="translate(55 98.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.27" transform="translate(66 117.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.3" transform="translate(77 135.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.32" transform="translate(88 154.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.34" transform="translate(99 172.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.37" transform="translate(110 191.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.39" transform="translate(121 209.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.41" transform="translate(132 228.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.42" transform="translate(143 246.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.44" transform="translate(154 265.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.46" transform="translate(165 283.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.47" transform="translate(176 302.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.48" transform="translate(187 320.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.49" transform="translate(198 339.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.5" transform="translate(209 357.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.51" transform="translate(220 376.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.51" transform="translate(231 394.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.52" transform="translate(242 413.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.52" transform="translate(253 431.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.52" transform="translate(264 450.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.51" transform="translate(275 468.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.51" transform="translate(286 487.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.5" transform="translate(297 505.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.49" transform="translate(308 524.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.48" transform="translate(319 542.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.47" transform="translate(330 561.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.46" transform="translate(341 579.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.44" transform="translate(352 598.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.42" transform="translate(363 616.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.41" transform="translate(374 635.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.39" transform="translate(385 653.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.37" transform="translate(396 672.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.34" transform="translate(407 690.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.32" transform="translate(418 709.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.3" transform="translate(429 727.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.27" transform="translate(440 746.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.25" transform="translate(451 764.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.22" transform="translate(462 783.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.2" transform="translate(473 801.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.17" transform="translate(484 820.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.14" transform="translate(495 838.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.11" transform="translate(506 857.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    </svg>
+  </div>
+
+<div class="wrap">
+
+  <!-- header -->
+  <header>
+    <div class="avatar" role="img" aria-label="Perfil de Maestro Ricardo">
+      <img id="avImg" alt="Foto de Maestro Ricardo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAsBKOgiv_kBEGjRdsLDTUZvI71zukRwIm4VDeUz7PNlZXgk-rbjdeD6dqKMmosd3_emj_ICwNW35ohfDVXeRh0Z9qFx0I4Zjb7jNHlals66RqOcXSkQu2MwkkciTFXkC95odUjko8VIPVa493BBrOY-WID8ZzD1PBV9U4Ja2q18Ov24D1q6vN3s3aoYWga0VydSZLaIpkbNGjcKqalA9cPOtjlGkZOSBrs-hPouXz3rf8bOc66iYv3e2gaqSDWmH1zI18tKalUSqva" onerror="this.style.display='none';var f=document.getElementById('avFallback');if(f){f.style.display='flex';}">
+      <div class="av-fb" id="avFallback">MR</div>
+    </div>
+    <div class="hi">
+      <h1 id="hdNombre">Maestro Ricardo</h1>
+      <p>Gestión de Estudiantes</p>
+    </div>
+    <button class="bell" id="btnNotif" type="button" aria-label="Notificaciones">
+      <span class="material-symbols-outlined">notifications</span>
+      <span class="bell-dot" id="notifDot"></span>
+    </button>
+    <a class="logout" href="/seleccion-rol" title="Cerrar sesión" id="btnLogout">
+      <span class="material-symbols-outlined">logout</span><small>Cerrar sesión</small>
+    </a>
+  </header>
+
+  <!-- perfil del maestro -->
+  <section>
+    <div class="sec-head"><h3><span class="m material-symbols-outlined">badge</span>Perfil del Maestro</h3></div>
+    <div class="pro-card">
+      <div class="pro-top">
+        <div class="pro-av" role="img" aria-label="Foto de perfil de Maestro Ricardo">
+          <img id="avImgPerfil" alt="Foto de Maestro Ricardo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAsBKOgiv_kBEGjRdsLDTUZvI71zukRwIm4VDeUz7PNlZXgk-rbjdeD6dqKMmosd3_emj_ICwNW35ohfDVXeRh0Z9qFx0I4Zjb7jNHlals66RqOcXSkQu2MwkkciTFXkC95odUjko8VIPVa493BBrOY-WID8ZzD1PBV9U4Ja2q18Ov24D1q6vN3s3aoYWga0VydSZLaIpkbNGjcKqalA9cPOtjlGkZOSBrs-hPouXz3rf8bOc66iYv3e2gaqSDWmH1zI18tKalUSqva" onerror="this.style.display='none';var f=document.getElementById('avFallbackPerfil');if(f){f.style.display='flex';}">
+          <div class="av-fb" id="avFallbackPerfil">MR</div>
+        </div>
+        <div class="pro-info">
+          <h4 id="proNombre">Maestro Ricardo</h4>
+          <span class="pro-chip"><span class="material-symbols-outlined">school</span>Docente · Técnica</span>
+        </div>
+      </div>
+      <div class="pro-contact">
+        <div class="pro-citem"><span class="material-symbols-outlined">mail</span><span id="proCorreo">maestro.ricardo@horasocial.edu</span></div>
+        <div class="pro-citem"><span class="material-symbols-outlined">call</span><span id="proTelefono">+57 300 123 4567</span></div>
+        <div class="pro-citem"><span class="material-symbols-outlined">location_on</span><span id="proSede">Sede Principal</span></div>
+      </div>
+      <button class="vbtn" id="btnEditPerfil" type="button"><span class="material-symbols-outlined">edit</span>Editar perfil</button>
+    </div>
+  </section>
+
+  <!-- estadísticas -->
+  <section>
+    <div class="sec-head"><h3><span class="m material-symbols-outlined">monitoring</span>Resumen</h3></div>
+    <div class="stats">
+      <div class="stat"><span class="m material-symbols-outlined">group</span><b id="stTotal">12</b><small>Total estudiantes</small></div>
+      <div class="stat"><span class="m material-symbols-outlined">task_alt</span><b id="stAlDia">6</b><small>Al día</small></div>
+      <div class="stat accent"><span class="m material-symbols-outlined">description</span><b id="stExcusa">3</b><small>Con excusa</small></div>
+      <div class="stat"><span class="m material-symbols-outlined">schedule</span><b id="stHoras">119</b><small>Horas registradas</small></div>
+    </div>
+  </section>
+
+  <!-- buscador y filtros -->
+  <section>
+    <div class="sec-head"><h3><span class="m material-symbols-outlined">search</span>Buscar estudiantes</h3></div>
+    <div class="search">
+      <span class="m material-symbols-outlined">search</span>
+      <input id="stSearch" type="search" placeholder="Buscar por nombre o código..." autocomplete="off">
+    </div>
+    <div class="filter-chips" id="filterChips">
+      <button class="chip active" type="button" data-filtro="Todas">Todas</button>
+      <button class="chip" type="button" data-filtro="Brigada Ambiental">Brigada Ambiental</button>
+      <button class="chip" type="button" data-filtro="Apoyo Académico">Apoyo Académico</button>
+      <button class="chip" type="button" data-filtro="Servicios Comunitarios">Servicios Comunitarios</button>
+      <button class="chip" type="button" data-filtro="Excusas">Excusas</button>
+    </div>
+  </section>
+
+  <!-- lista de estudiantes -->
+  <section>
+    <div class="sec-head">
+      <h3><span class="m material-symbols-outlined">group</span>Estudiantes</h3>
+      <button class="exp-btn" id="btnExport" type="button"><span class="material-symbols-outlined">download</span>Exportar CSV</button>
+    </div>
+    <div id="stList"></div>
+  </section>
+
+</div>
+
+<!-- nav inferior glass + íconos, bien distribuida -->
+<nav>
+  <div class="nav-inner">
+    <a class="nav-item" data-go data-file="../dashboard_maestro_horasocial_pro/index.html" data-served="/maestro/dashboard" href="/maestro/dashboard"><span class="ic"><span class="material-symbols-outlined">grid_view</span></span><small>Panel</small></a>
+    <a class="nav-item active" href="#"><span class="ic"><span class="material-symbols-outlined">group</span></span><small>Estudiantes</small></a>
+    <a class="nav-item" data-go data-file="../stitch_horasocial_pro_landing_page/gesti_n_t_cnica_perfil_maestro_2/code.html" data-served="/maestro/tecnico" href="/maestro/tecnico"><span class="ic"><span class="material-symbols-outlined">manage_accounts</span></span><small>Técnica</small></a>
+    <a class="nav-item" data-go data-file="../stitch_horasocial_pro_landing_page/mensajes_e_interacci_n_perfil_maestro/code.html" data-served="/maestro/mensajes" href="/maestro/mensajes"><span class="ic"><span class="material-symbols-outlined">chat</span></span><small>Mensajes</small></a>
+  </div>
+</nav>
+
+<!-- modal: editar perfil del maestro -->
+<div class="modal-backdrop" id="modalEditPerfil" role="dialog" aria-modal="true" aria-label="Editar perfil">
+  <div class="modal" role="document">
+    <div class="modal-head">
+      <div>
+        <h3><span class="m material-symbols-outlined">edit</span>Editar perfil</h3>
+        <p>Actualiza tus datos de contacto</p>
+      </div>
+      <button class="modal-x" id="xEditPerfil" type="button" aria-label="Cerrar"><span class="material-symbols-outlined">close</span></button>
+    </div>
+    <div class="modal-body">
+      <div class="f-field">
+        <label for="inputNombre">Nombre</label>
+        <input id="inputNombre" type="text" placeholder="Tu nombre completo">
+      </div>
+      <div class="f-field">
+        <label for="inputTelefono">Teléfono</label>
+        <input id="inputTelefono" type="tel" placeholder="+57 300 000 0000">
+      </div>
+      <div class="f-field">
+        <label for="inputCorreo">Correo</label>
+        <input id="inputCorreo" type="email" placeholder="tucorreo@horasocial.edu">
+      </div>
+      <button class="vbtn full" id="btnSavePerfil" type="button"><span class="material-symbols-outlined">save</span>Guardar cambios</button>
+    </div>
+  </div>
+</div>
+
+<!-- modal: ver perfil del estudiante -->
+<div class="modal-backdrop" id="modalPerfil" role="dialog" aria-modal="true" aria-label="Perfil del estudiante">
+  <div class="modal" role="document">
+    <div class="modal-head">
+      <div>
+        <h3><span class="m material-symbols-outlined">person</span>Perfil del Estudiante</h3>
+        <p>Detalle de progreso y movimientos</p>
+      </div>
+      <button class="modal-x" id="xPerfil" type="button" aria-label="Cerrar"><span class="material-symbols-outlined">close</span></button>
+    </div>
+    <div class="modal-body" id="perfilBody"></div>
+  </div>
+</div>
+
+<!-- modal: registrar horas -->
+<div class="modal-backdrop" id="modalHoras" role="dialog" aria-modal="true" aria-label="Registrar horas">
+  <div class="modal" role="document">
+    <div class="modal-head">
+      <div>
+        <h3><span class="m material-symbols-outlined">schedule</span>Registrar horas</h3>
+        <p>Suma horas de servicio social</p>
+      </div>
+      <button class="modal-x" id="xHoras" type="button" aria-label="Cerrar"><span class="material-symbols-outlined">close</span></button>
+    </div>
+    <div class="modal-body">
+      <div class="phero">
+        <div class="s-av" id="horasAv">--</div>
+        <div><b id="horasNombre">Estudiante</b><small id="horasCodigo">HS-2026-000</small></div>
+      </div>
+      <div class="f-field">
+        <label for="horasInput">Horas (1 a 8)</label>
+        <input id="horasInput" type="number" min="1" max="8" step="1" inputmode="numeric" placeholder="Ej. 4">
+        <div class="f-hint">El máximo permitido por registro es de 8 horas.</div>
+      </div>
+      <div class="f-field">
+        <label for="notaInput">Comentario (opcional)</label>
+        <input id="notaInput" type="text" maxlength="120" placeholder="Ej. Brigada ambiental">
+      </div>
+      <button class="vbtn full" id="btnRegistrarHoras" type="button"><span class="material-symbols-outlined">add_circle</span>Registrar</button>
+    </div>
+  </div>
+</div>
+
+<!-- panel de notificaciones -->
+<div class="notif-panel" id="notifPanel" role="dialog" aria-label="Notificaciones">
+  <div class="notif-head">
+    <b>Notificaciones</b>
+    <button id="btnNotifRead" type="button">Marcar todas como leídas</button>
+  </div>
+  <div class="notif-list" id="notifList"></div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+  (function(){
+    var $ = function(id){ return document.getElementById(id); };
+    var toastTimer = null;
+    function toast(msg){
+      var t = $('toast'); t.textContent = msg; t.classList.add('show');
+      clearTimeout(toastTimer); toastTimer = setTimeout(function(){ t.classList.remove('show'); }, 2600);
+    }
+    function isFile(){ return location.protocol === 'file:'; }
+    function go(fileHref, servedHref){ window.location.assign(isFile() ? fileHref : servedHref); }
+
+    var LS_EST = 'horasocial_maestro_estudiantes_v1';
+    var LS_PERFIL = 'horasocial_maestro_perfil_v1';
+    var LS_NOTIF = 'horasocial_maestro_notif_v1';
+    var META = 80;
+    var MESES = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+    var filtroActual = 'Todas';
+
+    function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+    function pad2(n){ return (n < 10 ? '0' : '') + n; }
+    function norm(s){ return String(s).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,''); }
+    function fechaHoy(){ var d = new Date(); return d.getDate() + ' ' + MESES[d.getMonth()]; }
+    function keyOpen(el, fn){ if (!el) return; el.addEventListener('keydown', function(e){ if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); fn(); } }); }
+    function byCodigo(cod){ var r = null; est.forEach(function(s){ if (s.codigo === cod) r = s; }); return r; }
+    function pct(e){ return Math.round(e.horas / META * 100); }
+    function clsBrigada(b){ return b === 'Brigada Ambiental' ? 'ba' : (b === 'Apoyo Académico' ? 'aa' : 'sc'); }
+    function chipEstado(e){
+      if (e.estado === 'Al día') return '<span class="s-chip ok">Al día</span>';
+      if (e.estado === 'Pendiente') return '<span class="s-chip pend">Pendiente</span>';
+      return '<span class="s-chip exc">Excusa</span>';
+    }
+
+    /* ---------- avatares: refuerzo del onerror inline ---------- */
+    ['avImg','avImgPerfil'].forEach(function(id){
+      var im = $(id);
+      if (!im) return;
+      im.addEventListener('error', function(){
+        im.style.display = 'none';
+        var fb = $(id === 'avImg' ? 'avFallback' : 'avFallbackPerfil');
+        if (fb) fb.style.display = 'flex';
+      });
+    });
+
+    /* ---------- cerrar sesión: intercepción SIEMPRE (file o servido) ---------- */
+    var btnLogout = $('btnLogout');
+    if (btnLogout) btnLogout.addEventListener('click', function(e){
+      e.preventDefault();
+      go('../selecci_n_de_rol_distribuci_n_expandida_vertical/code.html', '/seleccion-rol');
+    });
+
+    /* ---------- enlaces con patrón file/served (nav) ---------- */
+    document.querySelectorAll('[data-go]').forEach(function(el){
+      el.addEventListener('click', function(e){
+        e.preventDefault();
+        go(el.getAttribute('data-file'), el.getAttribute('data-served'));
+      });
+    });
+
+    /* ---------- estudiantes en localStorage ---------- */
+    function seedEstudiantes(){
+      return [
+        { nombre: 'Valentina Ospina',     brigada: 'Brigada Ambiental',      codigo: 'HS-2026-001', horas: 12, estado: 'Al día',     correo: 'valentina.ospina@horasocial.edu', telefono: '+57 300 111 2233',
+          historial: [ { f: '9 sep',  h: 4, n: 'Brigada ambiental' }, { f: '6 sep',  h: 5, n: 'Brigada ambiental' }, { f: '3 sep',  h: 3, n: 'Brigada ambiental' } ] },
+        { nombre: 'Samuel Rojas',         brigada: 'Brigada Ambiental',      codigo: 'HS-2026-002', horas: 10, estado: 'Pendiente', correo: 'samuel.rojas@horasocial.edu', telefono: '+57 300 222 3344',
+          historial: [ { f: '8 sep',  h: 4, n: 'Brigada ambiental' }, { f: '4 sep',  h: 3, n: 'Brigada ambiental' }, { f: '1 sep',  h: 3, n: 'Brigada ambiental' } ] },
+        { nombre: 'Mariana Cárdenas',     brigada: 'Apoyo Académico',        codigo: 'HS-2026-003', horas: 8,  estado: 'Excusa',    correo: 'mariana.cardenas@horasocial.edu', telefono: '+57 300 333 4455',
+          historial: [ { f: '7 sep',  h: 3, n: 'Apoyo académico' }, { f: '2 sep',  h: 3, n: 'Apoyo académico' }, { f: '29 ago', h: 2, n: 'Apoyo académico' } ] },
+        { nombre: 'Sebastián Gómez',      brigada: 'Servicios Comunitarios', codigo: 'HS-2026-004', horas: 14, estado: 'Al día',     correo: 'sebastian.gomez@horasocial.edu', telefono: '+57 300 444 5566',
+          historial: [ { f: '10 sep', h: 5, n: 'Servicios comunitarios' }, { f: '6 sep',  h: 4, n: 'Servicios comunitarios' }, { f: '1 sep',  h: 5, n: 'Servicios comunitarios' } ] },
+        { nombre: 'Isabella Torres',      brigada: 'Brigada Ambiental',      codigo: 'HS-2026-005', horas: 9,  estado: 'Excusa',    correo: 'isabella.torres@horasocial.edu', telefono: '+57 300 555 6677',
+          historial: [ { f: '7 sep',  h: 3, n: 'Brigada ambiental' }, { f: '5 sep',  h: 3, n: 'Brigada ambiental' }, { f: '31 ago', h: 3, n: 'Brigada ambiental' } ] },
+        { nombre: 'Juan David Muñoz',     brigada: 'Apoyo Académico',        codigo: 'HS-2026-006', horas: 6,  estado: 'Pendiente', correo: 'juan.munoz@horasocial.edu', telefono: '+57 300 666 7788',
+          historial: [ { f: '8 sep',  h: 2, n: 'Apoyo académico' }, { f: '4 sep',  h: 2, n: 'Apoyo académico' }, { f: '30 ago', h: 2, n: 'Apoyo académico' } ] },
+        { nombre: 'Sofía Ramírez',        brigada: 'Servicios Comunitarios', codigo: 'HS-2026-007', horas: 16, estado: 'Al día',     correo: 'sofia.ramirez@horasocial.edu', telefono: '+57 300 777 8899',
+          historial: [ { f: '9 sep',  h: 6, n: 'Servicios comunitarios' }, { f: '5 sep',  h: 5, n: 'Servicios comunitarios' }, { f: '2 sep',  h: 5, n: 'Servicios comunitarios' } ] },
+        { nombre: 'Andrés Felipe Castro', brigada: 'Brigada Ambiental',      codigo: 'HS-2026-008', horas: 11, estado: 'Al día',     correo: 'andres.castro@horasocial.edu', telefono: '+57 300 888 9900',
+          historial: [ { f: '10 sep', h: 4, n: 'Brigada ambiental' }, { f: '4 sep',  h: 4, n: 'Brigada ambiental' }, { f: '29 ago', h: 3, n: 'Brigada ambiental' } ] },
+        { nombre: 'Camila Arias',         brigada: 'Apoyo Académico',        codigo: 'HS-2026-009', horas: 7,  estado: 'Al día',     correo: 'camila.arias@horasocial.edu', telefono: '+57 300 999 1001',
+          historial: [ { f: '7 sep',  h: 3, n: 'Apoyo académico' }, { f: '3 sep',  h: 2, n: 'Apoyo académico' }, { f: '31 ago', h: 2, n: 'Apoyo académico' } ] },
+        { nombre: 'Nicolás Herrera',      brigada: 'Servicios Comunitarios', codigo: 'HS-2026-010', horas: 13, estado: 'Pendiente', correo: 'nicolas.herrera@horasocial.edu', telefono: '+57 300 101 1122',
+          historial: [ { f: '9 sep',  h: 5, n: 'Servicios comunitarios' }, { f: '6 sep',  h: 4, n: 'Servicios comunitarios' }, { f: '2 sep',  h: 4, n: 'Servicios comunitarios' } ] },
+        { nombre: 'Laura Gutiérrez',      brigada: 'Brigada Ambiental',      codigo: 'HS-2026-011', horas: 8,  estado: 'Al día',     correo: 'laura.gutierrez@horasocial.edu', telefono: '+57 300 202 2233',
+          historial: [ { f: '8 sep',  h: 3, n: 'Brigada ambiental' }, { f: '5 sep',  h: 3, n: 'Brigada ambiental' }, { f: '1 sep',  h: 2, n: 'Brigada ambiental' } ] },
+        { nombre: 'Daniel Salazar',       brigada: 'Apoyo Académico',        codigo: 'HS-2026-012', horas: 5,  estado: 'Excusa',    correo: 'daniel.salazar@horasocial.edu', telefono: '+57 300 303 3344',
+          historial: [ { f: '6 sep',  h: 2, n: 'Apoyo académico' }, { f: '3 sep',  h: 2, n: 'Apoyo académico' }, { f: '30 ago', h: 1, n: 'Apoyo académico' } ] }
+      ];
+    }
+    function cargarEstudiantes(){
+      try{
+        var raw = localStorage.getItem(LS_EST);
+        if (!raw) throw 0;
+        var arr = JSON.parse(raw);
+        if (!Array.isArray(arr) || !arr.length) throw 0;
+        return arr;
+      }catch(e){
+        var s = seedEstudiantes();
+        try{ localStorage.setItem(LS_EST, JSON.stringify(s)); }catch(e2){}
+        return s;
+      }
+    }
+    function guardarEstudiantes(){ try{ localStorage.setItem(LS_EST, JSON.stringify(est)); }catch(e){} }
+    var est = cargarEstudiantes();
+
+    /* ---------- perfil del maestro en localStorage ---------- */
+    function perfilDefault(){ return { nombre: 'Maestro Ricardo', telefono: '+57 300 123 4567', correo: 'maestro.ricardo@horasocial.edu', sede: 'Sede Principal' }; }
+    function cargarPerfil(){
+      try{
+        var raw = localStorage.getItem(LS_PERFIL);
+        if (!raw) throw 0;
+        var obj = JSON.parse(raw);
+        if (!obj || typeof obj !== 'object' || !obj.nombre) throw 0;
+        return obj;
+      }catch(e){
+        var d = perfilDefault();
+        try{ localStorage.setItem(LS_PERFIL, JSON.stringify(d)); }catch(e2){}
+        return d;
+      }
+    }
+    var perfil = cargarPerfil();
+    function guardarPerfil(){ try{ localStorage.setItem(LS_PERFIL, JSON.stringify(perfil)); }catch(e){} }
+    function renderPerfil(){
+      var n = $('proNombre'), c = $('proCorreo'), t = $('proTelefono'), s = $('proSede'), h = $('hdNombre');
+      if (n) n.textContent = perfil.nombre;
+      if (c) c.textContent = perfil.correo;
+      if (t) t.textContent = perfil.telefono;
+      if (s) s.textContent = perfil.sede;
+      if (h) h.textContent = perfil.nombre;
+    }
+
+    /* ---------- notificaciones en localStorage ---------- */
+    function seedNotifs(){
+      return [
+        { id: 1, texto: '3 estudiantes con horas pendientes de registro', tiempo: 'hace 5 min',  leido: false },
+        { id: 2, texto: 'Brigada Ambiental registró 12 horas nuevas',      tiempo: 'hace 2 h',    leido: false },
+        { id: 3, texto: 'Nueva solicitud de excusa: Mariana Cárdenas',     tiempo: 'hace 3 h',    leido: false },
+        { id: 4, texto: 'Reporte de Servicios Comunitarios por revisar',   tiempo: 'ayer',        leido: false }
+      ];
+    }
+    function cargarNotifs(){
+      try{
+        var raw = localStorage.getItem(LS_NOTIF);
+        if (!raw) throw 0;
+        var arr = JSON.parse(raw);
+        if (!Array.isArray(arr) || !arr.length) throw 0;
+        return arr;
+      }catch(e){
+        var s = seedNotifs();
+        try{ localStorage.setItem(LS_NOTIF, JSON.stringify(s)); }catch(e2){}
+        return s;
+      }
+    }
+    var notifs = cargarNotifs();
+    function guardarNotifs(){ try{ localStorage.setItem(LS_NOTIF, JSON.stringify(notifs)); }catch(e){} }
+
+    /* ---------- stats ---------- */
+    function renderStats(){
+      var total = est.length, alDia = 0, exc = 0, horasT = 0;
+      est.forEach(function(s){
+        if (s.estado === 'Al día') alDia++;
+        if (s.estado === 'Excusa') exc++;
+        horasT += s.horas;
+      });
+      var a = $('stTotal'), b = $('stAlDia'), c = $('stExcusa'), d = $('stHoras');
+      if (a) a.textContent = total;
+      if (b) b.textContent = alDia;
+      if (c) c.textContent = exc;
+      if (d) d.textContent = horasT;
+    }
+
+    /* ---------- filtros y lista ---------- */
+    function iniciales(nombre){
+      var p = nombre.split(' ');
+      return ((p[0] || '').charAt(0) + (p[1] || '').charAt(0)).toUpperCase();
+    }
+    function filtrados(){
+      var q = norm($('stSearch') ? $('stSearch').value : '');
+      return est.filter(function(s){
+        var okF = filtroActual === 'Todas' || (filtroActual === 'Excusas' ? s.estado === 'Excusa' : s.brigada === filtroActual);
+        var okQ = !q || norm(s.nombre).indexOf(q) !== -1 || norm(s.codigo).indexOf(q) !== -1;
+        return okF && okQ;
+      });
+    }
+    function renderList(){
+      var list = $('stList'); if (!list) return;
+      var data = filtrados();
+      if (!data.length){
+        list.innerHTML = '<div class="s-empty show"><span class="material-symbols-outlined">group_off</span><span>Sin estudiantes para este filtro</span></div>';
+        return;
+      }
+      var html = '';
+      data.forEach(function(s){
+        var cls = clsBrigada(s.brigada), p = pct(s);
+        html += '<div class="s-row">' +
+          '<div class="s-av ' + cls + '">' + esc(iniciales(s.nombre)) + '</div>' +
+          '<div class="s-info">' +
+            '<b>' + esc(s.nombre) + '</b><small>' + esc(s.codigo) + ' · ' + esc(s.brigada) + '</small>' +
+            '<div class="s-bar"><div class="bar"><div class="bar-fill" style="width:' + p + '%"></div></div><span>' + s.horas + '/80 h · ' + p + '%</span></div>' +
+          '</div>' +
+          '<div class="s-side">' +
+            '<div class="s-tags"><span class="b-chip ' + cls + '">' + esc(s.brigada) + '</span>' + chipEstado(s) + '</div>' +
+            '<div class="s-btns">' +
+              '<button class="btn-ico" type="button" data-ver="' + esc(s.codigo) + '" title="Ver perfil" aria-label="Ver perfil"><span class="material-symbols-outlined">visibility</span></button>' +
+              '<button class="btn-ico accent" type="button" data-horas="' + esc(s.codigo) + '" title="Registrar horas" aria-label="Registrar horas"><span class="material-symbols-outlined">schedule</span></button>' +
+            '</div>' +
+          '</div>' +
+        '</div>';
+      });
+      list.innerHTML = html;
+    }
+
+    /* ---------- exportar CSV ---------- */
+    function exportarCSV(){
+      var data = filtrados();
+      var L = ['Nombre,Código,Brigada,Horas,Meta,Estado'];
+      data.forEach(function(s){
+        L.push('"' + s.nombre.replace(/"/g,'""') + '","' + s.codigo + '","' + s.brigada.replace(/"/g,'""') + '",' + s.horas + ',' + META + ',"' + s.estado + '"');
+      });
+      var blob = new Blob(['\uFEFF' + L.join('\r\n')], { type: 'text/csv;charset=utf-8' });
+      var a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'estudiantes_maestro.csv';
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); }, 400);
+      toast('CSV exportado: ' + data.length + ' estudiantes');
+    }
+
+    /* ---------- modales ---------- */
+    function abrirModal(m){
+      if (!m) return;
+      m.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function cerrarModal(m){ if (!m) return; m.classList.remove('open'); document.body.style.overflow = ''; }
+
+    /* ---------- modal perfil estudiante ---------- */
+    function renderPerfilModal(s){
+      var box = $('perfilBody'); if (!box) return;
+      var cls = clsBrigada(s.brigada), p = pct(s);
+      var movs = '';
+      s.historial.forEach(function(m){
+        movs += '<div class="mov-row"><div class="mv-txt"><span class="mv-f">' + esc(m.f) + '</span><small>' + esc(m.n) + '</small></div><b class="mv-h">+' + m.h + ' h</b></div>';
+      });
+      var exc = s.estado === 'Excusa'
+        ? '<div class="exc-box"><p>Este estudiante tiene una excusa pendiente por validar. Al aprobarla, su estado pasará a Al día.</p>' +
+          '<button class="vbtn" type="button" data-excusa="' + esc(s.codigo) + '"><span class="material-symbols-outlined">how_to_reg</span>Aprobar excusa</button></div>'
+        : '';
+      box.innerHTML =
+        '<div class="phero">' +
+          '<div class="s-av ' + cls + '">' + esc(iniciales(s.nombre)) + '</div>' +
+          '<div><b>' + esc(s.nombre) + '</b><small>' + esc(s.codigo) + '</small></div>' +
+          chipEstado(s) +
+        '</div>' +
+        '<div class="pinfo">' +
+          '<div class="pinfo-row"><span class="material-symbols-outlined">mail</span><span>' + esc(s.correo) + '</span></div>' +
+          '<div class="pinfo-row"><span class="material-symbols-outlined">call</span><span>' + esc(s.telefono) + '</span></div>' +
+          '<div class="pinfo-row"><span class="material-symbols-outlined">energy_savings_leaf</span><span>' + esc(s.brigada) + '</span></div>' +
+        '</div>' +
+        '<div class="pbar">' +
+          '<div class="bar-row"><span>Progreso · ' + s.horas + ' / ' + META + ' h</span><b>' + p + '%</b></div>' +
+          '<div class="bar"><div class="bar-fill" style="width:' + p + '%"></div></div>' +
+        '</div>' +
+        '<div class="mov-h">Historial de movimientos</div>' + movs +
+        exc;
+    }
+
+    /* ---------- modal registrar horas ---------- */
+    var horasCodigoActual = null;
+    function abrirHoras(s){
+      horasCodigoActual = s.codigo;
+      var av = $('horasAv'), nm = $('horasNombre'), cd = $('horasCodigo'), hi = $('horasInput'), ni = $('notaInput');
+      if (av){ av.className = 's-av ' + clsBrigada(s.brigada); av.textContent = iniciales(s.nombre); }
+      if (nm) nm.textContent = s.nombre;
+      if (cd) cd.textContent = s.codigo;
+      if (hi) hi.value = '';
+      if (ni) ni.value = '';
+      abrirModal($('modalHoras'));
+    }
+
+    /* ---------- render notificaciones ---------- */
+    function renderNotifs(){
+      var list = $('notifList'); if (!list) return;
+      var unread = 0;
+      notifs.forEach(function(n){ if (!n.leido) unread++; });
+      var dot = $('notifDot');
+      if (dot) dot.style.display = unread ? 'block' : 'none';
+      if (!unread){
+        list.innerHTML = '<div class="notif-empty"><span class="material-symbols-outlined">notifications_off</span><span>Sin notificaciones nuevas</span></div>';
+        return;
+      }
+      var html = '';
+      notifs.forEach(function(n){
+        html += '<div class="notif-item' + (n.leido ? ' read' : '') + '" data-id="' + n.id + '">' +
+          '<span class="n-dot"></span>' +
+          '<div class="n-txt"><b>' + esc(n.texto) + '</b><small>' + esc(n.tiempo) + '</small></div>' +
+        '</div>';
+      });
+      list.innerHTML = html;
+    }
+
+    /* ---------- editar perfil ---------- */
+    function abrirEditPerfil(){
+      var n = $('inputNombre'), t = $('inputTelefono'), c = $('inputCorreo');
+      if (n) n.value = perfil.nombre;
+      if (t) t.value = perfil.telefono;
+      if (c) c.value = perfil.correo;
+      abrirModal($('modalEditPerfil'));
+    }
+    function guardarEditPerfil(){
+      var n = $('inputNombre'), t = $('inputTelefono'), c = $('inputCorreo');
+      var nombre = n ? n.value.trim() : '';
+      var tel = t ? t.value.trim() : '';
+      var correo = c ? c.value.trim() : '';
+      if (nombre.length < 3){ toast('Ingresa un nombre válido'); return; }
+      if (correo.indexOf('@') < 1){ toast('Ingresa un correo válido'); return; }
+      perfil.nombre = nombre; perfil.telefono = tel; perfil.correo = correo;
+      guardarPerfil();
+      renderPerfil();
+      cerrarModal($('modalEditPerfil'));
+      toast('Perfil actualizado');
+    }
+
+    /* ---------- bindings ---------- */
+    var btnEdit = $('btnEditPerfil');
+    if (btnEdit) btnEdit.addEventListener('click', abrirEditPerfil);
+    var btnSave = $('btnSavePerfil');
+    if (btnSave) btnSave.addEventListener('click', guardarEditPerfil);
+
+    var stSearch = $('stSearch');
+    if (stSearch) stSearch.addEventListener('input', renderList);
+
+    var filterBox = $('filterChips');
+    if (filterBox) filterBox.addEventListener('click', function(e){
+      var chip = e.target && e.target.closest ? e.target.closest('.chip') : null;
+      if (!chip || !filterBox.contains(chip)) return;
+      filtroActual = chip.getAttribute('data-filtro') || 'Todas';
+      filterBox.querySelectorAll('.chip').forEach(function(c){ c.classList.remove('active'); });
+      chip.classList.add('active');
+      renderList();
+    });
+
+    var stList = $('stList');
+    if (stList) stList.addEventListener('click', function(e){
+      var v = e.target && e.target.closest ? e.target.closest('[data-ver]') : null;
+      var hb = e.target && e.target.closest ? e.target.closest('[data-horas]') : null;
+      if (v){
+        var s1 = byCodigo(v.getAttribute('data-ver'));
+        if (!s1) return;
+        renderPerfilModal(s1);
+        abrirModal($('modalPerfil'));
+      } else if (hb){
+        var s2 = byCodigo(hb.getAttribute('data-horas'));
+        if (s2) abrirHoras(s2);
+      }
+    });
+
+    var perfilBody = $('perfilBody');
+    if (perfilBody) perfilBody.addEventListener('click', function(e){
+      var btn = e.target && e.target.closest ? e.target.closest('[data-excusa]') : null;
+      if (!btn) return;
+      var s = byCodigo(btn.getAttribute('data-excusa'));
+      if (!s || s.estado !== 'Excusa') return;
+      s.estado = 'Al día';
+      guardarEstudiantes();
+      renderStats();
+      renderList();
+      renderPerfilModal(s);
+      toast('Excusa aprobada: ' + s.nombre);
+    });
+
+    var btnReg = $('btnRegistrarHoras');
+    if (btnReg) btnReg.addEventListener('click', function(){
+      var hi = $('horasInput'), ni = $('notaInput');
+      if (!hi) return;
+      var h = parseInt(hi.value, 10);
+      if (!h || isNaN(h) || h < 1 || h > 8){ toast('Ingresa un valor entre 1 y 8 horas'); return; }
+      var s = byCodigo(horasCodigoActual);
+      if (!s) return;
+      var nota = ni ? ni.value.trim() : '';
+      s.horas += h;
+      s.historial.unshift({ f: fechaHoy(), h: h, n: nota || s.brigada });
+      guardarEstudiantes();
+      renderStats();
+      renderList();
+      cerrarModal($('modalHoras'));
+      toast('Horas registradas: ' + h + ' h para ' + s.nombre);
+    });
+
+    var btnExp = $('btnExport');
+    if (btnExp) btnExp.addEventListener('click', exportarCSV);
+
+    var mE = $('modalEditPerfil'), mP = $('modalPerfil'), mH = $('modalHoras');
+    var xE = $('xEditPerfil'), xP = $('xPerfil'), xH = $('xHoras');
+    if (xE) xE.addEventListener('click', function(){ cerrarModal(mE); });
+    if (xP) xP.addEventListener('click', function(){ cerrarModal(mP); });
+    if (xH) xH.addEventListener('click', function(){ cerrarModal(mH); });
+    if (mE) mE.addEventListener('click', function(e){ if (e.target === mE) cerrarModal(mE); });
+    if (mP) mP.addEventListener('click', function(e){ if (e.target === mP) cerrarModal(mP); });
+    if (mH) mH.addEventListener('click', function(e){ if (e.target === mH) cerrarModal(mH); });
+    document.addEventListener('keydown', function(e){
+      if (e.key === 'Escape'){ cerrarModal(mE); cerrarModal(mP); cerrarModal(mH); }
+    });
+
+    var btnNotif = $('btnNotif'), panel = $('notifPanel');
+    if (btnNotif) btnNotif.addEventListener('click', function(e){ e.stopPropagation(); if (panel) panel.classList.toggle('show'); });
+    document.addEventListener('click', function(e){
+      if (panel && panel.classList.contains('show') && !panel.contains(e.target) && btnNotif && !btnNotif.contains(e.target)) panel.classList.remove('show');
+    });
+    var notifList = $('notifList');
+    if (notifList) notifList.addEventListener('click', function(e){
+      var item = e.target && e.target.closest ? e.target.closest('.notif-item') : null;
+      if (!item) return;
+      var id = parseInt(item.getAttribute('data-id'), 10);
+      notifs.forEach(function(n){ if (n.id === id) n.leido = true; });
+      guardarNotifs(); renderNotifs();
+    });
+    var btnNotifRead = $('btnNotifRead');
+    if (btnNotifRead) btnNotifRead.addEventListener('click', function(e){
+      e.stopPropagation();
+      notifs.forEach(function(n){ n.leido = true; });
+      guardarNotifs(); renderNotifs();
+      toast('Notificaciones marcadas como leídas');
+    });
+
+    /* ---------- estado inicial ---------- */
+    renderPerfil();
+    renderStats();
+    renderList();
+    renderNotifs();
+  })();
+</script>
+</body>
+</html>
