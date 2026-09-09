@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport">
+<title>HORASOCIAL PRO - Gestión Técnica</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&amp;display=swap" rel="stylesheet">
+<style>
+  :root{
+    --sky-50:#f0f9ff; --sky-100:#e0f2fe; --sky-200:#bae6fd; --sky-300:#7dd3fc;
+    --sky-400:#38bdf8; --sky-500:#0ea5e9; --sky-600:#0284c7; --sky-700:#0369a1;
+    --navy-800:#075985; --navy-900:#0c4a6e; --ink:#0f2f44; --slate:#5b6b7c;
+    --card:#ffffff; --card-brd:#e6f0f9; --glass:rgba(255,255,255,.9); --radius:22px; --maxw:640px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html{scroll-behavior:smooth;overflow-x:hidden}
+  body{
+    font-family:'Inter','Plus Jakarta Sans','Segoe UI',system-ui,sans-serif;
+    color:var(--ink);background:#ffffff;position:relative;overflow-x:hidden;
+    min-height:100dvh;
+    padding:0 0 calc(120px + env(safe-area-inset-bottom));
+  }
+  h1,h2,h3,h4{font-family:'Plus Jakarta Sans',sans-serif}
+
+  /* ---------- ondas estilo selección de rol (toda la página) ---------- */
+  .flow-field{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;overflow:visible}
+  .flow-field svg{width:100%;height:100%;overflow:visible}
+  .wf-l{fill:none;stroke-width:0.9;vector-effect:non-scaling-stroke}
+  .wiggle{animation:flow-drift 38s ease-in-out infinite;will-change:transform}
+  @keyframes flow-drift{0%,100%{transform:translate(0,0)}20%{transform:translate(9px,-16px)}45%{transform:translate(19px,-6px)}70%{transform:translate(11px,6px)}}
+
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:22px 18px 10px;position:relative;z-index:1}
+  @media (min-width:720px){ :root{--maxw:920px} .wrap{padding:30px 26px 12px} }
+
+  /* ---------- header ---------- */
+  header{display:flex;align-items:center;gap:12px;padding:4px 2px 22px}
+  .avatar{width:56px;height:56px;border-radius:50%;flex:0 0 auto;position:relative;
+    filter:drop-shadow(0 8px 16px rgba(14,165,233,.35))}
+  .avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%;display:block}
+  .avatar::after{content:'';position:absolute;inset:-3px;border-radius:50%;
+    border:2.5px solid rgba(56,189,248,.45)}
+  .av-fb{display:none;width:100%;height:100%;border-radius:50%;align-items:center;justify-content:center;
+    background:linear-gradient(135deg,#38bdf8,#0369a1);color:#fff;
+    font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:19px;letter-spacing:.5px}
+  .hi{flex:1;min-width:0}
+  .hi h1{font-size:20px;font-weight:800;color:var(--navy-900);letter-spacing:-.2px}
+  .hi p{font-size:12px;color:var(--slate);font-weight:600;margin-top:3px}
+  .bell{position:relative;width:44px;height:44px;border-radius:14px;flex:0 0 auto;
+    background:var(--sky-50);border:1px solid var(--sky-200);color:var(--sky-700);
+    display:flex;align-items:center;justify-content:center;cursor:pointer;font-family:inherit;
+    transition:background .2s,box-shadow .2s,transform .12s}
+  .bell:hover{background:var(--sky-100);box-shadow:0 4px 12px rgba(2,132,199,.18)}
+  .bell:active{transform:scale(.94)}
+  .bell .material-symbols-outlined{font-size:22px}
+  .bell-dot{position:absolute;top:9px;right:10px;width:9px;height:9px;border-radius:50%;
+    background:#ef4444;border:2px solid #fff}
+  .logout{display:flex;align-items:center;gap:7px;text-decoration:none;
+    background:var(--sky-50);border:1px solid var(--sky-200);color:var(--sky-700);
+    padding:9px 13px;border-radius:999px;font-weight:800;font-size:12px;
+    transition:background .2s,box-shadow .2s,transform .12s;white-space:nowrap}
+  .logout:hover{background:var(--sky-100);box-shadow:0 4px 12px rgba(2,132,199,.18)}
+  .logout:active{transform:scale(.96)}
+  .logout .material-symbols-outlined{font-size:18px}
+  @media (max-width:430px){ .logout small{display:none} .logout{padding:10px} }
+
+  /* ---------- saludo ---------- */
+  .greet{margin:2px 0 24px;padding:0 4px}
+  .greet h2{font-size:22px;font-weight:800;color:var(--navy-900);letter-spacing:-.2px;line-height:1.25}
+  .greet p{font-size:13px;color:var(--slate);margin-top:7px;line-height:1.6;max-width:520px;font-weight:500}
+
+  /* ---------- sections ---------- */
+  section{margin-top:26px}
+  .sec-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;padding:0 4px}
+  .sec-head h3{font-size:16px;font-weight:800;color:var(--navy-900);display:flex;align-items:center;gap:8px}
+  .sec-head h3 .m{font-size:20px;color:var(--sky-500)}
+  .sec-head span{font-size:11.5px;color:var(--sky-600);font-weight:700}
+
+  /* ---------- botón exportar ---------- */
+  .exp-btn{display:inline-flex;align-items:center;gap:6px;background:var(--sky-50);
+    border:1px solid var(--sky-200);color:var(--sky-700);border-radius:999px;
+    padding:8px 13px;font-family:inherit;font-size:11.5px;font-weight:800;cursor:pointer;
+    white-space:nowrap;transition:background .2s,box-shadow .2s,transform .12s}
+  .exp-btn:hover{background:var(--sky-100);box-shadow:0 4px 12px rgba(2,132,199,.18)}
+  .exp-btn:active{transform:scale(.95)}
+  .exp-btn .material-symbols-outlined{font-size:16px}
+
+  /* ---------- stats grid ---------- */
+  .stats{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+  .stat{
+    background:var(--glass);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+    border:1px solid var(--card-brd);border-radius:20px;padding:18px 10px;text-align:center;
+    box-shadow:0 10px 28px rgba(3,105,161,.10);
+    display:flex;flex-direction:column;align-items:center;gap:5px;
+  }
+  .stat .m{font-size:26px;color:var(--sky-500)}
+  .stat b{font-size:25px;font-weight:800;color:var(--navy-900);line-height:1.1}
+  .stat small{font-size:11px;font-weight:700;color:var(--slate)}
+  .stat.accent .m{color:var(--sky-600)}
+  .stat.accent b{color:var(--sky-600)}
+
+  /* ---------- chips de filtro ---------- */
+  .filter-chips{display:flex;flex-wrap:wrap;gap:8px;padding:0 4px}
+  .filter-chips .chip{width:auto;height:auto;display:inline-flex;align-items:center;justify-content:center;
+    padding:8px 14px;border-radius:999px;font-size:11.5px;font-weight:800;
+    border:1px solid var(--card-brd);background:#fff;color:var(--slate);
+    cursor:pointer;font-family:inherit;box-shadow:none;
+    transition:background .2s,color .2s,border-color .2s,box-shadow .2s,transform .12s}
+  .filter-chips .chip:hover{border-color:var(--sky-300);color:var(--sky-700)}
+  .filter-chips .chip:active{transform:scale(.96)}
+  .filter-chips .chip.active{background:var(--sky-600);border-color:var(--sky-600);color:#fff;
+    box-shadow:0 6px 14px rgba(2,132,199,.25)}
+
+  .chip{width:48px;height:48px;border-radius:15px;flex:0 0 auto;
+    display:flex;align-items:center;justify-content:center;font-size:24px}
+  .chip.green{background:#d1fae5;color:#059669}
+  .chip.blue{background:#dbeafe;color:#2563eb}
+  .chip.purple{background:#ede9fe;color:#7c3aed}
+
+  /* ---------- tarjetas de herramienta ---------- */
+  .tool-card{display:flex;align-items:center;gap:13px;padding:15px 16px;border:1px solid var(--card-brd);
+    border-radius:18px;background:var(--glass);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+    box-shadow:0 6px 16px rgba(3,105,161,.06);margin-bottom:10px;
+    transition:transform .12s,box-shadow .2s}
+  .tool-card:active{transform:scale(.99)}
+  .tool-ico{width:48px;height:48px;border-radius:15px;flex:0 0 auto;
+    display:flex;align-items:center;justify-content:center;
+    background:var(--sky-100);color:var(--sky-700)}
+  .tool-ico .material-symbols-outlined{font-size:24px}
+  .tool-info{flex:1;min-width:0}
+  .tool-info b{display:block;font-size:13.5px;font-weight:800;color:var(--navy-900);line-height:1.35}
+  .tool-info small{display:block;font-size:11px;color:var(--slate);font-weight:600;margin:3px 0 8px}
+  .tool-side{flex:0 0 auto;display:flex;flex-direction:column;align-items:flex-end;gap:9px}
+  .tool-btns{display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-end}
+  .est-chip{display:inline-flex;align-items:center;gap:5px;border-radius:999px;
+    font-size:10.5px;font-weight:800;padding:4px 10px;white-space:nowrap;flex:0 0 auto}
+  .est-chip .material-symbols-outlined{font-size:13px}
+  .est-chip.disp{background:#d1fae5;color:#047857}
+  .est-chip.uso{background:#fef3c7;color:#b45309}
+  .est-chip.mant{background:#fee2e2;color:#b91c1c}
+  .tb-btn{display:inline-flex;align-items:center;gap:5px;border:0;border-radius:11px;padding:9px 12px;
+    font-family:inherit;font-size:11px;font-weight:800;cursor:pointer;
+    background:var(--sky-600);color:#fff;
+    transition:transform .12s,box-shadow .2s,background .2s}
+  .tb-btn:hover{background:var(--sky-700);box-shadow:0 6px 14px rgba(2,132,199,.3)}
+  .tb-btn:active{transform:scale(.94)}
+  .tb-btn .material-symbols-outlined{font-size:15px}
+  .tb-btn.ghost{background:#fff;color:var(--slate);border:1px solid var(--card-brd)}
+  .tb-btn.ghost:hover{background:var(--sky-50);color:var(--sky-700);box-shadow:none}
+  .btn-ico{width:34px;height:34px;border-radius:11px;border:1px solid var(--card-brd);
+    background:var(--sky-50);color:var(--sky-700);display:flex;align-items:center;justify-content:center;
+    cursor:pointer;font-family:inherit;
+    transition:background .2s,transform .12s,box-shadow .2s}
+  .btn-ico:hover{background:var(--sky-100);box-shadow:0 4px 10px rgba(2,132,199,.16)}
+  .btn-ico:active{transform:scale(.9)}
+  .btn-ico .material-symbols-outlined{font-size:17px}
+  .s-empty{display:none;flex-direction:column;align-items:center;gap:8px;padding:28px 16px;text-align:center}
+  .s-empty.show{display:flex}
+  .s-empty .material-symbols-outlined{font-size:34px;color:var(--sky-300)}
+  .s-empty span{font-size:12px;font-weight:700;color:var(--slate)}
+
+  /* ---------- aprobar reportes ---------- */
+  .rep-row{display:flex;align-items:center;gap:12px;padding:13px 14px;border:1px solid var(--card-brd);
+    border-radius:16px;margin-bottom:10px;background:#fff;
+    box-shadow:0 6px 16px rgba(3,105,161,.05)}
+  .rep-row.done{background:rgba(209,250,229,.42);border-color:#a7f3d0}
+  .rep-row.rejected{background:rgba(254,242,242,.55);border-color:#fecaca}
+  .rep-info{flex:1;min-width:0}
+  .rep-info b{display:block;font-size:13.5px;font-weight:800;color:var(--navy-900)}
+  .rep-info small{display:block;font-size:11.5px;color:var(--slate);font-weight:600;margin-top:3px}
+  .rep-btns{display:flex;align-items:center;gap:8px;flex:0 0 auto}
+  .rep-btn{display:inline-flex;align-items:center;gap:5px;border:0;border-radius:11px;padding:9px 12px;
+    font-family:inherit;font-size:11.5px;font-weight:800;cursor:pointer;color:#fff;
+    transition:transform .12s,box-shadow .2s}
+  .rep-btn:active{transform:scale(.94)}
+  .rep-btn .material-symbols-outlined{font-size:15px}
+  .rep-btn.ok{background:var(--sky-600)}
+  .rep-btn.ok:hover{background:var(--sky-700);box-shadow:0 6px 14px rgba(2,132,199,.3)}
+  .rep-btn.no{background:#fff;color:#b91c1c;border:1px solid #fecaca}
+  .rep-btn.no:hover{background:#fef2f2}
+  .rep-chip{display:inline-flex;align-items:center;gap:5px;border-radius:999px;
+    font-size:11px;font-weight:800;padding:6px 12px;white-space:nowrap}
+  .rep-chip.ok{background:#d1fae5;color:#047857}
+  .rep-chip.no{background:#fee2e2;color:#b91c1c}
+  .rep-chip .material-symbols-outlined{font-size:14px}
+  .rep-empty{display:none;flex-direction:column;align-items:center;gap:8px;padding:28px 16px;text-align:center}
+  .rep-empty.show{display:flex}
+  .rep-empty .material-symbols-outlined{font-size:34px;color:var(--sky-300)}
+  .rep-empty span{font-size:12px;font-weight:700;color:var(--slate)}
+  @media (max-width:430px){ .rep-btn{font-size:11px;padding:8px 10px} }
+
+  /* ---------- material educativo ---------- */
+  .mat-card{display:flex;flex-direction:column;gap:12px;padding:16px;border:1px solid var(--card-brd);
+    border-radius:18px;background:var(--glass);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+    box-shadow:0 6px 16px rgba(3,105,161,.06);margin-bottom:10px;
+    transition:transform .12s,box-shadow .2s}
+  .mat-card:active{transform:scale(.99)}
+  .mat-top{display:flex;align-items:flex-start;gap:12px}
+  .mat-ico{width:46px;height:46px;border-radius:14px;flex:0 0 auto;
+    display:flex;align-items:center;justify-content:center;
+    background:linear-gradient(135deg,#e0f2fe,#bae6fd);color:var(--sky-700)}
+  .mat-ico .material-symbols-outlined{font-size:23px}
+  .mat-info{flex:1;min-width:0}
+  .mat-info b{display:block;font-size:13.5px;font-weight:800;color:var(--navy-900);line-height:1.35}
+  .mat-tags{display:flex;gap:6px;margin-top:7px;flex-wrap:wrap}
+  .tipo-chip{font-size:9.5px;font-weight:800;padding:3px 9px;border-radius:999px;
+    background:var(--sky-100);color:var(--sky-700);white-space:nowrap}
+  .area-chip{font-size:9.5px;font-weight:800;padding:3px 9px;border-radius:999px;
+    background:#ede9fe;color:#6d28d9;white-space:nowrap}
+  .mat-btns{display:flex;gap:8px;flex-wrap:wrap}
+  .mat-btns .vbtn{padding:8px 12px}
+  .mat-desc{background:var(--sky-50);border:1px solid var(--sky-200);border-radius:14px;
+    padding:14px 16px;font-size:12.5px;font-weight:600;color:var(--ink);line-height:1.65;margin-top:4px}
+
+  /* ---------- bottom nav (glass + íconos, bien aireada) ---------- */
+  nav{
+    position:fixed;left:0;right:0;bottom:0;z-index:50;
+    background:rgba(255,255,255,.92);backdrop-filter:blur(14px);
+    border-top:1px solid #eaf3fb;box-shadow:0 -8px 26px rgba(3,105,161,.12);
+    border-radius:24px 24px 0 0;
+    padding:10px 12px calc(12px + env(safe-area-inset-bottom));
+  }
+  .nav-inner{max-width:var(--maxw);margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);column-gap:8px;padding:0 6px}
+  .nav-item{display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 4px;
+    border-radius:15px;text-decoration:none;color:var(--slate);font-size:10px;font-weight:700;min-width:0;
+    transition:transform .12s,color .2s}
+  .nav-item:active{transform:scale(.92)}
+  .nav-item .ic{width:48px;height:36px;display:flex;align-items:center;justify-content:center;
+    border-radius:13px;transition:background .2s,color .2s;color:#94a3b8}
+  .nav-item .ic .material-symbols-outlined{font-size:23px}
+  .nav-item small{font-size:10.5px;font-weight:700;letter-spacing:.2px}
+  .nav-item.active{color:var(--navy-900)}
+  .nav-item.active .ic{background:var(--navy-900);color:#fff}
+
+  /* toast */
+  #toast{position:fixed;left:16px;right:16px;bottom:calc(100px + env(safe-area-inset-bottom));
+    max-width:640px;margin:0 auto;background:var(--navy-900);color:#fff;text-align:center;
+    font-size:12.5px;font-weight:700;padding:13px 16px;border-radius:15px;opacity:0;
+    transform:translateY(12px);pointer-events:none;transition:opacity .25s,transform .25s;z-index:60;
+    box-shadow:0 10px 26px rgba(3,105,161,.30)}
+  #toast.show{opacity:1;transform:translateY(0)}
+
+  .material-symbols-outlined{
+    font-variation-settings:'FILL' 0,'wght' 500,'GRAD' 0,'opsz' 24;
+    user-select:none;
+  }
+
+  /* ---------- modales (bottom-sheet mobile / centrado desktop) ---------- */
+  .modal-backdrop{
+    position:fixed;inset:0;z-index:80;display:flex;align-items:flex-end;justify-content:center;
+    background:rgba(15,23,42,.45);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+    opacity:0;visibility:hidden;transition:opacity .25s,visibility .25s;
+  }
+  .modal-backdrop.open{opacity:1;visibility:visible}
+  .modal{
+    width:100%;max-height:88dvh;overflow-y:auto;
+    background:var(--glass);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+    border:1px solid var(--card-brd);border-radius:24px 24px 0 0;
+    box-shadow:0 -12px 40px rgba(15,23,42,.18);
+    transform:translateY(28px);transition:transform .28s cubic-bezier(.22,.9,.35,1);
+  }
+  .modal-backdrop.open .modal{transform:translateY(0)}
+  .modal-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:20px 20px 14px}
+  .modal-head h3{font-size:18px;font-weight:800;color:var(--navy-900);display:flex;align-items:center;gap:9px}
+  .modal-head h3 .m{color:var(--sky-500);font-size:22px}
+  .modal-head p{font-size:12px;color:var(--slate);font-weight:600;margin-top:4px}
+  .modal-x{width:38px;height:38px;border-radius:12px;border:1px solid var(--card-brd);background:var(--sky-50);
+    color:var(--sky-700);display:flex;align-items:center;justify-content:center;cursor:pointer;font-family:inherit;flex:0 0 auto;
+    transition:background .2s,transform .12s}
+  .modal-x:hover{background:var(--sky-100)}
+  .modal-x:active{transform:scale(.9)}
+  .modal-x .material-symbols-outlined{font-size:20px}
+  .modal-body{padding:6px 20px 24px}
+  @media (min-width:720px){
+    .modal-backdrop{align-items:center}
+    .modal{max-width:660px;border-radius:24px;box-shadow:0 24px 60px rgba(15,23,42,.28)}
+  }
+
+  /* ---------- contenido de modales ---------- */
+  .phero{display:flex;align-items:center;gap:14px;padding:6px 2px 16px}
+  .phero div{flex:1;min-width:0}
+  .phero b{display:block;font-size:16.5px;font-weight:800;color:var(--navy-900);letter-spacing:-.2px}
+  .phero small{font-size:11.5px;color:var(--slate);font-weight:700;display:block;margin-top:3px}
+  .t-av{width:58px;height:58px;border-radius:16px;flex:0 0 auto;
+    display:flex;align-items:center;justify-content:center;
+    background:var(--sky-100);color:var(--sky-700)}
+  .t-av .material-symbols-outlined{font-size:28px}
+  .pinfo{display:flex;flex-direction:column;gap:8px;padding:14px 0;border-top:1px dashed var(--card-brd)}
+  .pinfo-row{display:flex;align-items:center;gap:10px;font-size:12.5px;font-weight:600;color:var(--ink)}
+  .pinfo-row .material-symbols-outlined{font-size:16px;color:var(--sky-500);flex:0 0 auto}
+  .pinfo-row span{min-width:0}
+  .mov-h{font-size:10.5px;font-weight:800;color:var(--slate);letter-spacing:.3px;text-transform:uppercase;margin:16px 0 8px}
+  .mov-row{display:flex;align-items:center;justify-content:space-between;gap:10px;
+    padding:11px 13px;border:1px solid var(--card-brd);border-radius:13px;background:#fff;
+    margin-bottom:8px;box-shadow:0 4px 10px rgba(3,105,161,.05)}
+  .mov-row .mv-txt{flex:1;min-width:0}
+  .mov-row .mv-f{display:block;font-size:12px;font-weight:800;color:var(--ink)}
+  .mov-row .mv-txt small{font-size:11px;color:var(--slate);font-weight:600;display:block;margin-top:2px}
+  .vbtn{display:inline-flex;align-items:center;gap:6px;background:var(--sky-600);color:#fff;border:0;border-radius:12px;
+    padding:10px 13px;font-family:inherit;font-size:11.5px;font-weight:800;cursor:pointer;flex:0 0 auto;
+    transition:background .2s,transform .12s,box-shadow .2s}
+  .vbtn:hover{background:var(--sky-700);box-shadow:0 6px 14px rgba(2,132,199,.3)}
+  .vbtn:active{transform:scale(.94)}
+  .vbtn .material-symbols-outlined{font-size:16px}
+
+  /* ---------- panel notificaciones ---------- */
+  .notif-panel{
+    position:fixed;top:78px;right:16px;z-index:90;width:min(320px,calc(100vw - 24px));
+    background:var(--glass);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+    border:1px solid var(--card-brd);border-radius:20px;box-shadow:0 18px 44px rgba(15,23,42,.20);
+    opacity:0;visibility:hidden;transform:translateY(-8px) scale(.98);transform-origin:top right;
+    transition:opacity .22s,transform .22s,visibility .22s;overflow:hidden;
+  }
+  .notif-panel.show{opacity:1;visibility:visible;transform:translateY(0) scale(1)}
+  .notif-head{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:15px 16px 10px}
+  .notif-head b{font-size:14px;font-weight:800;color:var(--navy-900)}
+  .notif-head button{background:none;border:0;color:var(--sky-600);font-family:inherit;font-size:11px;font-weight:800;
+    cursor:pointer;padding:4px 6px;border-radius:8px}
+  .notif-head button:hover{background:var(--sky-100)}
+  .notif-list{max-height:min(340px,50dvh);overflow-y:auto;padding:0 8px 10px}
+  .notif-item{display:flex;align-items:flex-start;gap:10px;padding:12px 10px;border-radius:13px;cursor:pointer;
+    transition:background .15s}
+  .notif-item:hover{background:rgba(240,249,255,.9)}
+  .notif-item .n-txt{flex:1;min-width:0}
+  .notif-item .n-txt b{display:block;font-size:12.5px;font-weight:700;color:var(--ink);line-height:1.4}
+  .notif-item .n-txt small{font-size:10.5px;color:var(--slate);font-weight:600;display:block;margin-top:3px}
+  .notif-item .n-dot{width:8px;height:8px;border-radius:50%;background:var(--sky-500);flex:0 0 auto;margin-top:4px}
+  .notif-item.read .n-dot{background:#cbd5e1}
+  .notif-empty{display:flex;flex-direction:column;align-items:center;gap:8px;padding:28px 16px;text-align:center}
+  .notif-empty .material-symbols-outlined{font-size:34px;color:var(--sky-300)}
+  .notif-empty span{font-size:12px;font-weight:700;color:var(--slate)}
+
+  /* ---------- layout amplio ---------- */
+  @media (min-width:720px){
+    .stats{grid-template-columns:repeat(4,1fr);gap:14px}
+    .stat{padding:20px 10px}
+    .greet h2{font-size:24px}
+    #matList{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .mat-card{margin-bottom:0}
+  }
+</style>
+</head>
+<body>
+
+  <!-- fondo: ondas estilo selección de rol, fluyendo por toda la página -->
+  <div class="flow-field wiggle" aria-hidden="true">
+    <svg viewBox="0 0 1600 900" preserveAspectRatio="none">
+      <defs>
+        <linearGradient id="gradField" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#cde9ff"/>
+          <stop offset="35%" stop-color="#9fd4ff"/>
+          <stop offset="70%" stop-color="#5fb4f7"/>
+          <stop offset="100%" stop-color="#7dbfc8"/>
+        </linearGradient>
+      </defs>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.11" transform="translate(0 6.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.14" transform="translate(11 24.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.17" transform="translate(22 43.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.2" transform="translate(33 61.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.22" transform="translate(44 80.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.25" transform="translate(55 98.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.27" transform="translate(66 117.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.3" transform="translate(77 135.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.32" transform="translate(88 154.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.34" transform="translate(99 172.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.37" transform="translate(110 191.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.39" transform="translate(121 209.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.41" transform="translate(132 228.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.42" transform="translate(143 246.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.44" transform="translate(154 265.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.46" transform="translate(165 283.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.47" transform="translate(176 302.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.48" transform="translate(187 320.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.49" transform="translate(198 339.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.5" transform="translate(209 357.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.51" transform="translate(220 376.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.51" transform="translate(231 394.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.52" transform="translate(242 413.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.52" transform="translate(253 431.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.52" transform="translate(264 450.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.51" transform="translate(275 468.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.51" transform="translate(286 487.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.5" transform="translate(297 505.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.49" transform="translate(308 524.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.48" transform="translate(319 542.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.47" transform="translate(330 561.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.46" transform="translate(341 579.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.44" transform="translate(352 598.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.42" transform="translate(363 616.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.41" transform="translate(374 635.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.39" transform="translate(385 653.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.37" transform="translate(396 672.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.34" transform="translate(407 690.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.32" transform="translate(418 709.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.3" transform="translate(429 727.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.27" transform="translate(440 746.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.25" transform="translate(451 764.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.22" transform="translate(462 783.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.2" transform="translate(473 801.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.17" transform="translate(484 820.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.14" transform="translate(495 838.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.11" transform="translate(506 857.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    </svg>
+  </div>
+
+<div class="wrap">
+
+  <!-- header -->
+  <header>
+    <div class="avatar" role="img" aria-label="Perfil de Maestro Ricardo">
+      <img id="avImg" alt="Foto de Maestro Ricardo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAsBKOgiv_kBEGjRdsLDTUZvI71zukRwIm4VDeUz7PNlZXgk-rbjdeD6dqKMmosd3_emj_ICwNW35ohfDVXeRh0Z9qFx0I4Zjb7jNHlals66RqOcXSkQu2MwkkciTFXkC95odUjko8VIPVa493BBrOY-WID8ZzD1PBV9U4Ja2q18Ov24D1q6vN3s3aoYWga0VydSZLaIpkbNGjcKqalA9cPOtjlGkZOSBrs-hPouXz3rf8bOc66iYv3e2gaqSDWmH1zI18tKalUSqva" onerror="this.style.display='none';var f=document.getElementById('avFallback');if(f){f.style.display='flex';}">
+      <div class="av-fb" id="avFallback">MR</div>
+    </div>
+    <div class="hi">
+      <h1>Maestro Ricardo</h1>
+      <p>Gestión Técnica</p>
+    </div>
+    <button class="bell" id="btnNotif" type="button" aria-label="Notificaciones">
+      <span class="material-symbols-outlined">notifications</span>
+      <span class="bell-dot" id="notifDot"></span>
+    </button>
+    <a class="logout" href="/seleccion-rol" title="Cerrar sesión" id="btnLogout">
+      <span class="material-symbols-outlined">logout</span><small>Cerrar sesión</small>
+    </a>
+  </header>
+
+  <!-- saludo -->
+  <section class="greet">
+    <h2>Centro de Control Técnico</h2>
+    <p>Gestioná el inventario de herramientas, aprobá reportes de taller y compartí material educativo de tus asignaturas.</p>
+  </section>
+
+  <!-- KPIs -->
+  <section>
+    <div class="stats">
+      <div class="stat"><span class="m material-symbols-outlined">handyman</span><b id="kTools">12</b><small>Herramientas</small></div>
+      <div class="stat"><span class="m material-symbols-outlined">construction</span><b id="kUso">0</b><small>En uso</small></div>
+      <div class="stat accent"><span class="m material-symbols-outlined">pending_actions</span><b id="kPend">5</b><small>Reportes pendientes</small></div>
+      <div class="stat"><span class="m material-symbols-outlined">menu_book</span><b id="kMat">9</b><small>Material educativo</small></div>
+    </div>
+  </section>
+
+  <!-- inventario de herramientas -->
+  <section>
+    <div class="sec-head">
+      <h3><span class="m material-symbols-outlined">inventory_2</span>Inventario de Herramientas</h3>
+      <button class="exp-btn" id="btnExportInv" type="button"><span class="material-symbols-outlined">download</span>Exportar CSV</button>
+    </div>
+    <div class="filter-chips" id="toolFilter">
+      <button class="chip active" type="button" data-filtro="Todas">Todas</button>
+      <button class="chip" type="button" data-filtro="Soldadura">Soldadura</button>
+      <button class="chip" type="button" data-filtro="Electricidad">Electricidad</button>
+      <button class="chip" type="button" data-filtro="Carpintería">Carpintería</button>
+      <button class="chip" type="button" data-filtro="General">General</button>
+    </div>
+    <div class="filter-chips" id="toolStateFilter" style="margin-top:8px">
+      <button class="chip active" type="button" data-festado="Todos">Todos</button>
+      <button class="chip" type="button" data-festado="Disponible">Disponible</button>
+      <button class="chip" type="button" data-festado="En uso">En uso</button>
+      <button class="chip" type="button" data-festado="En mantenimiento">En mantenimiento</button>
+    </div>
+    <div id="toolList" style="margin-top:14px"></div>
+  </section>
+
+  <!-- reportes técnicos por aprobar -->
+  <section>
+    <div class="sec-head">
+      <h3><span class="m material-symbols-outlined">assignment_turned_in</span>Reportes Técnicos por Aprobar</h3>
+      <span id="repCount">5 pendientes</span>
+    </div>
+    <div class="rep-empty" id="repEmpty"><span class="material-symbols-outlined">task_alt</span><span>Sin reportes pendientes</span></div>
+    <div id="techRepList"></div>
+  </section>
+
+  <!-- material educativo -->
+  <section>
+    <div class="sec-head"><h3><span class="m material-symbols-outlined">library_books</span>Material Educativo</h3></div>
+    <div class="filter-chips" id="matFilter">
+      <button class="chip active" type="button" data-filtro="Todas">Todos</button>
+      <button class="chip" type="button" data-filtro="Soldadura">Soldadura</button>
+      <button class="chip" type="button" data-filtro="Electricidad">Electricidad</button>
+      <button class="chip" type="button" data-filtro="Carpintería">Carpintería</button>
+      <button class="chip" type="button" data-filtro="General">General</button>
+    </div>
+    <div id="matList" style="margin-top:14px"></div>
+  </section>
+
+</div>
+
+<!-- nav inferior glass + íconos, bien distribuida -->
+<nav>
+  <div class="nav-inner">
+    <a class="nav-item" data-go data-file="../dashboard_maestro_horasocial_pro/index.html" data-served="/maestro/dashboard" href="/maestro/dashboard"><span class="ic"><span class="material-symbols-outlined">grid_view</span></span><small>Panel</small></a>
+    <a class="nav-item" data-go data-file="../gestion_estudiantes_maestro_horasocial_pro/index.html" data-served="/maestro/estudiantes" href="/maestro/estudiantes"><span class="ic"><span class="material-symbols-outlined">group</span></span><small>Estudiantes</small></a>
+    <a class="nav-item active" href="#"><span class="ic"><span class="material-symbols-outlined">manage_accounts</span></span><small>Técnica</small></a>
+    <a class="nav-item" data-go data-file="../stitch_horasocial_pro_landing_page/mensajes_e_interacci_n_perfil_maestro/code.html" data-served="/maestro/mensajes" href="/maestro/mensajes"><span class="ic"><span class="material-symbols-outlined">chat</span></span><small>Mensajes</small></a>
+  </div>
+</nav>
+
+<!-- modal: historial de herramienta -->
+<div class="modal-backdrop" id="modalTool" role="dialog" aria-modal="true" aria-label="Historial de herramienta">
+  <div class="modal" role="document">
+    <div class="modal-head">
+      <div>
+        <h3><span class="m material-symbols-outlined">history</span>Historial de Herramienta</h3>
+        <p>Movimientos registrados del equipo</p>
+      </div>
+      <button class="modal-x" id="xTool" type="button" aria-label="Cerrar"><span class="material-symbols-outlined">close</span></button>
+    </div>
+    <div class="modal-body" id="toolHistBody"></div>
+  </div>
+</div>
+
+<!-- modal: material educativo -->
+<div class="modal-backdrop" id="matModal" role="dialog" aria-modal="true" aria-label="Material educativo">
+  <div class="modal" role="document">
+    <div class="modal-head">
+      <div>
+        <h3><span class="m material-symbols-outlined">library_books</span>Material Educativo</h3>
+        <p>Detalle del recurso compartido</p>
+      </div>
+      <button class="modal-x" id="xMat" type="button" aria-label="Cerrar"><span class="material-symbols-outlined">close</span></button>
+    </div>
+    <div class="modal-body" id="matBody"></div>
+  </div>
+</div>
+
+<!-- panel de notificaciones -->
+<div class="notif-panel" id="notifPanel" role="dialog" aria-label="Notificaciones">
+  <div class="notif-head">
+    <b>Notificaciones</b>
+    <button id="btnNotifRead" type="button">Marcar todas como leídas</button>
+  </div>
+  <div class="notif-list" id="notifList"></div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+  (function(){
+    var $ = function(id){ return document.getElementById(id); };
+    var toastTimer = null;
+    function toast(msg){
+      var t = $('toast'); t.textContent = msg; t.classList.add('show');
+      clearTimeout(toastTimer); toastTimer = setTimeout(function(){ t.classList.remove('show'); }, 2600);
+    }
+    function isFile(){ return location.protocol === 'file:'; }
+    function go(fileHref, servedHref){ window.location.assign(isFile() ? fileHref : servedHref); }
+
+    var LS_TOOLS = 'horasocial_maestro_tecnica_v1';
+    var LS_REPS = 'horasocial_maestro_reportes_tecnicos_v1';
+    var LS_MAT = 'horasocial_maestro_material_v1';
+    var LS_NOTIF = 'horasocial_maestro_notif_v1';
+    var MESES = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+
+    function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+    function fechaHoy(){ var d = new Date(); return d.getDate() + ' ' + MESES[d.getMonth()]; }
+
+    /* ---------- avatar: refuerzo del onerror inline ---------- */
+    var avImg = $('avImg');
+    if (avImg){
+      avImg.addEventListener('error', function(){
+        avImg.style.display = 'none';
+        var fb = $('avFallback');
+        if (fb) fb.style.display = 'flex';
+      });
+    }
+
+    /* ---------- cerrar sesión: intercepción SIEMPRE (file o servido) ---------- */
+    var btnLogout = $('btnLogout');
+    if (btnLogout) btnLogout.addEventListener('click', function(e){
+      e.preventDefault();
+      go('../selecci_n_de_rol_distribuci_n_expandida_vertical/code.html', '/seleccion-rol');
+    });
+
+    /* ---------- enlaces con patrón file/served (nav) ---------- */
+    document.querySelectorAll('[data-go]').forEach(function(el){
+      el.addEventListener('click', function(e){
+        e.preventDefault();
+        go(el.getAttribute('data-file'), el.getAttribute('data-served'));
+      });
+    });
+
+    /* ---------- herramientas en localStorage ---------- */
+    function seedTools(){
+      return [
+        { id: 1,  nombre: 'Soldadora Inverter 200 A',    categoria: 'Soldadura',    estado: 'Disponible',       ubicacion: 'Taller 1', icono: 'power',
+          historial: [ { f: '9 sep',  t: 'Liberada' }, { f: '8 sep',  t: 'Puesta en uso' }, { f: '2 sep',  t: 'Restaurada' } ] },
+        { id: 2,  nombre: 'Careta de soldadura',          categoria: 'Soldadura',    estado: 'En uso',           ubicacion: 'Taller 1', icono: 'flip',
+          historial: [ { f: '9 sep',  t: 'Puesta en uso' }, { f: '4 sep',  t: 'Liberada' } ] },
+        { id: 3,  nombre: 'Amoladora angular 4 1/2"',     categoria: 'Soldadura',    estado: 'En uso',           ubicacion: 'Taller 1', icono: 'settings',
+          historial: [ { f: '9 sep',  t: 'Puesta en uso' }, { f: '7 sep',  t: 'Restaurada' } ] },
+        { id: 4,  nombre: 'Taladro percutor 13 mm',       categoria: 'Electricidad', estado: 'Disponible',       ubicacion: 'Taller 2', icono: 'hardware',
+          historial: [ { f: '8 sep',  t: 'Liberada' }, { f: '6 sep',  t: 'Puesta en uso' } ] },
+        { id: 5,  nombre: 'Multímetro digital',           categoria: 'Electricidad', estado: 'En uso',           ubicacion: 'Taller 2', icono: 'electrical_services',
+          historial: [ { f: '9 sep',  t: 'Puesta en uso' }, { f: '3 sep',  t: 'Liberada' }, { f: '1 sep',  t: 'Puesta en uso' } ] },
+        { id: 6,  nombre: 'Juego de destornilladores',    categoria: 'Electricidad', estado: 'Disponible',       ubicacion: 'Taller 2', icono: 'handyman',
+          historial: [ { f: '7 sep',  t: 'Liberada' }, { f: '5 sep',  t: 'Puesta en uso' } ] },
+        { id: 7,  nombre: 'Sierra circular 7 1/4"',       categoria: 'Carpintería',  estado: 'En mantenimiento', ubicacion: 'Taller 3', icono: 'carpenter',
+          historial: [ { f: '9 sep',  t: 'Puesta en mantenimiento' }, { f: '5 sep',  t: 'Liberada' }, { f: '2 sep',  t: 'Puesta en uso' } ] },
+        { id: 8,  nombre: 'Cepillo de carpintero',        categoria: 'Carpintería',  estado: 'Disponible',       ubicacion: 'Taller 3', icono: 'precision_manufacturing',
+          historial: [ { f: '8 sep',  t: 'Liberada' }, { f: '4 sep',  t: 'Puesta en uso' } ] },
+        { id: 9,  nombre: 'Escuadra y nivel',             categoria: 'Carpintería',  estado: 'Disponible',       ubicacion: 'Taller 3', icono: 'straighten',
+          historial: [ { f: '6 sep',  t: 'Liberada' }, { f: '1 sep',  t: 'Puesta en uso' } ] },
+        { id: 10, nombre: 'Compresor de aire 50 L',       categoria: 'General',      estado: 'En mantenimiento', ubicacion: 'Taller 1', icono: 'air',
+          historial: [ { f: '9 sep',  t: 'Puesta en mantenimiento' }, { f: '6 sep',  t: 'Restaurada' } ] },
+        { id: 11, nombre: 'Caja de herramientas 21 pzs',  categoria: 'General',      estado: 'En uso',           ubicacion: 'Bodega',  icono: 'construction',
+          historial: [ { f: '9 sep',  t: 'Puesta en uso' }, { f: '3 sep',  t: 'Liberada' } ] },
+        { id: 12, nombre: 'Guantes de seguridad (x10)',   categoria: 'General',      estado: 'Disponible',       ubicacion: 'Bodega',  icono: 'shield',
+          historial: [ { f: '7 sep',  t: 'Liberada' }, { f: '2 sep',  t: 'Puesta en uso' } ] }
+      ];
+    }
+    function cargarTools(){
+      try{
+        var raw = localStorage.getItem(LS_TOOLS);
+        if (!raw) throw 0;
+        var arr = JSON.parse(raw);
+        if (!Array.isArray(arr) || !arr.length) throw 0;
+        return arr;
+      }catch(e){
+        var s = seedTools();
+        try{ localStorage.setItem(LS_TOOLS, JSON.stringify(s)); }catch(e2){}
+        return s;
+      }
+    }
+    function guardarTools(){ try{ localStorage.setItem(LS_TOOLS, JSON.stringify(tools)); }catch(e){} }
+    var tools = cargarTools();
+    function byToolId(id){ var r = null; tools.forEach(function(t){ if (t.id === id) r = t; }); return r; }
+
+    var catActual = 'Todas';
+    var estActual = 'Todos';
+
+    function toolsFiltrados(){
+      return tools.filter(function(t){
+        var okC = catActual === 'Todas' || t.categoria === catActual;
+        var okE = estActual === 'Todos' || t.estado === estActual;
+        return okC && okE;
+      });
+    }
+
+    function chipEstadoTool(t){
+      if (t.estado === 'Disponible') return '<span class="est-chip disp"><span class="material-symbols-outlined">check_circle</span>Disponible</span>';
+      if (t.estado === 'En uso') return '<span class="est-chip uso"><span class="material-symbols-outlined">sync</span>En uso</span>';
+      return '<span class="est-chip mant"><span class="material-symbols-outlined">build</span>En mantenimiento</span>';
+    }
+
+    function botonesTool(t){
+      var hist = '<button class="btn-ico" type="button" data-hist="' + t.id + '" title="Historial" aria-label="Ver historial"><span class="material-symbols-outlined">history</span></button>';
+      if (t.estado === 'Disponible'){
+        return '<button class="tb-btn" type="button" data-usar="' + t.id + '"><span class="material-symbols-outlined">play_arrow</span>Usar</button>' +
+          '<button class="tb-btn ghost" type="button" data-mant="' + t.id + '"><span class="material-symbols-outlined">build</span>Mantenimiento</button>' + hist;
+      }
+      if (t.estado === 'En uso'){
+        return '<button class="tb-btn" type="button" data-liberar="' + t.id + '"><span class="material-symbols-outlined">lock_open</span>Liberar</button>' + hist;
+      }
+      return '<button class="tb-btn" type="button" data-restaurar="' + t.id + '"><span class="material-symbols-outlined">check_circle</span>Disponible</button>' + hist;
+    }
+
+    function renderTools(){
+      var list = $('toolList'); if (!list) return;
+      var data = toolsFiltrados();
+      if (!data.length){
+        list.innerHTML = '<div class="s-empty show"><span class="material-symbols-outlined">handyman</span><span>Sin herramientas para este filtro</span></div>';
+        return;
+      }
+      var html = '';
+      data.forEach(function(t){
+        html += '<div class="tool-card">' +
+          '<div class="tool-ico"><span class="material-symbols-outlined">' + t.icono + '</span></div>' +
+          '<div class="tool-info">' +
+            '<b>' + esc(t.nombre) + '</b>' +
+            '<small>' + esc(t.ubicacion) + ' · ' + esc(t.categoria) + '</small>' +
+            chipEstadoTool(t) +
+          '</div>' +
+          '<div class="tool-side"><div class="tool-btns">' + botonesTool(t) + '</div></div>' +
+        '</div>';
+      });
+      list.innerHTML = html;
+    }
+
+    function setToolEstado(t, estado, evento, msg){
+      t.estado = estado;
+      t.historial.unshift({ f: fechaHoy(), t: evento });
+      guardarTools();
+      renderStats();
+      renderTools();
+      toast(msg + t.nombre);
+    }
+
+    /* ---------- reportes técnicos en localStorage ---------- */
+    function seedReps(){
+      return [
+        { id: 1, estudiante: 'Juan David Muñoz', taller: 'Taller de Soldadura',    fecha: '8 sep',  nota: 'Avance de proyecto final', estado: 'Pendiente' },
+        { id: 2, estudiante: 'Camila Arias',     taller: 'Taller de Electricidad', fecha: '9 sep',  nota: 'Práctica de circuitos',     estado: 'Pendiente' },
+        { id: 3, estudiante: 'Sofía Ramírez',    taller: 'Taller de Carpintería',  fecha: '9 sep',  nota: 'Maqueta terminada',          estado: 'Pendiente' },
+        { id: 4, estudiante: 'Nicolás Herrera',  taller: 'Taller de Soldadura',    fecha: '10 sep', nota: 'Unión de perfiles',          estado: 'Pendiente' },
+        { id: 5, estudiante: 'Laura Gutiérrez',  taller: 'Taller de Electricidad', fecha: '10 sep', nota: 'Instalación básica',         estado: 'Pendiente' }
+      ];
+    }
+    function cargarReps(){
+      try{
+        var raw = localStorage.getItem(LS_REPS);
+        if (!raw) throw 0;
+        var arr = JSON.parse(raw);
+        if (!Array.isArray(arr) || !arr.length) throw 0;
+        return arr;
+      }catch(e){
+        var s = seedReps();
+        try{ localStorage.setItem(LS_REPS, JSON.stringify(s)); }catch(e2){}
+        return s;
+      }
+    }
+    function guardarReps(){ try{ localStorage.setItem(LS_REPS, JSON.stringify(reps)); }catch(e){} }
+    var reps = cargarReps();
+    function byRepId(id){ var r = null; reps.forEach(function(x){ if (x.id === id) r = x; }); return r; }
+    function contarRep(estado){ var n = 0; reps.forEach(function(r){ if (r.estado === estado) n++; }); return n; }
+
+    function renderReps(){
+      var list = $('techRepList'); if (!list) return;
+      var pend = contarRep('Pendiente');
+      var c = $('repCount');
+      if (c) c.textContent = pend + ' pendientes';
+      var empty = $('repEmpty');
+      if (empty) empty.classList.toggle('show', pend === 0);
+      var html = '';
+      reps.forEach(function(r){
+        if (r.estado === 'Pendiente'){
+          html += '<div class="rep-row" data-id="' + r.id + '">' +
+            '<div class="rep-info"><b>' + esc(r.estudiante) + '</b>' +
+            '<small>' + esc(r.taller) + ' · ' + esc(r.fecha) + ' · ' + esc(r.nota) + '</small></div>' +
+            '<div class="rep-btns">' +
+              '<button class="rep-btn ok" type="button" data-tok="' + r.id + '"><span class="material-symbols-outlined">check</span>Aprobar</button>' +
+              '<button class="rep-btn no" type="button" data-tno="' + r.id + '"><span class="material-symbols-outlined">close</span>Rechazar</button>' +
+            '</div></div>';
+        } else {
+          html += '<div class="rep-row ' + (r.estado === 'Aprobado' ? 'done' : 'rejected') + '" data-id="' + r.id + '">' +
+            '<div class="rep-info"><b>' + esc(r.estudiante) + '</b>' +
+            '<small>' + esc(r.taller) + ' · ' + esc(r.fecha) + ' · ' + esc(r.nota) + '</small></div>' +
+            '<span class="rep-chip ' + (r.estado === 'Aprobado' ? 'ok' : 'no') + '"><span class="material-symbols-outlined">' + (r.estado === 'Aprobado' ? 'check' : 'close') + '</span>' + r.estado + '</span>' +
+          '</div>';
+        }
+      });
+      list.innerHTML = html;
+    }
+
+    /* ---------- material educativo en localStorage ---------- */
+    function seedMat(){
+      return [
+        { id: 1, titulo: 'Cómo hacer una unión de perfiles',      tipo: 'Video',        area: 'Soldadura',    icono: 'play_circle',       desc: 'Paso a paso para soldar perfiles de acero con el proceso MMA.' },
+        { id: 2, titulo: 'Guía rápida de seguridad en taller',    tipo: 'Guía',         area: 'General',      icono: 'menu_book',         desc: 'Normas obligatorias de protección personal y manejo de equipos.' },
+        { id: 3, titulo: 'Circuitos básicos: práctica 1',         tipo: 'Presentación', area: 'Electricidad', icono: 'slideshow',         desc: 'Armado de circuitos serie y paralelo con multímetro.' },
+        { id: 4, titulo: 'Mantenimiento de herramientas',         tipo: 'Guía',         area: 'General',      icono: 'build',             desc: 'Cuidado, limpieza y almacenamiento de cada equipo.' },
+        { id: 5, titulo: 'Maquetas en madera paso a paso',        tipo: 'Video',        area: 'Carpintería',  icono: 'play_circle',       desc: 'Técnicas de corte, ensamble y acabado para maquetas.' },
+        { id: 6, titulo: 'Plantilla: planilla de horas de taller', tipo: 'Plantilla',   area: 'General',      icono: 'description',       desc: 'Planilla editable para registrar horas de práctica.' },
+        { id: 7, titulo: 'Mediciones con multímetro',             tipo: 'Video',        area: 'Electricidad', icono: 'play_circle',       desc: 'Cómo medir voltaje, corriente y continuidad.' },
+        { id: 8, titulo: 'Proyectos de soldadura nivel 1',        tipo: 'Presentación', area: 'Soldadura',    icono: 'slideshow',         desc: 'Ideas de proyectos iniciales para estudiantes.' },
+        { id: 9, titulo: 'Normas de bioseguridad',                tipo: 'Guía',         area: 'General',      icono: 'health_and_safety', desc: 'Protocolos de higiene y primeros auxilios en el taller.' }
+      ];
+    }
+    function cargarMat(){
+      try{
+        var raw = localStorage.getItem(LS_MAT);
+        if (!raw) throw 0;
+        var arr = JSON.parse(raw);
+        if (!Array.isArray(arr) || !arr.length) throw 0;
+        return arr;
+      }catch(e){
+        var s = seedMat();
+        try{ localStorage.setItem(LS_MAT, JSON.stringify(s)); }catch(e2){}
+        return s;
+      }
+    }
+    var mat = cargarMat();
+    function byMatId(id){ var r = null; mat.forEach(function(m){ if (m.id === id) r = m; }); return r; }
+    var matArea = 'Todas';
+
+    function renderMats(){
+      var list = $('matList'); if (!list) return;
+      var data = mat.filter(function(m){ return matArea === 'Todas' || m.area === matArea; });
+      var html = '';
+      data.forEach(function(m){
+        html += '<div class="mat-card">' +
+          '<div class="mat-top">' +
+            '<div class="mat-ico"><span class="material-symbols-outlined">' + m.icono + '</span></div>' +
+            '<div class="mat-info">' +
+              '<b>' + esc(m.titulo) + '</b>' +
+              '<div class="mat-tags"><span class="tipo-chip">' + esc(m.tipo) + '</span><span class="area-chip">' + esc(m.area) + '</span></div>' +
+            '</div>' +
+          '</div>' +
+          '<div class="mat-btns">' +
+            '<button class="vbtn" type="button" data-ver="' + m.id + '"><span class="material-symbols-outlined">visibility</span>Ver</button>' +
+            '<button class="tb-btn" type="button" data-desc="' + m.id + '"><span class="material-symbols-outlined">download</span>Descargar</button>' +
+          '</div>' +
+        '</div>';
+      });
+      list.innerHTML = html;
+    }
+
+    /* ---------- notificaciones en localStorage ---------- */
+    function seedNotifs(){
+      return [
+        { id: 1, texto: '3 estudiantes esperan verificación de asistencia', tiempo: 'hace 5 min',  leido: false },
+        { id: 2, texto: 'Brigada Ambiental registró 5 horas nuevas',        tiempo: 'hace 2 h',    leido: false },
+        { id: 3, texto: 'Nuevo reporte de Apoyo Académico',                 tiempo: 'ayer',        leido: false },
+        { id: 4, texto: 'Solicitud de excusa recibida: Juan Pérez',         tiempo: 'hace 2 días', leido: false }
+      ];
+    }
+    function cargarNotifs(){
+      try{
+        var raw = localStorage.getItem(LS_NOTIF);
+        if (!raw) throw 0;
+        var arr = JSON.parse(raw);
+        if (!Array.isArray(arr) || !arr.length) throw 0;
+        return arr;
+      }catch(e){
+        var s = seedNotifs();
+        try{ localStorage.setItem(LS_NOTIF, JSON.stringify(s)); }catch(e2){}
+        return s;
+      }
+    }
+    var notifs = cargarNotifs();
+    function guardarNotifs(){ try{ localStorage.setItem(LS_NOTIF, JSON.stringify(notifs)); }catch(e){} }
+
+    function renderNotifs(){
+      var list = $('notifList'); if (!list) return;
+      var unread = 0;
+      notifs.forEach(function(n){ if (!n.leido) unread++; });
+      var dot = $('notifDot');
+      if (dot) dot.style.display = unread ? 'block' : 'none';
+      if (!unread){
+        list.innerHTML = '<div class="notif-empty"><span class="material-symbols-outlined">notifications_off</span><span>Sin notificaciones nuevas</span></div>';
+        return;
+      }
+      var html = '';
+      notifs.forEach(function(n){
+        html += '<div class="notif-item' + (n.leido ? ' read' : '') + '" data-id="' + n.id + '">' +
+          '<span class="n-dot"></span>' +
+          '<div class="n-txt"><b>' + esc(n.texto) + '</b><small>' + esc(n.tiempo) + '</small></div>' +
+        '</div>';
+      });
+      list.innerHTML = html;
+    }
+
+    /* ---------- KPIs ---------- */
+    function renderStats(){
+      var uso = 0;
+      tools.forEach(function(t){ if (t.estado === 'En uso') uso++; });
+      var a = $('kTools'), b = $('kUso'), c = $('kPend'), d = $('kMat');
+      if (a) a.textContent = tools.length;
+      if (b) b.textContent = uso;
+      if (c) c.textContent = contarRep('Pendiente');
+      if (d) d.textContent = mat.length;
+    }
+
+    /* ---------- modales ---------- */
+    function abrirModal(m){
+      if (!m) return;
+      m.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function cerrarModal(m){ if (!m) return; m.classList.remove('open'); document.body.style.overflow = ''; }
+
+    /* ---------- modal historial de herramienta ---------- */
+    function renderToolHist(t){
+      var box = $('toolHistBody'); if (!box) return;
+      var movs = '';
+      t.historial.forEach(function(h){
+        movs += '<div class="mov-row"><div class="mv-txt"><span class="mv-f">' + esc(h.f) + '</span><small>' + esc(h.t) + '</small></div></div>';
+      });
+      box.innerHTML =
+        '<div class="phero">' +
+          '<div class="t-av"><span class="material-symbols-outlined">' + t.icono + '</span></div>' +
+          '<div><b>' + esc(t.nombre) + '</b><small>' + esc(t.ubicacion) + '</small></div>' +
+          chipEstadoTool(t) +
+        '</div>' +
+        '<div class="pinfo">' +
+          '<div class="pinfo-row"><span class="material-symbols-outlined">category</span><span>' + esc(t.categoria) + '</span></div>' +
+        '</div>' +
+        '<div class="mov-h">Historial de movimientos</div>' + movs;
+    }
+
+    /* ---------- modal material educativo ---------- */
+    function renderMatModal(m){
+      var box = $('matBody'); if (!box) return;
+      box.innerHTML =
+        '<div class="phero">' +
+          '<div class="t-av"><span class="material-symbols-outlined">' + m.icono + '</span></div>' +
+          '<div><b>' + esc(m.titulo) + '</b><small>' + esc(m.area) + ' · ' + esc(m.tipo) + '</small></div>' +
+        '</div>' +
+        '<div class="pinfo">' +
+          '<div class="pinfo-row"><span class="material-symbols-outlined">category</span><span>Área: ' + esc(m.area) + '</span></div>' +
+          '<div class="pinfo-row"><span class="material-symbols-outlined">' + m.icono + '</span><span>Tipo: ' + esc(m.tipo) + '</span></div>' +
+        '</div>' +
+        '<div class="mat-desc">' + esc(m.desc) + '</div>';
+    }
+
+    /* ---------- exportar CSV ---------- */
+    function exportarCSV(){
+      var data = toolsFiltrados();
+      var L = ['Nombre,Categoría,Estado,Ubicación'];
+      data.forEach(function(t){
+        L.push('"' + t.nombre.replace(/"/g,'""') + '","' + t.categoria.replace(/"/g,'""') + '","' + t.estado.replace(/"/g,'""') + '","' + t.ubicacion.replace(/"/g,'""') + '"');
+      });
+      var blob = new Blob(['\uFEFF' + L.join('\r\n')], { type: 'text/csv;charset=utf-8' });
+      var a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'inventario_herramientas.csv';
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); }, 400);
+      toast('CSV exportado: ' + data.length + ' herramientas');
+    }
+
+    /* ---------- bindings: filtros de herramientas ---------- */
+    var toolFilter = $('toolFilter');
+    if (toolFilter) toolFilter.addEventListener('click', function(e){
+      var chip = e.target && e.target.closest ? e.target.closest('.chip') : null;
+      if (!chip || !toolFilter.contains(chip)) return;
+      catActual = chip.getAttribute('data-filtro') || 'Todas';
+      toolFilter.querySelectorAll('.chip').forEach(function(c){ c.classList.remove('active'); });
+      chip.classList.add('active');
+      renderTools();
+    });
+
+    var toolStateFilter = $('toolStateFilter');
+    if (toolStateFilter) toolStateFilter.addEventListener('click', function(e){
+      var chip = e.target && e.target.closest ? e.target.closest('.chip') : null;
+      if (!chip || !toolStateFilter.contains(chip)) return;
+      estActual = chip.getAttribute('data-festado') || 'Todos';
+      toolStateFilter.querySelectorAll('.chip').forEach(function(c){ c.classList.remove('active'); });
+      chip.classList.add('active');
+      renderTools();
+    });
+
+    /* ---------- bindings: acciones de herramientas ---------- */
+    var toolList = $('toolList');
+    if (toolList) toolList.addEventListener('click', function(e){
+      var el = e.target && e.target.closest ? e.target.closest('[data-usar],[data-mant],[data-liberar],[data-restaurar],[data-hist]') : null;
+      if (!el) return;
+      var id;
+      if (el.hasAttribute('data-hist')){
+        id = parseInt(el.getAttribute('data-hist'), 10);
+      } else {
+        var attr = el.hasAttribute('data-usar') ? 'data-usar'
+          : el.hasAttribute('data-mant') ? 'data-mant'
+          : el.hasAttribute('data-liberar') ? 'data-liberar' : 'data-restaurar';
+        id = parseInt(el.getAttribute(attr), 10);
+      }
+      var t = byToolId(id);
+      if (!t) return;
+      if (el.hasAttribute('data-hist')){
+        renderToolHist(t);
+        abrirModal($('modalTool'));
+        return;
+      }
+      if (el.hasAttribute('data-usar') && t.estado === 'Disponible') setToolEstado(t, 'En uso', 'Puesta en uso', 'Herramienta en uso: ');
+      else if (el.hasAttribute('data-mant') && t.estado === 'Disponible') setToolEstado(t, 'En mantenimiento', 'Puesta en mantenimiento', 'Herramienta en mantenimiento: ');
+      else if (el.hasAttribute('data-liberar') && t.estado === 'En uso') setToolEstado(t, 'Disponible', 'Liberada', 'Herramienta liberada: ');
+      else if (el.hasAttribute('data-restaurar') && t.estado === 'En mantenimiento') setToolEstado(t, 'Disponible', 'Restaurada', 'Herramienta disponible: ');
+    });
+
+    /* ---------- bindings: reportes técnicos ---------- */
+    var techRepList = $('techRepList');
+    if (techRepList) techRepList.addEventListener('click', function(e){
+      var btn = e.target && e.target.closest ? e.target.closest('[data-tok],[data-tno]') : null;
+      if (!btn) return;
+      var aprobar = btn.hasAttribute('data-tok');
+      var id = parseInt(btn.getAttribute(aprobar ? 'data-tok' : 'data-tno'), 10);
+      var rec = byRepId(id);
+      if (!rec || rec.estado !== 'Pendiente') return;
+      rec.estado = aprobar ? 'Aprobado' : 'Rechazado';
+      guardarReps();
+      renderStats();
+      renderReps();
+      toast((aprobar ? 'Reporte aprobado: ' : 'Reporte rechazado: ') + rec.estudiante);
+    });
+
+    /* ---------- bindings: material educativo ---------- */
+    var matFilter = $('matFilter');
+    if (matFilter) matFilter.addEventListener('click', function(e){
+      var chip = e.target && e.target.closest ? e.target.closest('.chip') : null;
+      if (!chip || !matFilter.contains(chip)) return;
+      matArea = chip.getAttribute('data-filtro') || 'Todas';
+      matFilter.querySelectorAll('.chip').forEach(function(c){ c.classList.remove('active'); });
+      chip.classList.add('active');
+      renderMats();
+    });
+
+    var matList = $('matList');
+    if (matList) matList.addEventListener('click', function(e){
+      var el = e.target && e.target.closest ? e.target.closest('[data-ver],[data-desc]') : null;
+      if (!el) return;
+      var id = parseInt(el.getAttribute(el.hasAttribute('data-ver') ? 'data-ver' : 'data-desc'), 10);
+      var m = byMatId(id);
+      if (!m) return;
+      if (el.hasAttribute('data-ver')){
+        renderMatModal(m);
+        abrirModal($('matModal'));
+      } else {
+        toast('Descarga iniciada: ' + m.titulo);
+      }
+    });
+
+    /* ---------- bindings: exportar ---------- */
+    var btnExp = $('btnExportInv');
+    if (btnExp) btnExp.addEventListener('click', exportarCSV);
+
+    /* ---------- bindings: modales ---------- */
+    var mT = $('modalTool'), mM = $('matModal');
+    var xT = $('xTool'), xM = $('xMat');
+    if (xT) xT.addEventListener('click', function(){ cerrarModal(mT); });
+    if (xM) xM.addEventListener('click', function(){ cerrarModal(mM); });
+    if (mT) mT.addEventListener('click', function(e){ if (e.target === mT) cerrarModal(mT); });
+    if (mM) mM.addEventListener('click', function(e){ if (e.target === mM) cerrarModal(mM); });
+    document.addEventListener('keydown', function(e){
+      if (e.key === 'Escape'){ cerrarModal(mT); cerrarModal(mM); }
+    });
+
+    /* ---------- bindings: notificaciones ---------- */
+    var btnNotif = $('btnNotif'), panel = $('notifPanel');
+    if (btnNotif) btnNotif.addEventListener('click', function(e){ e.stopPropagation(); if (panel) panel.classList.toggle('show'); });
+    document.addEventListener('click', function(e){
+      if (panel && panel.classList.contains('show') && !panel.contains(e.target) && btnNotif && !btnNotif.contains(e.target)) panel.classList.remove('show');
+    });
+    var notifList = $('notifList');
+    if (notifList) notifList.addEventListener('click', function(e){
+      var item = e.target && e.target.closest ? e.target.closest('.notif-item') : null;
+      if (!item) return;
+      var id = parseInt(item.getAttribute('data-id'), 10);
+      notifs.forEach(function(n){ if (n.id === id) n.leido = true; });
+      guardarNotifs(); renderNotifs();
+    });
+    var btnNotifRead = $('btnNotifRead');
+    if (btnNotifRead) btnNotifRead.addEventListener('click', function(e){
+      e.stopPropagation();
+      notifs.forEach(function(n){ n.leido = true; });
+      guardarNotifs(); renderNotifs();
+      toast('Notificaciones marcadas como leídas');
+    });
+
+    /* ---------- estado inicial ---------- */
+    renderStats();
+    renderTools();
+    renderReps();
+    renderMats();
+    renderNotifs();
+  })();
+</script>
+</body>
+</html>
