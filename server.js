@@ -249,7 +249,7 @@ app.get('/estudiante/dashboard', (req, res) => {
 });
 
 app.get('/estudiante/agenda', (req, res) => {
-    res.sendFile(path.join(__dirname, 'stitch_horasocial_pro_landing_page', 'agenda_estudiante_junio_2026_premium', 'code.html'));
+    res.sendFile(path.join(__dirname, 'agenda_estudiante_horasocial_pro', 'index.html'));
 });
 
 app.get('/estudiante/registro', (req, res) => {
@@ -331,7 +331,7 @@ app.get('/estudiante/dashboard', (req, res) => {
 });
 
 app.get('/estudiante/agenda', (req, res) => {
-    res.sendFile(path.join(__dirname, 'stitch_horasocial_pro_landing_page', 'agenda_estudiante_junio_2026_premium', 'code.html'));
+    res.sendFile(path.join(__dirname, 'agenda_estudiante_horasocial_pro', 'index.html'));
 });
 
 app.get('/estudiante/registro', (req, res) => {
