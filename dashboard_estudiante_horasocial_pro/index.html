@@ -667,11 +667,14 @@
     /* ---------- cerrar sesión ---------- */
     var btnLogout = $('btnLogout');
     if (btnLogout) btnLogout.addEventListener('click', function(e){
-      // si el dashboard se abre directo (file://), usar ruta relativa a la carpeta de selección de rol
-      if (location.protocol === 'file:'){
-        e.preventDefault();
-        location.href = '../selecci_n_de_rol_distribuci_n_expandida_vertical/code.html';
-      }
+      // a prueba de fallos: intercepta SIEMPRE y navega explícitamente.
+      // - abierto por servidor (localhost/Vercel): /seleccion-rol
+      // - abierto directo (file://): ruta relativa a la carpeta de selección de rol
+      e.preventDefault();
+      var target = (location.protocol === 'file:')
+        ? '../selecci_n_de_rol_distribuci_n_expandida_vertical/code.html'
+        : '/seleccion-rol';
+      window.location.assign(target);
     });
   })();
 </script>
