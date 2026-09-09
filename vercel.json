@@ -13,7 +13,9 @@
           "stitch_horasocial_pro_landing_page/recuperar_contrasena_estudiante/**",
           "stitch_horasocial_pro_landing_page/dashboard_estudiante_navegaci_n_optimizada/**",
           "dashboard_estudiante_horasocial_pro/**",
-          "dashboard_estudiante_navegaci_n_optimizada/**"
+          "dashboard_estudiante_navegaci_n_optimizada/**",
+          "agenda_estudiante_horasocial_pro/**",
+          "registro_estudiante_horasocial_pro/**"
         ]
       }
     }
@@ -30,6 +32,8 @@
     { "src": "/admin/alertas", "destination": "/server.js" },
     { "src": "/admin/mensajes", "destination": "/server.js" },
     { "src": "/estudiante/dashboard", "destination": "/server.js" },
+    { "src": "/estudiante/agenda", "destination": "/server.js" },
+    { "src": "/estudiante/registro", "destination": "/server.js" },
     { "src": "/maestro/dashboard", "destination": "/server.js" },
     { "src": "/seleccion-rol", "destination": "/server.js" },
     { "src": "/(.*)", "destination": "/server.js" }

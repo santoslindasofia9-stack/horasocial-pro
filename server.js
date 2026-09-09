@@ -253,7 +253,7 @@ app.get('/estudiante/agenda', (req, res) => {
 });
 
 app.get('/estudiante/registro', (req, res) => {
-    res.sendFile(path.join(__dirname, 'stitch_horasocial_pro_landing_page', 'registro_de_asistencia_horasocial_pro', 'code.html'));
+    res.sendFile(path.join(__dirname, 'registro_estudiante_horasocial_pro', 'index.html'));
 });
 
 app.get('/estudiante/mensajes', (req, res) => {
@@ -335,7 +335,7 @@ app.get('/estudiante/agenda', (req, res) => {
 });
 
 app.get('/estudiante/registro', (req, res) => {
-    res.sendFile(path.join(__dirname, 'stitch_horasocial_pro_landing_page', 'registro_de_asistencia_horasocial_pro', 'code.html'));
+    res.sendFile(path.join(__dirname, 'registro_estudiante_horasocial_pro', 'index.html'));
 });
 
 app.get('/estudiante/mensajes', (req, res) => {
