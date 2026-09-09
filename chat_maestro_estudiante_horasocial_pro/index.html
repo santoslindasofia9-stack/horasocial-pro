@@ -295,31 +295,51 @@
   renderBurbujas();
 
   /* ---------- filtro de lenguaje ---------- */
-  var PROHIBIDAS = ['culo','culos','puta','puto','putas','putos','polla','pija','pijas','verga','vergas',
-    'mierda','mierdas','pendejo','pendeja','pendejos','pendejas','marica','maricon','maricones',
-    'cabron','cabrona','hijueputa','hijueputas','sorete','pelotudo','pelotuda','pelotudos',
-    'boludo','boluda','boludos','choto','chota','concha','conchas','tarado','tarada',
-    'estupido','estupida','estupidos','imbecil','imbeciles','gil','giles'];
-  var FRASES = ['hijo de puta','hija de puta','hijos de puta','hijas de puta','me cago','concha de la lora'];
+  var PROHIBIDAS = ['culo','culos','puta','puto','putas','putos','putita','putear','puteada','puteadas','puterio',
+    'putazo','putazos','polla','pija','pijas','pijazo','pijazos','verga','vergas','vergazo','vergazos',
+    'mierda','mierdas','cagada','cagadas','cagar','cagado','cagon','cagona',
+    'pendejo','pendeja','pendejos','pendejas','pendejada','pendejadas',
+    'marica','maricon','maricones','mariconada','mariconadas',
+    'cabron','cabrona','cabronada','cabronadas','hijueputa','hijueputas',
+    'sorete','soretes','pelotudo','pelotuda','pelotudos','pelotudez','pelotudeces','pelotudisimo',
+    'boludo','boluda','boludos','boludez','boludeces','boludisimo','boludazo','recontraboludo','recontraboluda',
+    'choto','chota','chotos','chotas','chotear','choteada',
+    'concha','conchas','conchudo','conchuda','tarado','tarada','taradez',
+    'estupido','estupida','estupidos','estupidez','estupideces','idiota','idiotas',
+    'imbecil','imbeciles','imbecilidad','imbecilidades','gil','giles',
+    'poronga','porongas','porongo','pajero','pajera','pajeros','pajeras',
+    'forro','forra','forros','trolo','trola','trolos','mogolico','mogolica','mogolicos',
+    'culear','culeada','culeadas','culiar','culiado','culiada','culiao','hdp'];
+  var STEMS = ['bolud','pelotud','put','pendej','maricon','cabron','hijueput','porong','pajer','trol','mogol',
+    'mierd','chot','conch','gil','tarad','soret','cag','estupid','imbecil','verga','polla'];
+  var FRASES = ['hijo de puta','hija de puta','hijos de puta','hijas de puta','puta madre',
+    'la puta madre','me cago','concha de la lora','hijo de mil'];
   function normalizar(s){
     return s.toLowerCase()
       .replace(/[áàäâ]/g,'a').replace(/[éèëê]/g,'e')
       .replace(/[íìïî]/g,'i').replace(/[óòöô]/g,'o')
       .replace(/[úùüû]/g,'u')
       .replace(/0/g,'o').replace(/3/g,'e').replace(/1/g,'i')
-      .replace(/4/g,'a').replace(/5|7/g,'s').replace(/@/g,'a').replace(/\$/g,'s');
+      .replace(/4/g,'a').replace(/5|7/g,'s').replace(/@/g,'a').replace(/\$/g,'s')
+      .replace(/v(?![aeiou])/g,'u');
   }
   function tokenLimpio(t){
     return normalizar(t).replace(/[^a-z]/g,'');
   }
   function esProhibida(tok){
-    return PROHIBIDAS.indexOf(tokenLimpio(tok)) !== -1;
+    var t = tokenLimpio(tok);
+    if (PROHIBIDAS.indexOf(t) !== -1) return true;
+    for (var i = 0; i < STEMS.length; i++){
+      if (t.indexOf(STEMS[i]) === 0) return true;
+    }
+    return false;
   }
   function contieneProhibida(texto){
-    var n = ' ' + normalizar(texto).replace(/\s+/g,' ') + ' ';
-    for (var i = 0; i < PROHIBIDAS.length; i++){
-      if (n.indexOf(' ' + PROHIBIDAS[i] + ' ') !== -1) return true;
+    var partes = texto.split(/\s+/);
+    for (var i = 0; i < partes.length; i++){
+      if (esProhibida(partes[i])) return true;
     }
+    var n = ' ' + normalizar(texto).replace(/\s+/g,' ') + ' ';
     for (var j = 0; j < FRASES.length; j++){
       if (n.indexOf(FRASES[j]) !== -1) return true;
     }
