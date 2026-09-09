@@ -257,7 +257,11 @@ app.get('/estudiante/registro', (req, res) => {
 });
 
 app.get('/estudiante/mensajes', (req, res) => {
-    res.sendFile(path.join(__dirname, 'stitch_horasocial_pro_landing_page', 'mis_mensajes_bandeja_de_entrada_estudiante_1', 'code.html'));
+    res.sendFile(path.join(__dirname, 'mensajes_estudiante_horasocial_pro', 'index.html'));
+});
+
+app.get('/estudiante/chat', (req, res) => {
+    res.sendFile(path.join(__dirname, 'chat_maestro_estudiante_horasocial_pro', 'index.html'));
 });
 
 app.get('/maestro/dashboard', (req, res) => {
@@ -339,7 +343,11 @@ app.get('/estudiante/registro', (req, res) => {
 });
 
 app.get('/estudiante/mensajes', (req, res) => {
-    res.sendFile(path.join(__dirname, 'stitch_horasocial_pro_landing_page', 'mis_mensajes_bandeja_de_entrada_estudiante_1', 'code.html'));
+    res.sendFile(path.join(__dirname, 'mensajes_estudiante_horasocial_pro', 'index.html'));
+});
+
+app.get('/estudiante/chat', (req, res) => {
+    res.sendFile(path.join(__dirname, 'chat_maestro_estudiante_horasocial_pro', 'index.html'));
 });
 
 app.get('/maestro/dashboard', (req, res) => {
