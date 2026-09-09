@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport">
+<title>Horas Sociales · Dashboard de Estudiante</title>
+<style>
+  :root{
+    --sky-50:#f0f9ff; --sky-100:#e0f2fe; --sky-200:#bae6fd; --sky-300:#7dd3fc;
+    --sky-400:#38bdf8; --sky-500:#0ea5e9; --sky-600:#0284c7; --sky-700:#0369a1;
+    --navy-800:#075985; --navy-900:#0c4a6e; --ink:#0f2f44;
+    --glass:rgba(255,255,255,.72); --glass-brd:rgba(255,255,255,.9);
+    --radius:20px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{height:100%}
+  body{
+    font-family:'Segoe UI',Inter,-apple-system,system-ui,sans-serif;
+    color:var(--ink);
+    background:
+      radial-gradient(1200px 500px at 85% -10%, rgba(56,189,248,.35), transparent 60%),
+      radial-gradient(800px 400px at -10% 15%, rgba(125,211,252,.30), transparent 55%),
+      linear-gradient(180deg, var(--sky-100), var(--sky-50) 60%, #f7fbff);
+    background-attachment:fixed;
+    min-height:100dvh;
+    padding:0 0 calc(84px + env(safe-area-inset-bottom));
+  }
+  .wrap{max-width:520px;margin:0 auto;padding:18px 16px 8px}
+
+  /* ---------- header ---------- */
+  header{display:flex;align-items:center;gap:14px;padding:6px 2px 16px}
+  .avatar{
+    width:54px;height:54px;border-radius:50%;flex:0 0 auto;
+    background:linear-gradient(135deg,var(--sky-400),var(--sky-600));
+    color:#fff;display:flex;align-items:center;justify-content:center;
+    font-weight:800;font-size:22px;box-shadow:0 8px 20px rgba(14,165,233,.35);
+  }
+  .hi{flex:1;min-width:0}
+  .hi h1{font-size:20px;font-weight:800;color:var(--navy-900);letter-spacing:-.2px}
+  .hi p{font-size:13px;color:var(--sky-700);font-weight:600;margin-top:2px}
+  .grade{
+    background:rgba(255,255,255,.8);border:1px solid var(--glass-brd);
+    color:var(--sky-700);font-size:11px;font-weight:800;padding:6px 10px;
+    border-radius:999px;white-space:nowrap;box-shadow:0 2px 8px rgba(3,105,161,.08);
+  }
+
+  /* ---------- progress card ---------- */
+  .progress{
+    background:linear-gradient(135deg, rgba(255,255,255,.9), rgba(224,242,254,.85));
+    border:1px solid var(--glass-brd); backdrop-filter:blur(10px);
+    border-radius:var(--radius);padding:16px;display:flex;align-items:center;gap:16px;
+    box-shadow:0 10px 30px rgba(3,105,161,.10);
+  }
+  .ring{--p:50%;width:86px;height:86px;flex:0 0 auto;position:relative;border-radius:50%;
+    background:conic-gradient(var(--sky-500) var(--p), var(--sky-100) 0);}
+  .ring::after{content:'';position:absolute;inset:8px;border-radius:50%;background:#fff}
+  .ring b{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:1}
+  .ring b span{font-size:19px;font-weight:800;color:var(--navy-900)}
+  .ring b small{font-size:10px;color:var(--sky-600);font-weight:700}
+  .pinfo h2{font-size:15px;font-weight:800;color:var(--navy-900)}
+  .pinfo p{font-size:12.5px;color:var(--ink);opacity:.85;margin-top:3px;line-height:1.45}
+  .pinfo .bar{height:7px;background:var(--sky-100);border-radius:99px;margin-top:10px;overflow:hidden}
+  .pinfo .bar i{display:block;height:100%;width:50%;border-radius:99px;
+    background:linear-gradient(90deg,var(--sky-400),var(--sky-600))}
+  .pinfo .meta{display:flex;justify-content:space-between;font-size:10.5px;font-weight:700;color:var(--sky-600);margin-top:5px}
+
+  /* ---------- sections ---------- */
+  section{margin-top:20px}
+  .sec-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;padding:0 2px}
+  .sec-head h3{font-size:15px;font-weight:800;color:var(--navy-900)}
+  .sec-head span{font-size:11.5px;color:var(--sky-600);font-weight:700}
+
+  /* ---------- stats grid ---------- */
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+  .stat{
+    background:var(--glass);border:1px solid var(--glass-brd);backdrop-filter:blur(8px);
+    border-radius:16px;padding:12px 8px;text-align:center;
+    box-shadow:0 4px 14px rgba(3,105,161,.07);
+  }
+  .stat b{display:block;font-size:20px;font-weight:800;color:var(--sky-600)}
+  .stat small{font-size:10.5px;font-weight:700;color:var(--ink);opacity:.75}
+
+  /* ---------- generic cards ---------- */
+  .card{
+    background:var(--glass);border:1px solid var(--glass-brd);backdrop-filter:blur(10px);
+    border-radius:var(--radius);padding:16px;
+    box-shadow:0 8px 24px rgba(3,105,161,.08);
+  }
+
+  /* tomorrow activity */
+  .tomorrow{border:1px solid rgba(56,189,248,.55);position:relative;overflow:hidden}
+  .tomorrow::before{content:'';position:absolute;inset:0;background:linear-gradient(120deg,rgba(56,189,248,.12),rgba(255,255,255,.35) 60%);pointer-events:none}
+  .tom-row{display:flex;align-items:center;gap:12px;position:relative}
+  .tom-ico{
+    width:44px;height:44px;border-radius:14px;flex:0 0 auto;
+    background:linear-gradient(135deg,var(--sky-400),var(--sky-600));color:#fff;
+    display:flex;align-items:center;justify-content:center;font-size:21px;
+    box-shadow:0 6px 14px rgba(14,165,233,.35);
+  }
+  .tom-info{flex:1;min-width:0}
+  .tom-info .tag{display:inline-block;font-size:10px;font-weight:800;letter-spacing:.4px;
+    color:var(--sky-700);background:rgba(186,230,253,.6);padding:3px 8px;border-radius:99px;margin-bottom:4px}
+  .tom-info h4{font-size:14.5px;font-weight:800;color:var(--navy-900)}
+  .tom-info p{font-size:12px;color:var(--ink);opacity:.8;margin-top:2px}
+  .tom-actions{display:flex;gap:9px;margin-top:14px;position:relative}
+  .btn{
+    border:0;cursor:pointer;font-family:inherit;font-weight:800;border-radius:13px;
+    padding:11px 14px;font-size:12.5px;transition:transform .12s, opacity .12s, box-shadow .12s;
+  }
+  .btn:active{transform:scale(.96)}
+  .btn-confirm{flex:1;background:linear-gradient(135deg,var(--sky-400),var(--sky-600));color:#fff;
+    box-shadow:0 6px 16px rgba(14,165,233,.35)}
+  .btn-reject{flex:1;background:rgba(255,255,255,.85);color:var(--navy-800);
+    border:1.5px solid var(--sky-200)}
+  .btn[disabled]{opacity:.55;cursor:default;transform:none}
+  .state-pill{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:800;
+    color:#15803d;background:rgba(220,252,231,.8);border:1px solid rgba(187,247,208,.9);
+    padding:7px 12px;border-radius:99px}
+  .state-pill.red{color:#b91c1c;background:rgba(254,226,226,.85);border-color:rgba(254,202,202,.95)}
+
+  /* excuse form */
+  .excuse{margin-top:12px;background:rgba(255,255,255,.78);border:1.5px dashed var(--sky-300);
+    border-radius:14px;padding:12px;position:relative}
+  .excuse label{font-size:12px;font-weight:800;color:var(--navy-900);display:block;margin-bottom:6px}
+  .excuse textarea{width:100%;min-height:76px;resize:vertical;border:1px solid var(--sky-200);
+    border-radius:11px;padding:10px;font-family:inherit;font-size:13px;color:var(--ink);
+    background:#fff;outline:none}
+  .excuse textarea:focus{border-color:var(--sky-400);box-shadow:0 0 0 3px rgba(56,189,248,.18)}
+  .excuse .row{display:flex;gap:8px;margin-top:9px}
+  .excuse .btn{flex:1}
+  .send-btn{background:linear-gradient(135deg,var(--sky-500),var(--sky-700));color:#fff}
+  .cancel-btn{background:#fff;color:var(--navy-800);border:1.5px solid var(--sky-200)}
+
+  /* pending list */
+  .pend-item{display:flex;align-items:center;gap:11px;padding:12px 4px;border-bottom:1px solid rgba(186,230,253,.6)}
+  .pend-item:last-child{border-bottom:0}
+  .dot{width:9px;height:9px;border-radius:50%;flex:0 0 auto;background:var(--sky-400);box-shadow:0 0 0 4px rgba(56,189,248,.15)}
+  .pend-item .tx{flex:1;min-width:0}
+  .pend-item .tx b{display:block;font-size:13px;font-weight:700;color:var(--ink)}
+  .pend-item .tx small{font-size:11.5px;color:var(--sky-600);font-weight:600}
+  .pend-item .st{font-size:10px;font-weight:800;color:var(--sky-700);
+    background:rgba(186,230,253,.55);padding:4px 9px;border-radius:99px;white-space:nowrap}
+
+  /* available grid */
+  .avail{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .avail .card{padding:14px;display:flex;flex-direction:column;gap:8px}
+  .avail .emo{font-size:26px}
+  .avail b{font-size:13px;font-weight:800;color:var(--navy-900);line-height:1.25}
+  .avail small{font-size:11px;color:var(--ink);opacity:.75;line-height:1.35}
+  .inscribir{margin-top:auto;background:linear-gradient(135deg,var(--sky-400),var(--sky-600));
+    color:#fff;border:0;border-radius:11px;padding:9px;font-weight:800;font-size:12px;cursor:pointer;
+    transition:transform .12s,opacity .12s}
+  .inscribir:active{transform:scale(.96)}
+  .inscribir.done{background:linear-gradient(135deg,#4ade80,#16a34a);cursor:default}
+
+  /* weekly report */
+  .report-btn{width:100%;display:flex;align-items:center;justify-content:center;gap:9px;
+    background:linear-gradient(135deg,var(--sky-500),var(--sky-700));color:#fff;border:0;
+    border-radius:14px;padding:14px;font-family:inherit;font-weight:800;font-size:13.5px;cursor:pointer;
+    box-shadow:0 8px 20px rgba(2,132,199,.30);transition:transform .12s}
+  .report-btn:active{transform:scale(.98)}
+  .report-hint{margin-top:9px;text-align:center;font-size:11.5px;color:var(--sky-600);font-weight:600}
+  .report-panel{margin-top:12px;background:#fff;border:1px solid var(--sky-200);border-radius:14px;
+    padding:14px;display:none}
+  .report-panel.open{display:block}
+  .report-panel h5{font-size:13px;font-weight:800;color:var(--navy-900);margin-bottom:8px}
+  .rep-row{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px dashed var(--sky-100);font-size:12.5px}
+  .rep-row:last-child{border-bottom:0}
+  .rep-row .d{flex:1;font-weight:700;color:var(--ink)}
+  .rep-row .h{color:var(--sky-600);font-weight:800}
+  .rep-total{display:flex;justify-content:space-between;margin-top:9px;padding-top:9px;
+    border-top:2px solid var(--sky-200);font-weight:800;font-size:13px;color:var(--navy-900)}
+  .dl-btn{margin-top:11px;width:100%;background:rgba(224,242,254,.9);color:var(--sky-700);
+    border:1.5px solid var(--sky-300);border-radius:12px;padding:11px;font-family:inherit;
+    font-weight:800;font-size:12.5px;cursor:pointer;transition:transform .12s}
+  .dl-btn:active{transform:scale(.97)}
+
+  /* ---------- bottom nav ---------- */
+  nav{
+    position:fixed;left:0;right:0;bottom:0;z-index:50;
+    background:rgba(255,255,255,.86);backdrop-filter:blur(14px);
+    border-top:1px solid var(--glass-brd);
+    border-radius:22px 22px 0 0;box-shadow:0 -6px 24px rgba(3,105,161,.12);
+    padding:8px 10px calc(8px + env(safe-area-inset-bottom));
+  }
+  .nav-inner{max-width:520px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:4px}
+  .nav-item{display:flex;flex-direction:column;align-items:center;gap:3px;padding:7px 4px;
+    border-radius:14px;color:var(--sky-500);font-size:10px;font-weight:700;text-decoration:none;transition:transform .12s}
+  .nav-item:active{transform:scale(.93)}
+  .nav-item .ic{font-size:20px;line-height:1}
+  .nav-item.active{color:var(--sky-700);background:linear-gradient(180deg,rgba(186,230,253,.55),rgba(224,242,254,.15))}
+  .nav-item.active .ic{color:var(--sky-600)}
+
+  /* toast */
+  #toast{position:fixed;left:16px;right:16px;bottom:calc(92px + env(safe-area-inset-bottom));
+    max-width:520px;margin:0 auto;background:var(--navy-900);color:#fff;text-align:center;
+    font-size:12.5px;font-weight:700;padding:12px 16px;border-radius:14px;opacity:0;
+    transform:translateY(12px);pointer-events:none;transition:opacity .25s,transform .25s;z-index:60;
+    box-shadow:0 10px 30px rgba(3,105,161,.35)}
+  #toast.show{opacity:1;transform:translateY(0)}
+
+  @media (min-width:560px){
+    .avail{grid-template-columns:1fr 1fr 1fr}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- header -->
+  <header>
+    <div class="avatar">A</div>
+    <div class="hi">
+      <h1>¡Hola, Alex!</h1>
+      <p>Grado 11 · Institución Educativa</p>
+    </div>
+    <span class="grade">📘 11°</span>
+  </header>
+
+  <!-- progress -->
+  <div class="progress">
+    <div class="ring" id="ring"><b><span>40</span><small>/ 80 h</small></b></div>
+    <div class="pinfo">
+      <h2>Horas sociales</h2>
+      <p>Completaste la mitad de las horas exigidas para graduarte. ¡Vas muy bien!</p>
+      <div class="bar"><i style="width:50%"></i></div>
+      <div class="meta"><span>40 h hechas</span><span>40 h faltan</span></div>
+    </div>
+  </div>
+
+  <!-- resume stats -->
+  <section>
+    <div class="stats">
+      <div class="stat"><b>40</b><small>Completadas</small></div>
+      <div class="stat"><b>03</b><small>Pendientes</small></div>
+      <div class="stat"><b>06</b><small>Para elegir</small></div>
+    </div>
+  </section>
+
+  <!-- tomorrow -->
+  <section>
+    <div class="sec-head"><h3>Actividad de mañana</h3><span>📅 Jueves</span></div>
+    <div class="card tomorrow">
+      <div class="tom-row">
+        <div class="tom-ico">♻️</div>
+        <div class="tom-info">
+          <span class="tag">MAÑANA · 7:00 – 9:00</span>
+          <h4>Campaña de reciclaje</h4>
+          <p>Sede principal · Punto de acopio. Llevá guantes y bolsas.</p>
+        </div>
+      </div>
+      <div class="tom-actions" id="tomActions">
+        <button class="btn btn-confirm" id="btnConfirm">✓ Confirmar asistencia</button>
+        <button class="btn btn-reject" id="btnReject">✗ Rechazar</button>
+      </div>
+      <div id="tomState" style="display:none"></div>
+      <div class="excuse" id="excuseWrap" style="display:none">
+        <label for="excuseText">Escribí tu excusa (es obligatoria para rechazar):</label>
+        <textarea id="excuseText" placeholder="Ej.: tengo cita médica a la misma hora…"></textarea>
+        <div class="row">
+          <button class="btn send-btn" id="btnSend">Enviar excusa</button>
+          <button class="btn cancel-btn" id="btnCancel">Cancelar</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- pending -->
+  <section>
+    <div class="sec-head"><h3>Actividades pendientes</h3><span>03</span></div>
+    <div class="card">
+      <div class="pend-item">
+        <span class="dot"></span>
+        <div class="tx"><b>Jornada de limpieza – Parque central</b><small>Sáb · 10:00 – 12:00</small></div>
+        <span class="st">Próxima</span>
+      </div>
+      <div class="pend-item">
+        <span class="dot"></span>
+        <div class="tx"><b>Apoyo en biblioteca escolar</b><small>Lun · 14:00 – 16:00</small></div>
+        <span class="st">Inscrito</span>
+      </div>
+      <div class="pend-item">
+        <span class="dot"></span>
+        <div class="tx"><b>Entrega de donaciones – Comedor</b><small>Mié · 8:00 – 10:00</small></div>
+        <span class="st">Asignada</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- available -->
+  <section>
+    <div class="sec-head"><h3>Disponibles para elegir</h3><span>Inscribite</span></div>
+    <div class="avail">
+      <div class="card"><span class="emo">🌱</span><b>Campaña de reciclaje</b><small>Recolección y clasificación en el colegio.</small>
+        <button class="inscribir" data-name="Campaña de reciclaje">Inscribirme</button></div>
+      <div class="card"><span class="emo">🍅</span><b>Huerta escolar</b><small>Siembra y cuidado de la huerta comunitaria.</small>
+        <button class="inscribir" data-name="Huerta escolar">Inscribirme</button></div>
+      <div class="card"><span class="emo">📚</span><b>Apadrinamiento de lectura</b><small>Lectura a niños de primaria, 1 h por semana.</small>
+        <button class="inscribir" data-name="Apadrinamiento de lectura">Inscribirme</button></div>
+      <div class="card"><span class="emo">🐶</span><b>Jornada de vacunación canina</b><small>Apoyo logístico con la alcaldía.</small>
+        <button class="inscribir" data-name="Jornada de vacunación canina">Inscribirme</button></div>
+      <div class="card"><span class="emo">🛟</span><b>Primeros auxilios</b><small>Taller certificado, 4 horas.</small>
+        <button class="inscribir" data-name="Primeros auxilios">Inscribirme</button></div>
+      <div class="card"><span class="emo">🎨</span><b>Pintura de mural</b><small>Decora un muro del barrio con el grupo.</small>
+        <button class="inscribir" data-name="Pintura de mural">Inscribirme</button></div>
+    </div>
+  </section>
+
+  <!-- weekly report -->
+  <section>
+    <div class="sec-head"><h3>Reporte semanal</h3><span>Semana 1–7 Sep</span></div>
+    <div class="card">
+      <button class="report-btn" id="btnReport">📄 Ver reporte semanal</button>
+      <p class="report-hint">Al hacer clic el reporte aparece acá y podés descargarlo.</p>
+      <div class="report-panel" id="reportPanel"></div>
+    </div>
+  </section>
+
+</div>
+
+<!-- bottom nav -->
+<nav>
+  <div class="nav-inner">
+    <a class="nav-item active" href="#"><span class="ic">🏠</span>Dashboard</a>
+    <a class="nav-item" href="#agenda"><span class="ic">📅</span>Agenda</a>
+    <a class="nav-item" href="#registro"><span class="ic">✅</span>Registro</a>
+    <a class="nav-item" href="#mensajes"><span class="ic">✉️</span>Mensajes</a>
+  </div>
+</nav>
+
+<div id="toast"></div>
+
+<script>
+  (function(){
+    var $ = function(id){ return document.getElementById(id); };
+    var toastTimer = null;
+    function toast(msg){
+      var t = $('toast'); t.textContent = msg; t.classList.add('show');
+      clearTimeout(toastTimer); toastTimer = setTimeout(function(){ t.classList.remove('show'); }, 2600);
+    }
+
+    /* --- tomorrow: confirm / reject / excuse --- */
+    var refState = localStorage.getItem('tomorrow_state') || '';
+    var refExcuse = localStorage.getItem('tomorrow_excuse') || '';
+    var stateEl = $('tomState'), actionsEl = $('tomActions');
+
+    function renderState(){
+      if (refState === 'confirmOk'){
+        actionsEl.style.display = 'none'; $('excuseWrap').style.display = 'none';
+        stateEl.style.display = 'block';
+        stateEl.innerHTML = '<span class="state-pill">✓ Asistencia confirmada — nos vemos mañana a las 7:00</span>';
+      } else if (refState === 'rejectOk'){
+        actionsEl.style.display = 'none'; $('excuseWrap').style.display = 'none';
+        stateEl.style.display = 'block';
+        stateEl.innerHTML = '<span class="state-pill red">✗ Asistencia rechazada · Excusa enviada</span>';
+      } else {
+        actionsEl.style.display = 'flex'; stateEl.style.display = 'none'; $('excuseWrap').style.display = 'none';
+      }
+    }
+
+    $('btnConfirm').addEventListener('click', function(){
+      refState = 'confirmOk'; localStorage.setItem('tomorrow_state', refState);
+      renderState(); toast('✓ Asistencia confirmada');
+    });
+    $('btnReject').addEventListener('click', function(){
+      $('excuseWrap').style.display = 'block';
+    });
+    $('btnCancel').addEventListener('click', function(){
+      $('excuseWrap').style.display = 'none'; $('excuseText').value = '';
+    });
+    $('btnSend').addEventListener('click', function(){
+      var txt = $('excuseText').value.trim();
+      if (txt.length < 10){ toast('⚠️ La excusa debe tener al menos 10 caracteres'); return; }
+      refState = 'rejectOk'; refExcuse = txt;
+      localStorage.setItem('tomorrow_state', refState);
+      localStorage.setItem('tomorrow_excuse', txt);
+      renderState(); toast('✉️ Excusa enviada al docente');
+    });
+    renderState();
+
+    /* --- inscribirme --- */
+    var btns = document.querySelectorAll('.inscribir');
+    btns.forEach(function(b){
+      b.addEventListener('click', function(){
+        if (b.classList.contains('done')) return;
+        b.classList.add('done'); b.textContent = '✓ Inscripto';
+        toast('¡Inscripción enviada a ' + b.getAttribute('data-name') + '!');
+      });
+    });
+
+    /* --- weekly report --- */
+    function esc(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+    function buildReport(){
+      var rows = [
+        {d:'Martes 1 · Limpieza parque', h:'2 h'},
+        {d:'Miércoles 2 · Biblioteca', h:'1 h'},
+        {d:'Jueves 3 · Reciclaje', h:'2 h'},
+        {d:'Viernes 4 · Donaciones', h:'1 h'},
+        {d:'Sábado 5 · Mural', h:'2 h'}
+      ];
+      var html = '<h5>📊 Resumen semanal — 1 al 7 de septiembre</h5>';
+      rows.forEach(function(r){
+        html += '<div class="rep-row"><span class="d">' + esc(r.d) + '</span><span class="h">' + r.h + '</span></div>';
+      });
+      html += '<div class="rep-total"><span>Total de la semana</span><span>8 horas</span></div>';
+      html += '<div style="margin-top:6px;font-size:11.5px;color:var(--sky-600);font-weight:700">Acumulado: 40 / 80 horas · Falta 40</div>';
+      html += '<button class="dl-btn" id="btnDl">⬇️ Descargar reporte (.txt)</button>';
+      return html;
+    }
+
+    $('btnReport').addEventListener('click', function(){
+      var p = $('reportPanel');
+      if (p.classList.contains('open')){
+        p.classList.remove('open'); $('btnReport').innerHTML = '📄 Ver reporte semanal';
+        return;
+      }
+      p.innerHTML = buildReport();
+      p.classList.add('open');
+      $('btnReport').innerHTML = '📄 Ocultar reporte';
+      $('btnDl').addEventListener('click', function(){
+        var report =
+          'HORAS SOCIALES — REPORTE SEMANAL\n' +
+          'Estudiante: Alex · Grado 11\n' +
+          'Semana: 1 al 7 de septiembre\n\n' +
+          'Martes 1 · Limpieza parque ......... 2 h\n' +
+          'Miércoles 2 · Biblioteca .......... 1 h\n' +
+          'Jueves 3 · Reciclaje .............. 2 h\n' +
+          'Viernes 4 · Donaciones ............ 1 h\n' +
+          'Sábado 5 · Mural .................. 2 h\n\n' +
+          'Total de la semana: 8 horas\n' +
+          'Acumulado: 40 / 80 horas\n' +
+          'Generado el ' + new Date().toLocaleDateString('es-CO') + '\n';
+        var blob = new Blob([report], {type:'text/plain;charset=utf-8'});
+        var a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'reporte-semanal-horas-sociales.txt';
+        document.body.appendChild(a); a.click(); a.remove();
+        setTimeout(function(){ URL.revokeObjectURL(a.href); }, 1000);
+        toast('⬇️ Reporte descargado');
+      });
+      toast('📄 Reporte generado');
+    });
+  })();
+</script>
+</body>
+</html>

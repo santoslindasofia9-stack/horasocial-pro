@@ -245,17 +245,7 @@ app.get('/sobre', (req, res) => {
 });
 
 app.get('/estudiante/dashboard', (req, res) => {
-    // EL ARCHIVO DEL USUARIO NO SE MODIFICA NUNCA: se lee tal cual y solo se le
-    // agrega el link del css visual al momento de servir la página.
-    const file = path.join(__dirname, 'dashboard_estudiante_horasocial_pro', 'code.html');
-    let html = fs.readFileSync(file, 'utf8');
-    if (!html.includes('href="dashboard.css"')) {
-        html = html.replace(
-            '<title>Horasocial Pro - Student Dashboard</title>',
-            '<title>Horasocial Pro - Student Dashboard</title>\n<link rel="stylesheet" href="dashboard.css">'
-        );
-    }
-    res.type('html').send(html);
+    res.sendFile(path.join(__dirname, 'dashboard_estudiante_horasocial_pro', 'index.html'));
 });
 
 app.get('/estudiante/agenda', (req, res) => {
@@ -337,22 +327,7 @@ app.get('/sobre', (req, res) => {
 });
 
 app.get('/estudiante/dashboard', (req, res) => {
-    // EL ARCHIVO DEL USUARIO NO SE MODIFICA NUNCA: se lee tal cual y solo se le
-    // agrega el link del css visual al momento de servir la página.
-    const file = path.join(__dirname, 'dashboard_estudiante_horasocial_pro', 'code.html');
-    let html = fs.readFileSync(file, 'utf8');
-    if (!html.includes('href="dashboard.css"')) {
-        html = html.replace(
-            '<title>Horasocial Pro - Student Dashboard</title>',
-            '<title>Horasocial Pro - Student Dashboard</title>\n<link rel="stylesheet" href="dashboard.css">'
-        );
-    }
-    res.type('html').send(html);
-});
-
-// CSS visual del dashboard (el link relativo dashboard.css se resuelve acá)
-app.get('/estudiante/dashboard.css', (req, res) => {
-    res.sendFile(path.join(__dirname, 'dashboard_estudiante_horasocial_pro', 'dashboard.css'));
+    res.sendFile(path.join(__dirname, 'dashboard_estudiante_horasocial_pro', 'index.html'));
 });
 
 app.get('/estudiante/agenda', (req, res) => {
