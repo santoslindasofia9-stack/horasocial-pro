@@ -19,6 +19,8 @@
           "mensajes_estudiante_horasocial_pro/**",
           "chat_maestro_estudiante_horasocial_pro/**",
           "dashboard_maestro_horasocial_pro/**",
+          "login_maestro_horasocial_pro/**",
+          "recuperar_contrasena_maestro_horasocial_pro/**",
           "stitch_horasocial_pro_landing_page/gesti_n_estudiantes_perfil_maestro/**",
           "stitch_horasocial_pro_landing_page/gesti_n_t_cnica_perfil_maestro_2/**",
           "stitch_horasocial_pro_landing_page/mensajes_e_interacci_n_perfil_maestro/**"
@@ -32,6 +34,7 @@
     { "src": "/login", "destination": "/server.js" },
     { "src": "/recuperar-contrasena", "destination": "/server.js" },
     { "src": "/profesor/login", "destination": "/server.js" },
+    { "src": "/profesor/recuperar-contrasena", "destination": "/server.js" },
     { "src": "/login_administrador", "destination": "/server.js" },
     { "src": "/admin/dashboard", "destination": "/server.js" },
     { "src": "/admin/docentes", "destination": "/server.js" },

@@ -46,11 +46,30 @@ db.connect((err) => {
             estado ENUM('Pendiente', 'Autorizado') DEFAULT 'Pendiente'
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
     `;
-    db.query(createTableQuery, (tableErr) => {
+db.query(createTableQuery, (tableErr) => {
         if (tableErr) {
             console.error('Error al crear tabla:', tableErr.message);
         } else {
             console.log('Tabla solicitudes_recuperacion OK.');
+        }
+    });
+
+    const createMaestrosTableQuery = `
+        CREATE TABLE IF NOT EXISTS solicitudes_recuperacion_maestros (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            usuario VARCHAR(50) NOT NULL,
+            nombre_completo VARCHAR(150) NOT NULL,
+            telefono VARCHAR(20) NOT NULL,
+            asignatura VARCHAR(100) NOT NULL,
+            fecha_solicitud TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            estado ENUM('Pendiente', 'Autorizado') DEFAULT 'Pendiente'
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+    `;
+    db.query(createMaestrosTableQuery, (tableErr) => {
+        if (tableErr) {
+            console.error('Error al crear tabla maestros:', tableErr.message);
+        } else {
+            console.log('Tabla solicitudes_recuperacion_maestros OK.');
         }
     });
 });
@@ -74,6 +93,28 @@ function saveLocalRequests(requests) {
         fs.writeFileSync(SOLICITUDES_FILE, JSON.stringify(requests, null, 2), 'utf8');
     } catch (err) {
         console.error('Error escribiendo archivo local:', err.message);
+    }
+}
+
+const SOLICITUDES_MAESTROS_FILE = path.join(__dirname, 'solicitudes_recuperacion_maestros.json');
+
+function getLocalMaestroRequests() {
+    try {
+        if (fs.existsSync(SOLICITUDES_MAESTROS_FILE)) {
+            const data = fs.readFileSync(SOLICITUDES_MAESTROS_FILE, 'utf8');
+            return JSON.parse(data || '[]');
+        }
+    } catch (err) {
+        console.error('Error leyendo archivo local maestros:', err.message);
+    }
+    return [];
+}
+
+function saveLocalMaestroRequests(requests) {
+    try {
+        fs.writeFileSync(SOLICITUDES_MAESTROS_FILE, JSON.stringify(requests, null, 2), 'utf8');
+    } catch (err) {
+        console.error('Error escribiendo archivo local maestros:', err.message);
     }
 }
 
@@ -204,6 +245,126 @@ app.post('/api/rechazar-solicitud', (req, res) => {
     }
 });
 
+app.post('/api/recuperar-contrasena-maestro', (req, res) => {
+    const { usuario, nombre, telefono, asignatura } = req.body;
+    if (!usuario || !nombre || !telefono || !asignatura) {
+        return res.status(400).json({ error: 'Todos los campos son obligatorios' });
+    }
+
+    const dbConnected = db && db.state !== 'disconnected';
+    
+    const saveRequestToLocal = () => {
+        const requests = getLocalMaestroRequests();
+        const newRequest = {
+            id: Date.now(),
+            usuario,
+            nombre_completo: nombre,
+            telefono,
+            asignatura,
+            fecha_solicitud: new Date().toISOString(),
+            estado: 'Pendiente'
+        };
+        requests.push(newRequest);
+        saveLocalMaestroRequests(requests);
+        res.json({ success: true, message: 'Solicitud enviada (Modo local)', id: newRequest.id });
+    };
+
+    if (dbConnected) {
+        const query = 'INSERT INTO solicitudes_recuperacion_maestros (usuario, nombre_completo, telefono, asignatura, estado) VALUES (?, ?, ?, ?, ?)';
+        db.query(query, [usuario, nombre, telefono, asignatura, 'Pendiente'], (err, result) => {
+            if (err) {
+                console.error('Error MySQL, recurriendo a local:', err.message);
+                saveRequestToLocal();
+            } else {
+                res.json({ success: true, message: 'Solicitud enviada', id: result.insertId });
+            }
+        });
+    } else {
+        saveRequestToLocal();
+    }
+});
+
+app.get('/api/solicitudes-recuperacion-maestros', (req, res) => {
+    const dbConnected = db && db.state !== 'disconnected';
+    if (dbConnected) {
+        db.query('SELECT * FROM solicitudes_recuperacion_maestros WHERE estado = "Pendiente" ORDER BY fecha_solicitud DESC', (err, results) => {
+            if (err) {
+                console.error('Error MySQL, recurriendo a local:', err.message);
+                res.json(getLocalMaestroRequests().filter(r => r.estado === 'Pendiente'));
+            } else {
+                res.json(results);
+            }
+        });
+    } else {
+        res.json(getLocalMaestroRequests().filter(r => r.estado === 'Pendiente'));
+    }
+});
+
+app.post('/api/autorizar-solicitud-maestro', (req, res) => {
+    const { id, usuario } = req.body;
+    if (!id) return res.status(400).json({ error: 'ID requerido' });
+
+    const dbConnected = db && db.state !== 'disconnected';
+    
+    const updateRequestLocal = () => {
+        const requests = getLocalMaestroRequests();
+        const index = requests.findIndex(r => r.id === parseInt(id) || r.id === id);
+        if (index !== -1) {
+            requests[index].estado = 'Autorizado';
+            saveLocalMaestroRequests(requests);
+            res.json({ success: true, message: 'Autorizado (local). Contraseña: 123456' });
+        } else {
+            res.status(404).json({ error: 'Solicitud no encontrada' });
+        }
+    };
+
+    if (dbConnected) {
+        db.query('UPDATE solicitudes_recuperacion_maestros SET estado = "Autorizado" WHERE id = ?', [id], (err) => {
+            if (err) {
+                console.error('Error MySQL, recurriendo a local:', err.message);
+                updateRequestLocal();
+            } else {
+                if (usuario) {
+                    db.query('UPDATE usuarios_a SET password = ? WHERE nombre_usuario = ?', ['123456', usuario], (userErr) => {
+                        if (userErr) console.error('Error actualizando contraseña:', userErr.message);
+                        else console.log(`Contraseña de ${usuario} restablecida a "123456"`);
+                    });
+                }
+                res.json({ success: true, message: 'Autorizado. Contraseña: 123456' });
+            }
+        });
+    } else {
+        updateRequestLocal();
+    }
+});
+
+app.post('/api/rechazar-solicitud-maestro', (req, res) => {
+    const { id } = req.body;
+    if (!id) return res.status(400).json({ error: 'ID requerido' });
+
+    const dbConnected = db && db.state !== 'disconnected';
+    
+    const deleteRequestLocal = () => {
+        let requests = getLocalMaestroRequests();
+        requests = requests.filter(r => r.id !== parseInt(id) && r.id !== id);
+        saveLocalMaestroRequests(requests);
+        res.json({ success: true, message: 'Solicitud ignorada' });
+    };
+
+    if (dbConnected) {
+        db.query('DELETE FROM solicitudes_recuperacion_maestros WHERE id = ?', [id], (err) => {
+            if (err) {
+                console.error('Error MySQL, recurriendo a local:', err.message);
+                deleteRequestLocal();
+            } else {
+                res.json({ success: true, message: 'Solicitud ignorada' });
+            }
+        });
+    } else {
+        deleteRequestLocal();
+    }
+});
+
 // Ruta de ingreso desde el login de estudiante: valida que el usuario completó
 // el formulario y lo lleva al dashboard. La navegación real POST->redirect
 // permite que el navegador ofrezca guardar la contraseña.
@@ -213,6 +374,16 @@ app.post('/api/login-estudiante', (req, res) => {
         return res.status(400).json({ error: 'Usuario y contraseña son obligatorios' });
     }
     res.redirect(302, '/estudiante/dashboard');
+});
+
+// Login de profesor: igual que el de estudiante, la navegación POST->redirect
+// permite que el navegador ofrezca guardar la contraseña.
+app.post('/api/login-maestro', (req, res) => {
+    const { username, password } = req.body;
+    if (!username || !password) {
+        return res.status(400).json({ error: 'Usuario y contraseña son obligatorios' });
+    }
+    res.redirect(302, '/maestro/dashboard');
 });
 
 // ==========================================
@@ -232,7 +403,11 @@ app.get('/login', (req, res) => {
 });
 
 app.get('/profesor/login', (req, res) => {
-    res.sendFile(path.join(__dirname, 'stitch_horasocial_pro_landing_page', 'login_profesor', 'code.html'));
+    res.sendFile(path.join(__dirname, 'login_maestro_horasocial_pro', 'index.html'));
+});
+
+app.get('/profesor/recuperar-contrasena', (req, res) => {
+    res.sendFile(path.join(__dirname, 'recuperar_contrasena_maestro_horasocial_pro', 'index.html'));
 });
 
 // ✅ RUTA LOGIN ADMINISTRADOR
@@ -319,7 +494,11 @@ app.get('/recuperar-contrasena', (req, res) => {
 });
 
 app.get('/profesor/login', (req, res) => {
-    res.sendFile(path.join(__dirname, 'stitch_horasocial_pro_landing_page', 'login_profesor', 'code.html'));
+    res.sendFile(path.join(__dirname, 'login_maestro_horasocial_pro', 'index.html'));
+});
+
+app.get('/profesor/recuperar-contrasena', (req, res) => {
+    res.sendFile(path.join(__dirname, 'recuperar_contrasena_maestro_horasocial_pro', 'index.html'));
 });
 
 app.get('/login_administrador', (req, res) => {
