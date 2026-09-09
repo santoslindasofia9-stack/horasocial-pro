@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="utf-8">
 <meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport">
-<title>Horas Sociales Â· Mi Registro</title>
+<title>Horas Sociales · Mi Registro</title>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&amp;display=swap" rel="stylesheet">
 <style>
   :root{
@@ -143,7 +143,7 @@
     box-shadow:0 8px 18px rgba(2,132,199,.25);transition:transform .1s,box-shadow .15s}
   .btn-send:active{transform:scale(.97)}
 
-  /* ---------- secciÃ³n prÃ³ximas (aceptar / rechazar, plazo 24 h) ---------- */
+  /* ---------- sección próximas (aceptar / rechazar, plazo 24 h) ---------- */
   .section-head{display:flex;align-items:center;gap:8px;font-size:15.5px;font-weight:800;
     color:var(--navy-900);margin:0 0 12px}
   .section-head .material-symbols-outlined{font-size:19px;color:var(--sky-500)}
@@ -193,7 +193,7 @@
   .stat small{font-size:9.5px;font-weight:800;color:var(--slate);text-transform:uppercase;letter-spacing:.4px}
   .stat .material-symbols-outlined{font-size:15px;color:var(--sky-500);display:block;margin:0 auto 3px}
 
-  /* ---------- historial (pestaÃ±as) ---------- */
+  /* ---------- historial (pestañas) ---------- */
   .hist-head{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:12px}
   .hist-head h3{font-size:15.5px;font-weight:800;color:var(--navy-900);display:flex;align-items:center;gap:8px}
   .hist-head h3 .material-symbols-outlined{font-size:19px;color:var(--sky-500)}
@@ -342,9 +342,9 @@
     </div>
     <div class="hi">
       <h1>Mi Registro</h1>
-      <p>ConfirmÃ¡ asistencias y rechazos con excusa firmada</p>
+      <p>Confirmá asistencias y rechazos con excusa firmada</p>
     </div>
-    <a class="logout" href="/seleccion-rol" title="Cerrar sesiÃ³n" id="btnLogout">
+    <a class="logout" href="/seleccion-rol" title="Cerrar sesión" id="btnLogout">
       <span class="material-symbols-outlined">logout</span>
       <small>Salir</small>
     </a>
@@ -354,7 +354,7 @@
   <div class="hero">
     <div class="hero-top">
       <span class="hero-pill"><i></i>En curso hoy</span>
-      <span class="hero-limit"><span class="material-symbols-outlined">hourglass_bottom</span>Faltan 24 h para el lÃ­mite</span>
+      <span class="hero-limit"><span class="material-symbols-outlined">hourglass_bottom</span>Faltan 24 h para el límite</span>
     </div>
     <div class="hero-main">
       <div class="hero-ic"><span class="material-symbols-outlined">menu_book</span></div>
@@ -364,7 +364,7 @@
       </div>
     </div>
     <div class="hero-info">
-      <span><span class="material-symbols-outlined">schedule</span>08:00 â€“ 12:00</span>
+      <span><span class="material-symbols-outlined">schedule</span>08:00 – 12:00</span>
       <span><span class="material-symbols-outlined">location_on</span>Biblioteca Alfredo Correa</span>
     </div>
     <div class="hero-cta">
@@ -373,7 +373,7 @@
         <span data-lbl>Confirmar asistencia</span>
       </button>
       <button class="hero-cancel" id="cancelBtn">
-        <span class="material-symbols-outlined">cancel</span>No podrÃ© asistir
+        <span class="material-symbols-outlined">cancel</span>No podré asistir
       </button>
     </div>
   </div>
@@ -384,22 +384,22 @@
       <h3><span class="material-symbols-outlined">report</span>Excusa firmada</h3>
       <button class="excuse-close" id="excuseClose" aria-label="Cerrar">&times;</button>
     </div>
-    <div class="excuse-target"><span class="material-symbols-outlined">event</span><span id="excuseTarget">Biblioteca escolar Â· Hoy</span></div>
+    <div class="excuse-target"><span class="material-symbols-outlined">event</span><span id="excuseTarget">Biblioteca escolar · Hoy</span></div>
 
     <label for="excuseTxt">Motivo del rechazo <b>*</b></label>
-    <textarea id="excuseTxt" placeholder="Contanos brevemente por quÃ© no vas a poder asistir..."></textarea>
+    <textarea id="excuseTxt" placeholder="Contanos brevemente por qué no vas a poder asistir..."></textarea>
 
     <label for="sigCanvas">Firma del acudiente <b>*</b></label>
     <div class="sig-wrap">
       <canvas id="sigCanvas"></canvas>
       <button class="sig-clear" id="sigClear"><span class="material-symbols-outlined">ink_eraser</span>Limpiar</button>
     </div>
-    <p style="font-size:10.5px;color:#94a3b8;font-weight:600;margin-top:6px">ðŸ‘¨â€ðŸ‘©â€ðŸ‘§ FirmÃ¡ en el recuadro con el dedo o el mouse. La excusa no se envÃ­a sin la firma.</p>
+    <p style="font-size:10.5px;color:#94a3b8;font-weight:600;margin-top:6px">Firmá en el recuadro con el dedo o con el mouse. La excusa no se envía sin la firma.</p>
 
     <label for="fileInput">Adjuntar justificante (opcional)</label>
     <button class="file-btn" id="fileBtn" type="button">
       <span class="material-symbols-outlined">upload_file</span>
-      <span id="fileBtnLbl">ImÃ¡genes, PDF o documentos</span>
+      <span id="fileBtnLbl">Imágenes, PDF o documentos</span>
     </button>
     <input type="file" id="fileInput" accept="image/*,.pdf,.doc,.docx,.txt" multiple style="display:none">
     <div class="f-list" id="fileList"></div>
@@ -409,8 +409,8 @@
     </button>
   </div>
 
-  <!-- prÃ³ximas: aceptar / rechazar con plazo de 24 h -->
-  <div class="section-head"><span class="material-symbols-outlined">upcoming</span>PrÃ³ximas actividades</div>
+  <!-- próximas: aceptar / rechazar con plazo de 24 h -->
+  <div class="section-head"><span class="material-symbols-outlined">upcoming</span>Próximas actividades</div>
   <div id="upcomingList"></div>
 
   <!-- stats -->
@@ -455,8 +455,8 @@
   }
 
   var MONTHS_SHORT = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
-  var DAYS = ['Domingo','Lunes','Martes','MiÃ©rcoles','Jueves','Viernes','SÃ¡bado'];
-  var DAYS_SHORT = ['Dom','Lun','Mar','MiÃ©','Jue','Vie','SÃ¡b'];
+  var DAYS = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
+  var DAYS_SHORT = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
   function pad(n){ return (n < 10 ? '0' : '') + n; }
   function parseISO(s){ var p = s.split('-'); return new Date(+p[0], +p[1]-1, +p[2]); }
   function fmtDate(d){ return pad(d.getDate()) + '/' + pad(d.getMonth()+1); }
@@ -474,18 +474,18 @@
 
   /* ---------- datos ---------- */
   var records = [
-    {d:'2026-09-05', title:'Pintura de mural', h:'09:00 â€“ 11:00', hours:2},
-    {d:'2026-09-04', title:'Entrega de donaciones', h:'08:00 â€“ 09:00', hours:1},
-    {d:'2026-09-03', title:'CampaÃ±a de reciclaje', h:'08:00 â€“ 10:00', hours:2},
-    {d:'2026-09-02', title:'Biblioteca escolar', h:'08:00 â€“ 10:00', hours:2},
-    {d:'2026-08-31', title:'Primeros auxilios', h:'08:00 â€“ 12:00', hours:4},
-    {d:'2026-08-29', title:'Huerta escolar', h:'09:00 â€“ 11:00', hours:2},
-    {d:'2026-08-28', title:'Limpieza de canchas', h:'09:00 â€“ 10:00', hours:1},
-    {d:'2026-08-27', title:'VacunaciÃ³n canina', h:'08:00 â€“ 12:00', hours:4}
+    {d:'2026-09-05', title:'Pintura de mural', h:'08:00 - 11:00', hours:2},
+    {d:'2026-09-04', title:'Entrega de donaciones', h:'08:00 - 09:00', hours:1},
+    {d:'2026-09-03', title:'Campaña de reciclaje', h:'08:00 - 10:00', hours:2},
+    {d:'2026-09-02', title:'Biblioteca escolar', h:'08:00 - 10:00', hours:2},
+    {d:'2026-08-31', title:'Primeros auxilios', h:'08:00 - 12:00', hours:4},
+    {d:'2026-08-29', title:'Huerta escolar', h:'09:00 - 11:00', hours:2},
+    {d:'2026-08-28', title:'Limpieza de canchas', h:'09:00 - 10:00', hours:1},
+    {d:'2026-08-27', title:'Vacunación canina', h:'08:00 - 12:00', hours:4}
   ];
   var upcoming = [
     {id:'u1', title:'Huerta escolar', desc:'Mantenimiento y siembra de la huerta', start:'2026-09-11T09:00', hours:2, loc:'Huerta escolar', ic:'yard'},
-    {id:'u2', title:'Primeros auxilios', desc:'Taller con la Cruz Roja Argentina', start:'2026-09-12T08:00', hours:4, loc:'SalÃ³n multiuso', ic:'healing'}
+    {id:'u2', title:'Primeros auxilios', desc:'Taller con la Cruz Roja Argentina', start:'2026-09-12T08:00', hours:4, loc:'Salón multiuso', ic:'healing'}
   ];
 
   /* ---------- hero: confirmar asistencia hoy ---------- */
@@ -499,9 +499,9 @@
       attended.hoy = true; LS.set('horasocial_reg_attended_v1', attended);
       confirmBtn.classList.add('done');
       confirmBtn.querySelector('[data-ic]').textContent = 'task_alt';
-      confirmBtn.querySelector('[data-lbl]').textContent = 'Â¡Registrado!';
+      confirmBtn.querySelector('[data-lbl]').textContent = '¡Registrado!';
       confirmBtn.style.pointerEvents = '';
-      toast('âœ… Asistencia confirmada');
+      toast('Asistencia confirmada');
       $('cancelBtn').style.display = 'none';
       refreshStat();
     }, 1300);
@@ -509,7 +509,7 @@
   if (attended.hoy){
     confirmBtn.classList.add('done');
     confirmBtn.querySelector('[data-ic]').textContent = 'task_alt';
-    confirmBtn.querySelector('[data-lbl]').textContent = 'Â¡Registrado!';
+    confirmBtn.querySelector('[data-lbl]').textContent = '¡Registrado!';
     $('cancelBtn').style.display = 'none';
   }
 
@@ -522,7 +522,7 @@
     excuseArea.classList.add('open');
     if (focus) excuseArea.scrollIntoView({behavior:'smooth', block:'center'});
   }
-  $('cancelBtn').addEventListener('click', function(){ openExcuse('Biblioteca escolar Â· Hoy', {kind:'today'}, true); });
+  $('cancelBtn').addEventListener('click', function(){ openExcuse('Biblioteca escolar · Hoy', {kind:'today'}, true); });
   $('excuseClose').addEventListener('click', function(){ excuseArea.classList.remove('open'); });
 
   /* firma */
@@ -574,13 +574,13 @@
       list.appendChild(item);
     });
     $('fileBtn').classList.toggle('up', files.length > 0);
-    $('fileBtnLbl').textContent = files.length ? files.length + ' archivo(s) adjunto(s)' : 'ImÃ¡genes, PDF o documentos';
+    $('fileBtnLbl').textContent = files.length ? files.length + ' archivo(s) adjunto(s)' : 'Imágenes, PDF o documentos';
   }
   $('fileBtn').addEventListener('click', function(){ $('fileInput').click(); });
   $('fileInput').addEventListener('change', function(){
     var accepted = [];
     Array.prototype.forEach.call(this.files, function(file){
-      if (file.size > 8*1024*1024){ toast('âš ï¸ ' + file.name + ' supera 8 MB'); return; }
+      if (file.size > 8*1024*1024){ toast('El archivo "' + file.name + '" supera 8 MB'); return; }
       accepted.push(file);
     });
     files = files.concat(accepted);
@@ -591,12 +591,12 @@
   /* enviar excusa firmada */
   $('sendExcuse').addEventListener('click', function(){
     var motivo = $('excuseTxt').value.trim();
-    if (!motivo){ toast('âœï¸ EscribÃ­ el motivo primero'); return; }
-    if (!sig.hasInk()){ toast('âœï¸ Falta la firma del acudiente'); excuseArea.scrollIntoView({behavior:'smooth', block:'center'}); return; }
+    if (!motivo){ toast('Escribí el motivo primero'); return; }
+    if (!sig.hasInk()){ toast('Falta la firma del acudiente'); excuseArea.scrollIntoView({behavior:'smooth', block:'center'}); return; }
     var now = new Date();
     var label = excuseTarget.kind === 'today'
-      ? { title:'Biblioteca escolar', d:'2026-09-09', h:'08:00 â€“ 12:00' }
-      : (function(){ var u = upcoming.filter(function(x){ return x.id === excuseTarget.id; })[0]; return { title:u.title, d:u.start.slice(0,10), h:u.start.slice(11,16) + ' â€“ ' + String(+u.start.slice(11,13)+u.hours).padStart(2,'0') + ':00' }; })();
+      ? { title:'Biblioteca escolar', d:'2026-09-09', h:'08:00 - 12:00' }
+      : (function(){ var u = upcoming.filter(function(x){ return x.id === excuseTarget.id; })[0]; return { title:u.title, d:u.start.slice(0,10), h:u.start.slice(11,16) + ' - ' + String(+u.start.slice(11,13)+u.hours).padStart(2,'0') + ':00' }; })();
     inasist.unshift({
       id: 'in' + now.getTime(),
       title: label.title,
@@ -616,11 +616,11 @@
     /* limpiar */
     $('excuseTxt').value = ''; files = []; renderFiles(); sig.clear();
     excuseArea.classList.remove('open');
-    toast('ðŸ“¨ Excusa firmada enviada');
+    toast('Excusa firmada enviada');
     renderUpcoming(); renderInasis(); refreshStat();
   });
 
-  /* ---------- prÃ³ximas: aceptar / rechazar (plazo 24 h antes) ---------- */
+  /* ---------- próximas: aceptar / rechazar (plazo 24 h antes) ---------- */
   function deadlineFor(u){
     var d = new Date(u.start);
     return new Date(d.getTime() - 24*60*60*1000);
@@ -636,14 +636,14 @@
       row.className = 'up-row' + (state === 'accepted' ? ' done' : state === 'rejected' ? ' no' : '');
       var dlHtml = over
         ? '<span class="up-deadline over"><span class="material-symbols-outlined">block</span>Plazo de rechazo vencido (24 h antes)</span>'
-        : '<span class="up-deadline"><span class="material-symbols-outlined">schedule</span>PodÃ©s rechazar hasta ' + DAYS_SHORT[dl.getDay()] + ' ' + fmtDate(dl) + ' ' + pad(dl.getHours()) + ':' + pad(dl.getMinutes()) + '</span>';
+        : '<span class="up-deadline"><span class="material-symbols-outlined">schedule</span>Podés rechazar hasta ' + DAYS_SHORT[dl.getDay()] + ' ' + fmtDate(dl) + ' ' + pad(dl.getHours()) + ':' + pad(dl.getMinutes()) + '</span>';
       var actionsHtml = state === 'pending'
         ? '<div class="up-actions">' +
             '<button class="btn-accept" data-id="' + u.id + '" data-act="accept"><span class="material-symbols-outlined">check</span>Aceptar</button>' +
             '<button class="btn-reject" data-id="' + u.id + '" data-act="reject"' + (over ? ' disabled' : '') + '><span class="material-symbols-outlined">cancel</span>' + (over ? 'Sin plazo' : 'Rechazar') + '</button>' +
           '</div>'
         : '<div class="up-state"><span class="material-symbols-outlined">' + (state === 'accepted' ? 'done_all' : 'report') + '</span>' +
-          (state === 'accepted' ? 'Aceptada Â· Nos vemos ahÃ­' : 'Rechazada Â· Excusa firmada enviada') + '</div>';
+          (state === 'accepted' ? 'Aceptada · Nos vemos ahí' : 'Rechazada · Excusa firmada enviada') + '</div>';
       row.innerHTML =
         '<div class="up-top"><div class="up-ic"><span class="material-symbols-outlined">' + u.ic + '</span></div>' +
         '<div class="up-t"><b>' + u.title + '</b><small>' + u.desc + '</small></div></div>' +
@@ -657,13 +657,13 @@
     box.querySelectorAll('.btn-accept').forEach(function(btn){
       btn.addEventListener('click', function(){
         upState[btn.dataset.id] = 'accepted'; LS.set('horasocial_reg_upcoming_v1', upState);
-        renderUpcoming(); refreshStat(); toast('âœ… Actividad aceptada');
+        renderUpcoming(); refreshStat(); toast('Actividad aceptada');
       });
     });
     box.querySelectorAll('.btn-reject').forEach(function(btn){
       btn.addEventListener('click', function(){
         var u = upcoming.filter(function(x){ return x.id === btn.dataset.id; })[0];
-        openExcuse(u.title + ' Â· ' + DAYS_SHORT[new Date(u.start).getDay()] + ' ' + fmtDate(new Date(u.start)), {kind:'up', id:u.id}, true);
+        openExcuse(u.title + ' · ' + DAYS_SHORT[new Date(u.start).getDay()] + ' ' + fmtDate(new Date(u.start)), {kind:'up', id:u.id}, true);
       });
     });
   }
@@ -672,13 +672,13 @@
   function asisHTML(e){
     var dt = parseISO(e.d);
     return '<div class="hrow"><span class="slot"><b>' + dt.getDate() + '</b><small>' + MONTHS_SHORT[dt.getMonth()] + '</small></span>' +
-      '<div class="ht"><b>' + e.title + '</b><small>' + e.h + ' Â· ' + DAYS[dt.getDay()] + '</small></div>' +
+      '<div class="ht"><b>' + e.title + '</b><small>' + e.h + ' · ' + DAYS[dt.getDay()] + '</small></div>' +
       '<span class="hh">' + e.hours + ' h</span><span class="hd"></span></div>';
   }
   function inasisHTML(e){
     var dt = parseISO(e.d);
     return '<div class="hrow bad"><span class="slot"><b>' + dt.getDate() + '</b><small>' + MONTHS_SHORT[dt.getMonth()] + '</small></span>' +
-      '<div class="ht"><b>' + e.title + '</b><small>' + e.h + ' Â· ' + DAYS[dt.getDay()] + ' Â· ' + e.motivo + '</small>' +
+      '<div class="ht"><b>' + e.title + '</b><small>' + e.h + ' · ' + DAYS[dt.getDay()] + ' · ' + e.motivo + '</small>' +
         '<span class="badge-firma"><span class="material-symbols-outlined">draw</span>Firmada por acudiente</span>' +
         (e.files.length ? '<span class="file-chip"><span class="material-symbols-outlined">attach_file</span>' + e.files.length + '</span>' : '') +
       '</div><span class="hh">' + e.estado + '</span><span class="hd"></span></div>';
@@ -690,7 +690,7 @@
   function renderInasis(){
     var box = $('inasisList'); box.innerHTML = '';
     if (!inasist.length){
-      box.innerHTML = '<div class="empty"><span class="material-symbols-outlined">check_circle</span>No reportaste inasistencias. Â¡SeguÃ­ asÃ­!</div>';
+      box.innerHTML = '<div class="empty"><span class="material-symbols-outlined">check_circle</span>No reportaste inasistencias. ¡Seguí así!</div>';
       return;
     }
     inasist.forEach(function(e){ box.insertAdjacentHTML('beforeend', inasisHTML(e)); });
@@ -713,7 +713,7 @@
     $('inasisList').style.display = ''; $('asisList').style.display = 'none';
   });
 
-  /* cerrar sesiÃ³n */
+  /* cerrar sesión */
   var btnLogout = $('btnLogout');
   if (btnLogout) btnLogout.addEventListener('click', function(e){
     e.preventDefault();
