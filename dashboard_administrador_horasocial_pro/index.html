@@ -318,6 +318,49 @@
   .doc-chip.sky{background:#e0f2fe;color:#0369a1}
   .doc-chip.vio{background:#ede9fe;color:#6d28d9}
 
+  /* ---------- pestañas y ajustes de docentes ---------- */
+  .seg{display:flex;gap:8px;margin-bottom:14px;background:var(--glass);border:1px solid var(--card-brd);
+    border-radius:14px;padding:5px;width:max-content;max-width:100%}
+  .seg-btn{display:inline-flex;align-items:center;gap:6px;border:0;background:transparent;color:var(--slate);
+    font-family:inherit;font-size:12px;font-weight:800;padding:9px 16px;border-radius:10px;cursor:pointer;
+    transition:all .15s}
+  .seg-btn.active{background:var(--navy-900);color:#fff}
+  .seg-btn .material-symbols-outlined{font-size:16px}
+  .doc-vista{display:none}
+  .doc-vista.show{display:block;animation:popIn .22s ease}
+  .aj-card{background:var(--glass);backdrop-filter:blur(12px);border:1px solid var(--card-brd);
+    border-radius:var(--radius);padding:16px;margin-bottom:12px}
+  .aj-card h4{font-size:12.5px;font-weight:800;color:var(--navy-900);display:flex;align-items:center;
+    gap:7px;margin-bottom:11px}
+  .aj-card h4 .material-symbols-outlined{font-size:17px;color:var(--sky-500)}
+  .aj-row{display:flex;align-items:center;gap:12px;background:var(--glass);border:1px solid var(--card-brd);
+    border-radius:14px;padding:12px 14px;margin-bottom:9px;transition:opacity .18s}
+  .aj-row.off{opacity:.55}
+  .aj-row .doc-ava{width:38px;height:38px;font-size:10px}
+  .aj-info{flex:1;min-width:0}
+  .aj-info b{display:block;font-size:13px;font-weight:800;color:var(--navy-900)}
+  .aj-info small{display:block;font-size:10.5px;color:var(--slate);font-weight:600;margin-top:2px}
+  .aj-edit{display:none;align-items:center;gap:7px;margin-top:6px}
+  .aj-edit.show{display:flex}
+  .aj-edit input{border:1px solid var(--card-brd);border-radius:9px;padding:6px 9px;font-family:inherit;
+    font-size:11.5px;font-weight:600;outline:0;width:160px;background:#fff;color:var(--navy-900)}
+  .aj-btn{display:inline-flex;align-items:center;gap:5px;border:1px solid var(--card-brd);background:#fff;
+    color:var(--navy-900);font-family:inherit;font-size:10.5px;font-weight:800;padding:6px 10px;
+    border-radius:9px;cursor:pointer;transition:background .15s}
+  .aj-btn:hover{background:var(--sky-50)}
+  .aj-num{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+  .aj-num input{width:70px;border:1px solid var(--card-brd);border-radius:9px;padding:8px 10px;
+    font-family:inherit;font-size:12px;font-weight:700;outline:0;text-align:center;background:#fff;color:var(--navy-900)}
+  .aj-num span{font-size:11px;font-weight:700;color:var(--slate)}
+  .aj-hint{display:block;font-size:10.5px;color:var(--slate);font-weight:600;margin-top:8px}
+  .switch{position:relative;width:44px;height:24px;flex:0 0 auto;cursor:pointer}
+  .switch input{opacity:0;width:0;height:0}
+  .switch i{position:absolute;inset:0;background:#cbd5e1;border-radius:999px;transition:background .18s}
+  .switch i::after{content:"";position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;
+    background:#fff;transition:transform .18s;box-shadow:0 2px 6px rgba(15,23,42,.25)}
+  .switch input:checked + i{background:#16a34a}
+  .switch input:checked + i::after{transform:translateX(20px)}
+
   /* ---------- bottom nav (glass + íconos, bien aireada) ---------- */
   nav{
     position:fixed;left:0;right:0;bottom:0;z-index:50;
@@ -581,6 +624,11 @@
       <h3><span class="m material-symbols-outlined">badge</span>Coordinación de Docentes</h3>
       <span id="docResumenTxt">24 docentes</span>
     </div>
+    <div class="seg">
+      <button class="seg-btn active" data-docvista="coord" type="button"><span class="material-symbols-outlined">grid_view</span>Coordinación</button>
+      <button class="seg-btn" data-docvista="ajustes" type="button"><span class="material-symbols-outlined">tune</span>Ajustes</button>
+    </div>
+    <div class="doc-vista show" id="docVistaCoord">
     <div class="doc-toolbar">
       <div class="doc-search">
         <span class="material-symbols-outlined">search</span>
@@ -595,6 +643,22 @@
     </div>
     <div id="docGrid" class="doc-grid"></div>
     <div id="docEmpty" class="empty" hidden><span class="material-symbols-outlined">search_off</span><span>No hay docentes que coincidan</span></div>
+    </div>
+    <div class="doc-vista" id="docVistaAjustes">
+      <div class="aj-card">
+        <h4><span class="material-symbols-outlined">timeline</span>Horas objetivo semanal</h4>
+        <div class="aj-num">
+          <input id="ajObjetivo" type="number" min="20" max="80" aria-label="Horas objetivo semanal">
+          <span>horas por docente</span>
+          <button class="aj-btn" type="button" id="ajObjSave">Guardar</button>
+        </div>
+        <small class="aj-hint">La barra de horas de Coordinación se recalcula contra este objetivo.</small>
+      </div>
+      <div class="aj-card">
+        <h4><span class="material-symbols-outlined">manage_accounts</span>Plantilla de docentes</h4>
+        <div id="ajList"></div>
+      </div>
+    </div>
   </section>
 
   <!-- control de estudiantes -->
@@ -1344,7 +1408,7 @@
       var html = '';
       lista.forEach(function(d){
         var total = 0; d.semana.forEach(function(h){ total += h; });
-        var pct = Math.min(100, Math.round(total / 50 * 100));
+        var pct = Math.min(100, Math.round(total / AJ.objetivo * 100));
         var sem = '';
         d.semana.forEach(function(h, i){
           sem += '<div class="sem-row"><span>' + DIAS_SEM[i % DIAS_SEM.length] + '</span>' +
@@ -1426,6 +1490,126 @@
         toast('Horas registradas para ' + (nm || aid));
         renderDocentes();
       }
+    });
+
+/* ---------- ajustes de docentes ---------- */
+    var LS_AJUSTES = 'horasocial_admin_ajustes_v1';
+    function cargarAjustes(){
+      var base = { objetivo:40, materias:{}, activos:{} };
+      try{
+        var raw = localStorage.getItem(LS_AJUSTES);
+        if (raw){
+          var p = JSON.parse(raw);
+          if (p && typeof p === 'object'){
+            base.objetivo = parseInt(p.objetivo, 10) || 40;
+            base.materias = p.materias || {};
+            base.activos = p.activos || {};
+          }
+        }
+      }catch(e){}
+      DOCENTES.forEach(function(d){ if (base.materias[d.id]) d.materia = base.materias[d.id]; });
+      return base;
+    }
+    function guardarAjustes(){
+      try{ localStorage.setItem(LS_AJUSTES, JSON.stringify({ objetivo: AJ.objetivo, materias: AJ.materias, activos: AJ.activos })); }catch(e){}
+    }
+    var AJ = cargarAjustes();
+    AJ._base = {};
+    DOCENTES.forEach(function(d){ AJ._base[d.id] = d.semana.slice(); });
+
+    function renderAjustes(){
+      var list = $('ajList'); if (!list) return;
+      var html = '';
+      DOCENTES.forEach(function(d){
+        var activo = AJ.activos[d.id] !== false;
+        html += '<div class="aj-row' + (activo ? '' : ' off') + '" data-id="' + d.id + '">' +
+          '<div class="doc-ava">' + esc(d.iniciales) + '</div>' +
+          '<div class="aj-info">' +
+            '<b>' + esc(d.nombre) + '</b>' +
+            '<small>' + esc(d.materia) + (activo ? '' : ' · De baja') + '</small>' +
+            '<div class="aj-edit" id="ajedit-' + d.id + '">' +
+              '<input id="ajmat-' + d.id + '" value="' + esc(d.materia) + '" aria-label="Nueva materia">' +
+              '<button class="aj-btn" type="button" data-ajsave="' + d.id + '">Guardar</button>' +
+            '</div>' +
+          '</div>' +
+          '<button class="aj-btn" type="button" data-ajedit="' + d.id + '" title="Editar materia"><span class="material-symbols-outlined" style="font-size:14px">edit</span></button>' +
+          '<button class="aj-btn" type="button" data-ajreset="' + d.id + '" title="Restablecer horas de la semana"><span class="material-symbols-outlined" style="font-size:14px">restart_alt</span></button>' +
+          '<label class="switch" title="Dar de alta o baja"><input type="checkbox" data-ajact="' + d.id + '"' + (activo ? ' checked' : '') + '><i></i></label>' +
+        '</div>';
+      });
+      list.innerHTML = html;
+      var inp = $('ajObjetivo'); if (inp) inp.value = AJ.objetivo;
+    }
+
+    var ajList = $('ajList');
+    if (ajList){
+      ajList.addEventListener('change', function(e){
+        var cb = e.target && e.target.closest ? e.target.closest('[data-ajact]') : null;
+        if (!cb) return;
+        var id = cb.getAttribute('data-ajact');
+        AJ.activos[id] = cb.checked;
+        guardarAjustes();
+        ajList.querySelectorAll('.aj-row').forEach(function(r){ if (r.getAttribute('data-id') === id) r.classList.toggle('off', !cb.checked); });
+      });
+      ajList.addEventListener('click', function(e){
+        var t = e.target;
+        var ed = t && t.closest ? t.closest('[data-ajedit]') : null;
+        if (ed){
+          var box = $('ajedit-' + ed.getAttribute('data-ajedit'));
+          if (box) box.classList.toggle('show');
+          return;
+        }
+        var sv = t && t.closest ? t.closest('[data-ajsave]') : null;
+        if (sv){
+          var id = sv.getAttribute('data-ajsave');
+          var inp = $('ajmat-' + id);
+          var v = inp ? inp.value.trim() : '';
+          if (!v){ toast('La materia no puede quedar vacía'); return; }
+          DOCENTES.forEach(function(d){ if (d.id === id) d.materia = v; });
+          AJ.materias[id] = v;
+          guardarAjustes();
+          renderAjustes(); renderDocentes();
+          toast('Materia actualizada');
+          return;
+        }
+        var rs = t && t.closest ? t.closest('[data-ajreset]') : null;
+        if (rs){
+          var rid = rs.getAttribute('data-ajreset');
+          if (AJ._base && AJ._base[rid]){
+            DOCENTES.forEach(function(d){ if (d.id === rid) d.semana = AJ._base[rid].slice(); });
+          }
+          renderDocentes();
+          toast('Horas de la semana restablecidas');
+        }
+      });
+    }
+
+    var segBtns = document.querySelectorAll('[data-docvista]');
+    segBtns.forEach(function(b){
+      b.addEventListener('click', function(){
+        var v = b.getAttribute('data-docvista');
+        segBtns.forEach(function(x){ x.classList.toggle('active', x === b); });
+        var cv = $('docVistaCoord'), av = $('docVistaAjustes');
+        if (v === 'ajustes'){
+          if (cv) cv.classList.remove('show');
+          if (av) av.classList.add('show');
+          renderAjustes();
+        } else {
+          if (av) av.classList.remove('show');
+          if (cv) cv.classList.add('show');
+          renderDocentes();
+        }
+      });
+    });
+    var ajObjSave = $('ajObjSave');
+    if (ajObjSave) ajObjSave.addEventListener('click', function(){
+      var inp = $('ajObjetivo');
+      var v = inp ? parseInt(inp.value, 10) : 0;
+      if (!v || v < 20 || v > 80){ toast('Indicá un objetivo entre 20 y 80 horas'); return; }
+      AJ.objetivo = v;
+      guardarAjustes();
+      renderDocentes();
+      toast('Objetivo semanal: ' + v + ' h');
     });
 
     /* ---------- control de estudiantes ---------- */
