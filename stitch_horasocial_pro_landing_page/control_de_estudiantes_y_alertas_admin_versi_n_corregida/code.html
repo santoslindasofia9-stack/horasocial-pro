@@ -9,12 +9,19 @@
 <style>
         .font-comfortaa { font-family: 'Comfortaa', cursive; }
         .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
-        body { background-color: #F8FAFC; }
+        body { background: linear-gradient(180deg, #F0F7FF 0%, #F8FAFC 45%, #FFFFFF 100%); }
         .bar-meta { transition: width .7s cubic-bezier(.22,1,.36,1); }
         .est-card { transition: transform .15s ease, box-shadow .15s ease; }
-        .est-card:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(15,23,42,0.08); }
+        .est-card:hover { transform: translateY(-3px); box-shadow: 0 14px 32px rgba(15,23,42,0.10); }
         .burbuja { transition: transform .15s ease; }
         .burbuja:hover { transform: scale(1.15); }
+        .kpi-card { transition: transform .15s ease, box-shadow .15s ease; }
+        .kpi-card:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(15,23,42,0.07); }
+        .ocean-wave { position: fixed; pointer-events: none; z-index: 0; width: min(92vw, 900px); }
+        .ocean-wave svg { width: 100%; height: auto; display: block; }
+        @keyframes drift { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(-22px); } }
+        .drift-a svg { animation: drift 18s ease-in-out infinite; }
+        .drift-b svg { animation: drift 26s ease-in-out infinite reverse; }
     </style>
 <script id="tailwind-config">
         tailwind.config = {
@@ -46,10 +53,17 @@
     </script>
 </head>
 <body class="font-body text-on-surface min-h-screen pb-32">
+<!-- Ondas de fondo -->
+<div class="ocean-wave drift-a" style="top:-50px; left:-70px; transform: rotate(-12deg);" aria-hidden="true">
+<svg viewBox="0 0 600 200" fill="#BAE6FD" opacity="0.45"><path d="M0,100 C100,40 200,160 300,90 C400,20 500,140 600,80 L600,200 L0,200 Z"/></svg>
+</div>
+<div class="ocean-wave drift-b" style="bottom:-70px; right:-90px; transform: rotate(9deg);" aria-hidden="true">
+<svg viewBox="0 0 700 220" fill="#7DD3FC" opacity="0.35"><path d="M0,120 C120,40 260,190 400,100 C540,20 620,130 700,60 L700,220 L0,220 Z"/></svg>
+</div>
 <!-- Header -->
 <header class="fixed top-0 w-full z-50 bg-white/90 backdrop-blur-md border-b border-slate-200 px-4 md:px-lg py-md flex justify-between items-center h-20">
 <div class="flex items-center gap-3">
-<div class="w-10 h-10 bg-primary rounded-lg flex items-center justify-center text-white">
+<div class="w-10 h-10 bg-gradient-to-br from-[#0F172A] to-[#1E3A5F] rounded-lg flex items-center justify-center text-white shadow-md">
 <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">school</span>
 </div>
 <h1 class="font-headline text-xl font-bold text-primary tracking-tight">HORASOCIAL PRO</h1>
@@ -67,25 +81,29 @@
 </header>
 <main class="relative z-10 pt-24 px-4 md:px-8 max-w-[1440px] mx-auto">
 <!-- Banner -->
-<section class="mt-6 mb-8 rounded-2xl overflow-hidden relative flex items-center shadow-md">
-<div class="absolute inset-0 bg-gradient-to-r from-[#0F172A] via-[#1E293B] to-[#334155]"></div>
+<section class="mt-6 mb-8 rounded-3xl overflow-hidden relative flex items-center shadow-[0_18px_50px_rgba(15,23,42,0.18)]">
+<div class="absolute inset-0 bg-gradient-to-r from-[#0F172A] via-[#1E293B] to-[#0E7490]"></div>
+<div class="absolute -top-12 -left-12 w-64 h-64 bg-sky-500/25 rounded-full blur-3xl"></div>
+<div class="absolute -bottom-20 right-1/4 w-72 h-72 bg-cyan-400/20 rounded-full blur-3xl"></div>
 <div class="absolute right-6 opacity-10 hidden sm:block">
 <span class="material-symbols-outlined text-[150px] text-white">monitoring</span>
 </div>
-<div class="relative z-10 px-6 md:px-8 py-8 flex-1">
+<div class="relative z-10 px-6 md:px-8 py-9 flex-1">
 <div class="flex flex-wrap items-center gap-2 mb-3">
 <span class="bg-white/10 backdrop-blur text-white/90 text-[11px] font-bold px-3 py-1 rounded-full flex items-center gap-1.5"><span class="material-symbols-outlined text-sm">calendar_today</span><span id="fechaHoy">&mdash;</span></span>
-<span class="bg-accent/20 text-sky-200 text-[11px] font-bold px-3 py-1 rounded-full flex items-center gap-1.5"><span class="material-symbols-outlined text-sm">school</span>Periodo acad&eacute;mico 2026</span>
+<span class="bg-accent/25 text-sky-100 text-[11px] font-bold px-3 py-1 rounded-full flex items-center gap-1.5"><span class="relative flex h-2 w-2"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-300 opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-sky-400"></span></span>En vivo</span>
+<span class="bg-white/10 backdrop-blur text-white/90 text-[11px] font-bold px-3 py-1 rounded-full flex items-center gap-1.5"><span class="material-symbols-outlined text-sm">school</span>Periodo acad&eacute;mico 2026</span>
 </div>
 <h2 class="font-comfortaa text-2xl md:text-4xl text-white font-bold mb-2">Control de Estudiantes y Normas</h2>
 <p class="text-slate-300 text-sm md:text-base max-w-xl">Horas de compromiso, brigadas y alertas de convivencia en tiempo real, en un solo lugar.</p>
 </div>
+<svg class="absolute bottom-0 left-0 w-full h-10 md:h-14 text-[#F8FAFC]" viewBox="0 0 1440 90" preserveAspectRatio="none" fill="currentColor" aria-hidden="true"><path d="M0,45 C240,90 480,0 720,30 C960,60 1200,10 1440,45 L1440,90 L0,90 Z"/></svg>
 </section>
 <!-- KPIs -->
-<section class="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-8">
-<div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 flex flex-col justify-between">
+<section class="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-8 relative">
+<div class="kpi-card bg-white p-5 rounded-2xl shadow-sm border border-slate-100 flex flex-col justify-between">
 <div class="flex justify-between items-start">
-<div class="bg-blue-50 p-2.5 rounded-xl text-accent">
+<div class="bg-gradient-to-br from-blue-50 to-sky-100 p-2.5 rounded-xl text-accent">
 <span class="material-symbols-outlined">group</span>
 </div>
 <span class="text-xs font-bold text-sky-600 bg-sky-50 px-2.5 py-1 rounded-full">3 brigadas</span>
@@ -95,9 +113,9 @@
 <p class="text-4xl font-headline font-extrabold text-primary" id="kpiEst">0</p>
 </div>
 </div>
-<div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 flex flex-col justify-between">
+<div class="kpi-card bg-white p-5 rounded-2xl shadow-sm border border-slate-100 flex flex-col justify-between">
 <div class="flex justify-between items-start">
-<div class="bg-indigo-50 p-2.5 rounded-xl text-indigo-600">
+<div class="bg-gradient-to-br from-indigo-50 to-violet-100 p-2.5 rounded-xl text-indigo-600">
 <span class="material-symbols-outlined">schedule</span>
 </div>
 <span class="text-xs font-bold text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-full">Acumuladas</span>
@@ -107,9 +125,9 @@
 <p class="text-4xl font-headline font-extrabold text-primary flex items-center gap-2"><span id="kpiHoras">0</span><span class="text-xs font-bold text-slate-400 uppercase tracking-widest">h</span></p>
 </div>
 </div>
-<div class="bg-white p-5 rounded-2xl shadow-sm border-2 border-red-50 flex flex-col justify-between">
+<div class="kpi-card bg-white p-5 rounded-2xl shadow-sm border-2 border-red-50 flex flex-col justify-between">
 <div class="flex justify-between items-start">
-<div class="bg-red-50 p-2.5 rounded-xl text-red-600">
+<div class="bg-gradient-to-br from-red-50 to-rose-100 p-2.5 rounded-xl text-red-600">
 <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">warning</span>
 </div>
 <span class="text-xs font-bold text-red-600 bg-red-50 px-2.5 py-1 rounded-full uppercase tracking-tight" id="kpiAlChip">Acci&oacute;n requerida</span>
@@ -119,9 +137,9 @@
 <p class="text-4xl font-headline font-extrabold text-red-600" id="kpiAlertas">0</p>
 </div>
 </div>
-<div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 flex flex-col justify-between">
+<div class="kpi-card bg-white p-5 rounded-2xl shadow-sm border border-slate-100 flex flex-col justify-between">
 <div class="flex justify-between items-start">
-<div class="bg-emerald-50 p-2.5 rounded-xl text-emerald-600">
+<div class="bg-gradient-to-br from-emerald-50 to-teal-100 p-2.5 rounded-xl text-emerald-600">
 <span class="material-symbols-outlined">flag</span>
 </div>
 <span class="text-xs font-bold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full" id="kpiMetaLabel">Meta 1440 h</span>
@@ -136,14 +154,17 @@
 </div>
 </section>
 <!-- Main grid -->
-<section class="grid grid-cols-1 lg:grid-cols-10 gap-6 mb-12">
+<section class="grid grid-cols-1 lg:grid-cols-10 gap-6 mb-12 relative">
 <!-- Estudiantes -->
 <div class="lg:col-span-6 xl:col-span-7">
 <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
 <div class="p-5 border-b border-slate-100 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
 <div>
 <h3 class="font-comfortaa text-xl text-primary font-bold">Estudiantes</h3>
-<p class="text-slate-500 text-sm">Cada tarjeta muestra horas acumuladas contra la meta de 120 h.</p>
+<div class="mt-1 flex items-center gap-2">
+<svg class="h-2 w-14 text-sky-400" viewBox="0 0 64 8" fill="none" aria-hidden="true"><path d="M0,4 C8,8 16,0 24,4 C32,8 40,0 48,4 C56,8 60,2 64,4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+<span class="text-slate-500 text-sm">Cada tarjeta muestra horas acumuladas contra la meta de 120 h.</span>
+</div>
 </div>
 <div class="flex items-center gap-3 flex-wrap">
 <div class="relative">
@@ -171,11 +192,14 @@
 </div>
 <!-- Alertas -->
 <div class="lg:col-span-4 xl:col-span-3">
-<div class="bg-white rounded-2xl border border-red-100 shadow-sm flex flex-col h-full">
-<div class="p-5 bg-red-50/30 border-b border-red-100 rounded-t-2xl flex items-center justify-between">
+<div class="bg-white rounded-2xl border border-red-100 shadow-sm flex flex-col h-full overflow-hidden">
+<div class="p-5 bg-gradient-to-r from-red-50/80 to-rose-50/60 border-b border-red-100 rounded-t-2xl flex items-center justify-between">
+<div>
 <h3 class="font-comfortaa text-lg text-red-800 font-bold flex items-center gap-2">
 <span class="material-symbols-outlined text-red-600">emergency_home</span> Alertas de Convivencia
 </h3>
+<svg class="mt-1 h-2 w-14 text-red-300" viewBox="0 0 64 8" fill="none" aria-hidden="true"><path d="M0,4 C8,8 16,0 24,4 C32,8 40,0 48,4 C56,8 60,2 64,4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+</div>
 <span class="text-[11px] font-bold text-red-600 bg-red-100 px-2.5 py-1 rounded-full" id="alCount">0</span>
 </div>
 <div class="p-4 space-y-3 overflow-y-auto max-h-[640px]" id="alertList"></div>
@@ -188,8 +212,10 @@
 </section>
 </main>
 <!-- Footer Navigation -->
-<nav class="fixed bottom-0 left-0 w-full z-50 bg-white/95 backdrop-blur border-t border-slate-200 shadow-[0_-10px_30px_rgba(0,0,0,0.04)]">
-<div class="max-w-4xl mx-auto grid grid-cols-4 gap-1 px-3 h-20 items-center">
+<nav class="fixed bottom-0 left-0 w-full z-50">
+<div class="relative bg-white/95 backdrop-blur border-t border-sky-100/70 shadow-[0_-12px_32px_rgba(15,23,42,0.08)] rounded-t-3xl overflow-hidden px-3">
+<svg class="absolute top-0 left-0 w-full h-[10px] text-sky-100" viewBox="0 0 1440 20" preserveAspectRatio="none" fill="currentColor" aria-hidden="true"><path d="M0,8 C120,18 240,0 360,10 C480,20 600,2 720,10 C840,18 960,2 1080,10 C1200,18 1320,4 1440,10 L1440,20 L0,20 Z"/></svg>
+<div class="max-w-4xl mx-auto grid grid-cols-4 gap-1 relative h-20 items-center">
 <a class="flex flex-col items-center justify-center gap-1 py-2 rounded-xl text-slate-400 hover:text-primary transition-colors group" data-go data-file="../../dashboard_administrador_horasocial_pro/index.html" data-served="/admin/dashboard" href="/admin/dashboard">
 <span class="material-symbols-outlined text-2xl group-hover:scale-110 transition-transform">dashboard</span>
 <span class="text-[11px] font-bold">Panel</span>
@@ -198,7 +224,7 @@
 <span class="material-symbols-outlined text-2xl group-hover:scale-110 transition-transform">badge</span>
 <span class="text-[11px] font-bold">Docentes</span>
 </a>
-<a class="flex flex-col items-center justify-center gap-1 py-2 rounded-xl bg-accent/15 text-accent">
+<a class="flex flex-col items-center justify-center gap-1 py-2 rounded-xl bg-gradient-to-r from-sky-500 to-blue-600 text-white shadow-lg scale-105">
 <span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 1;">school</span>
 <span class="text-[11px] font-extrabold">Estudiantes</span>
 </a>
@@ -206,6 +232,7 @@
 <span class="material-symbols-outlined text-2xl group-hover:scale-110 transition-transform">chat_bubble</span>
 <span class="text-[11px] font-bold">Mensajes</span>
 </a>
+</div>
 </div>
 </nav>
 <script>
@@ -493,10 +520,12 @@
           burb += '</div></div>';
         }
 
-        html += '<div class="est-card rounded-xl border border-slate-100 bg-white p-4" data-id="' + e.id + '">' +
+        html += '<div class="est-card rounded-xl border border-slate-100 bg-white overflow-hidden" data-id="' + e.id + '">' +
+          '<div class="h-1.5 bg-gradient-to-r ' + gradienteBrigada(e.brigada).replace('bg-gradient-to-br','bg-gradient-to-r') + '"></div>' +
+          '<div class="p-4">' +
           '<div class="flex items-start gap-3">' +
             '<div class="relative">' +
-              '<div class="w-11 h-11 rounded-full flex items-center justify-center text-white font-bold text-sm ' + gradienteBrigada(e.brigada) + '">' + e.iniciales + '</div>' +
+              '<div class="w-11 h-11 rounded-full flex items-center justify-center text-white font-bold text-sm ring-2 ring-white shadow-md ' + gradienteBrigada(e.brigada) + '">' + e.iniciales + '</div>' +
               '<span class="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full border-2 border-white ' + (e.enLinea ? 'bg-green-500' : 'bg-slate-300') + '"></span>' +
             '</div>' +
             '<div class="min-w-0 flex-1">' +
@@ -513,6 +542,7 @@
             '<button class="py-2 rounded-lg text-[10px] font-bold border transition-colors ' + (open ? 'bg-primary text-white border-primary' : 'border-slate-200 text-primary hover:bg-slate-50') + '" data-perfil="' + e.id + '" type="button"><span class="material-symbols-outlined align-middle text-xs mr-1">insights</span>' + (open ? 'Ocultar' : 'Perfil') + '</button>' +
             '<button class="py-2 rounded-lg text-[10px] font-bold bg-primary text-white hover:bg-slate-800 transition-colors" data-addh="' + e.id + '" type="button"><span class="material-symbols-outlined align-middle text-xs mr-1">add_circle</span>+2 h</button>' +
           '</div>' + burb +
+          '</div>' +
         '</div>';
       });
 
