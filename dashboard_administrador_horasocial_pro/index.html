@@ -310,6 +310,40 @@
   }
 </style>
 </head>
+<style>
+  /* ---------- chat de soporte tecnico (solo dashboard) ---------- */
+  .sop-panel{position:fixed;top:64px;right:16px;width:min(360px,calc(100vw - 32px));height:min(480px,calc(100dvh - 96px));
+    background:#fff;border:1px solid var(--card-brd);border-radius:22px;box-shadow:0 24px 60px rgba(15,47,68,.28);
+    display:flex;flex-direction:column;overflow:hidden;opacity:0;visibility:hidden;transform:translateY(8px) scale(.98);
+    transition:all .18s;z-index:120}
+  .sop-panel.show{opacity:1;visibility:visible;transform:translateY(0) scale(1)}
+  .sop-head{display:flex;align-items:center;gap:10px;padding:13px 14px;background:linear-gradient(135deg,var(--navy-900),#16324a);color:#fff}
+  .sop-head .sop-ai{width:34px;height:34px;border-radius:11px;background:rgba(255,255,255,.14);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 10px rgba(0,0,0,.18)}
+  .sop-head .sop-ai .material-symbols-outlined{font-size:19px}
+  .sop-head b{font-size:13px;font-weight:800;display:block}
+  .sop-head small{font-size:10.5px;color:rgba(255,255,255,.75);font-weight:600;display:block;margin-top:2px}
+  .sop-head .dot{width:7px;height:7px;border-radius:50%;background:#4ade80;display:inline-block;margin-right:4px}
+  .sop-x{margin-left:auto;background:rgba(255,255,255,.12);border:0;color:#fff;width:30px;height:30px;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+  .sop-x:hover{background:rgba(255,255,255,.22)}
+  .sop-x .material-symbols-outlined{font-size:17px}
+  .sop-body{flex:1;overflow-y:auto;padding:14px 12px;display:flex;flex-direction:column;gap:10px;background:var(--sky-50)}
+  .sop-bb{display:flex;gap:8px;max-width:88%}
+  .sop-bb.out{align-self:flex-end;flex-direction:row-reverse}
+  .sop-ava{width:26px;height:26px;border-radius:50%;background:var(--navy-900);color:#fff;font-size:10.5px;font-weight:800;display:flex;align-items:center;justify-content:center;flex:0 0 auto;margin-top:2px}
+  .sop-bub{background:#fff;border:1px solid var(--card-brd);border-radius:15px;border-bottom-left-radius:5px;padding:9px 12px;box-shadow:0 4px 10px rgba(3,105,161,.07)}
+  .sop-bb.out .sop-bub{background:var(--sky-600);border-color:var(--sky-600);border-radius:15px;border-bottom-right-radius:5px}
+  .sop-bub p{font-size:12.5px;font-weight:600;color:var(--ink);line-height:1.5;white-space:pre-wrap;word-break:break-word}
+  .sop-bb.out .sop-bub p{color:#fff}
+  .sop-bub small{font-size:9.5px;color:var(--slate);font-weight:600;display:block;margin-top:3px;text-align:right}
+  .sop-bb.out .sop-bub small{color:rgba(255,255,255,.75)}
+  .sop-foot{display:flex;gap:8px;align-items:flex-end;padding:9px 12px;border-top:1px solid var(--card-brd);background:#fff}
+  .sop-foot input{flex:1;border:1px solid var(--card-brd);border-radius:13px;padding:10px 12px;font-family:inherit;font-size:12.5px;font-weight:600;color:var(--ink);outline:none;background:var(--sky-50)}
+  .sop-foot input:focus{border-color:var(--sky-400);background:#fff}
+  .sop-foot button{width:38px;height:38px;border-radius:12px;border:0;background:var(--navy-900);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+  .sop-foot button:active{transform:scale(.93)}
+  .sop-foot button .material-symbols-outlined{font-size:18px}
+  .sop-foot button.att{background:var(--sky-100);color:var(--sky-700)}
+</style>
 <body>
 
   <!-- fondo: ondas estilo selección de rol, fluyendo por toda la página -->
@@ -378,7 +412,7 @@
   <!-- header -->
   <header>
     <div class="avatar" role="img" aria-label="Perfil de Administradora Sofia">
-      <img id="avImg" alt="Foto de Administradora Sofia" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC2a3doQcYz7YW2YfF68HVbOvJ0y2UEpVIz_a1cdaOKDVUxSxGCUp8vcnpothWg82RQjdLADzsR4HcF9LcPVsvyJvQJtAwi_8o9nq47jRNCo_Y8XOyqXvlFSLrjV8PckkMvsJap" onerror="this.style.display='none';var f=document.getElementById('avSvgFallback');if(f){f.style.display='flex';}">
+      <img id="avImg" alt="Foto de Administradora Sofia" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD-jEaB1rRyiv-PFoHJYSYVflUphAJutNcW0ho3QJG2K8su-qgH2W2g609ldMcSycw7sYsVDxvgXEh8r07r3VlJxUVifGqFjwKtfg0ZBok1rdZHXJxitVGwIUD-smAwVcdHDfaKgoNGMFvkI-7RQJY87LuDRhKUwQELFPGRcJ6Ac4FuJlXsjOV2LlujosUbzrs7MX4AhqdNV9HekG47FckN51Rjsm7sX9lVJp1tOsYsOaaIh3EQkZzDcNaqN5JKFFvS2UPJ69jNx6J2" onerror="this.style.display='none';var f=document.getElementById('avSvgFallback');if(f){f.style.display='flex';}">
       <div class="av-fb" id="avSvgFallback">SA</div>
     </div>
     <div class="hi">
@@ -388,6 +422,10 @@
     <button class="bell" id="btnNotif" type="button" aria-label="Notificaciones">
       <span class="material-symbols-outlined">notifications</span>
       <span class="bell-dot" id="notifDot"></span>
+    </button>
+    <button class="bell" id="btnSoporte" type="button" aria-label="Soporte técnico">
+      <span class="material-symbols-outlined">support_agent</span>
+      <span class="bell-dot" id="sopDot"></span>
     </button>
     <a class="logout" href="/seleccion-rol" title="Cerrar sesión" id="btnLogout">
       <span class="material-symbols-outlined">logout</span><small>Cerrar sesión</small>
@@ -522,6 +560,24 @@
     <button id="btnNotifRead" type="button">Marcar todas como leídas</button>
   </div>
   <div class="notif-list" id="notifList"></div>
+</div>
+
+<!-- chat de soporte tecnico -->
+<div class="sop-panel" id="sopPanel" role="dialog" aria-label="Soporte técnico">
+  <div class="sop-head">
+    <span class="sop-ai"><span class="material-symbols-outlined">support_agent</span></span>
+    <div>
+      <b>Soporte Técnico</b>
+      <small><span class="dot"></span>En línea · respondemos al momento</small>
+    </div>
+    <button class="sop-x" id="sopClose" type="button" aria-label="Cerrar soporte"><span class="material-symbols-outlined">close</span></button>
+  </div>
+  <div class="sop-body" id="sopMsgs"></div>
+  <div class="sop-foot">
+    <button class="att" id="sopAttach" type="button" aria-label="Adjuntar archivo"><span class="material-symbols-outlined">attach_file</span></button>
+    <input id="sopInput" type="text" maxlength="400" placeholder="Escribí tu consulta…" autocomplete="off">
+    <button id="sopSend" type="button" aria-label="Enviar"><span class="material-symbols-outlined">send</span></button>
+  </div>
 </div>
 
 <div id="toast"></div>
@@ -1165,6 +1221,93 @@
         if (c3) c3.hidden = true;
       }
     });
+
+    /* ---------- chat de soporte tecnico ---------- */
+    var LS_SOP = 'horasocial_admin_soporte_v1';
+    var soporte = null;
+    var sopRan = 0;
+    var SOP_REPLIES = [
+      '¡Gracias por escribirnos! Ya estamos revisando tu consulta.',
+      'Entendido. El equipo técnico ya lo está atendiendo, te confirmamos en breve.',
+      'Perfecto, quedó registrado. ¿Necesitás ayuda con algo más?',
+      'Revisamos la incidencia: ya quedó resuelta del lado del sistema. ¡Cualquier cosa, avisanos!'
+    ];
+    function sopTsISO(){ return horaAhora(); }
+    function sopSeed(){
+      soporte = {
+        msgs: [
+          { who:'t', txt:'¡Hola! Soy el Soporte Técnico de HORASOCIAL PRO. ¿En qué podemos ayudarte?', ts:sopTsISO() },
+          { who:'t', txt:'Escribinos tu consulta y un miembro del equipo te responderá a la brevedad.', ts:sopTsISO() }
+        ],
+        unread: 2
+      };
+      try{ localStorage.setItem(LS_SOP, JSON.stringify(soporte)); }catch(e){}
+    }
+    function sopCargar(){
+      try{
+        var raw = localStorage.getItem(LS_SOP);
+        if (raw){ soporte = JSON.parse(raw); }
+      }catch(e){}
+      if (!soporte || !soporte.msgs || !soporte.msgs.length){ sopSeed(); }
+    }
+    function sopGuardar(){ try{ localStorage.setItem(LS_SOP, JSON.stringify(soporte)); }catch(e){} }
+    function sopRender(){
+      var body = $('sopMsgs'), dot = $('sopDot');
+      if (!body || !soporte) return;
+      body.innerHTML = '';
+      soporte.msgs.forEach(function(m){
+        var bb = document.createElement('div');
+        bb.className = 'sop-bb' + (m.who === 'a' ? ' out' : '');
+        var tpl = '';
+        if (m.who === 't'){ tpl += '<span class="sop-ava">' + esc(m.txt.charAt(0).toUpperCase()) + '</span>'; }
+        tpl += '<div class="sop-bub"><p>' + esc(m.txt) + '</p><small>' + esc(m.ts || '') + '</small></div>';
+        bb.innerHTML = tpl;
+        body.appendChild(bb);
+      });
+      body.scrollTop = body.scrollHeight;
+      var visible = $('sopPanel') && $('sopPanel').classList.contains('show');
+      if (visible && soporte.unread > 0){ soporte.unread = 0; sopGuardar(); }
+      if (dot) dot.style.display = (soporte.unread > 0 && !visible) ? 'block' : 'none';
+    }
+    function sopEnviar(){
+      var inp = $('sopInput'); if (!inp) return;
+      var txt = inp.value.trim();
+      if (!txt){ toast('Escribí un mensaje para el soporte técnico'); return; }
+      soporte.msgs.push({ who:'a', txt:txt, ts:sopTsISO() });
+      sopGuardar(); inp.value = ''; sopRender();
+      var delay = 900 + Math.min(700, txt.length * 4);
+      setTimeout(function(){
+        var r = SOP_REPLIES[sopRan % SOP_REPLIES.length]; sopRan++;
+        soporte.msgs.push({ who:'t', txt:r, ts:sopTsISO() });
+        soporte.unread = (soporte.unread || 0) + 1;
+        sopGuardar(); sopRender();
+      }, delay);
+    }
+    sopCargar();
+    var btnSoporte = $('btnSoporte'), sopPanel = $('sopPanel');
+    if (btnSoporte) btnSoporte.addEventListener('click', function(e){
+      e.stopPropagation();
+      if (sopPanel) sopPanel.classList.toggle('show');
+      sopRender();
+    });
+    var sopClose = $('sopClose');
+    if (sopClose) sopClose.addEventListener('click', function(e){
+      e.stopPropagation();
+      if (sopPanel) sopPanel.classList.remove('show');
+    });
+    var sopSend = $('sopSend'), sopInput = $('sopInput');
+    if (sopSend) sopSend.addEventListener('click', sopEnviar);
+    if (sopInput) sopInput.addEventListener('keydown', function(e){ if (e.key === 'Enter'){ e.preventDefault(); sopEnviar(); } });
+    var sopAttach = $('sopAttach');
+    if (sopAttach) sopAttach.addEventListener('click', function(){ toast('Adjuntar archivo · simulación'); });
+    setTimeout(function(){
+      document.addEventListener('click', function(e){
+        if (sopPanel && sopPanel.classList.contains('show') &&
+            !sopPanel.contains(e.target) && btnSoporte && !btnSoporte.contains(e.target)){
+          sopPanel.classList.remove('show');
+        }
+      });
+    }, 0);
 
     /* ---------- estado inicial ---------- */
     renderNotifs();
