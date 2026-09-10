@@ -1,492 +1,561 @@
 <!DOCTYPE html>
-
-<html class="light" lang="es"><head>
+<html lang="es">
+<head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Coordinación y Ajuste de Docentes | HORASOCIAL PRO</title>
-<!-- Fonts -->
-<link href="https://fonts.googleapis.com" rel="preconnect"/>
-<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;family=Comfortaa:wght@400;700&amp;display=swap" rel="stylesheet"/>
-<!-- Icons -->
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<!-- Tailwind -->
+<title>Coordinación de Docentes - HORASOCIAL PRO</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<script id="tailwind-config">
-      tailwind.config = {
-        darkMode: "class",
-        theme: {
-          extend: {
-            "colors": {
-                "surface-bright": "#f7f9fb",
-                "tertiary": "#000000",
-                "secondary-container": "#39b8fd",
-                "tertiary-fixed-dim": "#7bd0ff",
-                "on-secondary-fixed-variant": "#004c6e",
-                "secondary-fixed-dim": "#89ceff",
-                "inverse-on-surface": "#eff1f3",
-                "secondary": "#006591",
-                "outline-variant": "#c6c6cd",
-                "inverse-primary": "#bec6e0",
-                "error": "#ba1a1a",
-                "surface-dim": "#d8dadc",
-                "secondary-fixed": "#c9e6ff",
-                "primary-fixed": "#dae2fd",
-                "on-primary": "#ffffff",
-                "tertiary-fixed": "#c4e7ff",
-                "on-surface": "#191c1e",
-                "on-primary-fixed": "#131b2e",
-                "tertiary-container": "#001e2c",
-                "background": "#f7f9fb",
-                "on-secondary-fixed": "#001e2f",
-                "on-background": "#191c1e",
-                "on-secondary-container": "#004666",
-                "on-surface-variant": "#45464d",
-                "surface-variant": "#e0e3e5",
-                "surface-container-lowest": "#ffffff",
-                "on-tertiary-container": "#008ebf",
-                "on-secondary": "#ffffff",
-                "on-primary-fixed-variant": "#3f465c",
-                "error-container": "#ffdad6",
-                "primary-fixed-dim": "#bec6e0",
-                "on-error": "#ffffff",
-                "primary": "#000000",
-                "surface": "#f7f9fb",
-                "outline": "#76777d",
-                "on-tertiary": "#ffffff",
-                "surface-container-highest": "#e0e3e5",
-                "surface-container-low": "#f2f4f6",
-                "surface-container": "#eceef0",
-                "primary-container": "#131b2e",
-                "on-tertiary-fixed-variant": "#004c69",
-                "on-primary-container": "#7c839b",
-                "on-error-container": "#93000a",
-                "on-tertiary-fixed": "#001e2c",
-                "inverse-surface": "#2d3133",
-                "surface-container-high": "#e6e8ea",
-                "surface-tint": "#565e74"
-            },
-            "borderRadius": {
-                "DEFAULT": "0.25rem",
-                "lg": "0.5rem",
-                "xl": "0.75rem",
-                "full": "9999px"
-            },
-            "spacing": {
-                "sm": "8px",
-                "gutter": "24px",
-                "lg": "24px",
-                "unit": "4px",
-                "xl": "32px",
-                "xs": "4px",
-                "md": "16px",
-                "margin-mobile": "16px",
-                "margin-desktop": "48px"
-            },
-            "fontFamily": {
-                "headline-md": ["Plus Jakarta Sans"],
-                "display-lg": ["Plus Jakarta Sans"],
-                "body-lg": ["Inter"],
-                "headline-sm": ["Plus Jakarta Sans"],
-                "label-sm": ["Inter"],
-                "body-md": ["Inter"],
-                "label-md": ["Inter"],
-                "headline-lg": ["Plus Jakarta Sans"],
-                "comfortaa": ["Comfortaa"]
-            },
-            "fontSize": {
-                "headline-md": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
-                "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
-                "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
-                "headline-sm": ["20px", {"lineHeight": "1.4", "fontWeight": "600"}],
-                "label-sm": ["12px", {"lineHeight": "1.2", "fontWeight": "600"}],
-                "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
-                "label-md": ["14px", {"lineHeight": "1.4", "letterSpacing": "0.01em", "fontWeight": "500"}],
-                "headline-lg": ["32px", {"lineHeight": "1.2", "fontWeight": "600"}]
-            }
-          },
-        },
-      }
-    </script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;family=Comfortaa:wght@400;600;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <style>
-        .material-symbols-outlined {
-            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-            vertical-align: middle;
-        }
-        .blur-blob {
-            filter: blur(80px);
-            opacity: 0.15;
-            z-index: -1;
-        }
-        .gear-watermark::after {
-            content: 'settings';
-            font-family: 'Material Symbols Outlined';
-            position: absolute;
-            bottom: -10px;
-            right: -10px;
-            font-size: 64px;
-            opacity: 0.03;
-            pointer-events: none;
-        }
-        .custom-scrollbar::-webkit-scrollbar {
-            width: 4px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-track {
-            background: transparent;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: #e2e8f0;
-            border-radius: 10px;
-        }
+        .font-comfortaa { font-family: 'Comfortaa', cursive; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        body { background-color: #F8FAFC; }
+        .bar-meta { transition: width .7s cubic-bezier(.22,1,.36,1); }
+        .doc-card { transition: transform .15s ease, box-shadow .15s ease; }
+        .doc-card:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(15,23,42,0.08); }
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+        .sem-track { background: #F1F5F9; border-radius: 9999px; height: 6px; overflow: hidden; flex: 1; }
+        .sem-track i { display: block; height: 100%; border-radius: 9999px; background: linear-gradient(90deg, #0EA5E9, #0284C7); transition: width .4s ease; }
     </style>
-<style>
-    body {
-      min-height: max(884px, 100dvh);
-    }
-  </style>
-  </head>
-<body class="bg-[#F8FAFC] min-h-screen text-on-surface font-body-md overflow-x-hidden pb-24">
-<!-- Ambient Blobs -->
-<div class="fixed top-0 left-0 w-96 h-96 bg-secondary rounded-full blur-blob translate-x-[-20%] translate-y-[-20%]"></div>
-<div class="fixed bottom-0 right-0 w-96 h-96 bg-secondary-container rounded-full blur-blob translate-x-[20%] translate-y-[20%]"></div>
-<!-- TopAppBar -->
-<header class="fixed top-0 w-full z-50 bg-surface/80 dark:bg-surface-container/80 backdrop-blur-xl shadow-sm flex justify-between items-center px-lg py-md">
-<div class="flex items-center gap-2">
-<span class="material-symbols-outlined text-primary text-3xl">school</span>
-<span class="font-headline-md text-headline-md font-bold text-primary tracking-tight">HORASOCIAL PRO</span>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0F172A",
+                        "accent": "#0EA5E9",
+                        "background": "#F8FAFC",
+                        "surface": "#FFFFFF",
+                        "on-surface": "#191c1e",
+                        "on-surface-variant": "#45464d",
+                        "outline-variant": "#c6c6cd"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "1rem",
+                        "xl": "1.25rem",
+                        "full": "9999px"
+                    },
+                    fontFamily: {
+                        "body": ["Inter", "sans-serif"],
+                        "headline": ["Plus Jakarta Sans", "sans-serif"]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="font-body text-on-surface min-h-screen pb-32">
+<!-- Header -->
+<header class="fixed top-0 w-full z-50 bg-white/90 backdrop-blur-md border-b border-slate-200 px-4 md:px-lg py-md flex justify-between items-center h-20">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 bg-primary rounded-lg flex items-center justify-center text-white">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">school</span>
 </div>
-<div class="flex items-center gap-3 bg-surface-container-low px-4 py-2 rounded-full border border-outline-variant/30">
+<h1 class="font-headline text-xl font-bold text-primary tracking-tight">HORASOCIAL PRO</h1>
+</div>
+<div class="flex items-center gap-4 px-3 py-1.5 rounded-full bg-slate-50 border border-slate-100">
 <div class="text-right hidden sm:block">
-<p class="text-label-md font-bold text-on-surface">Coordinadora Carolina Rojas</p>
-<p class="text-[10px] text-on-surface-variant uppercase tracking-widest">Admin Central</p>
+<p class="text-sm font-bold text-primary leading-tight">Coordinadora Carolina Rojas</p>
+<p class="text-[11px] text-on-surface-variant font-medium">Administrador</p>
 </div>
-<div class="w-10 h-10 rounded-full border-2 border-secondary-container overflow-hidden shadow-inner bg-primary-container flex items-center justify-center">
-<img class="w-full h-full object-cover" data-alt="A professional headshot of a middle-aged female school administrator with a warm and confident expression. She is wearing a professional navy blazer in a brightly lit, modern educational office setting. The style is clean, corporate minimalism with soft, natural lighting that emphasizes a trustworthy and authoritative persona, aligned with high-end SaaS platform aesthetics." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBldGCAm3UfM6rbmy6IZu9_RwuWFllWf6Ba7d1wEJM328FKC3tAD66gObJRKhUVx35JqVnipj6jNyKThWD9wUSSGJmg2O89JjycJqI1C7cH4Q-XT7rrVASeOKQ_UR-E1Scpnqux_KQaxuHBCYLp0-XKO4RSULfST96vCJSiIOpbBd2vVmcrY3m0zsVUlJsDsVqg1dqeVJTY8zW4A5m_mQyYGZuJHI0bUriZajCwcf4fUZeFiigpy2ESltCvF2d3NyrWZteAJ2unPhiK"/>
+<div class="relative">
+<img alt="Profile" class="w-10 h-10 rounded-full border-2 border-primary object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD-jEaB1rRyiv-PFoHJYSYVflUphAJutNcW0ho3QJG2K8su-qgH2W2g609ldMcSycw7sYsVDxvgXEh8r07r3VlJxUVifGqFjwKtfg0ZBok1rdZHXJxitVGwIUD-smAwVcdHDfaKgoNGMFvkI-7RQJY87LuDRhKUwQELFPGRcJ6Ac4FuJlXsjOV2LlujosUbzrs7MX4AhqdNV9HekG47FckN51Rjsm7sX9lVJp1tOsYsOaaIh3EQkZzDcNaqN5JKFFvS2UPJ69jNx6J2"/>
+<div class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></div>
 </div>
 </div>
 </header>
-<main class="mt-24 px-gutter max-w-7xl mx-auto space-y-lg">
+<main class="relative z-10 pt-24 px-4 md:px-8 max-w-[1440px] mx-auto">
 <!-- Banner -->
-<section class="relative overflow-hidden rounded-xl bg-gradient-to-r from-[#0F172A] to-[#334155] p-xl text-white shadow-lg">
-<div class="relative z-10 flex flex-col md:flex-row justify-between items-center gap-lg">
-<div class="space-y-sm">
-<h1 class="font-comfortaa text-3xl font-bold tracking-tight">Distribución Horaria de Técnicas</h1>
-<p class="text-surface-variant max-w-2xl text-body-md opacity-90">
-                        Gestione de manera eficiente las asignaciones de proyectos sociales y técnicos. Asegure la adecuación de horarios para evitar solapamientos y optimizar la supervisión de los estudiantes.
-                    </p>
+<section class="mt-6 mb-8 rounded-2xl overflow-hidden relative flex items-center shadow-md">
+<div class="absolute inset-0 bg-gradient-to-r from-[#0F172A] via-[#1E293B] to-[#334155]"></div>
+<div class="absolute right-6 opacity-10 hidden sm:block">
+<span class="material-symbols-outlined text-[150px] text-white">calendar_month</span>
 </div>
-<div class="hidden lg:block opacity-20 transform scale-150">
-<span class="material-symbols-outlined text-[120px]">calendar_month</span>
+<div class="relative z-10 px-6 md:px-8 py-8 flex-1">
+<div class="flex flex-wrap items-center gap-2 mb-3">
+<span class="bg-white/10 backdrop-blur text-white/90 text-[11px] font-bold px-3 py-1 rounded-full flex items-center gap-1.5"><span class="material-symbols-outlined text-sm">calendar_today</span><span id="fechaHoy">&mdash;</span></span>
+<span class="bg-accent/20 text-sky-200 text-[11px] font-bold px-3 py-1 rounded-full flex items-center gap-1.5"><span class="material-symbols-outlined text-sm">badge</span>Plantilla 2026</span>
+</div>
+<h2 class="font-comfortaa text-2xl md:text-4xl text-white font-bold mb-2">Coordinaci&oacute;n de Docentes</h2>
+<p class="text-slate-300 text-sm md:text-base max-w-xl">Horas de la semana, planillas y ajustes de plantilla en tiempo real, con un solo objetivo.</p>
+</div>
+</section>
+<!-- KPIs -->
+<section class="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-8">
+<div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 flex flex-col justify-between">
+<div class="flex justify-between items-start">
+<div class="bg-blue-50 p-2.5 rounded-xl text-accent">
+<span class="material-symbols-outlined">badge</span>
+</div>
+<span class="text-xs font-bold text-sky-600 bg-sky-50 px-2.5 py-1 rounded-full">En plantilla</span>
+</div>
+<div class="mt-4">
+<h3 class="text-slate-500 text-xs font-bold uppercase tracking-widest mb-1">Docentes activos</h3>
+<p class="text-4xl font-headline font-extrabold text-primary" id="kpiDocAct">0</p>
+</div>
+</div>
+<div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 flex flex-col justify-between">
+<div class="flex justify-between items-start">
+<div class="bg-indigo-50 p-2.5 rounded-xl text-indigo-600">
+<span class="material-symbols-outlined">schedule</span>
+</div>
+<span class="text-xs font-bold text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-full">Semana en curso</span>
+</div>
+<div class="mt-4">
+<h3 class="text-slate-500 text-xs font-bold uppercase tracking-widest mb-1">Horas registradas</h3>
+<p class="text-4xl font-headline font-extrabold text-primary flex items-center gap-2"><span id="kpiDocHoras">0</span><span class="text-xs font-bold text-slate-400 uppercase tracking-widest">h</span></p>
+</div>
+</div>
+<div class="bg-white p-5 rounded-2xl shadow-sm border-2 border-amber-50 flex flex-col justify-between">
+<div class="flex justify-between items-start">
+<div class="bg-amber-50 p-2.5 rounded-xl text-amber-600">
+<span class="material-symbols-outlined">description</span>
+</div>
+<span class="text-xs font-bold text-amber-600 bg-amber-50 px-2.5 py-1 rounded-full uppercase tracking-tight" id="kpiPlanChip">Por revisar</span>
+</div>
+<div class="mt-4">
+<h3 class="text-amber-700 text-xs font-bold uppercase tracking-widest mb-1">Planillas pendientes</h3>
+<p class="text-4xl font-headline font-extrabold text-amber-600" id="kpiDocPlan">0</p>
+</div>
+</div>
+<div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 flex flex-col justify-between">
+<div class="flex justify-between items-start">
+<div class="bg-emerald-50 p-2.5 rounded-xl text-emerald-600">
+<span class="material-symbols-outlined">flag</span>
+</div>
+<span class="text-xs font-bold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full" id="kpiDocMetaLabel">Meta 960 h</span>
+</div>
+<div class="mt-4">
+<h3 class="text-slate-500 text-xs font-bold uppercase tracking-widest mb-1">Cumplimiento global</h3>
+<p class="text-4xl font-headline font-extrabold text-primary" id="kpiDocMeta">0%</p>
+<div class="mt-3 h-2 bg-slate-100 rounded-full overflow-hidden">
+<div class="bar-meta h-2 rounded-full bg-gradient-to-r from-sky-500 to-emerald-500" id="barraDocMeta" style="width:0%"></div>
+</div>
 </div>
 </div>
 </section>
-<!-- Summary Cards Row -->
-<section class="grid grid-cols-1 md:grid-cols-3 gap-lg">
-<!-- Card 1 -->
-<div class="bg-white rounded-xl p-lg shadow-[0px_4px_20px_rgba(15,23,42,0.05)] border border-outline-variant/20 relative overflow-hidden gear-watermark">
-<div class="flex justify-between items-start">
-<p class="text-label-md font-bold text-on-surface-variant uppercase tracking-wider">Docentes Activos</p>
-<span class="material-symbols-outlined text-primary">person_check</span>
+<!-- Main grid -->
+<section class="grid grid-cols-1 lg:grid-cols-10 gap-6 mb-12">
+<!-- Docentes -->
+<div class="lg:col-span-6 xl:col-span-7">
+<div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+<div class="p-5 border-b border-slate-100 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+<div>
+<h3 class="font-comfortaa text-xl text-primary font-bold">Docentes</h3>
+<p class="text-slate-500 text-sm"><span id="docResumenTxt">0 docentes</span> &middot; la barra se recalcula contra el objetivo semanal.</p>
 </div>
-<h2 class="text-4xl font-bold text-[#0F172A] mt-2">12</h2>
-<div class="mt-4 flex items-center text-xs text-secondary font-semibold">
-<span class="material-symbols-outlined text-sm mr-1">trending_up</span>
-                    +2 respecto al mes anterior
-                </div>
-</div>
-<!-- Card 2 (Dynamic Switcher) -->
-<div class="bg-white rounded-xl p-lg shadow-[0px_4px_20px_rgba(15,23,42,0.05)] border border-outline-variant/20 transition-all duration-500 relative overflow-hidden gear-watermark" id="conflict-card">
-<div class="flex justify-between items-start">
-<p class="text-label-md font-bold text-on-surface-variant uppercase tracking-wider">Cruces de Horario</p>
-<span class="material-symbols-outlined text-green-600" id="conflict-icon-card">check_circle</span>
-</div>
-<h2 class="text-4xl font-bold text-green-600 mt-2" id="conflict-count">0</h2>
-<p class="text-xs text-on-surface-variant mt-4 font-medium italic" id="conflict-subtext">Estructura horaria balanceada</p>
-</div>
-<!-- Card 3 -->
-<div class="bg-white rounded-xl p-lg shadow-[0px_4px_20px_rgba(15,23,42,0.05)] border border-outline-variant/20 relative overflow-hidden gear-watermark">
-<div class="flex justify-between items-start">
-<p class="text-label-md font-bold text-on-surface-variant uppercase tracking-wider">Proyectos Activos</p>
-<span class="material-symbols-outlined text-secondary-container">assignment_turned_in</span>
-</div>
-<h2 class="text-4xl font-bold text-secondary-container mt-2">6</h2>
-<div class="mt-4 flex items-center text-xs text-on-surface-variant font-medium">
-<span class="material-symbols-outlined text-sm mr-1">history</span>
-                    Última actualización: Hoy, 08:30 AM
-                </div>
-</div>
-</section>
-<!-- Main Content Grid -->
-<section class="grid grid-cols-1 lg:grid-cols-10 gap-lg pb-10">
-<!-- Left (70%) Table -->
-<div class="lg:col-span-7 bg-white rounded-xl shadow-[0px_4px_20px_rgba(15,23,42,0.05)] border border-outline-variant/20 flex flex-col">
-<div class="p-lg flex flex-col md:flex-row md:items-center justify-between gap-md border-b border-outline-variant/30">
-<h3 class="font-headline-sm text-headline-sm text-on-surface">Asignación de Grupos y Horarios</h3>
-<div class="relative max-w-xs w-full">
-<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-md">search</span>
-<input class="w-full pl-10 pr-4 py-2 bg-surface-container-low border border-outline-variant/50 rounded-lg text-sm focus:ring-2 focus:ring-secondary-container/50 focus:border-secondary-container outline-none transition-all" placeholder="Buscar docente..." type="text"/>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">search</span>
+<input class="pl-9 pr-3 py-2 border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-accent focus:border-accent outline-none w-44 md:w-56" id="docBuscar" placeholder="Buscar docente o materia..." type="text"/>
 </div>
 </div>
-<div class="overflow-x-auto custom-scrollbar">
-<table class="w-full text-left border-collapse">
-<thead>
-<tr class="bg-surface-container-low/50">
-<th class="px-lg py-4 text-label-md font-bold text-on-surface-variant">Docente</th>
-<th class="px-lg py-4 text-label-md font-bold text-on-surface-variant">Técnica</th>
-<th class="px-lg py-4 text-label-md font-bold text-on-surface-variant">Grupo</th>
-<th class="px-lg py-4 text-label-md font-bold text-on-surface-variant">Horario</th>
-<th class="px-lg py-4 text-label-md font-bold text-on-surface-variant text-center">Acción</th>
-</tr>
-</thead>
-<tbody class="divide-y divide-outline-variant/20">
-<!-- Row 1 -->
-<tr class="hover:bg-surface-container-low transition-colors group">
-<td class="px-lg py-4">
-<div class="flex items-center gap-3">
-<div class="w-8 h-8 rounded-full bg-primary-container text-on-primary-fixed-variant flex items-center justify-center text-xs font-bold">RM</div>
-<span class="font-medium text-sm">Ricardo Mendoza</span>
+<div class="px-5 pt-4 flex flex-wrap gap-2" id="docFiltros">
+<button class="px-3 py-1.5 rounded-full text-[11px] font-bold transition-colors" data-f="todos" type="button">Todos</button>
+<button class="px-3 py-1.5 rounded-full text-[11px] font-bold transition-colors" data-f="planilla" type="button">Con planilla</button>
+<button class="px-3 py-1.5 rounded-full text-[11px] font-bold transition-colors" data-f="sinplanilla" type="button">Sin planilla</button>
+<button class="px-3 py-1.5 rounded-full text-[11px] font-bold transition-colors" data-f="linea" type="button">En l&iacute;nea</button>
 </div>
-</td>
-<td class="px-lg py-4 text-sm text-on-surface-variant">Cuidado de Zonas Verdes</td>
-<td class="px-lg py-4 text-sm font-bold">11-A</td>
-<td class="px-lg py-4 text-sm font-medium">Viernes, 2:00 PM</td>
-<td class="px-lg py-4 text-center">
-<button class="text-secondary hover:underline font-bold text-xs uppercase tracking-widest px-4 py-2 bg-secondary/5 rounded-full hover:bg-secondary/10 transition-all active:scale-95" onclick="openAdjustModal('Ricardo Mendoza', 'Viernes', '2:00 PM')">Ajustar</button>
-</td>
-</tr>
-<!-- Row 2 -->
-<tr class="hover:bg-surface-container-low transition-colors group">
-<td class="px-lg py-4">
-<div class="flex items-center gap-3">
-<div class="w-8 h-8 rounded-full bg-secondary-container/20 text-secondary flex items-center justify-center text-xs font-bold">LP</div>
-<span class="font-medium text-sm">Lucía Peña</span>
-</div>
-</td>
-<td class="px-lg py-4 text-sm text-on-surface-variant">Alfabetización Digital</td>
-<td class="px-lg py-4 text-sm font-bold">10-C</td>
-<td class="px-lg py-4 text-sm font-medium">Miércoles, 3:30 PM</td>
-<td class="px-lg py-4 text-center">
-<button class="text-secondary hover:underline font-bold text-xs uppercase tracking-widest px-4 py-2 bg-secondary/5 rounded-full hover:bg-secondary/10 transition-all active:scale-95" onclick="openAdjustModal('Lucía Peña', 'Miércoles', '3:30 PM')">Ajustar</button>
-</td>
-</tr>
-<!-- Row 3 -->
-<tr class="hover:bg-surface-container-low transition-colors group">
-<td class="px-lg py-4">
-<div class="flex items-center gap-3">
-<div class="w-8 h-8 rounded-full bg-tertiary-fixed text-on-tertiary-fixed-variant flex items-center justify-center text-xs font-bold">JS</div>
-<span class="font-medium text-sm">Jairo Sánchez</span>
-</div>
-</td>
-<td class="px-lg py-4 text-sm text-on-surface-variant">Apoyo Comunitario</td>
-<td class="px-lg py-4 text-sm font-bold">11-B</td>
-<td class="px-lg py-4 text-sm font-medium">Martes, 1:00 PM</td>
-<td class="px-lg py-4 text-center">
-<button class="text-secondary hover:underline font-bold text-xs uppercase tracking-widest px-4 py-2 bg-secondary/5 rounded-full hover:bg-secondary/10 transition-all active:scale-95" onclick="openAdjustModal('Jairo Sánchez', 'Martes', '1:00 PM')">Ajustar</button>
-</td>
-</tr>
-<!-- Row 4 -->
-<tr class="hover:bg-surface-container-low transition-colors group">
-<td class="px-lg py-4">
-<div class="flex items-center gap-3">
-<div class="w-8 h-8 rounded-full bg-outline-variant/50 text-on-surface flex items-center justify-center text-xs font-bold">AG</div>
-<span class="font-medium text-sm">Andrea Giraldo</span>
-</div>
-</td>
-<td class="px-lg py-4 text-sm text-on-surface-variant">Liderazgo Juvenil</td>
-<td class="px-lg py-4 text-sm font-bold">11-C</td>
-<td class="px-lg py-4 text-sm font-medium">Lunes, 4:00 PM</td>
-<td class="px-lg py-4 text-center">
-<button class="text-secondary hover:underline font-bold text-xs uppercase tracking-widest px-4 py-2 bg-secondary/5 rounded-full hover:bg-secondary/10 transition-all active:scale-95" onclick="openAdjustModal('Andrea Giraldo', 'Lunes', '4:00 PM')">Ajustar</button>
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<!-- Right (30%) Conflict Assistant -->
-<div class="lg:col-span-3 space-y-lg">
-<div class="bg-white rounded-xl shadow-[0px_4px_20px_rgba(15,23,42,0.05)] border border-outline-variant/20 p-lg flex flex-col items-center justify-center text-center space-y-4 min-h-[300px] transition-all duration-700 relative overflow-hidden" id="conflict-assistant">
-<!-- Dynamic Content -->
-<div class="flex flex-col items-center" id="assistant-status-ui">
-<div class="w-20 h-20 rounded-full bg-green-50 flex items-center justify-center mb-4 transition-colors" id="assistant-icon-bg">
-<span class="material-symbols-outlined text-4xl text-green-500" id="assistant-icon">task_alt</span>
-</div>
-<h4 class="font-headline-sm text-on-surface" id="assistant-title">Asistente de Conflictos</h4>
-<p class="text-label-md text-on-surface-variant mt-2 px-4" id="assistant-desc">
-                            No se han detectado cruces de horarios en el sistema actual.
-                        </p>
-</div>
-<div class="w-full pt-4 mt-auto border-t border-outline-variant/30">
-<p class="text-[10px] text-on-surface-variant uppercase font-bold tracking-widest mb-2">Próximos Ajustes</p>
-<div class="bg-surface-container-low rounded-lg p-3 text-left">
-<p class="text-xs font-bold">Sede Norte - Bloque C</p>
-<p class="text-[10px] text-on-surface-variant">Revisión programada mañana 10am</p>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4 p-5" id="docGrid"></div>
+<div class="hidden p-8 text-center" id="docEmpty">
+<span class="material-symbols-outlined text-4xl text-slate-300">search_off</span>
+<p class="mt-2 text-sm text-slate-500 font-medium">No hay docentes que coincidan</p>
 </div>
 </div>
 </div>
-<!-- Subtle Gear Texture Card -->
-<div class="bg-white rounded-xl p-6 border border-outline-variant/20 shadow-sm relative overflow-hidden">
-<div class="relative z-10">
-<p class="text-label-sm font-bold text-secondary uppercase tracking-widest mb-2">Tips de Optimización</p>
-<p class="text-xs text-on-surface-variant leading-relaxed">
-                            Agrupe las técnicas por cercanía geográfica para reducir el tiempo de desplazamiento de los docentes entre sedes.
-                        </p>
+<!-- Ajustes -->
+<div class="lg:col-span-4 xl:col-span-3">
+<div class="bg-white rounded-2xl border border-slate-200 shadow-sm flex flex-col h-full">
+<div class="p-5 bg-sky-50/40 border-b border-sky-100 rounded-t-2xl flex items-center justify-between">
+<h3 class="font-comfortaa text-lg text-sky-900 font-bold flex items-center gap-2">
+<span class="material-symbols-outlined text-sky-600">tune</span> Panel de Ajustes
+</h3>
 </div>
-<span class="material-symbols-outlined absolute -bottom-4 -right-4 text-7xl opacity-5">engineering</span>
+<div class="p-4 space-y-3">
+<div class="bg-slate-50 rounded-xl p-4 border border-slate-100">
+<h4 class="text-sm font-bold text-primary flex items-center gap-2"><span class="material-symbols-outlined text-sky-600 text-base">timeline</span>Horas objetivo semanal</h4>
+<div class="flex gap-2 mt-2">
+<input class="w-24 px-3 py-2 border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-accent focus:border-accent outline-none" id="ajObjetivo" type="number" min="20" max="80" aria-label="Horas objetivo semanal"/>
+<span class="flex-1 flex items-center text-[11px] font-bold text-slate-400">h por docente</span>
+<button class="px-3 py-2 bg-primary text-white rounded-lg text-[11px] font-bold hover:bg-slate-800 transition-colors" id="ajObjSave" type="button">Guardar</button>
+</div>
+<p class="text-[11px] text-slate-400 mt-2">Las barras de horas se recalculan contra este objetivo.</p>
+</div>
+<div class="bg-slate-50 rounded-xl p-4 border border-slate-100">
+<h4 class="text-sm font-bold text-primary flex items-center gap-2 mb-2"><span class="material-symbols-outlined text-sky-600 text-base">manage_accounts</span>Plantilla de docentes</h4>
+<div class="space-y-2 max-h-80 overflow-y-auto custom-scrollbar pr-1" id="ajList"></div>
+</div>
+</div>
 </div>
 </div>
 </section>
 </main>
-<!-- Bottom Navigation Shell -->
-<nav class="fixed bottom-0 left-0 w-full grid grid-cols-4 items-center h-20 px-md pb-safe bg-surface shadow-[0px_-4px_20px_rgba(15,23,42,0.05)] border-t border-dashed border-outline-variant z-50">
-<!-- Dashboard -->
-<div class="flex flex-col items-center justify-center text-on-surface-variant border-r border-dashed border-outline-variant cursor-pointer hover:bg-surface-container-high transition-colors active:scale-90 duration-200">
-<span class="material-symbols-outlined text-2xl mb-1">dashboard</span>
-<span class="font-comfortaa text-[11px] font-bold">Dashboard</span>
-</div>
-<!-- Docentes (ACTIVE) -->
-<div class="flex items-center justify-center border-r border-dashed border-outline-variant">
-<div class="flex flex-col items-center justify-center bg-secondary-container/20 text-secondary rounded-full px-5 py-2 transition-all duration-300 w-4/5 mx-auto">
-<span class="material-symbols-outlined text-2xl mb-1" style="font-variation-settings: 'FILL' 1;">badge</span>
-<span class="font-comfortaa text-[11px] font-bold">Docentes</span>
-</div>
-</div>
-<!-- Estudiantes -->
-<div class="flex flex-col items-center justify-center text-on-surface-variant border-r border-dashed border-outline-variant cursor-pointer hover:bg-surface-container-high transition-colors active:scale-90 duration-200">
-<span class="material-symbols-outlined text-2xl mb-1">group</span>
-<span class="font-comfortaa text-[11px] font-bold">Estudiantes</span>
-</div>
-<!-- Mensajes -->
-<div class="flex flex-col items-center justify-center text-on-surface-variant cursor-pointer hover:bg-surface-container-high transition-colors active:scale-90 duration-200">
-<span class="material-symbols-outlined text-2xl mb-1">chat_bubble</span>
-<span class="font-comfortaa text-[11px] font-bold">Mensajes</span>
+<!-- Footer Navigation -->
+<nav class="fixed bottom-0 left-0 w-full z-50 bg-white/95 backdrop-blur border-t border-slate-200 shadow-[0_-10px_30px_rgba(0,0,0,0.04)]">
+<div class="max-w-4xl mx-auto grid grid-cols-4 gap-1 px-3 h-20 items-center">
+<a class="flex flex-col items-center justify-center gap-1 py-2 rounded-xl text-slate-400 hover:text-primary transition-colors group" data-go data-file="../../dashboard_administrador_horasocial_pro/index.html" data-served="/admin/dashboard" href="/admin/dashboard">
+<span class="material-symbols-outlined text-2xl group-hover:scale-110 transition-transform">dashboard</span>
+<span class="text-[11px] font-bold">Panel</span>
+</a>
+<a class="flex flex-col items-center justify-center gap-1 py-2 rounded-xl bg-accent/15 text-accent">
+<span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 1;">badge</span>
+<span class="text-[11px] font-extrabold">Docentes</span>
+</a>
+<a class="flex flex-col items-center justify-center gap-1 py-2 rounded-xl text-slate-400 hover:text-primary transition-colors group" data-go data-file="../control_de_estudiantes_y_alertas_admin_versi_n_corregida/code.html" data-served="/admin/alertas" href="/admin/alertas">
+<span class="material-symbols-outlined text-2xl group-hover:scale-110 transition-transform">school</span>
+<span class="text-[11px] font-bold">Estudiantes</span>
+</a>
+<a class="flex flex-col items-center justify-center gap-1 py-2 rounded-xl text-slate-400 hover:text-primary transition-colors group" id="navMsj" data-go data-file="../mensajer_a_y_canales_admin_horasocial_pro_2/code.html" data-served="/admin/mensajes" href="/admin/mensajes">
+<span class="material-symbols-outlined text-2xl group-hover:scale-110 transition-transform">chat_bubble</span>
+<span class="text-[11px] font-bold">Mensajes</span>
+</a>
 </div>
 </nav>
-<!-- Modal: Ajustar Horarios -->
-<div class="fixed inset-0 z-[60] hidden flex items-center justify-center p-4" id="adjust-modal">
-<!-- Backdrop -->
-<div class="absolute inset-0 bg-black/40 backdrop-blur-sm" onclick="closeAdjustModal()"></div>
-<!-- Modal Content -->
-<div class="relative w-full max-w-md bg-white rounded-2xl shadow-2xl p-xl overflow-hidden animate-in fade-in zoom-in duration-300">
-<div class="flex justify-between items-start mb-6">
-<div>
-<h3 class="font-headline-sm text-headline-sm text-on-surface">Ajustar Horario</h3>
-<p class="text-label-md text-secondary font-bold" id="modal-docente-name">Docente: Ricardo Mendoza</p>
-</div>
-<button class="w-8 h-8 rounded-full flex items-center justify-center hover:bg-surface-container transition-colors" onclick="closeAdjustModal()">
-<span class="material-symbols-outlined">close</span>
-</button>
-</div>
-<div class="space-y-4">
-<div>
-<label class="block text-label-md font-bold text-on-surface mb-2">Día de la Semana</label>
-<select class="w-full p-3 bg-surface-container-low border border-outline-variant rounded-lg focus:ring-2 focus:ring-secondary-container outline-none appearance-none" id="modal-day">
-<option value="Lunes">Lunes</option>
-<option value="Martes">Martes</option>
-<option value="Miércoles">Miércoles</option>
-<option value="Jueves">Jueves</option>
-<option value="Viernes">Viernes</option>
-</select>
-</div>
-<div>
-<label class="block text-label-md font-bold text-on-surface mb-2">Hora de Inicio</label>
-<input class="w-full p-3 bg-surface-container-low border border-outline-variant rounded-lg focus:ring-2 focus:ring-secondary-container outline-none" id="modal-time" type="time"/>
-</div>
-<div class="bg-primary-container/5 rounded-lg p-4 border border-primary-container/10">
-<div class="flex gap-3">
-<span class="material-symbols-outlined text-secondary-container">info</span>
-<p class="text-xs text-on-surface-variant leading-relaxed">
-                            Al guardar, el asistente verificará automáticamente si existe un conflicto con otros grupos asignados al mismo docente o salón.
-                        </p>
-</div>
-</div>
-</div>
-<div class="mt-8 flex gap-3">
-<button class="flex-1 py-3 px-4 border border-outline-variant rounded-lg font-bold text-sm hover:bg-surface-container transition-colors" onclick="closeAdjustModal()">Cancelar</button>
-<button class="flex-1 py-3 px-4 bg-primary text-white rounded-lg font-bold text-sm hover:shadow-lg transition-all active:scale-95 shadow-md" onclick="saveSchedule()">Guardar Cambios</button>
-</div>
-</div>
-</div>
 <script>
-        function openAdjustModal(name, day, time) {
-            document.getElementById('modal-docente-name').innerText = 'Docente: ' + name;
-            // Clean time for input type="time" (e.g., "2:00 PM" -> "14:00")
-            let formattedTime = "14:00"; 
-            if(time.includes("3:30")) formattedTime = "15:30";
-            if(time.includes("1:00")) formattedTime = "13:00";
-            if(time.includes("4:00")) formattedTime = "16:00";
+    var LS_AJUSTES = 'horasocial_admin_ajustes_v1';
+    var LS_DOCHORAS = 'horasocial_admin_doc_horas_v1';
+    var DIAS_SEM = ['Lunes','Martes','Miércoles','Jueves','Viernes'];
+    var docFiltro = 'todos', docQuery = '', docOpenId = null, ajEditId = null, ajObjTmp = null;
 
-            document.getElementById('modal-day').value = day;
-            document.getElementById('modal-time').value = formattedTime;
-            
-            const modal = document.getElementById('adjust-modal');
-            modal.classList.remove('hidden');
+    var DOCENTES = [
+      {id:'d1', nombre:'Prof. Carlos Méndez', materia:'Metalmecánica', iniciales:'CM', enLinea:true, planilla:true, semana:[8,7,8,8,6]},
+      {id:'d2', nombre:'Prof. Laura Gutiérrez', materia:'Informática', iniciales:'LG', enLinea:true, planilla:true, semana:[6,6,7,6,5]},
+      {id:'d3', nombre:'Prof. Andrés Silva', materia:'Carpintería', iniciales:'AS', enLinea:true, planilla:false, semana:[5,6,5,6,4]},
+      {id:'d4', nombre:'Prof. Mariana Ríos', materia:'Electricidad', iniciales:'MR', enLinea:true, planilla:true, semana:[7,7,6,7,6]},
+      {id:'d5', nombre:'Prof. Jorge Pereyra', materia:'Herrería', iniciales:'JP', enLinea:false, planilla:true, semana:[6,5,6,5,5]},
+      {id:'d6', nombre:'Natalia Cadavid', materia:'Biología', iniciales:'NC', enLinea:true, planilla:true, semana:[5,5,4,5,4]},
+      {id:'d7', nombre:'Felipe Osorio', materia:'Matemáticas', iniciales:'FO', enLinea:true, planilla:true, semana:[6,6,7,6,6]},
+      {id:'d8', nombre:'Camila Rincón', materia:'Lenguaje', iniciales:'CR', enLinea:true, planilla:true, semana:[5,4,5,4,3]},
+      {id:'d9', nombre:'Daniel Estrada', materia:'Ciencias Sociales', iniciales:'DE', enLinea:false, planilla:true, semana:[4,5,4,5,4]},
+      {id:'d10', nombre:'Andrea Peña', materia:'Química', iniciales:'AP', enLinea:true, planilla:true, semana:[5,6,5,6,5]},
+      {id:'d11', nombre:'Ricardo Bermúdez', materia:'Física', iniciales:'RB', enLinea:true, planilla:true, semana:[4,4,3,4,3]},
+      {id:'d12', nombre:'Juliana Torres', materia:'Inglés', iniciales:'JT', enLinea:true, planilla:true, semana:[5,5,6,5,4]},
+      {id:'d13', nombre:'Mauricio Zapata', materia:'Ed. Física', iniciales:'MZ', enLinea:true, planilla:true, semana:[4,4,4,4,4]},
+      {id:'d14', nombre:'Paula Duque', materia:'Artes', iniciales:'PD', enLinea:false, planilla:true, semana:[3,4,3,4,3]},
+      {id:'d15', nombre:'Óscar Vanegas', materia:'Filosofía', iniciales:'OV', enLinea:true, planilla:true, semana:[4,4,4,3,4]},
+      {id:'d16', nombre:'Tatiana Arias', materia:'Ética', iniciales:'TA', enLinea:true, planilla:true, semana:[3,3,3,3,3]},
+      {id:'d17', nombre:'Hernán Quintero', materia:'Agropecuaria', iniciales:'HQ', enLinea:true, planilla:false, semana:[5,5,5,5,4]},
+      {id:'d18', nombre:'Liliana Mejía', materia:'Contabilidad', iniciales:'LM', enLinea:true, planilla:true, semana:[5,4,5,4,5]},
+      {id:'d19', nombre:'Sergio Ochoa', materia:'Sistemas', iniciales:'SO', enLinea:false, planilla:true, semana:[5,5,4,5,4]},
+      {id:'d20', nombre:'Verónica Londoño', materia:'Mercadeo', iniciales:'VL', enLinea:true, planilla:true, semana:[4,4,5,4,4]},
+      {id:'d21', nombre:'Edwin Martínez', materia:'Mecánica Industrial', iniciales:'EM', enLinea:true, planilla:false, semana:[6,6,5,6,5]},
+      {id:'d22', nombre:'Diana Cifuentes', materia:'Orientación', iniciales:'DC', enLinea:true, planilla:true, semana:[4,3,4,3,3]},
+      {id:'d23', nombre:'Gabriel Mejía', materia:'Mantenimiento', iniciales:'GM', enLinea:true, planilla:true, semana:[5,5,6,5,5]},
+      {id:'d24', nombre:'Rosa Saldarriaga', materia:'Taller Textil', iniciales:'RS', enLinea:false, planilla:true, semana:[4,4,3,4,3]}
+    ];
+
+    var DOC_SEED = {};
+    DOCENTES.forEach(function(d){ DOC_SEED[d.id] = d.semana.slice(); });
+
+    /* ---------- helpers ---------- */
+    function $(id){ return document.getElementById(id); }
+    function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+    var toastEl = null;
+    function toast(msg){
+      if (!toastEl){
+        toastEl = document.createElement('div');
+        toastEl.className = 'fixed left-1/2 -translate-x-1/2 bottom-28 z-[70] bg-primary text-white text-sm font-bold px-5 py-3 rounded-full shadow-lg transition-all duration-300 opacity-0 pointer-events-none';
+        document.body.appendChild(toastEl);
+      }
+      toastEl.textContent = msg;
+      requestAnimationFrame(function(){ toastEl.classList.remove('opacity-0'); });
+      clearTimeout(toastEl._t);
+      toastEl._t = setTimeout(function(){ toastEl.classList.add('opacity-0'); }, 2200);
+    }
+
+    /* ---------- ajustes y horas ---------- */
+    function cargarAjustes(){
+      var base = { objetivo:40, materias:{}, activos:{} };
+      try{
+        var raw = localStorage.getItem(LS_AJUSTES);
+        if (raw){
+          var p = JSON.parse(raw);
+          if (p && typeof p === 'object'){
+            base.objetivo = parseInt(p.objetivo, 10) || 40;
+            base.materias = p.materias || {};
+            base.activos = p.activos || {};
+          }
         }
-
-        function closeAdjustModal() {
-            document.getElementById('adjust-modal').classList.add('hidden');
+      }catch(e){}
+      DOCENTES.forEach(function(d){ if (base.materias[d.id]) d.materia = base.materias[d.id]; });
+      return base;
+    }
+    function guardarAjustes(){
+      try{ localStorage.setItem(LS_AJUSTES, JSON.stringify({ objetivo: AJ.objetivo, materias: AJ.materias, activos: AJ.activos })); }catch(e){}
+    }
+    function cargarDocHoras(){
+      try{
+        var v = localStorage.getItem(LS_DOCHORAS);
+        if (v){
+          var p = JSON.parse(v);
+          DOCENTES.forEach(function(d){ if (p[d.id]) d.semana = p[d.id]; });
         }
+      }catch(e){}
+    }
+    function guardarDocHoras(){
+      var p = {};
+      DOCENTES.forEach(function(d){ p[d.id] = d.semana; });
+      try{ localStorage.setItem(LS_DOCHORAS, JSON.stringify(p)); }catch(e){}
+    }
+    var AJ = cargarAjustes();
 
-        function saveSchedule() {
-            // Simulation of Conflict Detection
-            const day = document.getElementById('modal-day').value;
-            const time = document.getElementById('modal-time').value;
+    function activoDe(d){ return AJ.activos[d.id] !== false; }
+    function totalSemana(d){ var t = 0; d.semana.forEach(function(h){ t += h; }); return t; }
 
-            // Simple Logic: if day is "Lunes" and time is "16:00", simulate a conflict (Andrea Giraldo overlap)
-            if (day === "Lunes" && time === "16:00") {
-                activateConflict();
-            } else {
-                deactivateConflict();
-            }
-            closeAdjustModal();
+    /* ---------- KPIs ---------- */
+    function actualizarKpis(){
+      var act = 0, horas = 0, pend = 0;
+      DOCENTES.forEach(function(d){
+        if (activoDe(d)) act++;
+        horas += totalSemana(d);
+        if (d.planilla === false) pend++;
+      });
+      $('kpiDocAct').textContent = act;
+      $('kpiDocHoras').textContent = horas.toLocaleString('es-CO');
+      $('kpiDocPlan').textContent = pend;
+      $('kpiPlanChip').textContent = pend ? 'Por revisar' : 'Todo al día';
+      $('kpiPlanChip').className = 'text-xs font-bold px-2.5 py-1 rounded-full uppercase tracking-tight ' + (pend ? 'text-amber-600 bg-amber-50' : 'text-emerald-600 bg-emerald-50');
+      $('kpiDocPlan').className = 'text-4xl font-headline font-extrabold ' + (pend ? 'text-amber-600' : 'text-emerald-600');
+      var full = act * AJ.objetivo;
+      var pct = full ? Math.round(horas / full * 100) : 0;
+      $('kpiDocMeta').textContent = pct + '%';
+      $('kpiDocMetaLabel').textContent = 'Meta ' + full.toLocaleString('es-CO') + ' h';
+      $('barraDocMeta').style.width = Math.min(100, pct) + '%';
+    }
+
+    /* ---------- docentes ---------- */
+    function renderDocentes(){
+      var grid = $('docGrid');
+      if (!grid) return;
+      var q = docQuery.toLowerCase();
+      var lista = DOCENTES.filter(function(d){
+        var okQ = !q || d.nombre.toLowerCase().indexOf(q) !== -1 || d.materia.toLowerCase().indexOf(q) !== -1;
+        var okF = true;
+        if (docFiltro === 'planilla') okF = d.planilla === true;
+        else if (docFiltro === 'sinplanilla') okF = d.planilla === false;
+        else if (docFiltro === 'linea') okF = d.enLinea === true;
+        return okQ && okF;
+      });
+      $('docResumenTxt').textContent = lista.length + (lista.length === 1 ? ' docente' : ' docentes') + ' de ' + DOCENTES.length;
+      $('docEmpty').classList.toggle('hidden', lista.length !== 0);
+      $('docEmpty').classList.toggle('flex', lista.length === 0);
+
+      $('docFiltros').querySelectorAll('[data-f]').forEach(function(btn){
+        var on = btn.getAttribute('data-f') === docFiltro;
+        btn.className = 'px-3 py-1.5 rounded-full text-[11px] font-bold transition-colors ' + (on ? 'bg-primary text-white' : 'bg-slate-100 text-slate-500 hover:bg-slate-200');
+      });
+
+      var html = '';
+      lista.forEach(function(d){
+        var activo = activoDe(d);
+        var total = totalSemana(d);
+        var pct = Math.min(100, Math.round(total / AJ.objetivo * 100));
+        var open = docOpenId === d.id;
+        var sem = '';
+        if (open){
+          sem = '<div class="mt-3 pt-3 border-t border-slate-100 space-y-2">';
+          d.semana.forEach(function(h, i){
+            sem += '<div class="flex items-center gap-2"><span class="w-16 text-[10px] font-bold text-slate-400">' + DIAS_SEM[i] + '</span>' +
+              '<div class="sem-track"><i style="width:' + Math.min(100, h * 12.5) + '%"></i></div>' +
+              '<b class="text-[10px] text-primary w-6 text-right">' + h + ' h</b></div>';
+          });
+          sem += '<div class="flex gap-2 pt-1"><input class="flex-1 min-w-0 px-3 py-1.5 border border-slate-200 rounded-lg text-xs focus:ring-2 focus:ring-accent focus:border-accent outline-none" id="add-' + d.id + '" type="number" min="1" max="10" placeholder="Horas a registrar" aria-label="Horas a registrar">' +
+            '<button class="px-3 py-1.5 bg-primary text-white rounded-lg text-[10px] font-bold hover:bg-slate-800 transition-colors" data-add="' + d.id + '" type="button">Registrar</button></div></div>';
         }
+        html += '<div class="doc-card rounded-xl border border-slate-100 bg-white p-4 ' + (activo ? '' : 'opacity-60') + '">' +
+          '<div class="flex items-start gap-3">' +
+            '<div class="relative">' +
+              '<div class="w-11 h-11 rounded-full bg-gradient-to-br from-sky-400 to-blue-600 text-white font-bold text-sm flex items-center justify-center">' + esc(d.iniciales) + '</div>' +
+              '<span class="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full border-2 border-white ' + (d.enLinea ? 'bg-green-500' : 'bg-slate-300') + '"></span>' +
+            '</div>' +
+            '<div class="min-w-0 flex-1">' +
+              '<p class="text-sm font-bold text-primary truncate">' + esc(d.nombre) + '</p>' +
+              '<span class="inline-block mt-1 px-2 py-0.5 rounded-full text-[9px] font-bold bg-sky-50 text-sky-700">' + esc(d.materia) + '</span>' +
+            '</div>' +
+            '<span class="flex-1 flex justify-end"><span class="px-2 py-1 rounded-full text-[9px] font-bold ' + (d.enLinea ? 'bg-green-50 text-green-700' : 'bg-slate-100 text-slate-400') + '">' + (d.enLinea ? 'En línea' : 'Offline') + '</span></span>' +
+          '</div>' +
+          (!activo ? '<p class="mt-2 text-[10px] font-bold text-red-500">· De baja</p>' : '') +
+          '<div class="mt-3">' +
+            '<div class="flex justify-between text-[10px] font-bold mb-1"><span class="text-slate-400">Meta ' + AJ.objetivo + ' h</span><span class="' + (pct >= 100 ? 'text-emerald-600' : 'text-primary') + '">' + total + ' h</span></div>' +
+            '<div class="h-2 bg-slate-100 rounded-full overflow-hidden"><div class="h-2 rounded-full bg-gradient-to-r ' + (pct >= 100 ? 'from-emerald-500 to-teal-500' : (pct >= 70 ? 'from-sky-500 to-blue-500' : 'from-amber-400 to-orange-400')) + '" style="width:' + pct + '%"></div></div>' +
+          '</div>' +
+          '<div class="mt-3 flex items-center justify-between gap-2">' +
+            '<span class="px-2 py-1 rounded-full text-[9px] font-bold ' + (d.planilla ? 'bg-emerald-50 text-emerald-700' : 'bg-amber-50 text-amber-700') + '">' + (d.planilla ? 'Planilla al día' : 'Planilla pendiente') + '</span>' +
+            '<button class="py-1.5 px-3 rounded-lg text-[10px] font-bold border transition-colors ' + (open ? 'bg-primary text-white border-primary' : 'border-slate-200 text-primary hover:bg-slate-50') + '" data-sema="' + d.id + '" type="button"><span class="material-symbols-outlined align-middle text-xs mr-1">insights</span>' + (open ? 'Cerrar' : 'Ver semana') + '</button>' +
+          '</div>' + sem +
+        '</div>';
+      });
+      grid.innerHTML = html;
+    }
 
-        function activateConflict() {
-            // Update Summary Card
-            const conflictCard = document.getElementById('conflict-card');
-            const conflictCount = document.getElementById('conflict-count');
-            const conflictIcon = document.getElementById('conflict-icon-card');
-            const conflictSubtext = document.getElementById('conflict-subtext');
+    /* ---------- ajustes ---------- */
+    function renderAjustes(){
+      var list = $('ajList');
+      if (!list) return;
+      var html = '';
+      DOCENTES.forEach(function(d){
+        var activo = activoDe(d);
+        var editando = ajEditId === d.id;
+        html += '<div class="flex items-center gap-2 rounded-lg bg-white border border-slate-100 p-2 ' + (activo ? '' : 'opacity-60') + '">' +
+          '<div class="w-8 h-8 rounded-full bg-gradient-to-br from-sky-400 to-blue-600 text-white text-[10px] font-bold flex items-center justify-center shrink-0">' + esc(d.iniciales) + '</div>' +
+          '<div class="min-w-0 flex-1">' +
+            '<p class="text-xs font-bold text-primary truncate">' + esc(d.nombre) + (activo ? '' : ' <span class="text-red-500 text-[9px]">· baja</span>') + '</p>' +
+            (editando
+              ? '<div class="flex gap-1 mt-1"><input class="w-full min-w-0 px-2 py-1 border border-sky-300 rounded-md text-[11px] focus:ring-2 focus:ring-accent outline-none" id="ajmat-' + d.id + '" value="' + esc(d.materia) + '" aria-label="Nueva materia"/></div>'
+              : '<p class="text-[10px] text-slate-400 truncate">' + esc(d.materia) + '</p>') +
+          '</div>' +
+          (editando
+            ? '<button class="w-7 h-7 rounded-full bg-emerald-100 text-emerald-700 hover:bg-emerald-200 transition-colors flex items-center justify-center shrink-0" data-ajsave="' + d.id + '" title="Guardar materia" type="button"><span class="material-symbols-outlined" style="font-size:14px">check</span></button>' +
+              '<button class="w-7 h-7 rounded-full bg-slate-100 text-slate-500 hover:bg-slate-200 transition-colors flex items-center justify-center shrink-0" data-ajcancel="1" title="Cancelar" type="button"><span class="material-symbols-outlined" style="font-size:14px">close</span></button>'
+            : '<button class="w-7 h-7 rounded-full bg-slate-100 text-slate-500 hover:bg-slate-200 transition-colors flex items-center justify-center shrink-0" data-ajedit="' + d.id + '" title="Editar materia" type="button"><span class="material-symbols-outlined" style="font-size:14px">edit</span></button>' +
+              '<button class="w-7 h-7 rounded-full bg-slate-100 text-slate-500 hover:bg-slate-200 transition-colors flex items-center justify-center shrink-0" data-ajreset="' + d.id + '" title="Restablecer horas de la semana" type="button"><span class="material-symbols-outlined" style="font-size:14px">restart_alt</span></button>') +
+          '<button class="px-2 py-1 rounded-full text-[9px] font-bold shrink-0 transition-colors ' + (activo ? 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100' : 'bg-slate-100 text-slate-400 hover:bg-slate-200') + '" data-ajact="' + d.id + '" title="Dar de alta o baja" type="button">' + (activo ? 'Alta' : 'Baja') + '</button>' +
+        '</div>';
+      });
+      list.innerHTML = html;
+      var inp = $('ajObjetivo');
+      if (inp) inp.value = AJ.objetivo;
+    }
 
-            conflictCount.innerText = "1";
-            conflictCount.className = "text-4xl font-bold text-error mt-2";
-            conflictIcon.innerText = "warning";
-            conflictIcon.className = "material-symbols-outlined text-error";
-            conflictSubtext.innerText = "¡Conflicto detectado en Lunes!";
-            conflictSubtext.className = "text-xs text-error mt-4 font-bold animate-pulse";
+    function registrarHorasDoc(id, h){
+      var d = null;
+      DOCENTES.forEach(function(x){ if (x.id === id) d = x; });
+      if (!d) return;
+      d.semana.push(h);
+      guardarDocHoras();
+      actualizarKpis();
+    }
+    function resetSemana(id){
+      var d = null;
+      DOCENTES.forEach(function(x){ if (x.id === id) d = x; });
+      if (!d) return;
+      d.semana = DOC_SEED[id].slice();
+      guardarDocHoras();
+      actualizarKpis();
+    }
 
-            // Update Assistant
-            document.getElementById('assistant-icon-bg').classList.replace('bg-green-50', 'bg-error-container');
-            document.getElementById('assistant-icon').innerText = "report_problem";
-            document.getElementById('assistant-icon').classList.replace('text-green-500', 'text-error');
-            document.getElementById('assistant-title').innerText = "¡Choque Detectado!";
-            document.getElementById('assistant-title').classList.add('text-error');
-            document.getElementById('assistant-desc').innerText = "Andrea Giraldo tiene dos grupos asignados en el mismo horario. Por favor, reasigne el Grupo 11-C.";
-            document.getElementById('assistant-assistant').classList.add('border-error');
-        }
+    /* ---------- fecha ---------- */
+    function fechaHoy(){
+      try{
+        var d = new Date();
+        var dias = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
+        var meses = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+        $('fechaHoy').textContent = dias[d.getDay()] + ' ' + d.getDate() + ' ' + meses[d.getMonth()] + ' ' + d.getFullYear();
+      }catch(e){}
+    }
 
-        function deactivateConflict() {
-             // Reset Summary Card
-            const conflictCard = document.getElementById('conflict-card');
-            const conflictCount = document.getElementById('conflict-count');
-            const conflictIcon = document.getElementById('conflict-icon-card');
-            const conflictSubtext = document.getElementById('conflict-subtext');
+    /* ---------- navegacion ---------- */
+    function ir(a){
+      var f = a.getAttribute('data-file'), s = a.getAttribute('data-served');
+      if (s){
+        try{
+          fetch(s, { method:'HEAD' }).then(function(r){
+            location.href = r.ok ? s : f;
+          }).catch(function(){ location.href = f; });
+        }catch(e){ location.href = f; }
+      } else {
+        location.href = f;
+      }
+    }
+    document.querySelectorAll('[data-go]').forEach(function(a){
+      a.addEventListener('click', function(ev){ ev.preventDefault(); ir(a); });
+    });
 
-            conflictCount.innerText = "0";
-            conflictCount.className = "text-4xl font-bold text-green-600 mt-2";
-            conflictIcon.innerText = "check_circle";
-            conflictIcon.className = "material-symbols-outlined text-green-600";
-            conflictSubtext.innerText = "Estructura horaria balanceada";
-            conflictSubtext.className = "text-xs text-on-surface-variant mt-4 font-medium italic";
+    var navMsj = $('navMsj');
 
-            // Reset Assistant
-            document.getElementById('assistant-icon-bg').classList.replace('bg-error-container', 'bg-green-50');
-            document.getElementById('assistant-icon').innerText = "task_alt";
-            document.getElementById('assistant-icon').classList.replace('text-error', 'text-green-500');
-            document.getElementById('assistant-title').innerText = "Asistente de Conflictos";
-            document.getElementById('assistant-title').classList.remove('text-error');
-            document.getElementById('assistant-desc').innerText = "No se han detectado cruces de horarios en el sistema actual.";
-        }
-    </script>
-</body></html>
+    /* ---------- interacciones ---------- */
+    $('docBuscar').addEventListener('input', function(){ docQuery = this.value.trim(); renderDocentes(); });
+    $('docFiltros').addEventListener('click', function(ev){
+      var b = ev.target.closest('[data-f]');
+      if (!b) return;
+      docFiltro = b.getAttribute('data-f');
+      renderDocentes();
+    });
+    $('docGrid').addEventListener('click', function(ev){
+      var b = ev.target.closest('[data-sema],[data-add]');
+      if (!b) return;
+      if (b.hasAttribute('data-sema')){
+        var id = b.getAttribute('data-sema');
+        docOpenId = docOpenId === id ? null : id;
+        renderDocentes();
+        return;
+      }
+      var aid = b.getAttribute('data-add');
+      var inp = $('add-' + aid);
+      var h = inp ? parseInt(inp.value, 10) : 0;
+      if (!h || h < 1 || h > 10){ toast('Indicá un número de horas entre 1 y 10'); return; }
+      var nm = '';
+      DOCENTES.forEach(function(d){ if (d.id === aid){ nm = d.nombre; } });
+      registrarHorasDoc(aid, h);
+      renderDocentes();
+      renderAjustes();
+      toast('Horas registradas: ' + nm);
+    });
+    $('ajList').addEventListener('click', function(ev){
+      var b = ev.target.closest('[data-ajedit],[data-ajsave],[data-ajcancel],[data-ajreset],[data-ajact]');
+      if (!b) return;
+      var id = b.getAttribute('data-ajedit') || b.getAttribute('data-ajsave') || b.getAttribute('data-ajreset') || b.getAttribute('data-ajact');
+      if (b.hasAttribute('data-ajedit')){
+        ajEditId = id; renderAjustes(); return;
+      }
+      if (b.hasAttribute('data-ajcancel')){
+        ajEditId = null; renderAjustes(); return;
+      }
+      if (b.hasAttribute('data-ajsave')){
+        var inp = $('ajmat-' + id);
+        var val = inp ? inp.value.trim() : '';
+        if (!val){ toast('Escribí la materia nueva'); return; }
+        DOCENTES.forEach(function(d){ if (d.id === id) d.materia = val; });
+        AJ.materias[id] = val;
+        guardarAjustes();
+        ajEditId = null;
+        renderAjustes();
+        renderDocentes();
+        toast('Materia actualizada');
+        return;
+      }
+      if (b.hasAttribute('data-ajreset')){
+        resetSemana(id);
+        renderAjustes();
+        renderDocentes();
+        toast('Semana restablecida');
+        return;
+      }
+      if (b.hasAttribute('data-ajact')){
+        var actAnt = false;
+        DOCENTES.forEach(function(d){ if (d.id === id) actAnt = activoDe(d); });
+        AJ.activos[id] = !actAnt;
+        guardarAjustes();
+        renderAjustes();
+        renderDocentes();
+        actualizarKpis();
+      }
+    });
+    $('ajObjSave').addEventListener('click', function(){
+      var v = parseInt($('ajObjetivo').value, 10);
+      if (!v || v < 20 || v > 80){ toast('El objetivo va de 20 a 80 horas'); return; }
+      AJ.objetivo = v;
+      guardarAjustes();
+      actualizarKpis();
+      renderDocentes();
+      toast('Objetivo semanal: ' + v + ' h');
+    });
+
+    document.querySelectorAll('button').forEach(function(btn){
+      btn.addEventListener('mousedown', function(){ btn.classList.add('scale-95'); });
+      btn.addEventListener('mouseup', function(){ btn.classList.remove('scale-95'); });
+      btn.addEventListener('mouseleave', function(){ btn.classList.remove('scale-95'); });
+    });
+
+    /* ---------- init ---------- */
+    cargarDocHoras();
+    fechaHoy();
+    actualizarKpis();
+    renderDocentes();
+    renderAjustes();
+</script>
+</body>
+</html>
