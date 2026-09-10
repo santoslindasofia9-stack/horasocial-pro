@@ -169,6 +169,34 @@
   .mico.green{background:#d1fae5;color:#059669}
   .mico.amber{background:#ffedd5;color:#ea580c}
 
+  /* ---------- alertas de infracción en chat ---------- */
+  .infr-card{
+    background:var(--glass);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+    border:1px solid #fee2e2;border-radius:var(--radius);padding:17px 16px;
+    box-shadow:0 10px 24px rgba(220,38,38,.07);margin-bottom:12px;
+    display:flex;flex-direction:column;gap:12px;
+  }
+  .infr-card.rev{opacity:.74}
+  .infr-top{display:flex;align-items:center;gap:12px}
+  .infr-av{width:42px;height:42px;border-radius:13px;flex:0 0 auto;
+    display:flex;align-items:center;justify-content:center;background:#fee2e2;color:#dc2626}
+  .infr-av .material-symbols-outlined{font-size:20px}
+  .infr-info{flex:1;min-width:0}
+  .infr-info b{display:block;font-size:14px;font-weight:800;color:var(--navy-900);line-height:1.3}
+  .infr-info small{font-size:11px;color:var(--slate);font-weight:600;display:block;margin-top:2px}
+  .infr-txt{font-size:12.5px;line-height:1.55;font-weight:600;color:var(--slate);font-style:italic;
+    background:rgba(254,242,242,.75);border:1px solid #fee2e2;border-radius:12px;padding:9px 12px}
+  .infr-btn{display:inline-flex;align-items:center;gap:6px;background:#fff;color:#b91c1c;
+    border:1px solid #fecaca;border-radius:11px;padding:8px 13px;font-family:inherit;
+    font-size:11.5px;font-weight:800;cursor:pointer;flex:0 0 auto;transition:background .15s,transform .12s}
+  .infr-btn:hover{background:#fef2f2}
+  .infr-btn:active{transform:scale(.94)}
+  .infr-btn .material-symbols-outlined{font-size:15px}
+  .infr-chip{display:inline-flex;align-items:center;gap:5px;border-radius:999px;
+    font-size:11px;font-weight:800;padding:6px 12px;white-space:nowrap;flex:0 0 auto;
+    background:#d1fae5;color:#047857}
+  .infr-chip .material-symbols-outlined{font-size:14px}
+
   /* ---------- bottom nav (glass + íconos, bien aireada) ---------- */
   nav{
     position:fixed;left:0;right:0;bottom:0;z-index:50;
@@ -307,7 +335,7 @@
   <!-- header -->
   <header>
     <div class="avatar" role="img" aria-label="Perfil de Administradora Sofia">
-      <img id="avImg" alt="Foto de Administradora Sofia" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAsBKOgiv_kBEGjRdsLDTUZvI71zukRwIm4VDeUz7PNlZXgk-rbjdeD6dqKMmosd3_emj_ICwNW35ohfDVXeRh0Z9qFx0I4Zjb7jNHlals66RqOcXSkQu2MwkkciTFXkC95odUjko8VIPVa493BBrOY-WID8ZzD1PBV9U4Ja2q18Ov24D1q6vN3s3aoYWga0VydSZLaIpkbNGjcKqalA9cPOtjlGkZOSBrs-hPouXz3rf8bOc66iYv3e2gaqSDWmH1zI18tKalUSqva" onerror="this.style.display='none';var f=document.getElementById('avSvgFallback');if(f){f.style.display='flex';}">
+      <img id="avImg" alt="Foto de Administradora Sofia" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC2a3doQcYz7YW2YfF68HVbOvJ0y2UEpVIz_a1cdaOKDVUxSxGCUp8vcnpothWg82RQjdLADzsR4HcF9LcPVsvyJvQJtAwi_8o9nq47jRNCo_Y8XOyqXvlFSLrjV8PckkMvsJap" onerror="this.style.display='none';var f=document.getElementById('avSvgFallback');if(f){f.style.display='flex';}">
       <div class="av-fb" id="avSvgFallback">SA</div>
     </div>
     <div class="hi">
@@ -371,13 +399,21 @@
         <span class="mico green"><span class="material-symbols-outlined">badge</span></span>
         <span><b>Docentes</b><small>Coordinación y ajustes</small></span>
       </button>
-      <button class="mini" data-go type="button" data-file="../stitch_horasocial_pro_landing_page/mensajer_a_y_canales_admin_horasocial_pro/code.html" data-served="/admin/mensajes" aria-label="Ir a Mensajes">
+      <button class="mini" data-go type="button" data-file="../stitch_horasocial_pro_landing_page/mensajer_a_y_canales_admin_horasocial_pro_2/code.html" data-served="/admin/mensajes" aria-label="Ir a Mensajes">
         <span class="mico amber"><span class="material-symbols-outlined">chat</span></span>
         <span><b>Mensajes</b><small>Canales y conversaciones</small></span>
       </button>
     </div>
   </section>
 
+  <!-- alertas de infracción en chat -->
+  <section id="secInfracciones">
+    <div class="sec-head">
+      <h3><span class="m material-symbols-outlined">report</span>Alertas de Infracción en Chat</h3>
+      <span id="infrCount">0 alertas</span>
+    </div>
+    <div id="infrList"></div>
+  </section>
 </div>
 
 <!-- nav inferior glass + íconos, bien distribuida -->
@@ -386,7 +422,7 @@
     <a class="nav-item active" href="#"><span class="ic"><span class="material-symbols-outlined">grid_view</span></span><small>Panel</small></a>
     <a class="nav-item" data-go data-file="../stitch_horasocial_pro_landing_page/control_de_estudiantes_y_alertas_admin_versi_n_corregida/code.html" data-served="/admin/alertas" href="/admin/alertas"><span class="ic"><span class="material-symbols-outlined">group</span></span><small>Estudiantes</small></a>
     <a class="nav-item" data-go data-file="../stitch_horasocial_pro_landing_page/coordinaci_n_y_ajuste_de_docentes_admin/code.html" data-served="/admin/docentes" href="/admin/docentes"><span class="ic"><span class="material-symbols-outlined">badge</span></span><small>Docentes</small></a>
-    <a class="nav-item" data-go data-file="../stitch_horasocial_pro_landing_page/mensajer_a_y_canales_admin_horasocial_pro/code.html" data-served="/admin/mensajes" href="/admin/mensajes"><span class="ic"><span class="material-symbols-outlined">chat</span></span><small>Mensajes</small></a>
+    <a class="nav-item" data-go data-file="../stitch_horasocial_pro_landing_page/mensajer_a_y_canales_admin_horasocial_pro_2/code.html" data-served="/admin/mensajes" href="/admin/mensajes"><span class="ic"><span class="material-symbols-outlined">chat</span></span><small>Mensajes</small></a>
   </div>
 </nav>
 
@@ -704,8 +740,199 @@
       toast('Notificaciones marcadas como leídas');
     });
 
+  var MAESTROS = [
+    {id:'m1', nombre:'Prof. Carlos Méndez', materia:'Metalmecánica', iniciales:'CM', enLinea:true},
+    {id:'m2', nombre:'Prof. Laura Gutiérrez', materia:'Informática', iniciales:'LG', enLinea:true},
+    {id:'m3', nombre:'Prof. Andrés Silva', materia:'Carpintería', iniciales:'AS', enLinea:true},
+    {id:'m4', nombre:'Prof. Mariana Ríos', materia:'Electricidad', iniciales:'MR', enLinea:true},
+    {id:'m5', nombre:'Prof. Jorge Pereyra', materia:'Herrería', iniciales:'JP', enLinea:false}
+  ];
+
+  var ESTUDIANTES = [
+    {id:'e1', nombre:'Valentina Ospina', brigada:'Brigada Ambiental', iniciales:'VO', enLinea:true},
+    {id:'e2', nombre:'Samuel Rojas', brigada:'Brigada Ambiental', iniciales:'SR', enLinea:false},
+    {id:'e3', nombre:'Mariana Cárdenas', brigada:'Apoyo Académico', iniciales:'MC', enLinea:true},
+    {id:'e4', nombre:'Sebastián Gómez', brigada:'Servicios Comunitarios', iniciales:'SG', enLinea:false},
+    {id:'e5', nombre:'Isabella Torres', brigada:'Brigada Ambiental', iniciales:'IT', enLinea:true},
+    {id:'e6', nombre:'Juan David Muñoz', brigada:'Apoyo Académico', iniciales:'JM', enLinea:false},
+    {id:'e7', nombre:'Sofía Ramírez', brigada:'Servicios Comunitarios', iniciales:'SR', enLinea:true},
+    {id:'e8', nombre:'Andrés Felipe Castro', brigada:'Brigada Ambiental', iniciales:'AC', enLinea:false},
+    {id:'e9', nombre:'Camila Arias', brigada:'Apoyo Académico', iniciales:'CA', enLinea:true},
+    {id:'e10', nombre:'Nicolás Herrera', brigada:'Servicios Comunitarios', iniciales:'NH', enLinea:false},
+    {id:'e11', nombre:'Laura Gutiérrez', brigada:'Apoyo Académico', iniciales:'LG', enLinea:true},
+    {id:'e12', nombre:'Daniel Salazar', brigada:'Servicios Comunitarios', iniciales:'DS', enLinea:false}
+  ];
+
+  /* ---------- filtro de lenguaje ---------- */
+  var PROHIBIDAS = ['culo','culos','puta','puto','putas','putos','putita','putear','puteada','puteadas','puterio',
+    'putazo','putazos','polla','pija','pijas','pijazo','pijazos','verga','vergas','vergazo','vergazos',
+    'mierda','mierdas','cagada','cagadas','cagar','cagado','cagon','cagona',
+    'pendejo','pendeja','pendejos','pendejas','pendejada','pendejadas',
+    'marica','maricon','maricones','mariconada','mariconadas',
+    'cabron','cabrona','cabronada','cabronadas','hijueputa','hijueputas',
+    'sorete','soretes','pelotudo','pelotuda','pelotudos','pelotudez','pelotudeces','pelotudisimo',
+    'boludo','boluda','boludos','boludez','boludeces','boludisimo','boludazo','recontraboludo','recontraboluda',
+    'choto','chota','chotos','chotas','chotear','choteada',
+    'concha','conchas','conchudo','conchuda','tarado','tarada','taradez',
+    'estupido','estupida','estupidos','estupidez','estupideces','idiota','idiotas',
+    'imbecil','imbeciles','imbecilidad','imbecilidades','gil','giles',
+    'poronga','porongas','porongo','pajero','pajera','pajeros','pajeras',
+    'forro','forra','forros','trolo','trola','trolos','mogolico','mogolica','mogolicos',
+    'culear','culeada','culeadas','culiar','culiado','culiada','culiao','hdp'];
+  var STEMS = ['bolud','pelotud','put','pendej','maricon','cabron','hijueput','porong','pajer','trol','mogol',
+    'mierd','chot','conch','gil','tarad','soret','cag','estupid','imbecil','verga','polla'];
+  var FRASES = ['hijo de puta','hija de puta','hijos de puta','hijas de puta','puta madre',
+    'la puta madre','me cago','concha de la lora','hijo de mil'];
+  function normalizar(s){
+    return s.toLowerCase()
+      .replace(/[áàäâ]/g,'a').replace(/[éèëê]/g,'e')
+      .replace(/[íìïî]/g,'i').replace(/[óòöô]/g,'o')
+      .replace(/[úùüû]/g,'u')
+      .replace(/0/g,'o').replace(/3/g,'e').replace(/1/g,'i')
+      .replace(/4/g,'a').replace(/5|7/g,'s').replace(/@/g,'a').replace(/\$/g,'s')
+      .replace(/v(?![aeiou])/g,'u');
+  }
+  function tokenLimpio(t){
+    return normalizar(t).replace(/[^a-z]/g,'');
+  }
+  function esProhibida(tok){
+    var t = tokenLimpio(tok);
+    if (PROHIBIDAS.indexOf(t) !== -1) return true;
+    for (var i = 0; i < STEMS.length; i++){
+      if (t.indexOf(STEMS[i]) === 0) return true;
+    }
+    return false;
+  }
+  function contieneProhibida(texto){
+    var partes = texto.split(/\s+/);
+    for (var i = 0; i < partes.length; i++){
+      if (esProhibida(partes[i])) return true;
+    }
+    var n = ' ' + normalizar(texto).replace(/\s+/g,' ') + ' ';
+    for (var j = 0; j < FRASES.length; j++){
+      if (n.indexOf(FRASES[j]) !== -1) return true;
+    }
+    return false;
+  }
+
+    /* ---------- alertas de infracción en chat ---------- */
+    var LS_ALERTAS = 'horasocial_admin_chat_alertas_v1';
+
+    function leerChat(k){
+      try{
+        var v = localStorage.getItem(k);
+        return v ? JSON.parse(v) : {};
+      }catch(e){ return {}; }
+    }
+
+    function tentarSemillas(){
+      var c1 = leerChat('horasocial_chat_v1');
+      var c2 = leerChat('horasocial_maestro_chat_v1');
+      if (Object.keys(c1).length || Object.keys(c2).length) return;
+      var s1 = {
+        m1: [
+          {de:'profe', txt:'Hola Alex, te compartí la guía de soldadura. Cualquier duda me escribís.', h:'08:10'},
+          {de:'me', txt:'Profe, qué mierda de día, se me dañó todo en el taller.', h:'08:14'},
+          {de:'profe', txt:'Tranquilo Alex, mañana lo resolvemos juntos.', h:'08:16'}
+        ]
+      };
+      var s2 = {
+        e3: [
+          {de:'alum', txt:'Profe, ¿la guía de matemáticas la arranco hoy?', h:'09:10'},
+          {de:'alum', txt:'Es que esto es una cagada, no entiendo nada.', h:'09:12'},
+          {de:'me', txt:'Mariana, vamos por partes hoy después de clase.', h:'09:14'}
+        ]
+      };
+      try{ localStorage.setItem('horasocial_chat_v1', JSON.stringify(s1)); }catch(e){}
+      try{ localStorage.setItem('horasocial_maestro_chat_v1', JSON.stringify(s2)); }catch(e){}
+    }
+
+    function cargarRevisadas(){
+      try{
+        var raw = localStorage.getItem(LS_ALERTAS);
+        var arr = raw ? JSON.parse(raw) : [];
+        return Array.isArray(arr) ? arr : [];
+      }catch(e){ return []; }
+    }
+    function guardarRevisadas(arr){ try{ localStorage.setItem(LS_ALERTAS, JSON.stringify(arr)); }catch(e){} }
+
+    function escanearInfracciones(){
+      tentarSemillas();
+      var lista = [];
+      var c1 = leerChat('horasocial_chat_v1');
+      var ks1 = Object.keys(c1);
+      for (var i = 0; i < ks1.length; i++){
+        var key = ks1[i], msgs = c1[key] || [];
+        for (var j = 0; j < msgs.length; j++){
+          var ms = msgs[j];
+          if (ms && ms.de === 'me' && typeof ms.txt === 'string' && contieneProhibida(ms.txt)){
+            var nm = '';
+            for (var k = 0; k < MAESTROS.length; k++){ if (MAESTROS[k].id === key){ nm = MAESTROS[k].nombre; break; } }
+            lista.push({ id:'s:' + key + ':' + j, alumno:'Estudiante (Alex)', contexto:'Chat con ' + (nm || key), txt:ms.txt, h:ms.h || '' });
+          }
+        }
+      }
+      var c2 = leerChat('horasocial_maestro_chat_v1');
+      var ks2 = Object.keys(c2);
+      for (var a = 0; a < ks2.length; a++){
+        var ekey = ks2[a], msgs2 = c2[ekey] || [];
+        for (var b = 0; b < msgs2.length; b++){
+          var ms2 = msgs2[b];
+          if (ms2 && ms2.de === 'alum' && typeof ms2.txt === 'string' && contieneProhibida(ms2.txt)){
+            var ne = '';
+            for (var u = 0; u < ESTUDIANTES.length; u++){ if (ESTUDIANTES[u].id === ekey){ ne = ESTUDIANTES[u].nombre; break; } }
+            lista.push({ id:'m:' + ekey + ':' + b, alumno:ne || ekey, contexto:'Chat del maestro', txt:ms2.txt, h:ms2.h || '' });
+          }
+        }
+      }
+      return lista;
+    }
+
+    function renderInfracciones(){
+      var list = $('infrList'); if (!list) return;
+      var revs = cargarRevisadas();
+      var alerts = escanearInfracciones();
+      alerts.forEach(function(a){ a.rev = revs.indexOf(a.id) !== -1; });
+      var pend = [], rev = [];
+      alerts.forEach(function(a){ (a.rev ? rev : pend).push(a); });
+      var orden = pend.concat(rev);
+      var cnt = $('infrCount');
+      if (cnt) cnt.textContent = alerts.length ? (alerts.length === 1 ? '1 alerta' : alerts.length + ' alertas') : 'Sin alertas';
+      if (!alerts.length){
+        list.innerHTML = '<div class="empty"><span class="material-symbols-outlined">verified_user</span><span>Sin infracciones detectadas en los chats</span></div>';
+        return;
+      }
+      var html = '';
+      orden.forEach(function(a){
+        html += '<div class="infr-card' + (a.rev ? ' rev' : '') + '" data-id="' + esc(a.id) + '">' +
+          '<div class="infr-top">' +
+            '<div class="infr-av"><span class="material-symbols-outlined">report</span></div>' +
+            '<div class="infr-info"><b>' + esc(a.alumno) + '</b><small>' + esc(a.contexto) + (a.h ? ' · ' + esc(a.h) : '') + '</small></div>' +
+            (a.rev
+              ? '<span class="infr-chip"><span class="material-symbols-outlined">done</span>Revisada</span>'
+              : '<button class="infr-btn" type="button" data-rev="' + esc(a.id) + '"><span class="material-symbols-outlined">done</span>Marcar revisada</button>') +
+          '</div>' +
+          '<div class="infr-txt">' + esc(a.txt) + '</div>' +
+        '</div>';
+      });
+      list.innerHTML = html;
+    }
+
+    var infrList = $('infrList');
+    if (infrList) infrList.addEventListener('click', function(e){
+      var btn = e.target && e.target.closest ? e.target.closest('[data-rev]') : null;
+      if (!btn) return;
+      var id = btn.getAttribute('data-rev');
+      var arr = cargarRevisadas();
+      if (arr.indexOf(id) === -1) arr.push(id);
+      guardarRevisadas(arr);
+      renderInfracciones();
+      toast('Infracción marcada como revisada');
+    });
+
     /* ---------- estado inicial ---------- */
     renderNotifs();
+    renderInfracciones();
     cargarSolicitudes(function(){ renderSolicitudes(); });
   })();
 </script>
