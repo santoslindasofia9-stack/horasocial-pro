@@ -26,6 +26,7 @@
           "login_maestro_horasocial_pro/**",
           "recuperar_contrasena_maestro_horasocial_pro/**",
           "login_administrador_horasocial_pro/**",
+          "dashboard_administrador_horasocial_pro/**",
           "recuperar_contrasena_administrador_horasocial_pro/**"
         ]
       }

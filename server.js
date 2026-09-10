@@ -638,7 +638,7 @@ app.get('/maestro/mensajes', (req, res) => {
 });
 
 app.get('/admin/dashboard', (req, res) => {
-    res.sendFile(path.join(__dirname, 'stitch_horasocial_pro_landing_page', 'dashboard_administrador_control_y_gesti_n_central', 'code.html'));
+    res.sendFile(path.join(__dirname, 'dashboard_administrador_horasocial_pro', 'index.html'));
 });
 
 app.get('/admin/docentes', (req, res) => {
@@ -740,7 +740,7 @@ app.get('/maestro/mensajes', (req, res) => {
 });
 
 app.get('/admin/dashboard', (req, res) => {
-    res.sendFile(path.join(__dirname, 'stitch_horasocial_pro_landing_page', 'dashboard_administrador_control_y_gesti_n_central', 'code.html'));
+    res.sendFile(path.join(__dirname, 'dashboard_administrador_horasocial_pro', 'index.html'));
 });
 
 app.get('/admin/docentes', (req, res) => {
