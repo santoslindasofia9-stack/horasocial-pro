@@ -122,21 +122,21 @@
 <main class="w-full px-lg flex flex-col items-center justify-center flex-grow">
 <div class="w-full grid grid-cols-3 gap-lg max-w-lg">
 <!-- Card 1: Estudiante -->
-<button class="group flex flex-col aspect-square bg-white rounded-xl shadow-md border border-surface-variant/20 transition-all duration-300 active:scale-95 items-center justify-center p-2 text-center">
+<button onclick="if(location.protocol==='file:'){location.href='../login_estudiante_distribuci_n_centrada_y_logo_optimizado_2/code.html'}else{location.href='/login'}" class="group flex flex-col aspect-square bg-white rounded-xl shadow-md border border-surface-variant/20 transition-all duration-300 active:scale-95 items-center justify-center p-2 text-center cursor-pointer">
 <div class="w-12 h-12 rounded-full bg-bright-sky flex items-center justify-center mb-sm shadow-sm">
 <span class="material-symbols-outlined text-white text-2xl">school</span>
 </div>
 <h3 class="font-label-md text-label-md text-on-surface font-bold leading-tight">Estudiante</h3>
 </button>
 <!-- Card 2: Profesor -->
-<button class="group flex flex-col aspect-square bg-white rounded-xl shadow-md border border-surface-variant/20 transition-all duration-300 active:scale-95 items-center justify-center p-2 text-center">
+<button onclick="if(location.protocol==='file:'){location.href='../../login_maestro_horasocial_pro/index.html'}else{location.href='/profesor/login'}" class="group flex flex-col aspect-square bg-white rounded-xl shadow-md border border-surface-variant/20 transition-all duration-300 active:scale-95 items-center justify-center p-2 text-center cursor-pointer">
 <div class="w-12 h-12 rounded-full bg-secondary flex items-center justify-center mb-sm shadow-sm">
 <span class="material-symbols-outlined text-white text-2xl">group</span>
 </div>
 <h3 class="font-label-md text-label-md text-on-surface font-bold leading-tight">Profesor</h3>
 </button>
 <!-- Card 3: Administrador -->
-<button class="group flex flex-col aspect-square bg-white rounded-xl shadow-md border border-surface-variant/20 transition-all duration-300 active:scale-95 items-center justify-center p-2 text-center">
+<button onclick="if(location.protocol==='file:'){location.href='../../login_administrador_horasocial_pro/index.html'}else{location.href='/admin/login'}" class="group flex flex-col aspect-square bg-white rounded-xl shadow-md border border-surface-variant/20 transition-all duration-300 active:scale-95 items-center justify-center p-2 text-center cursor-pointer">
 <div class="w-12 h-12 rounded-full bg-institutional-blue flex items-center justify-center mb-sm shadow-sm">
 <span class="material-symbols-outlined text-white text-2xl">verified_user</span>
 </div>
@@ -149,7 +149,7 @@
 <div class="mb-sm">
 <p class="font-label-md text-label-md text-outline">
         ¿Necesitas ayuda? 
-        <a class="text-bright-sky font-semibold hover:underline" href="#">Consulta nuestra guía de acceso</a>
+        <a class="text-bright-sky font-semibold hover:underline" href="javascript:void(0)" onclick="irSobre();return false;">Sobre horas sociales</a>
 </p>
 </div>
 <div class="mb-sm">
@@ -162,4 +162,5 @@
 <a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary" href="#">Contacto</a>
 </nav>
 </footer>
+<script>function irSobre(){if(location.protocol==='file:'){location.href='../sobre_horasocial_pro_identidad_y_prop_sito/code.html'}else{location.href='/sobre'}}</script>
 </body></html>
