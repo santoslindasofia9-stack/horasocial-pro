@@ -651,7 +651,7 @@ app.get('/admin/alertas', (req, res) => {
 
 // ✅ RUTA /admin/mensajes CORREGIDA - apunta a la carpeta correcta del admin
 app.get('/admin/mensajes', (req, res) => {
-    res.sendFile(path.join(__dirname, 'stitch_horasocial_pro_landing_page', 'mensajer_a_y_canales_admin_horasocial_pro', 'code.html'));
+    res.sendFile(path.join(__dirname, 'stitch_horasocial_pro_landing_page', 'mensajer_a_y_canales_admin_horasocial_pro_2', 'code.html'));
 });
 
 module.exports = app;
@@ -752,7 +752,7 @@ app.get('/admin/alertas', (req, res) => {
 });
 
 app.get('/admin/mensajes', (req, res) => {
-    res.sendFile(path.join(__dirname, 'stitch_horasocial_pro_landing_page', 'mensajer_a_y_canales_admin_horasocial_pro', 'code.html'));
+    res.sendFile(path.join(__dirname, 'stitch_horasocial_pro_landing_page', 'mensajer_a_y_canales_admin_horasocial_pro_2', 'code.html'));
 });
 if (!process.env.VERCEL) {
     app.listen(PORT, () => {
