@@ -296,6 +296,28 @@
     font-family:inherit;font-size:11.5px;font-weight:600;outline:0;background:#fff;color:var(--navy-900)}
   .doc-cta{display:flex;justify-content:flex-end;margin-top:12px}
 
+  /* ---------- control de estudiantes ---------- */
+  #secEstudiantes{display:none}
+  #secEstudiantes.open{display:block;animation:popIn .22s ease}
+  .est-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-bottom:14px}
+  .est-stat{background:var(--glass);backdrop-filter:blur(12px);border:1px solid var(--card-brd);
+    border-radius:14px;padding:12px 8px;text-align:center}
+  .est-stat b{display:block;font-size:19px;font-weight:800;color:var(--navy-900)}
+  .est-stat small{font-size:10px;font-weight:700;color:var(--slate);display:block;margin-top:3px}
+  .est-alert{display:inline-flex;align-items:center;gap:4px;background:#fee2e2;color:#dc2626;
+    font-size:10px;font-weight:800;border-radius:999px;padding:4px 9px;cursor:pointer;
+    border:0;font-family:inherit;transition:background .15s,transform .12s;flex:0 0 auto}
+  .est-alert:hover{background:#fecaca}
+  .est-alert:active{transform:scale(.94)}
+  .est-bols{display:flex;gap:6px;width:100%}
+  .est-bol{flex:1;text-align:center}
+  .est-bol i{display:block;width:100%;height:22px;border-radius:7px;background:#eef2f7;margin-bottom:3px;transition:background .2s}
+  .est-bol.on i{background:linear-gradient(180deg,#a7f3d0,#10b981)}
+  .est-bol.med i{background:linear-gradient(180deg,#fde68a,#f59e0b)}
+  .est-bol small{font-size:8.5px;font-weight:700;color:var(--slate)}
+  .doc-chip.sky{background:#e0f2fe;color:#0369a1}
+  .doc-chip.vio{background:#ede9fe;color:#6d28d9}
+
   /* ---------- bottom nav (glass + íconos, bien aireada) ---------- */
   nav{
     position:fixed;left:0;right:0;bottom:0;z-index:50;
@@ -518,6 +540,7 @@
           <div class="res-item"><b id="resEstHoras">18.540</b><small>Horas totales</small></div>
           <div class="res-item"><b id="resEstAlertas">0</b><small>Alertas en chat</small></div>
         </div>
+        <div class="doc-cta"><button class="res-chip" type="button" id="btnGoEstCoord"><span class="material-symbols-outlined">open_in_new</span>Ir a control de estudiantes</button></div>
       </div>
     </div>
 
@@ -574,6 +597,35 @@
     <div id="docEmpty" class="empty" hidden><span class="material-symbols-outlined">search_off</span><span>No hay docentes que coincidan</span></div>
   </section>
 
+  <!-- control de estudiantes -->
+  <section id="secEstudiantes">
+    <div class="sec-head">
+      <h3><span class="m material-symbols-outlined">group</span>Control de Estudiantes</h3>
+      <span id="estResumenTxt">12 estudiantes</span>
+    </div>
+    <div class="est-stats">
+      <div class="est-stat"><b>312</b><small>Estudiantes activos</small></div>
+      <div class="est-stat"><b>18.540</b><small>Horas de servicio</small></div>
+      <div class="est-stat"><b>3</b><small>Brigadas en curso</small></div>
+      <div class="est-stat"><b id="estAlertasStat">0</b><small>Alertas en chat</small></div>
+    </div>
+    <div class="doc-toolbar">
+      <div class="doc-search">
+        <span class="material-symbols-outlined">search</span>
+        <input id="estBuscar" type="search" placeholder="Buscar estudiante o brigada...">
+      </div>
+      <div class="doc-filtros" id="estFiltros">
+        <button class="doc-fil active" data-fe="todos" type="button">Todas</button>
+        <button class="doc-fil" data-fe="ambiental" type="button">Brigada Ambiental</button>
+        <button class="doc-fil" data-fe="apoyo" type="button">Apoyo Académico</button>
+        <button class="doc-fil" data-fe="servicios" type="button">Servicios Comunitarios</button>
+        <button class="doc-fil" data-fe="alertas" type="button">Con alertas</button>
+      </div>
+    </div>
+    <div id="estGrid" class="doc-grid"></div>
+    <div id="estEmpty" class="empty" hidden><span class="material-symbols-outlined">search_off</span><span>No hay estudiantes que coincidan</span></div>
+  </section>
+
   <!-- alertas de infracción en chat -->
   <section id="secInfracciones">
     <div class="sec-head">
@@ -588,7 +640,7 @@
 <nav>
   <div class="nav-inner">
     <a class="nav-item active" href="#"><span class="ic"><span class="material-symbols-outlined">grid_view</span></span><small>Panel</small></a>
-    <a class="nav-item" data-go data-file="../stitch_horasocial_pro_landing_page/control_de_estudiantes_y_alertas_admin_versi_n_corregida/code.html" data-served="/admin/alertas" href="/admin/alertas"><span class="ic"><span class="material-symbols-outlined">group</span></span><small>Estudiantes</small></a>
+    <a class="nav-item" data-pantalla="estudiantes" href="#secEstudiantes"><span class="ic"><span class="material-symbols-outlined">group</span></span><small>Estudiantes</small></a>
     <a class="nav-item" data-pantalla="docentes" href="#secDocentes"><span class="ic"><span class="material-symbols-outlined">badge</span></span><small>Docentes</small></a>
     <a class="nav-item" data-go data-file="../stitch_horasocial_pro_landing_page/mensajer_a_y_canales_admin_horasocial_pro_2/code.html" data-served="/admin/mensajes" href="/admin/mensajes"><span class="ic"><span class="material-symbols-outlined">chat</span></span><small>Mensajes</small></a>
   </div>
@@ -1320,26 +1372,29 @@
       grid.innerHTML = html;
     }
 
-    function mostrarCoordinacionDesdeResumen(){
+    function abrirPantalla(panel){
       document.querySelectorAll('.nav-item[data-pantalla]').forEach(function(n){ n.classList.remove('active'); });
-      var dn = document.querySelector('.nav-item[data-pantalla="docentes"]');
+      var dn = document.querySelector('.nav-item[data-pantalla="' + panel + '"]');
       if (dn) dn.classList.add('active');
-      var sec = $('secDocentes');
+      var sec = $('sec' + cap(panel));
       if (sec){
         sec.classList.add('open');
         if (sec.scrollIntoView) sec.scrollIntoView({ behavior:'smooth', block:'start' });
       }
-      renderDocentes();
+      if (panel === 'docentes') renderDocentes();
+      if (panel === 'estudiantes') renderEstudiantes();
     }
 
     document.querySelectorAll('.nav-item[data-pantalla]').forEach(function(n){
       n.addEventListener('click', function(e){
         e.preventDefault();
-        mostrarCoordinacionDesdeResumen();
+        abrirPantalla(n.getAttribute('data-pantalla'));
       });
     });
     var btnDocCoord = $('btnGoDocCoord');
-    if (btnDocCoord) btnDocCoord.addEventListener('click', mostrarCoordinacionDesdeResumen);
+    if (btnDocCoord) btnDocCoord.addEventListener('click', function(){ abrirPantalla('docentes'); });
+    var btnEstCoord = $('btnGoEstCoord');
+    if (btnEstCoord) btnEstCoord.addEventListener('click', function(){ abrirPantalla('estudiantes'); });
     var docFiltros = $('docFiltros');
     if (docFiltros) docFiltros.addEventListener('click', function(e){
       var b = e.target && e.target.closest ? e.target.closest('[data-f]') : null;
@@ -1370,6 +1425,137 @@
         DOCENTES.forEach(function(d){ if (d.id === aid){ d.semana.push(h); nm = d.nombre; } });
         toast('Horas registradas para ' + (nm || aid));
         renderDocentes();
+      }
+    });
+
+    /* ---------- control de estudiantes ---------- */
+    var EST_HORAS = {
+      e1:{ horas:118, semana:[6,7,6,6,5] },
+      e2:{ horas:64,  semana:[4,3,4,3,0] },
+      e3:{ horas:96,  semana:[6,5,6,5,4] },
+      e4:{ horas:55,  semana:[3,4,3,3,0] },
+      e5:{ horas:132, semana:[7,7,8,7,6] },
+      e6:{ horas:48,  semana:[4,3,3,3,0] },
+      e7:{ horas:88,  semana:[5,5,6,5,4] },
+      e8:{ horas:150, semana:[8,8,8,7,7] },
+      e9:{ horas:77,  semana:[5,4,5,4,3] },
+      e10:{ horas:41, semana:[3,3,3,2,0] },
+      e11:{ horas:103, semana:[6,6,6,5,5] },
+      e12:{ horas:69,  semana:[5,4,5,4,2] }
+    };
+    var estFiltro = 'todos', estQuery = '', estOpenId = null;
+    var DIA_LETRA = ['L','M','X','J','V'];
+
+    function mapaAlertasEstudiantes(){
+      var ll = escanearInfracciones();
+      var rev = cargarRevisadas();
+      var map = {};
+      ll.forEach(function(a){
+        if (a.id.charAt(0) === 'm'){
+          var k = a.id.split(':')[1];
+          if (rev.indexOf(a.id) === -1) map[k] = (map[k] || 0) + 1;
+        }
+      });
+      return map;
+    }
+
+    function renderEstudiantes(){
+      var grid = $('estGrid'); if (!grid) return;
+      var q = estQuery.toLowerCase();
+      var mapAl = mapaAlertasEstudiantes();
+      var totA = 0;
+      Object.keys(mapAl).forEach(function(k){ totA += mapAl[k]; });
+      var stA = $('estAlertasStat'); if (stA) stA.textContent = totA;
+      var lista = ESTUDIANTES.filter(function(s){
+        var okQ = !q || s.nombre.toLowerCase().indexOf(q) !== -1 || s.brigada.toLowerCase().indexOf(q) !== -1;
+        var b = s.brigada;
+        var okF = true;
+        if (estFiltro === 'ambiental') okF = b.indexOf('Ambiental') !== -1;
+        else if (estFiltro === 'apoyo') okF = b.indexOf('Apoyo') !== -1;
+        else if (estFiltro === 'servicios') okF = b.indexOf('Comunitarios') !== -1;
+        else if (estFiltro === 'alertas') okF = (mapAl[s.id] || 0) > 0;
+        return okQ && okF;
+      });
+      var st = $('estResumenTxt');
+      if (st) st.textContent = lista.length + (lista.length === 1 ? ' estudiante' : ' estudiantes') + ' de ' + ESTUDIANTES.length;
+      var emp = $('estEmpty'); if (emp) emp.hidden = lista.length > 0;
+      var html = '';
+      lista.forEach(function(s){
+        var info = EST_HORAS[s.id] || { horas:0, semana:[0,0,0,0,0] };
+        var total = info.horas;
+        var pct = Math.min(100, Math.round(total / 120 * 100));
+        var grad = s.brigada.indexOf('Ambiental') !== -1 ? 'linear-gradient(135deg,#34d399,#047857)'
+          : s.brigada.indexOf('Apoyo') !== -1 ? 'linear-gradient(135deg,#38bdf8,#0369a1)'
+          : 'linear-gradient(135deg,#c4b5fd,#6d28d9)';
+        var chip = s.brigada.indexOf('Ambiental') !== -1 ? 'ok' : s.brigada.indexOf('Apoyo') !== -1 ? 'sky' : 'vio';
+        var nA = mapAl[s.id] || 0;
+        var bols = '';
+        info.semana.forEach(function(hh, i){
+          var cls = hh >= 7 ? 'on' : hh >= 4 ? 'med' : '';
+          bols += '<div class="est-bol' + (cls ? ' ' + cls : '') + '"><i></i><small>' + DIA_LETRA[i % 5] + '</small></div>';
+        });
+        html += '<div class="doc-card' + (estOpenId === s.id ? ' open' : '') + '" data-id="' + s.id + '">' +
+          '<div class="doc-top">' +
+            '<div class="doc-ava" style="background:' + grad + '">' + esc(s.iniciales) + '</div>' +
+            '<div class="doc-info"><b>' + esc(s.nombre) + '</b><small>' + esc(s.brigada) + '</small></div>' +
+            (nA
+              ? '<button class="est-alert" type="button" data-goinfra="' + s.id + '"><span class="material-symbols-outlined" style="font-size:12px">report</span>' + nA + '</button>'
+              : '<span class="doc-chip ' + (s.enLinea ? 'on' : 'off') + '">' + (s.enLinea ? 'En línea' : 'Offline') + '</span>') +
+          '</div>' +
+          '<div class="doc-horas"><div class="doc-h-row"><span>Horas de servicio</span><b>' + total + ' / 120 h</b></div>' +
+            '<div class="doc-bar" style="background:#f1f5f9"><i style="width:' + pct + '%;background:linear-gradient(90deg,#a7f3d0,#10b981)"></i></div></div>' +
+          '<div class="doc-meta">' +
+            '<span class="doc-chip ' + chip + '">' + esc(s.brigada) + '</span>' +
+            '<button class="doc-btn" type="button" data-estperfil="' + s.id + '">' + (estOpenId === s.id ? 'Cerrar perfil' : 'Ver perfil') + '</button>' +
+          '</div>' +
+          '<div class="doc-sema" id="perfil-' + s.id + '"' + (estOpenId === s.id ? '' : ' hidden') + '>' +
+            '<div class="sem-row"><span>Semana</span><div class="est-bols">' + bols + '</div><b>' + total + ' h</b></div>' +
+            '<div class="sem-add"><input id="estadd-' + s.id + '" type="number" min="1" max="10" placeholder="Horas" aria-label="Horas a registrar">' +
+            '<button class="doc-btn ok" type="button" data-estadd="' + s.id + '">Registrar horas</button></div>' +
+          '</div>' +
+        '</div>';
+      });
+      grid.innerHTML = html;
+    }
+
+    var estFiltros = $('estFiltros');
+    if (estFiltros) estFiltros.addEventListener('click', function(e){
+      var b = e.target && e.target.closest ? e.target.closest('[data-fe]') : null;
+      if (!b) return;
+      estFiltro = b.getAttribute('data-fe');
+      estFiltros.querySelectorAll('[data-fe]').forEach(function(x){ x.classList.toggle('active', x === b); });
+      renderEstudiantes();
+    });
+    var estBuscar = $('estBuscar');
+    if (estBuscar) estBuscar.addEventListener('input', function(){ estQuery = estBuscar.value.trim(); renderEstudiantes(); });
+    var estGrid = $('estGrid');
+    if (estGrid) estGrid.addEventListener('click', function(e){
+      var t = e.target;
+      var per = t && t.closest ? t.closest('[data-estperfil]') : null;
+      if (per){
+        var id = per.getAttribute('data-estperfil');
+        estOpenId = estOpenId === id ? null : id;
+        renderEstudiantes();
+        return;
+      }
+      var add = t && t.closest ? t.closest('[data-estadd]') : null;
+      if (add){
+        var aid = add.getAttribute('data-estadd');
+        var inp = $('estadd-' + aid);
+        var h = inp ? parseInt(inp.value, 10) : 0;
+        if (!h || h < 1 || h > 10){ toast('Indicá un número de horas entre 1 y 10'); return; }
+        var nm = '';
+        ESTUDIANTES.forEach(function(s){ if (s.id === aid) nm = s.nombre; });
+        if (EST_HORAS[aid]){ EST_HORAS[aid].horas += h; EST_HORAS[aid].semana.push(h); }
+        toast('Horas registradas para ' + (nm || aid));
+        renderEstudiantes();
+        return;
+      }
+      var gi = t && t.closest ? t.closest('[data-goinfra]') : null;
+      if (gi){
+        var sec = $('secInfracciones');
+        if (sec && sec.scrollIntoView) sec.scrollIntoView({ behavior:'smooth', block:'start' });
+        toast('Revisá las alertas de chat de ese estudiante');
       }
     });
 
