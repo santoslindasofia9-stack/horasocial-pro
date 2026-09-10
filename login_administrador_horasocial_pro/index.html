@@ -6,27 +6,19 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <style>
     :root {
-      --royal-50: #EEF2FF;
-      --royal-100: #E0E7FF;
-      --royal-200: #C7D2FE;
-      --royal-300: #A5B4FC;
-      --royal-400: #818CF8;
-      --royal-500: #6366F1;
-      --royal-600: #4F46E5;
-      --royal-700: #4338CA;
-      --royal-800: #3730A3;
-      --royal-900: #312E81;
-      --ink: #1E1B4B;
+      --institutional: #0F172A;
+      --sky: #38BDF8;
+      --sky-dark: #0EA5E9;
       --surface: #FFFFFF;
       --muted: #45464D;
       --muted-soft: #6B7280;
-      --line: #C9CCE8;
+      --line: #D1D7E2;
     }
     * { margin: 0; padding: 0; box-sizing: border-box; }
     html, body { height: 100%; }
     body {
       font-family: "Inter", ui-sans-serif, system-ui, sans-serif;
-      color: var(--ink);
+      color: var(--institutional);
       background: var(--surface);
       min-height: 100vh;
       display: flex;
@@ -84,7 +76,7 @@
       height: 160px;
       width: auto;
       object-fit: contain;
-      border: 1.5px solid rgba(30, 27, 75, 0.75);
+      border: 1.5px solid rgba(15, 23, 42, 0.75);
       border-radius: 14px;
       padding: 8px;
       background: #fff;
@@ -101,8 +93,8 @@
       flex-direction: column;
       gap: 4px;
     }
-    .slogan .line-1 { color: var(--ink); }
-    .slogan .line-2 { color: var(--royal-500); }
+    .slogan .line-1 { color: var(--institutional); }
+    .slogan .line-2 { color: var(--sky); }
 
     /* Login card */
     .login-wrap {
@@ -117,9 +109,9 @@
       width: 100%;
       max-width: 440px;
       background: #fff;
-      border: 1px solid rgba(201, 204, 232, 0.9);
+      border: 1px solid rgba(209, 215, 226, 0.9);
       border-radius: 16px;
-      box-shadow: 0 4px 20px rgba(30, 27, 75, 0.08);
+      box-shadow: 0 4px 20px rgba(15, 23, 42, 0.08);
       padding: 32px;
       text-align: center;
     }
@@ -128,17 +120,11 @@
       font-size: 24px;
       line-height: 1.3;
       font-weight: 700;
-      color: var(--ink);
-      margin-bottom: 8px;
+      color: var(--institutional);
+      margin-bottom: 24px;
     }
     .login-card h1 .rol {
-      color: var(--royal-500);
-    }
-    .login-card .subtitle {
-      font-size: 14px;
-      line-height: 1.55;
-      color: var(--muted-soft);
-      margin-bottom: 24px;
+      color: var(--sky);
     }
     .field {
       margin-bottom: 20px;
@@ -168,7 +154,7 @@
       padding: 14px 44px 14px 46px;
       font-size: 15px;
       font-family: "Inter", sans-serif;
-      color: var(--ink);
+      color: var(--institutional);
       background: #F8FAFC;
       border: 1px solid var(--line);
       border-radius: 10px;
@@ -177,8 +163,8 @@
     }
     .input-wrap input::placeholder { color: rgba(107, 114, 128, 0.7); }
     .input-wrap input:focus {
-      border-color: var(--royal-500);
-      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.18);
+      border-color: var(--sky);
+      box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.18);
     }
     .input-wrap .eye {
       position: absolute;
@@ -192,7 +178,7 @@
       align-items: center;
       padding: 4px;
     }
-    .input-wrap .eye:hover { color: var(--royal-500); }
+    .input-wrap .eye:hover { color: var(--sky); }
     .btn-ingresar {
       width: 100%;
       padding: 14px;
@@ -202,42 +188,24 @@
       letter-spacing: 0.08em;
       text-transform: uppercase;
       color: #fff;
-      background: linear-gradient(135deg, var(--royal-500), var(--royal-700));
+      background: var(--sky);
       border: none;
       border-radius: 10px;
       cursor: pointer;
-      box-shadow: 0 2px 8px rgba(79, 70, 229, 0.35);
+      box-shadow: 0 2px 8px rgba(56, 189, 248, 0.35);
       transition: background .2s ease, transform .15s ease, box-shadow .2s ease;
     }
-    .btn-ingresar:hover { background: linear-gradient(135deg, var(--royal-400), var(--royal-600)); box-shadow: 0 4px 12px rgba(79, 70, 229, 0.45); }
+    .btn-ingresar:hover { background: var(--sky-dark); box-shadow: 0 4px 12px rgba(56, 189, 248, 0.45); }
     .btn-ingresar:active { transform: scale(0.98); }
     .forgot {
-      display: block;
+      display: inline-block;
       margin-top: 18px;
       font-size: 12px;
       font-weight: 600;
-      color: var(--royal-600);
+      color: var(--sky);
       text-decoration: none;
     }
     .forgot:hover { text-decoration: underline; }
-    .btn-back {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      margin-top: 16px;
-      padding: 9px 18px;
-      font-family: "Inter", sans-serif;
-      font-size: 12.5px;
-      font-weight: 600;
-      color: var(--royal-700);
-      background: linear-gradient(180deg, var(--royal-50), var(--royal-100));
-      border: 1px solid var(--royal-200);
-      border-radius: 999px;
-      text-decoration: none;
-      transition: background .2s ease, border-color .2s ease;
-    }
-    .btn-back:hover { background: linear-gradient(180deg, var(--royal-100), var(--royal-200)); border-color: var(--royal-300); }
-    .btn-back .material-symbols-outlined { font-size: 16px; }
 
     /* Footer */
     .site-footer {
@@ -261,7 +229,7 @@
       color: var(--muted-soft);
       text-decoration: none;
     }
-    .site-footer nav a:hover { color: var(--royal-500); }
+    .site-footer nav a:hover { color: var(--sky); }
 
     @media (max-width: 640px) {
       .site-header { padding-top: 20px; }
@@ -277,10 +245,10 @@
 <svg viewBox="0 0 1600 900" preserveAspectRatio="none">
 <defs>
 <linearGradient id="gradField" x1="0%" y1="0%" x2="100%" y2="100%">
-<stop offset="0%" stop-color="#e4e9ff"/>
-<stop offset="35%" stop-color="#c7d2fe"/>
-<stop offset="70%" stop-color="#818cf8"/>
-<stop offset="100%" stop-color="#6d28d9"/>
+<stop offset="0%" stop-color="#cde9ff"/>
+<stop offset="35%" stop-color="#9fd4ff"/>
+<stop offset="70%" stop-color="#5fb4f7"/>
+<stop offset="100%" stop-color="#7dbfc8"/>
 </linearGradient>
 </defs>
 <path class="wf-l" stroke="url(#gradField)" opacity="0.11" transform="translate(0 6.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
@@ -347,7 +315,6 @@
 <main class="login-wrap">
 <div class="login-card">
 <h1>Iniciar Sesión: <span class="rol">administradores</span></h1>
-<p class="subtitle">Gestión central de HORASOCIAL PRO · Colegio Alfredo Correa</p>
 
 <form id="loginForm" action="/api/login-administrador" method="post" autocomplete="on">
 <div class="field">
@@ -372,8 +339,7 @@
 <button class="btn-ingresar" type="submit">INGRESAR</button>
 </form>
 
-<a class="forgot" id="forgotLink" href="/admin/recuperar-contrasena">¿Olvidaste tu contraseña?</a>
-<a class="btn-back" id="btnBack" href="/seleccion-rol"><span class="material-symbols-outlined">arrow_back</span>Volver</a>
+<a class="forgot" href="/admin/recuperar-contrasena">¿Olvidaste tu contraseña?</a>
 </div>
 </main>
 
@@ -399,13 +365,12 @@ function togglePassword() {
 document.getElementById('loginForm').addEventListener('submit', (e) => {
   if (location.protocol === 'file:') {
     e.preventDefault();
-    location.href = '../stitch_horasocial_pro_landing_page/dashboard_administrador_control_y_gesti_n_central/code.html';
+    location.href = '../dashboard_administrador_horasocial_pro/index.html';
   }
 });
 
 if (location.protocol === 'file:') {
-  document.getElementById('forgotLink').href = '../recuperar_contrasena_administrador_horasocial_pro/index.html';
-  document.getElementById('btnBack').href = '../selecci_n_de_rol_distribuci_n_expandida_vertical/code.html';
+  document.querySelector('.forgot').href = '../recuperar_contrasena_administrador_horasocial_pro/index.html';
 }
 </script>
 </body></html>
