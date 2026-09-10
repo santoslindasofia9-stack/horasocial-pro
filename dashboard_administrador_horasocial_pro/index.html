@@ -169,6 +169,37 @@
   .mico.green{background:#d1fae5;color:#059669}
   .mico.amber{background:#ffedd5;color:#ea580c}
 
+  /* ---------- resúmenes de accesos rápidos ---------- */
+  .mini.active{box-shadow:0 14px 30px rgba(3,105,161,.18);border-color:var(--sky-400);transform:translateY(-2px)}
+  .resumen{display:none;margin-top:16px}
+  .resumen.show{display:block;animation:popIn .22s ease}
+  @keyframes popIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+  .resumo{background:var(--glass);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+    border:1px solid var(--card-brd);border-radius:var(--radius);padding:17px 16px;
+    box-shadow:0 10px 24px rgba(3,105,161,.08);margin-bottom:12px}
+  .resumo h4{font-size:13.5px;font-weight:800;color:var(--navy-900);display:flex;align-items:center;gap:8px;margin-bottom:11px}
+  .resumo h4 .material-symbols-outlined{font-size:18px;color:var(--sky-500)}
+  .res-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+  .res-item{background:var(--sky-50);border:1px solid var(--card-brd);border-radius:14px;padding:11px 8px;text-align:center}
+  .res-item b{display:block;font-size:18px;font-weight:800;color:var(--navy-900);line-height:1.15}
+  .res-item small{font-size:10px;font-weight:700;color:var(--slate);display:block;margin-top:3px;line-height:1.35}
+  .res-row{display:flex;align-items:center;gap:11px;padding:11px 4px;border-bottom:1px solid #eef5fb}
+  .res-row:last-child{border-bottom:0}
+  .res-row .r-ava{width:36px;height:36px;border-radius:12px;background:var(--sky-100);color:var(--sky-700);
+    display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;flex:0 0 auto}
+  .res-row .r-i{flex:1;min-width:0}
+  .res-row b{display:block;font-size:12.5px;font-weight:800;color:var(--navy-900)}
+  .res-row small{display:block;font-size:10.5px;color:var(--slate);font-weight:600;margin-top:2px;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .res-chip{display:inline-flex;align-items:center;gap:5px;border-radius:999px;background:var(--sky-100);
+    color:var(--sky-700);font-size:10.5px;font-weight:800;padding:6px 11px;flex:0 0 auto;cursor:pointer;
+    border:0;font-family:inherit;transition:background .15s,transform .12s}
+  .res-chip:hover{background:var(--sky-200)}
+  .res-chip:active{transform:scale(.94)}
+  .res-chip.warn{background:#fee2e2;color:#dc2626}
+  .res-chip.warn:hover{background:#fecaca}
+  .res-chip .material-symbols-outlined{font-size:13px}
+
   /* ---------- alertas de infracción en chat ---------- */
   .infr-card{
     background:var(--glass);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
@@ -387,22 +418,68 @@
   <section>
     <div class="sec-head"><h3><span class="m material-symbols-outlined">bolt</span>Accesos rápidos</h3></div>
     <div class="quick">
-      <button class="mini" id="btnGoSol" type="button" aria-label="Ver solicitudes de recuperación">
+      <button class="mini" id="btnGoSol" data-panel="solicitudes" type="button" aria-label="Ver solicitudes de recuperación">
         <span class="mico indigo"><span class="material-symbols-outlined">lock_reset</span></span>
         <span><b>Solicitudes</b><small>Recuperación de contraseña</small></span>
       </button>
-      <button class="mini" data-go type="button" data-file="../stitch_horasocial_pro_landing_page/control_de_estudiantes_y_alertas_admin_versi_n_corregida/code.html" data-served="/admin/alertas" aria-label="Ir a Estudiantes">
+      <button class="mini" data-panel="estudiantes" type="button" aria-label="Ver resumen de Estudiantes">
         <span class="mico blue"><span class="material-symbols-outlined">group</span></span>
-        <span><b>Estudiantes</b><small>Control y alertas</small></span>
+        <span><b>Estudiantes</b><small>Resumen y brigadas</small></span>
       </button>
-      <button class="mini" data-go type="button" data-file="../stitch_horasocial_pro_landing_page/coordinaci_n_y_ajuste_de_docentes_admin/code.html" data-served="/admin/docentes" aria-label="Ir a Docentes">
+      <button class="mini" data-panel="docentes" type="button" aria-label="Ver resumen de Docentes">
         <span class="mico green"><span class="material-symbols-outlined">badge</span></span>
-        <span><b>Docentes</b><small>Coordinación y ajustes</small></span>
+        <span><b>Docentes</b><small>Coordinación y horas</small></span>
       </button>
-      <button class="mini" data-go type="button" data-file="../stitch_horasocial_pro_landing_page/mensajer_a_y_canales_admin_horasocial_pro_2/code.html" data-served="/admin/mensajes" aria-label="Ir a Mensajes">
+      <button class="mini" data-panel="mensajes" type="button" aria-label="Ver resumen de Mensajes">
         <span class="mico amber"><span class="material-symbols-outlined">chat</span></span>
-        <span><b>Mensajes</b><small>Canales y conversaciones</small></span>
+        <span><b>Mensajes</b><small>Conversaciones y alertas</small></span>
       </button>
+    </div>
+  </section>
+
+  <!-- resúmenes de los accesos rápidos -->
+  <section id="secResumen">
+    <div class="resumen" id="resumenEstudiantes">
+      <div class="resumo">
+        <h4><span class="material-symbols-outlined">group</span>Resumen de Estudiantes</h4>
+        <div class="res-grid">
+          <div class="res-item"><b>312</b><small>Estudiantes activos</small></div>
+          <div class="res-item"><b>105</b><small>Brigada Ambiental</small></div>
+          <div class="res-item"><b>98</b><small>Apoyo Académico</small></div>
+          <div class="res-item"><b>109</b><small>Servicios Comunitarios</small></div>
+          <div class="res-item"><b id="resEstHoras">18.540</b><small>Horas totales</small></div>
+          <div class="res-item"><b id="resEstAlertas">0</b><small>Alertas en chat</small></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="resumen" id="resumenDocentes">
+      <div class="resumo">
+        <h4><span class="material-symbols-outlined">badge</span>Resumen de Docentes</h4>
+        <div class="res-grid">
+          <div class="res-item"><b>24</b><small>Docentes en el colegio</small></div>
+          <div class="res-item"><b>21</b><small>Con planilla al día</small></div>
+          <div class="res-item"><b>3</b><small>Sin planilla de horas</small></div>
+          <div class="res-item"><b>1.250</b><small>Horas registradas esta semana</small></div>
+          <div class="res-item"><b>8</b><small>Talleres activos</small></div>
+          <div class="res-item"><b id="resDocPend">0</b><small>Solicitudes pendientes</small></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="resumen" id="resumenMensajes">
+      <div class="resumo">
+        <h4><span class="material-symbols-outlined">chat</span>Conversaciones recientes</h4>
+        <div id="resConv"></div>
+      </div>
+      <div class="resumo">
+        <h4><span class="material-symbols-outlined">report</span>Vigilancia del chat</h4>
+        <div class="res-row">
+          <div class="r-ava"><span class="material-symbols-outlined" style="font-size:16px">verified_user</span></div>
+          <div class="r-i"><b>Infracciones detectadas</b><small id="resMsgInfracciones">0 activas</small></div>
+          <button class="res-chip warn" type="button" id="btnGoInfra"><span class="material-symbols-outlined">arrow_forward</span>Ver alertas</button>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -713,10 +790,94 @@
     var btnExp = $('btnExportSol');
     if (btnExp) btnExp.addEventListener('click', exportarCSV);
 
-    var btnGoSol = $('btnGoSol');
-    if (btnGoSol) btnGoSol.addEventListener('click', function(){
-      var sec = $('secSolicitudes');
-      if (sec && sec.scrollIntoView) sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    /* ---------- resúmenes de accesos rápidos (tiles del dashboard) ---------- */
+    function cap(s){ return s.charAt(0).toUpperCase() + s.slice(1); }
+    function contarPendientes(){
+      var lista = escanearInfracciones();
+      var revs = cargarRevisadas();
+      var n = 0;
+      lista.forEach(function(a){ if (revs.indexOf(a.id) === -1) n++; });
+      return n;
+    }
+    function refreshResumenVivos(){
+      var n = contarPendientes();
+      var eA = $('resEstAlertas'); if (eA) eA.textContent = n;
+      var mI = $('resMsgInfracciones'); if (mI) mI.textContent = n === 1 ? '1 activa' : (n ? n + ' activas' : 'Sin alertas');
+      var dP = $('resDocPend');
+      if (dP){
+        var pend = 0;
+        if (sols && Array.isArray(sols)){ sols.forEach(function(s){ if (s.estado !== 'Autorizado') pend++; }); }
+        else { var k = $('kSol'); if (k) pend = parseInt(k.textContent, 10) || 0; }
+        dP.textContent = pend;
+      }
+    }
+    function nombreEstudiantePorId(id){
+      for (var i = 0; i < ESTUDIANTES.length; i++){ if (ESTUDIANTES[i].id === id) return ESTUDIANTES[i]; }
+      return null;
+    }
+    function renderResumenMensajes(){
+      var box = $('resConv'); if (!box) return;
+      tentarSemillas();
+      var conv = leerChat('horasocial_maestro_chat_v1');
+      var keys = Object.keys(conv);
+      var filas = [];
+      keys.forEach(function(k){
+        var arr = conv[k] || [];
+        if (!arr.length) return;
+        var ultimo = arr[arr.length - 1];
+        var est = nombreEstudiantePorId(k);
+        filas.push({
+          nombre: est ? est.nombre : k,
+          iniciales: est ? est.iniciales : k.toUpperCase(),
+          txt: ultimo && ultimo.txt ? ultimo.txt : 'Sin mensajes',
+          h: ultimo && ultimo.h ? ultimo.h : ''
+        });
+      });
+      if (!filas.length){
+        filas = [
+          { nombre:'Valentina Ospina', iniciales:'VO', txt:'Profe, ya terminé de clasificar los residuos del patio.', h:'08:15' },
+          { nombre:'Samuel Rojas', iniciales:'SR', txt:'Perfecto, allá estaré.', h:'16:01' },
+          { nombre:'Mariana Cárdenas', iniciales:'MC', txt:'Muchas gracias profe, ya la estoy mirando.', h:'09:14' }
+        ];
+      }
+      filas = filas.slice(0, 3);
+      var html = '';
+      filas.forEach(function(f){
+        var texto = f.txt.length > 56 ? f.txt.slice(0, 56) + '...' : f.txt;
+        html += '<div class="res-row">' +
+          '<div class="r-ava">' + esc(f.iniciales) + '</div>' +
+          '<div class="r-i"><b>' + esc(f.nombre) + '</b><small>' + esc(texto) + (f.h ? ' · ' + esc(f.h) : '') + '</small></div>' +
+        '</div>';
+      });
+      box.innerHTML = html;
+    }
+    function abrirResumen(panel, tile){
+      document.querySelectorAll('.mini[data-panel]').forEach(function(x){ x.classList.remove('active'); });
+      if (tile) tile.classList.add('active');
+      if (panel === 'solicitudes'){
+        var sec0 = $('secSolicitudes');
+        if (sec0 && sec0.scrollIntoView) sec0.scrollIntoView({ behavior:'smooth', block:'start' });
+        refreshResumenVivos();
+        return;
+      }
+      document.querySelectorAll('.resumen').forEach(function(x){ x.classList.remove('show'); });
+      var pan = $('resumen' + cap(panel));
+      if (pan){
+        pan.classList.add('show');
+        if (pan.scrollIntoView) pan.scrollIntoView({ behavior:'smooth', block:'start' });
+      }
+      if (panel === 'mensajes') renderResumenMensajes();
+      refreshResumenVivos();
+    }
+    document.querySelectorAll('.mini[data-panel]').forEach(function(tile){
+      tile.addEventListener('click', function(){
+        abrirResumen(tile.getAttribute('data-panel'), tile);
+      });
+    });
+    var btnGoInfra = $('btnGoInfra');
+    if (btnGoInfra) btnGoInfra.addEventListener('click', function(){
+      var sec = $('secInfracciones');
+      if (sec && sec.scrollIntoView) sec.scrollIntoView({ behavior:'smooth', block:'start' });
     });
 
     var btnNotif = $('btnNotif'), panel = $('notifPanel');
