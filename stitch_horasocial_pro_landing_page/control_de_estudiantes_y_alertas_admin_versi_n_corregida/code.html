@@ -1,706 +1,1107 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport">
 <title>Control de Estudiantes - HORASOCIAL PRO</title>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;family=Comfortaa:wght@400;600;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&amp;display=swap" rel="stylesheet">
 <style>
-        .font-comfortaa { font-family: 'Comfortaa', cursive; }
-        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
-        body { background: linear-gradient(180deg, #F0F7FF 0%, #F8FAFC 45%, #FFFFFF 100%); }
-        .bar-meta { transition: width .7s cubic-bezier(.22,1,.36,1); }
-        .est-card { transition: transform .15s ease, box-shadow .15s ease; }
-        .est-card:hover { transform: translateY(-3px); box-shadow: 0 14px 32px rgba(15,23,42,0.10); }
-        .burbuja { transition: transform .15s ease; }
-        .burbuja:hover { transform: scale(1.15); }
-        .kpi-card { transition: transform .15s ease, box-shadow .15s ease; }
-        .kpi-card:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(15,23,42,0.07); }
-        .ocean-wave { position: fixed; pointer-events: none; z-index: 0; width: min(92vw, 900px); }
-        .ocean-wave svg { width: 100%; height: auto; display: block; }
-        @keyframes drift { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(-22px); } }
-        .drift-a svg { animation: drift 18s ease-in-out infinite; }
-        .drift-b svg { animation: drift 26s ease-in-out infinite reverse; }
-    </style>
-<script id="tailwind-config">
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    colors: {
-                        "primary": "#0F172A",
-                        "accent": "#0EA5E9",
-                        "background": "#F8FAFC",
-                        "surface": "#FFFFFF",
-                        "on-surface": "#191c1e",
-                        "on-surface-variant": "#45464d",
-                        "outline-variant": "#c6c6cd"
-                    },
-                    borderRadius: {
-                        "DEFAULT": "0.25rem",
-                        "lg": "1rem",
-                        "xl": "1.25rem",
-                        "full": "9999px"
-                    },
-                    fontFamily: {
-                        "body": ["Inter", "sans-serif"],
-                        "headline": ["Plus Jakarta Sans", "sans-serif"]
-                    }
-                }
-            }
-        }
-    </script>
+
+  :root{
+    --sky-50:#f0f9ff; --sky-100:#e0f2fe; --sky-200:#bae6fd; --sky-300:#7dd3fc;
+    --sky-400:#38bdf8; --sky-500:#0ea5e9; --sky-600:#0284c7; --sky-700:#0369a1;
+    --navy-800:#075985; --navy-900:#0c4a6e; --ink:#0f2f44; --slate:#5b6b7c;
+    --card:#ffffff; --card-brd:#e6f0f9; --glass:rgba(255,255,255,.9); --radius:22px; --maxw:640px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html{scroll-behavior:smooth;overflow-x:hidden}
+  body{
+    font-family:'Inter','Plus Jakarta Sans','Segoe UI',system-ui,sans-serif;
+    color:var(--ink);background:#ffffff;position:relative;overflow-x:hidden;
+    min-height:100dvh;
+    padding:0 0 calc(120px + env(safe-area-inset-bottom));
+  }
+  h1,h2,h3,h4{font-family:'Plus Jakarta Sans',sans-serif}
+
+  /* ---------- ondas estilo selección de rol (toda la página) ---------- */
+  .flow-field{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;overflow:visible}
+  .flow-field svg{width:100%;height:100%;overflow:visible}
+  .wf-l{fill:none;stroke-width:0.9;vector-effect:non-scaling-stroke}
+  .wiggle{animation:flow-drift 38s ease-in-out infinite;will-change:transform}
+  @keyframes flow-drift{0%,100%{transform:translate(0,0)}20%{transform:translate(9px,-16px)}45%{transform:translate(19px,-6px)}70%{transform:translate(11px,6px)}}
+
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:22px 18px 10px;position:relative;z-index:1}
+  @media (min-width:720px){ :root{--maxw:920px} .wrap{padding:30px 26px 12px} }
+
+  /* ---------- header ---------- */
+  header{display:flex;align-items:center;gap:12px;padding:4px 2px 22px}
+  .avatar{width:56px;height:56px;border-radius:50%;flex:0 0 auto;position:relative;
+    filter:drop-shadow(0 8px 16px rgba(124,58,237,.32))}
+  .avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%;display:block}
+  .avatar::after{content:'';position:absolute;inset:-3px;border-radius:50%;
+    border:2.5px solid rgba(139,92,246,.45)}
+  .av-fb{display:none;width:100%;height:100%;border-radius:50%;align-items:center;justify-content:center;
+    background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff;
+    font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:19px;letter-spacing:.5px}
+  .hi{flex:1;min-width:0}
+  .hi h1{font-size:20px;font-weight:800;color:var(--navy-900);letter-spacing:-.2px}
+  .hi p{font-size:12px;color:var(--slate);font-weight:600;margin-top:3px}
+  .bell{position:relative;width:44px;height:44px;border-radius:14px;flex:0 0 auto;
+    background:var(--sky-50);border:1px solid var(--sky-200);color:var(--sky-700);
+    display:flex;align-items:center;justify-content:center;cursor:pointer;font-family:inherit;
+    transition:background .2s,box-shadow .2s,transform .12s}
+  .bell:hover{background:var(--sky-100);box-shadow:0 4px 12px rgba(2,132,199,.18)}
+  .bell:active{transform:scale(.94)}
+  .bell .material-symbols-outlined{font-size:22px}
+  .bell-dot{position:absolute;top:9px;right:10px;width:9px;height:9px;border-radius:50%;
+    background:#ef4444;border:2px solid #fff}
+  .logout{display:flex;align-items:center;gap:7px;text-decoration:none;
+    background:var(--sky-50);border:1px solid var(--sky-200);color:var(--sky-700);
+    padding:9px 13px;border-radius:999px;font-weight:800;font-size:12px;
+    transition:background .2s,box-shadow .2s,transform .12s;white-space:nowrap}
+  .logout:hover{background:var(--sky-100);box-shadow:0 4px 12px rgba(2,132,199,.18)}
+  .logout:active{transform:scale(.96)}
+  .logout .material-symbols-outlined{font-size:18px}
+  @media (max-width:430px){ .logout small{display:none} .logout{padding:10px} }
+
+  /* ---------- saludo ---------- */
+  .greet{margin:2px 0 24px;padding:0 4px}
+  .greet h2{font-size:22px;font-weight:800;color:var(--navy-900);letter-spacing:-.2px;line-height:1.25}
+  .greet p{font-size:13px;color:var(--slate);margin-top:7px;line-height:1.6;max-width:520px;font-weight:500}
+
+  /* ---------- sections ---------- */
+  section{margin-top:26px}
+  .sec-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;padding:0 4px}
+  .sec-head h3{font-size:16px;font-weight:800;color:var(--navy-900);display:flex;align-items:center;gap:8px}
+  .sec-head h3 .m{font-size:20px;color:var(--sky-500)}
+  .sec-head span{font-size:11.5px;color:var(--sky-600);font-weight:700}
+
+  /* ---------- botón exportar ---------- */
+  .exp-btn{display:inline-flex;align-items:center;gap:6px;background:var(--sky-50);
+    border:1px solid var(--sky-200);color:var(--sky-700);border-radius:999px;
+    padding:8px 13px;font-family:inherit;font-size:11.5px;font-weight:800;cursor:pointer;
+    white-space:nowrap;transition:background .2s,box-shadow .2s,transform .12s}
+  .exp-btn:hover{background:var(--sky-100);box-shadow:0 4px 12px rgba(2,132,199,.18)}
+  .exp-btn:active{transform:scale(.95)}
+  .exp-btn .material-symbols-outlined{font-size:16px}
+
+  /* ---------- stats grid ---------- */
+  .stats{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+  .stat{
+    background:var(--glass);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+    border:1px solid var(--card-brd);border-radius:20px;padding:18px 10px;text-align:center;
+    box-shadow:0 10px 28px rgba(3,105,161,.10);
+    display:flex;flex-direction:column;align-items:center;gap:5px;
+  }
+  .stat .m{font-size:26px;color:var(--sky-500)}
+  .stat b{font-size:25px;font-weight:800;color:var(--navy-900);line-height:1.1}
+  .stat small{font-size:11px;font-weight:700;color:var(--slate)}
+  .stat.accent .m{color:var(--sky-600)}
+  .stat.accent b{color:var(--sky-600)}
+
+  /* ---------- solicitudes de recuperación ---------- */
+  .sol-card{
+    background:var(--glass);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+    border:1px solid var(--card-brd);border-radius:var(--radius);padding:17px 16px;
+    box-shadow:0 10px 24px rgba(3,105,161,.08);margin-bottom:12px;
+    display:flex;flex-direction:column;gap:13px;
+  }
+  .sol-top{display:flex;align-items:center;gap:12px}
+  .sol-av{width:42px;height:42px;border-radius:13px;flex:0 0 auto;
+    display:flex;align-items:center;justify-content:center;
+    background:#ede9fe;color:#7c3aed}
+  .sol-av .material-symbols-outlined{font-size:20px}
+  .sol-info{flex:1;min-width:0}
+  .sol-info b{display:block;font-size:14px;font-weight:800;color:var(--navy-900);line-height:1.3}
+  .sol-info small{font-size:11px;color:var(--slate);font-weight:600;display:block;margin-top:2px}
+  .sol-date{font-size:10.5px;font-weight:800;color:var(--sky-600);white-space:nowrap;flex:0 0 auto}
+  .sol-meta{display:flex;flex-direction:column;gap:6px}
+  .sol-meta-row{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:600;color:var(--ink);min-width:0}
+  .sol-meta-row .material-symbols-outlined{font-size:15px;color:var(--sky-500);flex:0 0 auto}
+  .sol-meta-row span:last-child{min-width:0;overflow:hidden;text-overflow:ellipsis}
+  .sol-btns{display:flex;gap:8px}
+  .sol-btns .rep-btn{flex:1;justify-content:center}
+  .rep-btn{display:inline-flex;align-items:center;gap:5px;border:0;border-radius:11px;padding:9px 12px;
+    font-family:inherit;font-size:11.5px;font-weight:800;cursor:pointer;color:#fff;
+    transition:transform .12s,box-shadow .2s}
+  .rep-btn:active{transform:scale(.94)}
+  .rep-btn .material-symbols-outlined{font-size:15px}
+  .rep-btn.ok{background:var(--sky-600)}
+  .rep-btn.ok:hover{background:var(--sky-700);box-shadow:0 6px 14px rgba(2,132,199,.3)}
+  .rep-btn.no{background:#fff;color:#b91c1c;border:1px solid #fecaca}
+  .rep-btn.no:hover{background:#fef2f2}
+  .rep-chip{display:inline-flex;align-items:center;gap:5px;border-radius:999px;
+    font-size:11px;font-weight:800;padding:6px 12px;white-space:nowrap}
+  .rep-chip.ok{background:#d1fae5;color:#047857}
+  .rep-chip .material-symbols-outlined{font-size:14px}
+
+  /* ---------- aprobadas ---------- */
+  .aprob-wrap{opacity:.72;margin-top:4px}
+  .apro-row{display:flex;align-items:center;gap:12px;padding:12px 14px;
+    border:1px dashed var(--card-brd);border-radius:16px;
+    background:rgba(240,249,255,.55);margin-bottom:8px}
+  .apro-info{flex:1;min-width:0}
+  .apro-info b{display:block;font-size:13px;font-weight:800;color:var(--navy-900)}
+  .apro-info small{font-size:10.5px;color:var(--slate);font-weight:600;display:block;margin-top:2px}
+  .apro-side{flex:0 0 auto;display:flex;flex-direction:column;align-items:flex-end;gap:5px}
+  .apro-note{font-size:10.5px;font-weight:800;color:#047857;background:#d1fae5;
+    border-radius:999px;padding:4px 10px;white-space:nowrap}
+
+  /* ---------- vacío ---------- */
+  .empty{display:flex;flex-direction:column;align-items:center;gap:8px;padding:30px 16px;text-align:center}
+  .empty .material-symbols-outlined{font-size:34px;color:var(--sky-300)}
+  .empty span{font-size:12px;font-weight:700;color:var(--slate)}
+
+  /* ---------- accesos rápidos 2x2 ---------- */
+  .quick{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+  .mini{display:flex;flex-direction:column;align-items:center;gap:9px;padding:17px 10px;text-decoration:none;
+    cursor:pointer;background:var(--glass);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+    border:1px solid var(--card-brd);border-radius:20px;box-shadow:0 10px 24px rgba(3,105,161,.08);
+    transition:transform .12s,box-shadow .2s;font-family:inherit;text-align:center}
+  .mini:hover{box-shadow:0 14px 30px rgba(3,105,161,.14);transform:translateY(-2px)}
+  .mini:active{transform:scale(.97)}
+  .mini .mico{width:46px;height:46px;border-radius:14px;flex:0 0 auto;
+    display:flex;align-items:center;justify-content:center;font-size:23px}
+  .mini b{font-size:12.5px;font-weight:800;color:var(--navy-900)}
+  .mini small{font-size:10px;font-weight:600;color:var(--slate);display:block;margin-top:2px;line-height:1.4}
+  .mico.indigo{background:#ede9fe;color:#7c3aed}
+  .mico.blue{background:var(--sky-100);color:var(--sky-700)}
+  .mico.green{background:#d1fae5;color:#059669}
+  .mico.amber{background:#ffedd5;color:#ea580c}
+
+  /* ---------- resúmenes de accesos rápidos ---------- */
+  .mini.active{box-shadow:0 14px 30px rgba(3,105,161,.18);border-color:var(--sky-400);transform:translateY(-2px)}
+  .resumen{display:none;margin-top:16px}
+  .resumen.show{display:block;animation:popIn .22s ease}
+  @keyframes popIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+  .resumo{background:var(--glass);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+    border:1px solid var(--card-brd);border-radius:var(--radius);padding:17px 16px;
+    box-shadow:0 10px 24px rgba(3,105,161,.08);margin-bottom:12px}
+  .resumo h4{font-size:13.5px;font-weight:800;color:var(--navy-900);display:flex;align-items:center;gap:8px;margin-bottom:11px}
+  .resumo h4 .material-symbols-outlined{font-size:18px;color:var(--sky-500)}
+  .res-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+  .res-item{background:var(--sky-50);border:1px solid var(--card-brd);border-radius:14px;padding:11px 8px;text-align:center}
+  .res-item b{display:block;font-size:18px;font-weight:800;color:var(--navy-900);line-height:1.15}
+  .res-item small{font-size:10px;font-weight:700;color:var(--slate);display:block;margin-top:3px;line-height:1.35}
+  .res-row{display:flex;align-items:center;gap:11px;padding:11px 4px;border-bottom:1px solid #eef5fb}
+  .res-row:last-child{border-bottom:0}
+  .res-row .r-ava{width:36px;height:36px;border-radius:12px;background:var(--sky-100);color:var(--sky-700);
+    display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;flex:0 0 auto}
+  .res-row .r-i{flex:1;min-width:0}
+  .res-row b{display:block;font-size:12.5px;font-weight:800;color:var(--navy-900)}
+  .res-row small{display:block;font-size:10.5px;color:var(--slate);font-weight:600;margin-top:2px;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .res-chip{display:inline-flex;align-items:center;gap:5px;border-radius:999px;background:var(--sky-100);
+    color:var(--sky-700);font-size:10.5px;font-weight:800;padding:6px 11px;flex:0 0 auto;cursor:pointer;
+    border:0;font-family:inherit;transition:background .15s,transform .12s}
+  .res-chip:hover{background:var(--sky-200)}
+  .res-chip:active{transform:scale(.94)}
+  .res-chip.warn{background:#fee2e2;color:#dc2626}
+  .res-chip.warn:hover{background:#fecaca}
+  .res-chip .material-symbols-outlined{font-size:13px}
+
+  /* ---------- alertas de infracción en chat ---------- */
+  .infr-card{
+    background:var(--glass);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+    border:1px solid #fee2e2;border-radius:var(--radius);padding:17px 16px;
+    box-shadow:0 10px 24px rgba(220,38,38,.07);margin-bottom:12px;
+    display:flex;flex-direction:column;gap:12px;
+  }
+  .infr-card.rev{opacity:.74}
+  .infr-top{display:flex;align-items:center;gap:12px}
+  .infr-av{width:42px;height:42px;border-radius:13px;flex:0 0 auto;
+    display:flex;align-items:center;justify-content:center;background:#fee2e2;color:#dc2626}
+  .infr-av .material-symbols-outlined{font-size:20px}
+  .infr-info{flex:1;min-width:0}
+  .infr-info b{display:block;font-size:14px;font-weight:800;color:var(--navy-900);line-height:1.3}
+  .infr-info small{font-size:11px;color:var(--slate);font-weight:600;display:block;margin-top:2px}
+  .infr-txt{font-size:12.5px;line-height:1.55;font-weight:600;color:var(--slate);font-style:italic;
+    background:rgba(254,242,242,.75);border:1px solid #fee2e2;border-radius:12px;padding:9px 12px}
+  .infr-btn{display:inline-flex;align-items:center;gap:6px;background:#fff;color:#b91c1c;
+    border:1px solid #fecaca;border-radius:11px;padding:8px 13px;font-family:inherit;
+    font-size:11.5px;font-weight:800;cursor:pointer;flex:0 0 auto;transition:background .15s,transform .12s}
+  .infr-btn:hover{background:#fef2f2}
+  .infr-btn:active{transform:scale(.94)}
+  .infr-btn .material-symbols-outlined{font-size:15px}
+  .infr-chip{display:inline-flex;align-items:center;gap:5px;border-radius:999px;
+    font-size:11px;font-weight:800;padding:6px 12px;white-space:nowrap;flex:0 0 auto;
+    background:#d1fae5;color:#047857}
+  .infr-chip .material-symbols-outlined{font-size:14px}
+  .infr-acts{display:flex;align-items:center;gap:8px;flex:0 0 auto}
+  .infr-btn.send{background:var(--navy-900);color:#fff;border-color:var(--navy-900)}
+  .infr-btn.send:hover{background:#0b2a4a}
+  .infr-btn.ghost{background:transparent;border-color:transparent;color:var(--slate)}
+  .infr-btn.ghost:hover{background:var(--sky-50)}
+  .infr-composer{display:flex;flex-direction:column;gap:9px;background:#fff;border:1px solid var(--card-brd);
+    border-radius:13px;padding:11px}
+  .infr-composer[hidden]{display:none}
+  .infr-composer textarea{border:1px solid var(--card-brd);border-radius:11px;padding:10px 12px;resize:vertical;
+    min-height:60px;font-family:inherit;font-size:12.5px;line-height:1.5;outline:0;background:#f8fbff;color:var(--navy-900)}
+  .infr-composer textarea:focus{border-color:var(--sky-400)}
+  .infr-c-btns{display:flex;justify-content:flex-end;gap:8px}
+
+  /* ---------- bottom nav (glass + íconos, bien aireada) ---------- */
+  nav{
+    position:fixed;left:0;right:0;bottom:0;z-index:50;
+    background:rgba(255,255,255,.92);backdrop-filter:blur(14px);
+    border-top:1px solid #eaf3fb;box-shadow:0 -8px 26px rgba(3,105,161,.12);
+    border-radius:24px 24px 0 0;
+    padding:10px 12px calc(12px + env(safe-area-inset-bottom));
+  }
+  .nav-inner{max-width:var(--maxw);margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);column-gap:8px;padding:0 6px}
+  .nav-item{display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 4px;
+    border-radius:15px;text-decoration:none;color:var(--slate);font-size:10px;font-weight:700;min-width:0;
+    transition:transform .12s,color .2s}
+  .nav-item:active{transform:scale(.92)}
+  .nav-item .ic{width:48px;height:36px;display:flex;align-items:center;justify-content:center;
+    border-radius:13px;transition:background .2s,color .2s;color:#94a3b8}
+  .nav-item .ic .material-symbols-outlined{font-size:23px}
+  .nav-item small{font-size:10.5px;font-weight:700;letter-spacing:.2px}
+  .nav-item.active{color:var(--navy-900)}
+  .nav-item.active .ic{background:var(--navy-900);color:#fff}
+
+  /* toast */
+  #toast{position:fixed;left:16px;right:16px;bottom:calc(100px + env(safe-area-inset-bottom));
+    max-width:640px;margin:0 auto;background:var(--navy-900);color:#fff;text-align:center;
+    font-size:12.5px;font-weight:700;padding:13px 16px;border-radius:15px;opacity:0;
+    transform:translateY(12px);pointer-events:none;transition:opacity .25s,transform .25s;z-index:60;
+    box-shadow:0 10px 26px rgba(3,105,161,.30)}
+  #toast.show{opacity:1;transform:translateY(0)}
+
+  .material-symbols-outlined{
+    font-variation-settings:'FILL' 0,'wght' 500,'GRAD' 0,'opsz' 24;
+    user-select:none;
+  }
+
+  /* ---------- panel notificaciones ---------- */
+  .notif-panel{
+    position:fixed;top:78px;right:16px;z-index:90;width:min(320px,calc(100vw - 24px));
+    background:var(--glass);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+    border:1px solid var(--card-brd);border-radius:20px;box-shadow:0 18px 44px rgba(15,23,42,.20);
+    opacity:0;visibility:hidden;transform:translateY(-8px) scale(.98);transform-origin:top right;
+    transition:opacity .22s,transform .22s,visibility .22s;overflow:hidden;
+  }
+  .notif-panel.show{opacity:1;visibility:visible;transform:translateY(0) scale(1)}
+  .notif-head{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:15px 16px 10px}
+  .notif-head b{font-size:14px;font-weight:800;color:var(--navy-900)}
+  .notif-head button{background:none;border:0;color:var(--sky-600);font-family:inherit;font-size:11px;font-weight:800;
+    cursor:pointer;padding:4px 6px;border-radius:8px}
+  .notif-head button:hover{background:var(--sky-100)}
+  .notif-list{max-height:min(340px,50dvh);overflow-y:auto;padding:0 8px 10px}
+  .notif-item{display:flex;align-items:flex-start;gap:10px;padding:12px 10px;border-radius:13px;cursor:pointer;
+    transition:background .15s}
+  .notif-item:hover{background:rgba(240,249,255,.9)}
+  .notif-item .n-txt{flex:1;min-width:0}
+  .notif-item .n-txt b{display:block;font-size:12.5px;font-weight:700;color:var(--ink);line-height:1.4}
+  .notif-item .n-txt small{font-size:10.5px;color:var(--slate);font-weight:600;display:block;margin-top:3px}
+  .notif-item .n-dot{width:8px;height:8px;border-radius:50%;background:var(--sky-500);flex:0 0 auto;margin-top:4px}
+  .notif-item.read .n-dot{background:#cbd5e1}
+  .notif-empty{display:flex;flex-direction:column;align-items:center;gap:8px;padding:28px 16px;text-align:center}
+  .notif-empty .material-symbols-outlined{font-size:34px;color:var(--sky-300)}
+  .notif-empty span{font-size:12px;font-weight:700;color:var(--slate)}
+
+  /* ---------- layout amplio ---------- */
+  @media (min-width:720px){
+    .stats{grid-template-columns:repeat(4,1fr);gap:14px}
+    .stat{padding:20px 10px}
+    .greet h2{font-size:24px}
+    .quick{gap:14px}
+    .mini{padding:20px 12px}
+  }
+
+</style>
+<style>
+  /* ---------- extras de control de estudiantes ---------- */
+  .hidden{display:none!important}
+  .chips-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+  .soft-chip{display:inline-flex;align-items:center;gap:6px;background:var(--glass);
+    backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+    border:1px solid var(--card-brd);color:var(--sky-700);border-radius:999px;
+    padding:7px 13px;font-size:11px;font-weight:800;box-shadow:0 6px 14px rgba(3,105,161,.08)}
+  .soft-chip .material-symbols-outlined{font-size:15px;color:var(--sky-500)}
+  .live-dot{position:relative;width:8px;height:8px;flex:0 0 auto}
+  .live-dot::before{content:'';position:absolute;inset:0;border-radius:50%;background:var(--sky-400);animation:livePing 1.6s ease-out infinite}
+  .live-dot::after{content:'';position:absolute;inset:0;border-radius:50%;background:var(--sky-500)}
+  @keyframes livePing{0%{transform:scale(1);opacity:.8}80%,100%{transform:scale(2.6);opacity:0}}
+
+  /* ---------- toolbar (buscar + filtros) ---------- */
+  .toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin-bottom:14px;padding:0 4px}
+  .search{flex:1;min-width:200px;display:flex;align-items:center;gap:8px;background:var(--glass);
+    backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+    border:1px solid var(--card-brd);border-radius:15px;padding:9px 13px;
+    box-shadow:0 8px 18px rgba(3,105,161,.06)}
+  .search .material-symbols-outlined{font-size:19px;color:var(--sky-500);flex:0 0 auto}
+  .search input{border:0;outline:0;flex:1;background:transparent;font-family:inherit;font-size:13px;font-weight:600;color:var(--ink);min-width:0}
+  .search input::placeholder{color:#94a3b8}
+  .chips{display:flex;flex-wrap:wrap;gap:7px}
+  .chip{border:1px solid var(--card-brd);background:#fff;color:var(--slate);border-radius:999px;
+    padding:7px 13px;font-family:inherit;font-size:11px;font-weight:800;cursor:pointer;
+    transition:background .2s,color .2s,box-shadow .2s,transform .12s}
+  .chip:hover{background:var(--sky-50)}
+  .chip:active{transform:scale(.95)}
+  .chip.on{background:var(--navy-900);color:#fff;border-color:var(--navy-900);box-shadow:0 6px 14px rgba(3,105,161,.28)}
+
+  /* ---------- grilla estudiantes ---------- */
+  .est-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;padding:2px}
+  @media (max-width:430px){ .est-grid{grid-template-columns:1fr} }
+  @media (min-width:900px){ .est-grid{grid-template-columns:repeat(3,1fr)} }
+  .est-card{background:var(--glass);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+    border:1px solid var(--card-brd);border-radius:20px;padding:16px 14px;
+    box-shadow:0 10px 24px rgba(3,105,161,.08);display:flex;flex-direction:column;gap:12px;
+    transition:transform .12s,box-shadow .2s}
+  .est-card:hover{box-shadow:0 14px 30px rgba(3,105,161,.14);transform:translateY(-2px)}
+  .est-top{display:flex;align-items:flex-start;gap:11px}
+  .est-av{width:46px;height:46px;border-radius:50%;flex:0 0 auto;display:flex;align-items:center;
+    justify-content:center;color:#fff;font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:14px;
+    position:relative;box-shadow:0 8px 16px rgba(3,105,161,.22)}
+  .est-av.em{background:linear-gradient(135deg,#34d399,#0d9488)}
+  .est-av.ap{background:linear-gradient(135deg,#38bdf8,#2563eb)}
+  .est-av.sv{background:linear-gradient(135deg,#a78bfa,#7c3aed)}
+  .est-dot{position:absolute;bottom:1px;right:1px;width:11px;height:11px;border-radius:50%;border:2px solid #fff}
+  .est-dot.ok{background:#22c55e}
+  .est-dot.off{background:#cbd5e1}
+  .est-info{flex:1;min-width:0}
+  .est-info b{display:block;font-size:13.5px;font-weight:800;color:var(--navy-900);line-height:1.3;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .est-chip{display:inline-flex;align-items:center;gap:4px;margin-top:5px;border-radius:999px;font-size:10px;font-weight:800;padding:4px 9px}
+  .est-chip.em{background:#d1fae5;color:#047857}
+  .est-chip.ap{background:var(--sky-100);color:var(--sky-700)}
+  .est-chip.sv{background:#ede9fe;color:#7c3aed}
+  .al-chip{flex:0 0 auto;display:inline-flex;align-items:center;gap:3px;background:#ef4444;color:#fff;
+    border-radius:999px;padding:4px 9px;font-size:10px;font-weight:800}
+  .al-chip .material-symbols-outlined{font-size:12px}
+  .prog-label{display:flex;justify-content:space-between;font-size:10px;font-weight:800;margin-bottom:6px}
+  .prog-label span:first-child{color:var(--slate)}
+  .prog-label span:last-child{color:var(--navy-900)}
+  .prog{height:8px;background:var(--sky-50);border-radius:999px;overflow:hidden}
+  .prog i{display:block;height:100%;border-radius:999px;
+    background:linear-gradient(90deg,var(--sky-400),#0284c7);transition:width .6s cubic-bezier(.22,1,.36,1)}
+  .prog i.full{background:linear-gradient(90deg,#10b981,#059669)}
+  .prog i.low{background:linear-gradient(90deg,#fbbf24,#f59e0b)}
+  .est-btns{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .est-btns .btn2{border:0;border-radius:12px;padding:9px 6px;font-family:inherit;font-size:10.5px;font-weight:800;
+    cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:5px;
+    transition:transform .12s,box-shadow .2s,background .2s}
+  .est-btns .btn2:active{transform:scale(.95)}
+  .btn2.ghost{background:#fff;border:1px solid var(--card-brd);color:var(--navy-900)}
+  .btn2.ghost:hover{background:var(--sky-50)}
+  .btn2.filled{background:var(--navy-900);color:#fff}
+  .btn2.filled:hover{box-shadow:0 8px 16px rgba(3,105,161,.35)}
+  .sem-wrap{margin-top:12px;padding-top:12px;border-top:1px solid #eaf3fb}
+  .sem-hd{font-size:9.5px;font-weight:800;text-transform:uppercase;letter-spacing:.12em;color:var(--slate);margin-bottom:8px}
+  .sem-row{display:flex;gap:6px}
+  .burbuja{flex:1;height:38px;border-radius:12px;display:flex;align-items:center;justify-content:center;
+    font-size:11px;font-weight:800;transition:transform .15s}
+  .burbuja:hover{transform:scale(1.12)}
+  .burbuja .v{margin-left:3px;font-size:9px;font-weight:800}
+  .burb-ok{background:#10b981;color:#fff}
+  .burb-mid{background:#fbbf24;color:#fff}
+  .burb-low{background:var(--sky-50);color:var(--slate)}
+
+  /* ---------- alertas ---------- */
+  .badge{font-size:11px;font-weight:800;border-radius:999px;padding:6px 12px;color:#fff;white-space:nowrap}
+  .badge.bg-red{background:#ef4444}
+  .badge.bg-green{background:#10b981}
+  .ala-card{background:var(--glass);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+    border:1px solid var(--card-brd);border-left:4px solid #f59e0b;border-radius:var(--radius);
+    padding:16px 15px;box-shadow:0 10px 24px rgba(3,105,161,.08);margin-bottom:12px;
+    transition:box-shadow .2s}
+  .ala-card:hover{box-shadow:0 14px 30px rgba(3,105,161,.14)}
+  .ala-card.crit{border-left-color:#ef4444}
+  .ala-card.ok{border-left-color:#10b981;opacity:.72}
+  .ala-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:10px}
+  .ala-tag{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;border-radius:6px;padding:4px 8px;white-space:nowrap}
+  .ala-tag.crit{background:#ef4444;color:#fff}
+  .ala-tag.mod{background:#f59e0b;color:#fff}
+  .ala-tag.ok{background:#d1fae5;color:#047857}
+  .ala-time{font-size:10px;font-weight:700;color:var(--slate);text-align:right}
+  .ala-card .nm{display:block;font-size:14px;font-weight:800;color:var(--navy-900)}
+  .ala-card .txt{font-size:12px;color:var(--slate);font-style:italic;margin-top:3px}
+  .ala-card .ctx{font-size:10.5px;color:#94a3b8;margin-top:4px}
+  .ala-btns{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:12px}
+  .ala-btns .full{grid-column:span 2}
+  .act-btn{border:0;border-radius:11px;padding:9px 8px;font-family:inherit;font-size:10.5px;font-weight:800;
+    cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:5px;
+    transition:transform .12s,box-shadow .2s,background .2s}
+  .act-btn:active{transform:scale(.95)}
+  .act-btn.red{background:#ef4444;color:#fff}
+  .act-btn.red:hover{background:#dc2626}
+  .act-btn.ghost{background:#fff;border:1px solid var(--card-brd);color:var(--navy-900)}
+  .act-btn.ghost:hover{background:var(--sky-50)}
+  .act-btn.ok{background:#d1fae5;color:#047857}
+  .act-btn .material-symbols-outlined{font-size:14px}
+
+  /* ---------- barra de meta dentro de un stat ---------- */
+  .mini-bar{width:100%;max-width:150px;height:8px;background:var(--sky-50);border-radius:999px;overflow:hidden;margin-top:8px}
+  .mini-bar i{display:block;height:100%;border-radius:999px;
+    background:linear-gradient(90deg,var(--sky-500),#0284c7);transition:width .6s cubic-bezier(.22,1,.36,1)}
+</style>
 </head>
-<body class="font-body text-on-surface min-h-screen pb-32">
-<!-- Ondas de fondo -->
-<div class="ocean-wave drift-a" style="top:-50px; left:-70px; transform: rotate(-12deg);" aria-hidden="true">
-<svg viewBox="0 0 600 200" fill="#BAE6FD" opacity="0.45"><path d="M0,100 C100,40 200,160 300,90 C400,20 500,140 600,80 L600,200 L0,200 Z"/></svg>
-</div>
-<div class="ocean-wave drift-b" style="bottom:-70px; right:-90px; transform: rotate(9deg);" aria-hidden="true">
-<svg viewBox="0 0 700 220" fill="#7DD3FC" opacity="0.35"><path d="M0,120 C120,40 260,190 400,100 C540,20 620,130 700,60 L700,220 L0,220 Z"/></svg>
-</div>
-<!-- Header -->
-<header class="fixed top-0 w-full z-50 bg-white/90 backdrop-blur-md border-b border-slate-200 px-4 md:px-lg py-md flex justify-between items-center h-20">
-<div class="flex items-center gap-3">
-<div class="w-10 h-10 bg-gradient-to-br from-[#0F172A] to-[#1E3A5F] rounded-lg flex items-center justify-center text-white shadow-md">
-<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">school</span>
-</div>
-<h1 class="font-headline text-xl font-bold text-primary tracking-tight">HORASOCIAL PRO</h1>
-</div>
-<div class="flex items-center gap-4 px-3 py-1.5 rounded-full bg-slate-50 border border-slate-100">
-<div class="text-right hidden sm:block">
-<p class="text-sm font-bold text-primary leading-tight">Coordinadora Carolina Rojas</p>
-<p class="text-[11px] text-on-surface-variant font-medium">Administrador</p>
-</div>
-<div class="relative">
-<img alt="Profile" class="w-10 h-10 rounded-full border-2 border-primary object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD-jEaB1rRyiv-PFoHJYSYVflUphAJutNcW0ho3QJG2K8su-qgH2W2g609ldMcSycw7sYsVDxvgXEh8r07r3VlJxUVifGqFjwKtfg0ZBok1rdZHXJxitVGwIUD-smAwVcdHDfaKgoNGMFvkI-7RQJY87LuDRhKUwQELFPGRcJ6Ac4FuJlXsjOV2LlujosUbzrs7MX4AhqdNV9HekG47FckN51Rjsm7sX9lVJp1tOsYsOaaIh3EQkZzDcNaqN5JKFFvS2UPJ69jNx6J2"/>
-<div class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></div>
-</div>
-</div>
-</header>
-<main class="relative z-10 pt-24 px-4 md:px-8 max-w-[1440px] mx-auto">
-<!-- Banner -->
-<section class="mt-6 mb-8 rounded-3xl overflow-hidden relative flex items-center shadow-[0_18px_50px_rgba(15,23,42,0.18)]">
-<div class="absolute inset-0 bg-gradient-to-r from-[#0F172A] via-[#1E293B] to-[#0E7490]"></div>
-<div class="absolute -top-12 -left-12 w-64 h-64 bg-sky-500/25 rounded-full blur-3xl"></div>
-<div class="absolute -bottom-20 right-1/4 w-72 h-72 bg-cyan-400/20 rounded-full blur-3xl"></div>
-<div class="absolute right-6 opacity-10 hidden sm:block">
-<span class="material-symbols-outlined text-[150px] text-white">monitoring</span>
-</div>
-<div class="relative z-10 px-6 md:px-8 py-9 flex-1">
-<div class="flex flex-wrap items-center gap-2 mb-3">
-<span class="bg-white/10 backdrop-blur text-white/90 text-[11px] font-bold px-3 py-1 rounded-full flex items-center gap-1.5"><span class="material-symbols-outlined text-sm">calendar_today</span><span id="fechaHoy">&mdash;</span></span>
-<span class="bg-accent/25 text-sky-100 text-[11px] font-bold px-3 py-1 rounded-full flex items-center gap-1.5"><span class="relative flex h-2 w-2"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-300 opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-sky-400"></span></span>En vivo</span>
-<span class="bg-white/10 backdrop-blur text-white/90 text-[11px] font-bold px-3 py-1 rounded-full flex items-center gap-1.5"><span class="material-symbols-outlined text-sm">school</span>Periodo acad&eacute;mico 2026</span>
-</div>
-<h2 class="font-comfortaa text-2xl md:text-4xl text-white font-bold mb-2">Control de Estudiantes y Normas</h2>
-<p class="text-slate-300 text-sm md:text-base max-w-xl">Horas de compromiso, brigadas y alertas de convivencia en tiempo real, en un solo lugar.</p>
-</div>
-<svg class="absolute bottom-0 left-0 w-full h-10 md:h-14 text-[#F8FAFC]" viewBox="0 0 1440 90" preserveAspectRatio="none" fill="currentColor" aria-hidden="true"><path d="M0,45 C240,90 480,0 720,30 C960,60 1200,10 1440,45 L1440,90 L0,90 Z"/></svg>
-</section>
-<!-- KPIs -->
-<section class="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-8 relative">
-<div class="kpi-card bg-white p-5 rounded-2xl shadow-sm border border-slate-100 flex flex-col justify-between">
-<div class="flex justify-between items-start">
-<div class="bg-gradient-to-br from-blue-50 to-sky-100 p-2.5 rounded-xl text-accent">
-<span class="material-symbols-outlined">group</span>
-</div>
-<span class="text-xs font-bold text-sky-600 bg-sky-50 px-2.5 py-1 rounded-full">3 brigadas</span>
-</div>
-<div class="mt-4">
-<h3 class="text-slate-500 text-xs font-bold uppercase tracking-widest mb-1">Estudiantes registrados</h3>
-<p class="text-4xl font-headline font-extrabold text-primary" id="kpiEst">0</p>
-</div>
-</div>
-<div class="kpi-card bg-white p-5 rounded-2xl shadow-sm border border-slate-100 flex flex-col justify-between">
-<div class="flex justify-between items-start">
-<div class="bg-gradient-to-br from-indigo-50 to-violet-100 p-2.5 rounded-xl text-indigo-600">
-<span class="material-symbols-outlined">schedule</span>
-</div>
-<span class="text-xs font-bold text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-full">Acumuladas</span>
-</div>
-<div class="mt-4">
-<h3 class="text-slate-500 text-xs font-bold uppercase tracking-widest mb-1">Horas de servicio</h3>
-<p class="text-4xl font-headline font-extrabold text-primary flex items-center gap-2"><span id="kpiHoras">0</span><span class="text-xs font-bold text-slate-400 uppercase tracking-widest">h</span></p>
-</div>
-</div>
-<div class="kpi-card bg-white p-5 rounded-2xl shadow-sm border-2 border-red-50 flex flex-col justify-between">
-<div class="flex justify-between items-start">
-<div class="bg-gradient-to-br from-red-50 to-rose-100 p-2.5 rounded-xl text-red-600">
-<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">warning</span>
-</div>
-<span class="text-xs font-bold text-red-600 bg-red-50 px-2.5 py-1 rounded-full uppercase tracking-tight" id="kpiAlChip">Acci&oacute;n requerida</span>
-</div>
-<div class="mt-4">
-<h3 class="text-red-700 text-xs font-bold uppercase tracking-widest mb-1">Alertas en chat</h3>
-<p class="text-4xl font-headline font-extrabold text-red-600" id="kpiAlertas">0</p>
-</div>
-</div>
-<div class="kpi-card bg-white p-5 rounded-2xl shadow-sm border border-slate-100 flex flex-col justify-between">
-<div class="flex justify-between items-start">
-<div class="bg-gradient-to-br from-emerald-50 to-teal-100 p-2.5 rounded-xl text-emerald-600">
-<span class="material-symbols-outlined">flag</span>
-</div>
-<span class="text-xs font-bold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full" id="kpiMetaLabel">Meta 1440 h</span>
-</div>
-<div class="mt-4">
-<h3 class="text-slate-500 text-xs font-bold uppercase tracking-widest mb-1">Cumplimiento global</h3>
-<p class="text-4xl font-headline font-extrabold text-primary" id="kpiMeta">0%</p>
-<div class="mt-3 h-2 bg-slate-100 rounded-full overflow-hidden">
-<div class="bar-meta h-2 rounded-full bg-gradient-to-r from-sky-500 to-emerald-500" id="barraMeta" style="width:0%"></div>
-</div>
-</div>
-</div>
-</section>
-<!-- Main grid -->
-<section class="grid grid-cols-1 lg:grid-cols-10 gap-6 mb-12 relative">
-<!-- Estudiantes -->
-<div class="lg:col-span-6 xl:col-span-7">
-<div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-<div class="p-5 border-b border-slate-100 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-<div>
-<h3 class="font-comfortaa text-xl text-primary font-bold">Estudiantes</h3>
-<div class="mt-1 flex items-center gap-2">
-<svg class="h-2 w-14 text-sky-400" viewBox="0 0 64 8" fill="none" aria-hidden="true"><path d="M0,4 C8,8 16,0 24,4 C32,8 40,0 48,4 C56,8 60,2 64,4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-<span class="text-slate-500 text-sm">Cada tarjeta muestra horas acumuladas contra la meta de 120 h.</span>
-</div>
-</div>
-<div class="flex items-center gap-3 flex-wrap">
-<div class="relative">
-<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">search</span>
-<input class="pl-9 pr-3 py-2 border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-accent focus:border-accent outline-none w-44 md:w-56" id="estBuscar" placeholder="Buscar estudiante..." type="text"/>
-</div>
-<button class="bg-primary text-white px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-2 hover:bg-slate-800 transition-colors" id="btnExport" type="button">
-<span class="material-symbols-outlined text-sm">download</span> Exportar
-</button>
-</div>
-</div>
-<div class="px-5 pt-4 flex flex-wrap gap-2" id="estFiltros">
-<button class="px-3 py-1.5 rounded-full text-[11px] font-bold transition-colors" data-f="todos" type="button">Todas</button>
-<button class="px-3 py-1.5 rounded-full text-[11px] font-bold transition-colors" data-f="ambiental" type="button">Brigada Ambiental</button>
-<button class="px-3 py-1.5 rounded-full text-[11px] font-bold transition-colors" data-f="apoyo" type="button">Apoyo Acad&eacute;mico</button>
-<button class="px-3 py-1.5 rounded-full text-[11px] font-bold transition-colors" data-f="servicios" type="button">Servicios Comunitarios</button>
-<button class="px-3 py-1.5 rounded-full text-[11px] font-bold transition-colors" data-f="alertas" type="button">Con alertas</button>
-</div>
-<div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 p-5" id="estGrid"></div>
-<div class="hidden p-8 text-center" id="estEmpty">
-<span class="material-symbols-outlined text-4xl text-slate-300">search_off</span>
-<p class="mt-2 text-sm text-slate-500 font-medium">No hay estudiantes que coincidan</p>
-</div>
-</div>
-</div>
-<!-- Alertas -->
-<div class="lg:col-span-4 xl:col-span-3">
-<div class="bg-white rounded-2xl border border-red-100 shadow-sm flex flex-col h-full overflow-hidden">
-<div class="p-5 bg-gradient-to-r from-red-50/80 to-rose-50/60 border-b border-red-100 rounded-t-2xl flex items-center justify-between">
-<div>
-<h3 class="font-comfortaa text-lg text-red-800 font-bold flex items-center gap-2">
-<span class="material-symbols-outlined text-red-600">emergency_home</span> Alertas de Convivencia
-</h3>
-<svg class="mt-1 h-2 w-14 text-red-300" viewBox="0 0 64 8" fill="none" aria-hidden="true"><path d="M0,4 C8,8 16,0 24,4 C32,8 40,0 48,4 C56,8 60,2 64,4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-</div>
-<span class="text-[11px] font-bold text-red-600 bg-red-100 px-2.5 py-1 rounded-full" id="alCount">0</span>
-</div>
-<div class="p-4 space-y-3 overflow-y-auto max-h-[640px]" id="alertList"></div>
-<div class="hidden p-8 text-center" id="alertEmpty">
-<span class="material-symbols-outlined text-4xl text-emerald-400" style="font-variation-settings: 'FILL' 1;">verified_user</span>
-<p class="mt-2 text-sm text-slate-500 font-medium">Sin infracciones detectadas en los chats</p>
-</div>
-</div>
-</div>
-</section>
-</main>
-<!-- Footer Navigation -->
-<nav class="fixed bottom-0 left-0 w-full z-50">
-<div class="relative bg-white/95 backdrop-blur border-t border-sky-100/70 shadow-[0_-12px_32px_rgba(15,23,42,0.08)] rounded-t-3xl overflow-hidden px-3">
-<svg class="absolute top-0 left-0 w-full h-[10px] text-sky-100" viewBox="0 0 1440 20" preserveAspectRatio="none" fill="currentColor" aria-hidden="true"><path d="M0,8 C120,18 240,0 360,10 C480,20 600,2 720,10 C840,18 960,2 1080,10 C1200,18 1320,4 1440,10 L1440,20 L0,20 Z"/></svg>
-<div class="max-w-4xl mx-auto grid grid-cols-4 gap-1 relative h-20 items-center">
-<a class="flex flex-col items-center justify-center gap-1 py-2 rounded-xl text-slate-400 hover:text-primary transition-colors group" data-go data-file="../../dashboard_administrador_horasocial_pro/index.html" data-served="/admin/dashboard" href="/admin/dashboard">
-<span class="material-symbols-outlined text-2xl group-hover:scale-110 transition-transform">dashboard</span>
-<span class="text-[11px] font-bold">Panel</span>
-</a>
-<a class="flex flex-col items-center justify-center gap-1 py-2 rounded-xl text-slate-400 hover:text-primary transition-colors group" data-go data-file="../coordinaci_n_y_ajuste_de_docentes_admin/code.html" data-served="/admin/docentes" href="/admin/docentes">
-<span class="material-symbols-outlined text-2xl group-hover:scale-110 transition-transform">badge</span>
-<span class="text-[11px] font-bold">Docentes</span>
-</a>
-<a class="flex flex-col items-center justify-center gap-1 py-2 rounded-xl bg-gradient-to-r from-sky-500 to-blue-600 text-white shadow-lg scale-105">
-<span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 1;">school</span>
-<span class="text-[11px] font-extrabold">Estudiantes</span>
-</a>
-<a class="flex flex-col items-center justify-center gap-1 py-2 rounded-xl text-slate-400 hover:text-primary transition-colors group" id="navMsj" data-go data-file="../mensajer_a_y_canales_admin_horasocial_pro_2/code.html" data-served="/admin/mensajes" href="/admin/mensajes">
-<span class="material-symbols-outlined text-2xl group-hover:scale-110 transition-transform">chat_bubble</span>
-<span class="text-[11px] font-bold">Mensajes</span>
-</a>
-</div>
-</div>
-</nav>
+<body>
+
+  <!-- fondo: ondas estilo seleccion de rol, fluyendo por toda la pagina -->
+  <div class="flow-field wiggle" aria-hidden="true">
+    <svg viewBox="0 0 1600 900" preserveAspectRatio="none">
+      <defs>
+        <linearGradient id="gradField" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#cde9ff"/>
+          <stop offset="35%" stop-color="#9fd4ff"/>
+          <stop offset="70%" stop-color="#5fb4f7"/>
+          <stop offset="100%" stop-color="#7dbfc8"/>
+        </linearGradient>
+      </defs>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.11" transform="translate(0 6.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.14" transform="translate(11 24.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.17" transform="translate(22 43.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.2" transform="translate(33 61.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.22" transform="translate(44 80.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.25" transform="translate(55 98.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.27" transform="translate(66 117.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.3" transform="translate(77 135.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.32" transform="translate(88 154.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.34" transform="translate(99 172.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.37" transform="translate(110 191.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.39" transform="translate(121 209.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.41" transform="translate(132 228.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.42" transform="translate(143 246.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.44" transform="translate(154 265.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.46" transform="translate(165 283.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.47" transform="translate(176 302.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.48" transform="translate(187 320.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.49" transform="translate(198 339.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.5" transform="translate(209 357.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.51" transform="translate(220 376.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.51" transform="translate(231 394.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.52" transform="translate(242 413.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.52" transform="translate(253 431.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.52" transform="translate(264 450.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.51" transform="translate(275 468.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.51" transform="translate(286 487.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.5" transform="translate(297 505.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.49" transform="translate(308 524.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.48" transform="translate(319 542.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.47" transform="translate(330 561.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.46" transform="translate(341 579.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.44" transform="translate(352 598.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.42" transform="translate(363 616.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.41" transform="translate(374 635.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.39" transform="translate(385 653.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.37" transform="translate(396 672.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.34" transform="translate(407 690.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.32" transform="translate(418 709.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.3" transform="translate(429 727.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.27" transform="translate(440 746.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.25" transform="translate(451 764.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.22" transform="translate(462 783.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.2" transform="translate(473 801.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.17" transform="translate(484 820.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.14" transform="translate(495 838.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+      <path class="wf-l" stroke="url(#gradField)" opacity="0.11" transform="translate(506 857.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    </svg>
+  </div>
+
+  <div class="wrap">
+    <header>
+      <div class="avatar" role="img" aria-label="Perfil de Administradora Sofia">
+        <img id="avImg" alt="Foto de Administradora Sofia" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD-jEaB1rRyiv-PFoHJYSYVflUphAJutNcW0ho3QJG2K8su-qgH2W2g609ldMcSycw7sYsVDxvgXEh8r07r3VlJxUVifGqFjwKtfg0ZBok1rdZHXJxitVGwIUD-smAwVcdHDfaKgoNGMFvkI-7RQJY87LuDRhKUwQELFPGRcJ6Ac4FuJlXsjOV2LlujosUbzrs7MX4AhqdNV9HekG47FckN51Rjsm7sX9lVJp1tOsYsOaaIh3EQkZzDcNaqN5JKFFvS2UPJ69jNx6J2" onerror="this.style.display='none';var f=document.getElementById('avSvgFallback');if(f){f.style.display='flex';}">
+        <div class="av-fb" id="avSvgFallback">SA</div>
+      </div>
+      <div class="hi">
+        <h1>Administradora Sofia</h1>
+        <p>Control de Estudiantes y Normas &ndash; Colegio Alfredo Correa</p>
+      </div>
+      <button class="bell" id="btnNotif" type="button" aria-label="Notificaciones">
+        <span class="material-symbols-outlined">notifications</span>
+        <span class="bell-dot" id="notifDot"></span>
+      </button>
+      <a class="logout" href="#" title="Cerrar sesion" id="btnLogout">
+        <span class="material-symbols-outlined">logout</span><small>Cerrar sesion</small>
+      </a>
+    </header>
+
+    <section class="greet">
+      <h2>Control de Estudiantes y Normas</h2>
+      <p>Horas de compromiso, brigadas y alertas de convivencia en tiempo real, en un solo lugar.</p>
+      <div class="chips-row">
+        <span class="soft-chip"><span class="material-symbols-outlined">calendar_today</span><span id="fechaHoy">&mdash;</span></span>
+        <span class="soft-chip"><span class="live-dot"></span>En vivo</span>
+        <span class="soft-chip"><span class="material-symbols-outlined">school</span>Periodo academico 2026</span>
+      </div>
+    </section>
+
+    <section>
+      <div class="stats">
+        <div class="stat"><span class="m material-symbols-outlined">group</span><b id="kpiEst">0</b><small>Estudiantes registrados</small></div>
+        <div class="stat"><span class="m material-symbols-outlined">schedule</span><b id="kpiHoras">0</b><small>Horas de servicio</small></div>
+        <div class="stat"><span class="m material-symbols-outlined">warning</span><b id="kpiAlertas">0</b><small>Alertas en chat</small></div>
+        <div class="stat accent"><span class="m material-symbols-outlined">flag</span><b id="kpiMeta">0%</b><small id="kpiMetaLabel">Meta 1440 h</small>
+          <div class="mini-bar"><i id="barraMeta"></i></div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="sec-head">
+        <h3><span class="m material-symbols-outlined">group</span>Estudiantes</h3>
+        <button class="exp-btn" id="btnExport" type="button"><span class="material-symbols-outlined">download</span>Exportar CSV</button>
+      </div>
+      <div class="toolbar">
+        <div class="search">
+          <span class="material-symbols-outlined">search</span>
+          <input id="estBuscar" placeholder="Buscar estudiante o brigada..." type="text">
+        </div>
+        <div class="chips" id="estFiltros">
+          <button class="chip on" data-f="todos" type="button">Todas</button>
+          <button class="chip" data-f="ambiental" type="button">Ambiental</button>
+          <button class="chip" data-f="apoyo" type="button">Apoyo academico</button>
+          <button class="chip" data-f="servicios" type="button">Servicios</button>
+          <button class="chip" data-f="alertas" type="button">Con alertas</button>
+        </div>
+      </div>
+      <div class="est-grid" id="estGrid"></div>
+      <div class="empty hidden" id="estEmpty">
+        <span class="material-symbols-outlined">search_off</span><span>No hay estudiantes que coincidan</span>
+      </div>
+    </section>
+
+    <section>
+      <div class="sec-head">
+        <h3><span class="m material-symbols-outlined">emergency_home</span>Alertas de convivencia</h3>
+        <span class="badge bg-green" id="alCount">0</span>
+      </div>
+      <div id="alertList"></div>
+      <div class="empty hidden" id="alertEmpty">
+        <span class="material-symbols-outlined">verified_user</span><span>Sin infracciones detectadas en los chats</span>
+      </div>
+    </section>
+  </div>
+
+  <nav>
+    <div class="nav-inner">
+      <a class="nav-item" data-go data-file="../../dashboard_administrador_horasocial_pro/index.html" data-served="/admin/dashboard" href="/admin/dashboard"><span class="ic"><span class="material-symbols-outlined">grid_view</span></span><small>Panel</small></a>
+      <a class="nav-item active" href="#"><span class="ic"><span class="material-symbols-outlined">group</span></span><small>Estudiantes</small></a>
+      <a class="nav-item" data-go data-file="../coordinaci_n_y_ajuste_de_docentes_admin/code.html" data-served="/admin/docentes" href="/admin/docentes"><span class="ic"><span class="material-symbols-outlined">badge</span></span><small>Docentes</small></a>
+      <a class="nav-item" id="navMsj" data-go data-file="../mensajer_a_y_canales_admin_horasocial_pro_2/code.html" data-served="/admin/mensajes" href="/admin/mensajes"><span class="ic"><span class="material-symbols-outlined">chat</span></span><small>Mensajes</small></a>
+    </div>
+  </nav>
+
+  <div class="notif-panel" id="notifPanel" role="dialog" aria-label="Notificaciones">
+    <div class="notif-head">
+      <b>Alertas de convivencia</b>
+      <button id="btnNotifRead" type="button">Marcar todas como leidas</button>
+    </div>
+    <div class="notif-list" id="notifList"></div>
+  </div>
+
+  <div id="toast"></div>
+
 <script>
-    var LS_ALERTAS = 'horasocial_admin_chat_alertas_v1';
-    var LS_HORAS = 'horasocial_admin_horas_v1';
-    var META = 120;
-    var DIA_LETRA = ['L','M','X','J','V'];
-    var estFiltro = 'todos', estQuery = '', estOpenId = null;
+  var LS_ALERTAS = 'horasocial_admin_chat_alertas_v1';
+  var LS_HORAS = 'horasocial_admin_horas_v1';
+  var META = 120;
+  var DIA_LETRA = ['L','M','X','J','V'];
+  var estFiltro = 'todos', estQuery = '', estOpenId = null;
 
-    var MAESTROS = [
-      {id:'m1', nombre:'Prof. Carlos Mendez', materia:'Metalmecanica', iniciales:'CM', enLinea:true},
-      {id:'m2', nombre:'Prof. Laura Gutierrez', materia:'Informatica', iniciales:'LG', enLinea:true},
-      {id:'m3', nombre:'Prof. Andres Silva', materia:'Carpinteria', iniciales:'AS', enLinea:true},
-      {id:'m4', nombre:'Prof. Mariana Rios', materia:'Electricidad', iniciales:'MR', enLinea:true},
-      {id:'m5', nombre:'Prof. Jorge Pereyra', materia:'Herreria', iniciales:'JP', enLinea:false}
-    ];
+  var MAESTROS = [
+    {id:'m1', nombre:'Prof. Carlos Mendez', materia:'Metalmecanica', iniciales:'CM', enLinea:true},
+    {id:'m2', nombre:'Prof. Laura Gutierrez', materia:'Informatica', iniciales:'LG', enLinea:true},
+    {id:'m3', nombre:'Prof. Andres Silva', materia:'Carpinteria', iniciales:'AS', enLinea:true},
+    {id:'m4', nombre:'Prof. Mariana Rios', materia:'Electricidad', iniciales:'MR', enLinea:true},
+    {id:'m5', nombre:'Prof. Jorge Pereyra', materia:'Herreria', iniciales:'JP', enLinea:false}
+  ];
 
-    var ESTUDIANTES = [
-      {id:'e1', nombre:'Valentina Ospina', brigada:'Brigada Ambiental', iniciales:'VO', enLinea:true},
-      {id:'e2', nombre:'Samuel Rojas', brigada:'Brigada Ambiental', iniciales:'SR', enLinea:false},
-      {id:'e3', nombre:'Mariana Cardenas', brigada:'Apoyo Academico', iniciales:'MC', enLinea:true},
-      {id:'e4', nombre:'Sebastian Gomez', brigada:'Servicios Comunitarios', iniciales:'SG', enLinea:false},
-      {id:'e5', nombre:'Isabella Torres', brigada:'Brigada Ambiental', iniciales:'IT', enLinea:true},
-      {id:'e6', nombre:'Juan David Munoz', brigada:'Apoyo Academico', iniciales:'JM', enLinea:false},
-      {id:'e7', nombre:'Sofia Ramirez', brigada:'Servicios Comunitarios', iniciales:'SR', enLinea:true},
-      {id:'e8', nombre:'Andres Felipe Castro', brigada:'Brigada Ambiental', iniciales:'AC', enLinea:false},
-      {id:'e9', nombre:'Camila Arias', brigada:'Apoyo Academico', iniciales:'CA', enLinea:true},
-      {id:'e10', nombre:'Nicolas Herrera', brigada:'Servicios Comunitarios', iniciales:'NH', enLinea:false},
-      {id:'e11', nombre:'Laura Gutierrez', brigada:'Apoyo Academico', iniciales:'LG', enLinea:true},
-      {id:'e12', nombre:'Daniel Salazar', brigada:'Servicios Comunitarios', iniciales:'DS', enLinea:false}
-    ];
+  var ESTUDIANTES = [
+    {id:'e1', nombre:'Valentina Ospina', brigada:'Brigada Ambiental', iniciales:'VO', enLinea:true},
+    {id:'e2', nombre:'Samuel Rojas', brigada:'Brigada Ambiental', iniciales:'SR', enLinea:false},
+    {id:'e3', nombre:'Mariana Cardenas', brigada:'Apoyo Academico', iniciales:'MC', enLinea:true},
+    {id:'e4', nombre:'Sebastian Gomez', brigada:'Servicios Comunitarios', iniciales:'SG', enLinea:false},
+    {id:'e5', nombre:'Isabella Torres', brigada:'Brigada Ambiental', iniciales:'IT', enLinea:true},
+    {id:'e6', nombre:'Juan David Munoz', brigada:'Apoyo Academico', iniciales:'JM', enLinea:false},
+    {id:'e7', nombre:'Sofia Ramirez', brigada:'Servicios Comunitarios', iniciales:'SR', enLinea:true},
+    {id:'e8', nombre:'Andres Felipe Castro', brigada:'Brigada Ambiental', iniciales:'AC', enLinea:false},
+    {id:'e9', nombre:'Camila Arias', brigada:'Apoyo Academico', iniciales:'CA', enLinea:true},
+    {id:'e10', nombre:'Nicolas Herrera', brigada:'Servicios Comunitarios', iniciales:'NH', enLinea:false},
+    {id:'e11', nombre:'Laura Gutierrez', brigada:'Apoyo Academico', iniciales:'LG', enLinea:true},
+    {id:'e12', nombre:'Daniel Salazar', brigada:'Servicios Comunitarios', iniciales:'DS', enLinea:false}
+  ];
 
-    var EST_HORAS = {
-      e1:{ horas:118, semana:[6,7,6,6,5] },
-      e2:{ horas:64,  semana:[4,3,4,3,0] },
-      e3:{ horas:96,  semana:[6,5,6,5,4] },
-      e4:{ horas:55,  semana:[3,4,3,3,0] },
-      e5:{ horas:132, semana:[7,7,8,7,6] },
-      e6:{ horas:48,  semana:[4,3,3,3,0] },
-      e7:{ horas:88,  semana:[5,5,6,5,4] },
-      e8:{ horas:150, semana:[8,8,8,7,7] },
-      e9:{ horas:77,  semana:[5,4,5,4,3] },
-      e10:{ horas:41, semana:[3,3,3,2,0] },
-      e11:{ horas:103, semana:[6,6,6,5,5] },
-      e12:{ horas:69,  semana:[5,4,5,4,2] }
+  var EST_HORAS = {
+    e1:{ horas:118, semana:[6,7,6,6,5] },
+    e2:{ horas:64,  semana:[4,3,4,3,0] },
+    e3:{ horas:96,  semana:[6,5,6,5,4] },
+    e4:{ horas:55,  semana:[3,4,3,3,0] },
+    e5:{ horas:132, semana:[7,7,8,7,6] },
+    e6:{ horas:48,  semana:[4,3,3,3,0] },
+    e7:{ horas:88,  semana:[5,5,6,5,4] },
+    e8:{ horas:150, semana:[8,8,8,7,7] },
+    e9:{ horas:77,  semana:[5,4,5,4,3] },
+    e10:{ horas:41, semana:[3,3,3,2,0] },
+    e11:{ horas:103, semana:[6,6,6,5,5] },
+    e12:{ horas:69,  semana:[5,4,5,4,2] }
+  };
+
+  /* ---------- filtro de lenguaje ---------- */
+  var PROHIBIDAS = ['culo','culos','puta','puto','putas','putos','putita','putear','puteada','puteadas','puterio',
+    'putazo','putazos','polla','pija','pijas','pijazo','pijazos','verga','vergas','vergazo','vergazos',
+    'mierda','mierdas','cagada','cagadas','cagar','cagado','cagon','cagona',
+    'pendejo','pendeja','pendejos','pendejas','pendejada','pendejadas',
+    'marica','maricon','maricones','mariconada','mariconadas',
+    'cabron','cabrona','cabronada','cabronadas','hijueputa','hijueputas',
+    'sorete','soretes','pelotudo','pelotuda','pelotudos','pelotudez','pelotudeces','pelotudisimo',
+    'boludo','boluda','boludos','boludez','boludeces','boludisimo','boludazo','recontraboludo','recontraboluda',
+    'choto','chota','chotos','chotas','chotear','choteada',
+    'concha','conchas','conchudo','conchuda','tarado','tarada','taradez',
+    'estupido','estupida','estupidos','estupidez','estupideces','idiota','idiotas',
+    'imbecil','imbeciles','imbecilidad','imbecilidades','gil','giles',
+    'poronga','porongas','porongo','pajero','pajera','pajeros','pajeras',
+    'forro','forra','forros','trolo','trola','trolos','mogolico','mogolica','mogolicos',
+    'culear','culeada','culeadas','culiar','culiado','culiada','culiao','hdp'];
+  var STEMS = ['bolud','pelotud','put','pendej','maricon','cabron','hijueput','porong','pajer','trol','mogol',
+    'mierd','chot','conch','gil','tarad','soret','cag','estupid','imbecil','verga','polla'];
+  var FRASES = ['hijo de puta','hija de puta','hijos de puta','hijas de puta','puta madre',
+    'la puta madre','me cago','concha de la lora','hijo de mil'];
+
+  function normalizar(s){
+    return s.toLowerCase()
+      .replace(/[áàäâ]/g,'a').replace(/[éèëê]/g,'e')
+      .replace(/[íìïî]/g,'i').replace(/[óòöô]/g,'o')
+      .replace(/[úùüû]/g,'u')
+      .replace(/0/g,'o').replace(/3/g,'e').replace(/1/g,'i')
+      .replace(/4/g,'a').replace(/5|7/g,'s').replace(/@/g,'a').replace(/\$/g,'s')
+      .replace(/v(?![aeiou])/g,'u');
+  }
+  function tokenLimpio(t){
+    return normalizar(t).replace(/[^a-z]/g,'');
+  }
+  function esProhibida(tok){
+    var t = tokenLimpio(tok);
+    if (PROHIBIDAS.indexOf(t) !== -1) return true;
+    for (var i = 0; i < STEMS.length; i++){
+      if (t.indexOf(STEMS[i]) === 0) return true;
+    }
+    return false;
+  }
+  function gradoInfraccion(texto){
+    var n = 0, f = 0;
+    var nrm = ' ' + normalizar(texto).replace(/\s+/g,' ') + ' ';
+    var partes = texto.split(/\s+/);
+    for (var i = 0; i < partes.length; i++){ if (esProhibida(partes[i])) n++; }
+    for (var j = 0; j < FRASES.length; j++){
+      var idx = 0;
+      while ((idx = nrm.indexOf(FRASES[j], idx)) !== -1){ f++; idx += FRASES[j].length; }
+    }
+    return n + f * 2;
+  }
+
+  /* ---------- helpers ---------- */
+  function $(id){ return document.getElementById(id); }
+  function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+  var toastTimer = null;
+  function toast(msg){
+    var t = $('toast'); t.textContent = msg; t.classList.add('show');
+    clearTimeout(toastTimer); toastTimer = setTimeout(function(){ t.classList.remove('show'); }, 2600);
+  }
+  function isFile(){ return location.protocol === 'file:'; }
+  function go(fileHref, servedHref){ window.location.assign(isFile() ? fileHref : servedHref); }
+
+  /* ---------- datos ---------- */
+  function leerChat(k){
+    try{
+      var v = localStorage.getItem(k);
+      return v ? JSON.parse(v) : {};
+    }catch(e){ return {}; }
+  }
+  function cargarHoras(){
+    try{
+      var v = localStorage.getItem(LS_HORAS);
+      if (v){ EST_HORAS = JSON.parse(v); }
+    }catch(e){}
+  }
+  function guardarHoras(){ try{ localStorage.setItem(LS_HORAS, JSON.stringify(EST_HORAS)); }catch(e){} }
+
+  function tentarSemillas(){
+    var c1 = leerChat('horasocial_chat_v1');
+    var c2 = leerChat('horasocial_maestro_chat_v1');
+    if (Object.keys(c1).length || Object.keys(c2).length) return;
+    var s1 = {
+      m1: [
+        {de:'profe', txt:'Hola Alex, te compartí la guía de soldadura. Cualquier duda me escribís.', h:'08:10'},
+        {de:'me', txt:'Profe, qué mierda de día, se me dañó todo en el taller.', h:'08:14'},
+        {de:'profe', txt:'Tranquilo Alex, mañana lo resolvemos juntos.', h:'08:16'}
+      ]
     };
+    var s2 = {
+      e3: [
+        {de:'alum', txt:'Profe, ¿la guía de matemáticas la arranco hoy?', h:'09:10'},
+        {de:'alum', txt:'Es que esto es una cagada, no entiendo nada.', h:'09:12'},
+        {de:'me', txt:'Mariana, vamos por partes hoy después de clase.', h:'09:14'}
+      ]
+    };
+    try{ localStorage.setItem('horasocial_chat_v1', JSON.stringify(s1)); }catch(e){}
+    try{ localStorage.setItem('horasocial_maestro_chat_v1', JSON.stringify(s2)); }catch(e){}
+  }
 
-    /* ---------- filtro de lenguaje ---------- */
-    var PROHIBIDAS = ['culo','culos','puta','puto','putas','putos','putita','putear','puteada','puteadas','puterio',
-      'putazo','putazos','polla','pija','pijas','pijazo','pijazos','verga','vergas','vergazo','vergazos',
-      'mierda','mierdas','cagada','cagadas','cagar','cagado','cagon','cagona',
-      'pendejo','pendeja','pendejos','pendejas','pendejada','pendejadas',
-      'marica','maricon','maricones','mariconada','mariconadas',
-      'cabron','cabrona','cabronada','cabronadas','hijueputa','hijueputas',
-      'sorete','soretes','pelotudo','pelotuda','pelotudos','pelotudez','pelotudeces','pelotudisimo',
-      'boludo','boluda','boludos','boludez','boludeces','boludisimo','boludazo','recontraboludo','recontraboluda',
-      'choto','chota','chotos','chotas','chotear','choteada',
-      'concha','conchas','conchudo','conchuda','tarado','tarada','taradez',
-      'estupido','estupida','estupidos','estupidez','estupideces','idiota','idiotas',
-      'imbecil','imbeciles','imbecilidad','imbecilidades','gil','giles',
-      'poronga','porongas','porongo','pajero','pajera','pajeros','pajeras',
-      'forro','forra','forros','trolo','trola','trolos','mogolico','mogolica','mogolicos',
-      'culear','culeada','culeadas','culiar','culiado','culiada','culiao','hdp'];
-    var STEMS = ['bolud','pelotud','put','pendej','maricon','cabron','hijueput','porong','pajer','trol','mogol',
-      'mierd','chot','conch','gil','tarad','soret','cag','estupid','imbecil','verga','polla'];
-    var FRASES = ['hijo de puta','hija de puta','hijos de puta','hijas de puta','puta madre',
-      'la puta madre','me cago','concha de la lora','hijo de mil'];
+  function cargarRevisadas(){
+    try{
+      var raw = localStorage.getItem(LS_ALERTAS);
+      var arr = raw ? JSON.parse(raw) : [];
+      return Array.isArray(arr) ? arr : [];
+    }catch(e){ return []; }
+  }
+  function guardarRevisadas(arr){ try{ localStorage.setItem(LS_ALERTAS, JSON.stringify(arr)); }catch(e){} }
 
-    function normalizar(s){
-      return s.toLowerCase()
-        .replace(/[áàäâ]/g,'a').replace(/[éèëê]/g,'e')
-        .replace(/[íìïî]/g,'i').replace(/[óòöô]/g,'o')
-        .replace(/[úùüû]/g,'u')
-        .replace(/0/g,'o').replace(/3/g,'e').replace(/1/g,'i')
-        .replace(/4/g,'a').replace(/5|7/g,'s').replace(/@/g,'a').replace(/\$/g,'s')
-        .replace(/v(?![aeiou])/g,'u');
-    }
-    function tokenLimpio(t){
-      return normalizar(t).replace(/[^a-z]/g,'');
-    }
-    function esProhibida(tok){
-      var t = tokenLimpio(tok);
-      if (PROHIBIDAS.indexOf(t) !== -1) return true;
-      for (var i = 0; i < STEMS.length; i++){
-        if (t.indexOf(STEMS[i]) === 0) return true;
-      }
-      return false;
-    }
-    function gradoInfraccion(texto){
-      var n = 0, f = 0;
-      var nrm = ' ' + normalizar(texto).replace(/\s+/g,' ') + ' ';
-      var partes = texto.split(/\s+/);
-      for (var i = 0; i < partes.length; i++){ if (esProhibida(partes[i])) n++; }
-      for (var j = 0; j < FRASES.length; j++){
-        var idx = 0;
-        while ((idx = nrm.indexOf(FRASES[j], idx)) !== -1){ f++; idx += FRASES[j].length; }
-      }
-      return n + f * 2;
-    }
-
-    /* ---------- helpers ---------- */
-    function $(id){ return document.getElementById(id); }
-    function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-    var toastEl = null;
-    function toast(msg){
-      if (!toastEl){
-        toastEl = document.createElement('div');
-        toastEl.className = 'fixed left-1/2 -translate-x-1/2 bottom-28 z-[70] bg-primary text-white text-sm font-bold px-5 py-3 rounded-full shadow-lg transition-all duration-300 opacity-0 pointer-events-none';
-        document.body.appendChild(toastEl);
-      }
-      toastEl.textContent = msg;
-      requestAnimationFrame(function(){ toastEl.classList.remove('opacity-0'); });
-      clearTimeout(toastEl._t);
-      toastEl._t = setTimeout(function(){ toastEl.classList.add('opacity-0'); }, 2200);
-    }
-
-    /* ---------- datos ---------- */
-    function leerChat(k){
-      try{
-        var v = localStorage.getItem(k);
-        return v ? JSON.parse(v) : {};
-      }catch(e){ return {}; }
-    }
-    function cargarHoras(){
-      try{
-        var v = localStorage.getItem(LS_HORAS);
-        if (v){ EST_HORAS = JSON.parse(v); }
-      }catch(e){}
-    }
-    function guardarHoras(){ try{ localStorage.setItem(LS_HORAS, JSON.stringify(EST_HORAS)); }catch(e){} }
-
-    function tentarSemillas(){
-      var c1 = leerChat('horasocial_chat_v1');
-      var c2 = leerChat('horasocial_maestro_chat_v1');
-      if (Object.keys(c1).length || Object.keys(c2).length) return;
-      var s1 = {
-        m1: [
-          {de:'profe', txt:'Hola Alex, te compartí la guía de soldadura. Cualquier duda me escribís.', h:'08:10'},
-          {de:'me', txt:'Profe, qué mierda de día, se me dañó todo en el taller.', h:'08:14'},
-          {de:'profe', txt:'Tranquilo Alex, mañana lo resolvemos juntos.', h:'08:16'}
-        ]
-      };
-      var s2 = {
-        e3: [
-          {de:'alum', txt:'Profe, ¿la guía de matemáticas la arranco hoy?', h:'09:10'},
-          {de:'alum', txt:'Es que esto es una cagada, no entiendo nada.', h:'09:12'},
-          {de:'me', txt:'Mariana, vamos por partes hoy después de clase.', h:'09:14'}
-        ]
-      };
-      try{ localStorage.setItem('horasocial_chat_v1', JSON.stringify(s1)); }catch(e){}
-      try{ localStorage.setItem('horasocial_maestro_chat_v1', JSON.stringify(s2)); }catch(e){}
-    }
-
-    function cargarRevisadas(){
-      try{
-        var raw = localStorage.getItem(LS_ALERTAS);
-        var arr = raw ? JSON.parse(raw) : [];
-        return Array.isArray(arr) ? arr : [];
-      }catch(e){ return []; }
-    }
-    function guardarRevisadas(arr){ try{ localStorage.setItem(LS_ALERTAS, JSON.stringify(arr)); }catch(e){} }
-
-    function escanearInfracciones(){
-      tentarSemillas();
-      var lista = [];
-      var c1 = leerChat('horasocial_chat_v1');
-      var ks1 = Object.keys(c1);
-      for (var i = 0; i < ks1.length; i++){
-        var key = ks1[i], msgs = c1[key] || [];
-        for (var j = 0; j < msgs.length; j++){
-          var ms = msgs[j];
-          if (ms && ms.de === 'me' && typeof ms.txt === 'string' && gradoInfraccion(ms.txt) > 0){
-            var nm = '';
-            for (var k = 0; k < MAESTROS.length; k++){ if (MAESTROS[k].id === key){ nm = MAESTROS[k].nombre; break; } }
-            lista.push({ id:'s:' + key + ':' + j, alumno:'Estudiante (Alex)', contexto:'Chat con ' + (nm || key), txt:ms.txt, h:ms.h || '', grado:gradoInfraccion(ms.txt) });
-          }
+  function escanearInfracciones(){
+    tentarSemillas();
+    var lista = [];
+    var c1 = leerChat('horasocial_chat_v1');
+    var ks1 = Object.keys(c1);
+    for (var i = 0; i < ks1.length; i++){
+      var key = ks1[i], msgs = c1[key] || [];
+      for (var j = 0; j < msgs.length; j++){
+        var ms = msgs[j];
+        if (ms && ms.de === 'me' && typeof ms.txt === 'string' && gradoInfraccion(ms.txt) > 0){
+          var nm = '';
+          for (var k = 0; k < MAESTROS.length; k++){ if (MAESTROS[k].id === key){ nm = MAESTROS[k].nombre; break; } }
+          lista.push({ id:'s:' + key + ':' + j, alumno:'Estudiante (Alex)', contexto:'Chat con ' + (nm || key), txt:ms.txt, h:ms.h || '', grado:gradoInfraccion(ms.txt) });
         }
       }
-      var c2 = leerChat('horasocial_maestro_chat_v1');
-      var ks2 = Object.keys(c2);
-      for (var a = 0; a < ks2.length; a++){
-        var ekey = ks2[a], msgs2 = c2[ekey] || [];
-        for (var b = 0; b < msgs2.length; b++){
-          var ms2 = msgs2[b];
-          if (ms2 && ms2.de === 'alum' && typeof ms2.txt === 'string' && gradoInfraccion(ms2.txt) > 0){
-            var ne = '';
-            for (var u = 0; u < ESTUDIANTES.length; u++){ if (ESTUDIANTES[u].id === ekey){ ne = ESTUDIANTES[u].nombre; break; } }
-            lista.push({ id:'m:' + ekey + ':' + b, alumno:ne || ekey, contexto:'Chat del maestro', txt:ms2.txt, h:ms2.h || '', grado:gradoInfraccion(ms2.txt) });
-          }
+    }
+    var c2 = leerChat('horasocial_maestro_chat_v1');
+    var ks2 = Object.keys(c2);
+    for (var a = 0; a < ks2.length; a++){
+      var ekey = ks2[a], msgs2 = c2[ekey] || [];
+      for (var b = 0; b < msgs2.length; b++){
+        var ms2 = msgs2[b];
+        if (ms2 && ms2.de === 'alum' && typeof ms2.txt === 'string' && gradoInfraccion(ms2.txt) > 0){
+          var ne = '';
+          for (var u = 0; u < ESTUDIANTES.length; u++){ if (ESTUDIANTES[u].id === ekey){ ne = ESTUDIANTES[u].nombre; break; } }
+          lista.push({ id:'m:' + ekey + ':' + b, alumno:ne || ekey, contexto:'Chat del maestro', txt:ms2.txt, h:ms2.h || '', grado:gradoInfraccion(ms2.txt) });
         }
       }
-      return lista;
     }
+    return lista;
+  }
 
-    function mapaAlertasEstudiantes(){
-      var ll = escanearInfracciones();
-      var rev = cargarRevisadas();
-      var map = {};
-      ll.forEach(function(a){
-        if (a.id.charAt(0) === 'm'){
-          var k = a.id.split(':')[1];
-          if (rev.indexOf(a.id) === -1) map[k] = (map[k] || 0) + 1;
+  function mapaAlertasEstudiantes(){
+    var ll = escanearInfracciones();
+    var rev = cargarRevisadas();
+    var map = {};
+    ll.forEach(function(a){
+      if (a.id.charAt(0) === 'm'){
+        var k = a.id.split(':')[1];
+        if (rev.indexOf(a.id) === -1) map[k] = (map[k] || 0) + 1;
+      }
+    });
+    return map;
+  }
+
+  function contarPendientes(){
+    var ll = escanearInfracciones();
+    var rev = cargarRevisadas();
+    var n = 0;
+    ll.forEach(function(a){ if (rev.indexOf(a.id) === -1) n++; });
+    return n;
+  }
+
+  /* ---------- render ---------- */
+  function claseBrigada(b){
+    if (b.indexOf('Ambiental') !== -1) return 'em';
+    if (b.indexOf('Apoyo') !== -1) return 'ap';
+    return 'sv';
+  }
+  function claseBarra(pct){
+    if (pct >= 100) return 'full';
+    if (pct >= 70) return 'mid';
+    return 'low';
+  }
+
+  function actualizarKpis(){
+    var alerts = escanearInfracciones();
+    var rev = cargarRevisadas();
+    var pends = alerts.filter(function(a){ return rev.indexOf(a.id) === -1; }).length;
+
+    $('kpiEst').textContent = ESTUDIANTES.length;
+    var tot = 0;
+    ESTUDIANTES.forEach(function(e){ tot += EST_HORAS[e.id] ? EST_HORAS[e.id].horas : 0; });
+    $('kpiHoras').textContent = tot.toLocaleString('es-CO');
+    var full = ESTUDIANTES.length * META;
+    var pct = full ? Math.round(tot / full * 100) : 0;
+    $('kpiMeta').textContent = pct + '%';
+    $('kpiMetaLabel').textContent = 'Meta ' + full.toLocaleString('es-CO') + ' h';
+    $('barraMeta').style.width = Math.min(100, pct) + '%';
+
+    $('kpiAlertas').textContent = pends;
+  }
+
+  function renderEstudiantes(){
+    var grid = $('estGrid');
+    if (!grid) return;
+    var mapAl = mapaAlertasEstudiantes();
+    var q = estQuery.toLowerCase();
+    var html = '';
+    var vis = 0;
+
+    $('estFiltros').querySelectorAll('[data-f]').forEach(function(btn){
+      var on = btn.getAttribute('data-f') === estFiltro;
+      btn.className = 'chip ' + (on ? 'on' : '');
+    });
+
+    ESTUDIANTES.forEach(function(e){
+      var d = EST_HORAS[e.id] || { horas:0, semana:[0,0,0,0,0] };
+      var name = e.nombre.toLowerCase(), br = e.brigada.toLowerCase();
+      if (q && name.indexOf(q) === -1 && br.indexOf(q) === -1) return;
+      var nA = mapAl[e.id] || 0;
+      if (estFiltro === 'ambiental' && br.indexOf('ambiental') === -1) return;
+      if (estFiltro === 'apoyo' && br.indexOf('apoyo') === -1) return;
+      if (estFiltro === 'servicios' && br.indexOf('servicios') === -1) return;
+      if (estFiltro === 'alertas' && nA === 0) return;
+      vis++;
+
+      var pct = Math.min(100, Math.round(d.horas / META * 100));
+      var open = estOpenId === e.id;
+      var clBr = claseBrigada(e.brigada);
+      var burb = '';
+      if (open){
+        burb = '<div class="sem-wrap">' +
+          '<p class="sem-hd">Semana en curso</p>' +
+          '<div class="sem-row">';
+        for (var i = 0; i < 5; i++){
+          var v = d.semana[i] || 0;
+          var cor = v >= 7 ? 'burb-ok' : (v >= 4 ? 'burb-mid' : 'burb-low');
+          burb += '<div class="burbuja ' + cor + '" title="' + v + ' h">' + DIA_LETRA[i] + '<span class="v">' + v + '</span></div>';
         }
-      });
-      return map;
-    }
-
-    /* ---------- render ---------- */
-    function gradienteBrigada(b){
-      if (b.indexOf('Ambiental') !== -1) return 'bg-gradient-to-br from-emerald-400 to-teal-600';
-      if (b.indexOf('Apoyo') !== -1) return 'bg-gradient-to-br from-sky-400 to-blue-600';
-      return 'bg-gradient-to-br from-violet-400 to-purple-600';
-    }
-    function chipBrigada(b){
-      if (b.indexOf('Ambiental') !== -1) return 'bg-emerald-50 text-emerald-700';
-      if (b.indexOf('Apoyo') !== -1) return 'bg-sky-50 text-sky-700';
-      return 'bg-violet-50 text-violet-700';
-    }
-    function claseBarra(pct){
-      if (pct >= 100) return 'from-emerald-500 to-teal-500';
-      if (pct >= 70) return 'from-sky-500 to-blue-500';
-      return 'from-amber-400 to-orange-400';
-    }
-
-    function actualizarKpis(){
-      var mapAl = mapaAlertasEstudiantes();
-      var pendAl = 0;
-      Object.keys(mapAl).forEach(function(k){ pendAl += mapAl[k]; });
-      var alerts = escanearInfracciones();
-      var rev = cargarRevisadas();
-      var pends = alerts.filter(function(a){ return rev.indexOf(a.id) === -1; }).length;
-
-      $('kpiEst').textContent = ESTUDIANTES.length;
-      var tot = 0;
-      ESTUDIANTES.forEach(function(e){ tot += EST_HORAS[e.id] ? EST_HORAS[e.id].horas : 0; });
-      $('kpiHoras').textContent = tot.toLocaleString('es-CO');
-      var full = ESTUDIANTES.length * META;
-      var pct = full ? Math.round(tot / full * 100) : 0;
-      $('kpiMeta').textContent = pct + '%';
-      $('kpiMetaLabel').textContent = 'Meta ' + full.toLocaleString('es-CO') + ' h';
-      $('barraMeta').style.width = Math.min(100, pct) + '%';
-
-      $('kpiAlertas').textContent = pends;
-      $('kpiAlChip').textContent = pends ? 'Acción requerida' : 'Todo en orden';
-      $('kpiAlChip').className = 'text-xs font-bold px-2.5 py-1 rounded-full uppercase tracking-tight ' + (pends ? 'text-red-600 bg-red-50' : 'text-emerald-600 bg-emerald-50');
-      $('kpiAlertas').className = 'text-4xl font-headline font-extrabold ' + (pends ? 'text-red-600' : 'text-emerald-600');
-    }
-
-    function renderEstudiantes(){
-      var grid = $('estGrid');
-      if (!grid) return;
-      var mapAl = mapaAlertasEstudiantes();
-      var q = estQuery.toLowerCase();
-      var html = '';
-      var vis = 0;
-
-      $('estFiltros').querySelectorAll('[data-f]').forEach(function(btn){
-        var on = btn.getAttribute('data-f') === estFiltro;
-        btn.className = 'px-3 py-1.5 rounded-full text-[11px] font-bold transition-colors ' + (on ? 'bg-primary text-white' : 'bg-slate-100 text-slate-500 hover:bg-slate-200');
-      });
-
-      ESTUDIANTES.forEach(function(e){
-        var d = EST_HORAS[e.id] || { horas:0, semana:[0,0,0,0,0] };
-        var name = e.nombre.toLowerCase(), br = e.brigada.toLowerCase();
-        if (q && name.indexOf(q) === -1 && br.indexOf(q) === -1) return;
-        var nA = mapAl[e.id] || 0;
-        if (estFiltro === 'ambiental' && br.indexOf('ambiental') === -1) return;
-        if (estFiltro === 'apoyo' && br.indexOf('apoyo') === -1) return;
-        if (estFiltro === 'servicios' && br.indexOf('servicios') === -1) return;
-        if (estFiltro === 'alertas' && nA === 0) return;
-        vis++;
-
-        var pct = Math.min(100, Math.round(d.horas / META * 100));
-        var open = estOpenId === e.id;
-        var burb = '';
-        if (open){
-          burb = '<div class="mt-3 pt-3 border-t border-slate-100">' +
-            '<p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Semana en curso</p>' +
-            '<div class="flex gap-1.5">';
-          for (var i = 0; i < 5; i++){
-            var v = d.semana[i] || 0;
-            var cor = v >= 7 ? 'bg-emerald-500 text-white' : (v >= 4 ? 'bg-amber-400 text-white' : 'bg-slate-200 text-slate-500');
-            burb += '<div class="burbuja flex-1 h-9 rounded-lg flex items-center justify-center text-[11px] font-extrabold ' + cor + '" title="' + v + ' h">' + DIA_LETRA[i] + '<span class="ml-1 text-[9px] font-bold">' + v + '</span></div>';
-          }
-          burb += '</div></div>';
-        }
-
-        html += '<div class="est-card rounded-xl border border-slate-100 bg-white overflow-hidden" data-id="' + e.id + '">' +
-          '<div class="h-1.5 bg-gradient-to-r ' + gradienteBrigada(e.brigada).replace('bg-gradient-to-br','bg-gradient-to-r') + '"></div>' +
-          '<div class="p-4">' +
-          '<div class="flex items-start gap-3">' +
-            '<div class="relative">' +
-              '<div class="w-11 h-11 rounded-full flex items-center justify-center text-white font-bold text-sm ring-2 ring-white shadow-md ' + gradienteBrigada(e.brigada) + '">' + e.iniciales + '</div>' +
-              '<span class="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full border-2 border-white ' + (e.enLinea ? 'bg-green-500' : 'bg-slate-300') + '"></span>' +
-            '</div>' +
-            '<div class="min-w-0 flex-1">' +
-              '<p class="text-sm font-bold text-primary truncate">' + esc(e.nombre) + '</p>' +
-              '<span class="inline-block mt-1 px-2 py-0.5 rounded-full text-[9px] font-bold ' + chipBrigada(e.brigada) + '">' + esc(e.brigada) + '</span>' +
-            '</div>' +
-            (nA ? '<span class="flex items-center gap-1 px-2 py-1 rounded-full bg-red-600 text-white text-[10px] font-extrabold shadow-sm"><span class="material-symbols-outlined text-xs" style="font-variation-settings: \'FILL\' 1;">error</span>' + nA + '</span>' : '') +
-          '</div>' +
-          '<div class="mt-3">' +
-            '<div class="flex justify-between text-[10px] font-bold mb-1"><span class="text-slate-400">Meta ' + META + ' h</span><span class="' + (pct >= 100 ? 'text-emerald-600' : 'text-primary') + '">' + d.horas + ' h</span></div>' +
-            '<div class="h-2 bg-slate-100 rounded-full overflow-hidden"><div class="h-2 rounded-full bg-gradient-to-r ' + claseBarra(pct) + '" style="width:' + pct + '%"></div></div>' +
-          '</div>' +
-          '<div class="mt-3 grid grid-cols-2 gap-2">' +
-            '<button class="py-2 rounded-lg text-[10px] font-bold border transition-colors ' + (open ? 'bg-primary text-white border-primary' : 'border-slate-200 text-primary hover:bg-slate-50') + '" data-perfil="' + e.id + '" type="button"><span class="material-symbols-outlined align-middle text-xs mr-1">insights</span>' + (open ? 'Ocultar' : 'Perfil') + '</button>' +
-            '<button class="py-2 rounded-lg text-[10px] font-bold bg-primary text-white hover:bg-slate-800 transition-colors" data-addh="' + e.id + '" type="button"><span class="material-symbols-outlined align-middle text-xs mr-1">add_circle</span>+2 h</button>' +
-          '</div>' + burb +
-          '</div>' +
-        '</div>';
-      });
-
-      grid.innerHTML = html;
-      $('estEmpty').classList.toggle('hidden', vis !== 0);
-      $('estEmpty').classList.toggle('flex', vis === 0);
-    }
-
-    function renderAlertas(){
-      var list = $('alertList');
-      if (!list) return;
-      var revs = cargarRevisadas();
-      var alerts = escanearInfracciones();
-      alerts.forEach(function(a){ a.rev = revs.indexOf(a.id) !== -1; });
-      var pend = [], rev = [];
-      alerts.forEach(function(a){ (a.rev ? rev : pend).push(a); });
-      var orden = pend.concat(rev);
-      var pends = pend.length;
-
-      $('alCount').textContent = alerts.length ? (alerts.length === 1 ? '1 alerta' : alerts.length + ' alertas') : 'Sin alertas';
-      $('alCount').className = 'text-[11px] font-bold px-2.5 py-1 rounded-full ' + (pends ? 'text-red-600 bg-red-100' : 'text-emerald-600 bg-emerald-100');
-      $('alertEmpty').classList.toggle('hidden', alerts.length !== 0);
-      $('alertEmpty').classList.toggle('flex', alerts.length === 0);
-      $('alertList').classList.toggle('hidden', alerts.length === 0);
-
-      var html = '';
-      orden.forEach(function(a){
-        var crit = a.grado >= 2;
-        html += '<div class="p-4 rounded-xl border-l-4 shadow-sm transition-colors ' + (a.rev ? 'bg-slate-50 border-l-emerald-400 opacity-70' : (crit ? 'bg-slate-50 border-l-red-500 hover:bg-white' : 'bg-slate-50 border-l-amber-500 hover:bg-white')) + '">' +
-          '<div class="flex justify-between items-start mb-1.5">' +
-            '<span class="text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded ' + (a.rev ? 'bg-emerald-100 text-emerald-700' : (crit ? 'bg-red-600 text-white' : 'bg-amber-500 text-white')) + '">' + (a.rev ? 'Revisada' : (crit ? 'Critica' : 'Moderada')) + '</span>' +
-            '<span class="text-[10px] text-slate-400">' + esc(a.h) + (a.rev ? ' · revisada' : ' · pendiente') + '</span>' +
-          '</div>' +
-          '<p class="text-sm font-bold text-primary">' + esc(a.alumno) + '</p>' +
-          '<p class="text-[11px] text-slate-500 italic mt-0.5">' + esc(a.txt) + '</p>' +
-          '<p class="text-[10px] text-slate-400 mt-1">' + esc(a.contexto) + '</p>' +
-          '<div class="mt-3 grid grid-cols-2 gap-2">' +
-            (a.rev
-              ? '<span class="col-span-2 py-2 rounded-lg text-[10px] font-bold text-center bg-emerald-50 text-emerald-700"><span class="material-symbols-outlined align-middle text-xs mr-1">done</span>Gestionada</span>'
-              : '<button class="py-2 bg-red-600 text-white rounded-lg text-[10px] font-bold hover:bg-red-700 transition-colors" data-rev="' + esc(a.id) + '" type="button"><span class="material-symbols-outlined align-middle text-xs mr-1">done</span>Gestionar</button>' +
-                '<button class="py-2 bg-white border border-slate-200 text-primary rounded-lg text-[10px] font-bold hover:bg-slate-50 transition-colors" data-act="msg" type="button"><span class="material-symbols-outlined align-middle text-xs mr-1">forum</span>Escribir</button>') +
-          '</div>' +
-        '</div>';
-      });
-      list.innerHTML = html;
-    }
-
-    function registrarHoras(id){
-      var d = EST_HORAS[id];
-      if (!d) return;
-      d.horas += 2;
-      var dia = new Date().getDay();
-      if (dia >= 1 && dia <= 5){ d.semana[dia - 1] = (d.semana[dia - 1] || 0) + 2; }
-      guardarHoras();
-      actualizarKpis();
-    }
-
-    function marcarRevisada(id){
-      var revs = cargarRevisadas();
-      if (revs.indexOf(id) === -1){ revs.push(id); guardarRevisadas(revs); }
-      actualizarKpis();
-      renderAlertas();
-      renderEstudiantes();
-    }
-
-    function exportarCSV(){
-      var filas = [['Estudiante','Brigada','Horas','Meta','%']];
-      ESTUDIANTES.forEach(function(e){
-        var d = EST_HORAS[e.id] || { horas:0 };
-        filas.push([e.nombre, e.brigada, d.horas, META, Math.round(d.horas / META * 100) + '%']);
-      });
-      var csv = '\uFEFF' + filas.map(function(f){
-        return f.map(function(c){ return '"' + String(c).replace(/"/g,'""') + '"'; }).join(',');
-      }).join('\r\n');
-      var a = document.createElement('a');
-      a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
-      a.download = 'estudiantes_horasocial.csv';
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      toast('Exportacion lista');
-    }
-
-    function fechaHoy(){
-      try{
-        var d = new Date();
-        var dias = ['Domingo','Lunes','Martes','Miercoles','Jueves','Viernes','Sabado'];
-        var meses = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
-        $('fechaHoy').textContent = dias[d.getDay()] + ' ' + d.getDate() + ' ' + meses[d.getMonth()] + ' ' + d.getFullYear();
-      }catch(e){}
-    }
-
-    /* ---------- navegacion ---------- */
-    function ir(a){
-      var f = a.getAttribute('data-file'), s = a.getAttribute('data-served');
-      if (s){
-        try{
-          fetch(s, { method:'HEAD' }).then(function(r){
-            location.href = r.ok ? s : f;
-          }).catch(function(){ location.href = f; });
-        }catch(e){ location.href = f; }
-      } else {
-        location.href = f;
+        burb += '</div></div>';
       }
+
+      html += '<div class="est-card" data-id="' + e.id + '">' +
+        '<div class="est-top">' +
+          '<div class="est-av ' + clBr + '">' + e.iniciales +
+            '<span class="est-dot ' + (e.enLinea ? 'ok' : 'off') + '"></span>' +
+          '</div>' +
+          '<div class="est-info">' +
+            '<b>' + esc(e.nombre) + '</b>' +
+            '<span class="est-chip ' + clBr + '">' + esc(e.brigada) + '</span>' +
+          '</div>' +
+          (nA ? '<span class="al-chip"><span class="material-symbols-outlined">error</span>' + nA + '</span>' : '') +
+        '</div>' +
+        '<div>' +
+          '<div class="prog-label"><span>Meta ' + META + ' h</span><span>' + d.horas + ' h</span></div>' +
+          '<div class="prog"><i class="' + claseBarra(pct) + '" style="width:' + pct + '%"></i></div>' +
+        '</div>' +
+        '<div class="est-btns">' +
+          '<button class="btn2 ' + (open ? 'filled' : 'ghost') + '" data-perfil="' + e.id + '" type="button"><span class="material-symbols-outlined">insights</span>' + (open ? 'Ocultar' : 'Perfil') + '</button>' +
+          '<button class="btn2 filled" data-addh="' + e.id + '" type="button"><span class="material-symbols-outlined">add_circle</span>+2 h</button>' +
+        '</div>' + burb +
+      '</div>';
+    });
+
+    grid.innerHTML = html;
+    $('estEmpty').classList.toggle('hidden', vis !== 0);
+    $('estEmpty').classList.toggle('flex', vis === 0);
+  }
+
+  function renderAlertas(){
+    var list = $('alertList');
+    if (!list) return;
+    var revs = cargarRevisadas();
+    var alerts = escanearInfracciones();
+    alerts.forEach(function(a){ a.rev = revs.indexOf(a.id) !== -1; });
+    var pend = [], rev = [];
+    alerts.forEach(function(a){ (a.rev ? rev : pend).push(a); });
+    var orden = pend.concat(rev);
+    var pends = pend.length;
+
+    var badge = $('alCount');
+    badge.textContent = alerts.length ? (alerts.length === 1 ? '1 alerta' : alerts.length + ' alertas') : 'Sin alertas';
+    badge.className = 'badge ' + (pends ? 'bg-red' : 'bg-green');
+    $('alertEmpty').classList.toggle('hidden', alerts.length !== 0);
+    $('alertEmpty').classList.toggle('flex', alerts.length === 0);
+    $('alertList').classList.toggle('hidden', alerts.length === 0);
+
+    var html = '';
+    orden.forEach(function(a){
+      var crit = a.grado >= 2;
+      html += '<div class="ala-card ' + (a.rev ? 'ok' : (crit ? 'crit' : '')) + '">' +
+        '<div class="ala-top">' +
+          '<span class="ala-tag ' + (a.rev ? 'ok' : (crit ? 'crit' : 'mod')) + '">' + (a.rev ? 'Revisada' : (crit ? 'Critica' : 'Moderada')) + '</span>' +
+          '<span class="ala-time">' + esc(a.h) + (a.rev ? ' &middot; revisada' : ' &middot; pendiente') + '</span>' +
+        '</div>' +
+        '<span class="nm">' + esc(a.alumno) + '</span>' +
+        '<p class="txt">&ldquo;' + esc(a.txt) + '&rdquo;</p>' +
+        '<p class="ctx">' + esc(a.contexto) + '</p>' +
+        '<div class="ala-btns">' +
+          (a.rev
+            ? '<span class="act-btn ok full"><span class="material-symbols-outlined">done</span>Gestionada</span>'
+            : '<button class="act-btn red" data-rev="' + esc(a.id) + '" type="button"><span class="material-symbols-outlined">done</span>Gestionar</button>' +
+              '<button class="act-btn ghost" data-act="msg" type="button"><span class="material-symbols-outlined">forum</span>Escribir</button>') +
+        '</div>' +
+      '</div>';
+    });
+    list.innerHTML = html;
+  }
+
+  function renderNotifs(){
+    var list = $('notifList'); if (!list) return;
+    var ll = escanearInfracciones();
+    var rev = cargarRevisadas();
+    var pend = ll.filter(function(a){ return rev.indexOf(a.id) === -1; });
+    var dot = $('notifDot');
+    if (dot) dot.style.display = pend.length ? 'block' : 'none';
+    if (!pend.length){
+      list.innerHTML = '<div class="notif-empty"><span class="material-symbols-outlined">notifications_off</span><span>Sin alertas pendientes</span></div>';
+      return;
     }
-    document.querySelectorAll('[data-go]').forEach(function(a){
-      a.addEventListener('click', function(ev){ ev.preventDefault(); ir(a); });
+    var html = '';
+    pend.forEach(function(a){
+      html += '<div class="notif-item">' +
+        '<span class="n-dot"></span>' +
+        '<div class="n-txt"><b>' + esc(a.alumno) + ' &middot; ' + (a.grado >= 2 ? 'Critica' : 'Moderada') + '</b><small>' + esc(a.txt) + '</small></div>' +
+      '</div>';
     });
+    list.innerHTML = html;
+  }
 
-    /* ---------- interacciones ---------- */
-    $('estBuscar').addEventListener('input', function(){ estQuery = this.value; renderEstudiantes(); });
-    $('estFiltros').addEventListener('click', function(ev){
-      var b = ev.target.closest('[data-f]');
-      if (!b) return;
-      estFiltro = b.getAttribute('data-f');
-      renderEstudiantes();
-    });
-    $('estGrid').addEventListener('click', function(ev){
-      var b = ev.target.closest('[data-perfil],[data-addh]');
-      if (!b) return;
-      var id = b.getAttribute('data-perfil') || b.getAttribute('data-addh');
-      if (b.hasAttribute('data-perfil')){
-        estOpenId = estOpenId === id ? null : id;
-        renderEstudiantes();
-      } else {
-        registrarHoras(id);
-        renderEstudiantes();
-        var e = null;
-        for (var i = 0; i < ESTUDIANTES.length; i++){ if (ESTUDIANTES[i].id === id){ e = ESTUDIANTES[i]; break; } }
-        toast('+2 h para ' + (e ? e.nombre : id));
-      }
-    });
-    $('alertList').addEventListener('click', function(ev){
-      var b = ev.target.closest('[data-rev],[data-act]');
-      if (!b) return;
-      if (b.hasAttribute('data-rev')){
-        marcarRevisada(b.getAttribute('data-rev'));
-        toast('Alerta gestionada');
-      } else if (b.getAttribute('data-act') === 'msg'){
-        var msj = $('navMsj');
-        if (msj) msj.click();
-      }
-    });
-    $('btnExport').addEventListener('click', exportarCSV);
-
-    document.querySelectorAll('button').forEach(function(btn){
-      btn.addEventListener('mousedown', function(){ btn.classList.add('scale-95'); });
-      btn.addEventListener('mouseup', function(){ btn.classList.remove('scale-95'); });
-      btn.addEventListener('mouseleave', function(){ btn.classList.remove('scale-95'); });
-    });
-
-    /* ---------- init ---------- */
-    cargarHoras();
-    fechaHoy();
+  function registrarHoras(id){
+    var d = EST_HORAS[id];
+    if (!d) return;
+    d.horas += 2;
+    var dia = new Date().getDay();
+    if (dia >= 1 && dia <= 5){ d.semana[dia - 1] = (d.semana[dia - 1] || 0) + 2; }
+    guardarHoras();
     actualizarKpis();
-    renderEstudiantes();
+  }
+
+  function marcarRevisada(id){
+    var revs = cargarRevisadas();
+    if (revs.indexOf(id) === -1){ revs.push(id); guardarRevisadas(revs); }
+    actualizarKpis();
     renderAlertas();
-    setInterval(function(){ actualizarKpis(); renderAlertas(); }, 6000);
+    renderEstudiantes();
+    renderNotifs();
+  }
+
+  function exportarCSV(){
+    var filas = [['Estudiante','Brigada','Horas','Meta','%']];
+    ESTUDIANTES.forEach(function(e){
+      var d = EST_HORAS[e.id] || { horas:0 };
+      filas.push([e.nombre, e.brigada, d.horas, META, Math.round(d.horas / META * 100) + '%']);
+    });
+    var csv = '\uFEFF' + filas.map(function(f){
+      return f.map(function(c){ return '"' + String(c).replace(/"/g,'""') + '"'; }).join(',');
+    }).join('\r\n');
+    var a = document.createElement('a');
+    a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
+    a.download = 'estudiantes_horasocial.csv';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    toast('Exportacion lista');
+  }
+
+  function pintarFechaHoy(){
+    try{
+      var d = new Date();
+      var dias = ['Domingo','Lunes','Martes','Miercoles','Jueves','Viernes','Sabado'];
+      var meses = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+      $('fechaHoy').textContent = dias[d.getDay()] + ' ' + d.getDate() + ' ' + meses[d.getMonth()] + ' ' + d.getFullYear();
+    }catch(e){}
+  }
+
+  /* ---------- navegacion ---------- */
+  document.querySelectorAll('[data-go]').forEach(function(el){
+    el.addEventListener('click', function(e){
+      e.preventDefault();
+      go(el.getAttribute('data-file'), el.getAttribute('data-served'));
+    });
+  });
+  var btnLogout = $('btnLogout');
+  if (btnLogout) btnLogout.addEventListener('click', function(e){
+    e.preventDefault();
+    go('../../selecci_n_de_rol_distribuci_n_expandida_vertical/code.html', '/seleccion-rol');
+  });
+  var avImg = $('avImg');
+  if (avImg){
+    avImg.addEventListener('error', function(){
+      avImg.style.display = 'none';
+      var fb = $('avSvgFallback');
+      if (fb) fb.style.display = 'flex';
+    });
+  }
+
+  /* ---------- panel de notificaciones ---------- */
+  var btnNotif = $('btnNotif');
+  var notifPanel = $('notifPanel');
+  if (btnNotif && notifPanel){
+    btnNotif.addEventListener('click', function(e){
+      e.stopPropagation();
+      if (notifPanel) notifPanel.classList.toggle('show');
+    });
+    document.addEventListener('click', function(e){
+      if (notifPanel && notifPanel.classList.contains('show') && !notifPanel.contains(e.target) && btnNotif && !btnNotif.contains(e.target)) notifPanel.classList.remove('show');
+    });
+    var btnNotifRead = $('btnNotifRead');
+    if (btnNotifRead){
+      btnNotifRead.addEventListener('click', function(){
+        var pend = [];
+        var ll = escanearInfracciones();
+        var revs = cargarRevisadas();
+        ll.forEach(function(a){ if (revs.indexOf(a.id) === -1) pend.push(a.id); });
+        pend.forEach(function(id){ revs.push(id); });
+        guardarRevisadas(revs);
+        renderAlertas();
+        renderEstudiantes();
+        renderNotifs();
+        actualizarKpis();
+        toast('Alertas marcadas como leidas');
+      });
+    }
+  }
+
+  /* ---------- interacciones ---------- */
+  $('estBuscar').addEventListener('input', function(){ estQuery = this.value; renderEstudiantes(); });
+  $('estFiltros').addEventListener('click', function(ev){
+    var b = ev.target.closest('[data-f]');
+    if (!b) return;
+    estFiltro = b.getAttribute('data-f');
+    renderEstudiantes();
+  });
+  $('estGrid').addEventListener('click', function(ev){
+    var b = ev.target.closest('[data-perfil],[data-addh]');
+    if (!b) return;
+    var id = b.getAttribute('data-perfil') || b.getAttribute('data-addh');
+    if (b.hasAttribute('data-perfil')){
+      estOpenId = estOpenId === id ? null : id;
+      renderEstudiantes();
+    } else {
+      registrarHoras(id);
+      renderEstudiantes();
+      var e = null;
+      for (var i = 0; i < ESTUDIANTES.length; i++){ if (ESTUDIANTES[i].id === id){ e = ESTUDIANTES[i]; break; } }
+      toast('+2 h para ' + (e ? e.nombre : id));
+    }
+  });
+  $('alertList').addEventListener('click', function(ev){
+    var b = ev.target.closest('[data-rev],[data-act]');
+    if (!b) return;
+    if (b.hasAttribute('data-rev')){
+      marcarRevisada(b.getAttribute('data-rev'));
+      toast('Alerta gestionada');
+    } else if (b.getAttribute('data-act') === 'msg'){
+      var msj = $('navMsj');
+      if (msj) msj.click();
+    }
+  });
+  $('btnExport').addEventListener('click', exportarCSV);
+
+  /* ---------- init ---------- */
+  cargarHoras();
+  pintarFechaHoy();
+  actualizarKpis();
+  renderEstudiantes();
+  renderAlertas();
+  renderNotifs();
+  setInterval(function(){ actualizarKpis(); renderAlertas(); renderNotifs(); }, 6000);
 </script>
 </body>
 </html>
