@@ -12,8 +12,7 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
-    "express": "^5.2.1",
-    "mysql2": "^3.22.5"
+    "express": "^5.2.1"
   },
   "devDependencies": {
     "@tailwindcss/container-queries": "^0.1.1",
