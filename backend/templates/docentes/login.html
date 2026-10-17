@@ -1,0 +1,37 @@
+{% extends 'docentes/base.html' %}
+
+{% block title %}Iniciar sesion | HORASOCIAL PRO{% endblock %}
+
+{% block content %}
+  <h1>Iniciar sesion</h1>
+  <p class="subtitle">Ingresa con tu correo institucional o tu codigo de docente.</p>
+
+  <form method="post" novalidate>
+    {% csrf_token %}
+
+    {% if form.non_field_errors %}
+      <ul class="errors">
+        {% for error in form.non_field_errors %}<li>{{ error }}</li>{% endfor %}
+      </ul>
+    {% endif %}
+
+    {% for field in form %}
+      <div class="field">
+        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+        {{ field }}
+        {% if field.errors %}
+          <ul class="errors">
+            {% for error in field.errors %}<li>{{ error }}</li>{% endfor %}
+          </ul>
+        {% endif %}
+      </div>
+    {% endfor %}
+
+    <button class="btn" type="submit">Entrar</button>
+  </form>
+
+  <div class="links">
+    <a href="{% url 'docentes:recuperar' %}">Olvide mi contrasena</a>
+    <a href="{% url 'docentes:registro' %}">Registrar un docente nuevo</a>
+  </div>
+{% endblock %}

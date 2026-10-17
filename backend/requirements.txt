@@ -1,0 +1,5 @@
+# Dependencias del backend Django - HORASOCIAL PRO
+# Instalar con:  pip install -r requirements.txt
+
+Django==6.1.2
+mysqlclient==2.3.0

@@ -1,0 +1,104 @@
+{% extends 'docentes/base.html' %}
+
+{% block title %}Panel del docente | HORASOCIAL PRO{% endblock %}
+
+{% block card_class %}card--wide{% endblock %}
+
+{% block content %}
+  <div class="topbar">
+    <div>
+      <h1>Hola, {{ usuario.nombre_completo }}</h1>
+      <p class="subtitle">
+        {{ usuario.correo }}
+        <span class="pill">{{ usuario.rol }}</span>
+      </p>
+    </div>
+    <form class="inline" method="post" action="{% url 'docentes:logout' %}">
+      {% csrf_token %}
+      <button class="btn btn--ghost" type="submit">Cerrar sesion</button>
+    </form>
+  </div>
+
+  {% if es_docente %}
+    <div class="grid">
+      <div class="stat">
+        <div class="stat__label">Brigadas asignadas</div>
+        <div class="stat__value">{{ resumen.brigadas }}</div>
+      </div>
+      <div class="stat">
+        <div class="stat__label">Estudiantes a cargo</div>
+        <div class="stat__value">{{ resumen.estudiantes }}</div>
+      </div>
+      <div class="stat">
+        <div class="stat__label">Horas validadas</div>
+        <div class="stat__value">{{ resumen.horas_validadas }}</div>
+      </div>
+    </div>
+
+    <h2 style="margin-top:28px;font-size:1.05rem;">Brigadas asignadas</h2>
+    {% if brigadas %}
+      <table>
+        <thead>
+          <tr>
+            <th>Sesion</th>
+            <th>Actividad</th>
+            <th>Fecha</th>
+            <th>Ubicacion</th>
+            <th>Cupos</th>
+            <th>Estado</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for sesion in brigadas %}
+            <tr>
+              <td>#{{ sesion.id_sesion }}</td>
+              <td>{{ sesion.id_tipo.nombre_actividad }}</td>
+              <td>{{ sesion.fecha_hora|date:"d/m/Y H:i" }}</td>
+              <td>{{ sesion.ubicacion }}</td>
+              <td>{{ sesion.cupos_disponibles }}/{{ sesion.cupos_max }}</td>
+              <td>{{ sesion.estado }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <p class="subtitle">Todavia no tienes brigadas asignadas.</p>
+    {% endif %}
+
+    <h2 style="margin-top:28px;font-size:1.05rem;">Estudiantes a cargo</h2>
+    {% if estudiantes %}
+      <table>
+        <thead>
+          <tr>
+            <th>Codigo</th>
+            <th>Nombre</th>
+            <th>Grado</th>
+            <th>Horas registradas</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for estudiante in estudiantes %}
+            <tr>
+              <td>{{ estudiante.codigo|default:"-" }}</td>
+              <td>{{ estudiante.nombre_completo }}</td>
+              <td>{{ estudiante.grado|default:"-" }}</td>
+              <td>{{ estudiante.horas_registradas }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <p class="subtitle">Todavia no hay estudiantes registrados en tus brigadas.</p>
+    {% endif %}
+
+  {% else %}
+    <p class="subtitle">
+      Tu cuenta tiene el rol <strong>{{ usuario.rol }}</strong>. El panel de
+      brigadas esta disponible para el rol Docente.
+    </p>
+  {% endif %}
+
+  <div class="links" style="margin-top:26px;">
+    <a href="{% url 'docentes:cambiar_contrasena' %}">Cambiar mi contrasena</a>
+  </div>
+{% endblock %}

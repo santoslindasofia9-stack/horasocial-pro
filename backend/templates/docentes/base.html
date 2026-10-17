@@ -1,0 +1,157 @@
+{% load static %}<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}HORASOCIAL PRO{% endblock %}</title>
+  <style>
+    :root {
+      --sky: #0EA5E9;
+      --sky-soft: #7DD3FC;
+      --gold: #AA771C;
+      --gold-light: #D4AF37;
+      --gold-soft: #F3E5AB;
+      --pink: #F7C8DC;
+      --ink: #1F2937;
+      --muted: #6B7280;
+      --surface: #FFFFFF;
+      --bg: #F0F9FF;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Segoe UI", Roboto, system-ui, sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(900px 500px at 15% 20%, rgba(247, 200, 220, 0.55), transparent 65%),
+        radial-gradient(800px 480px at 85% 75%, rgba(247, 200, 220, 0.45), transparent 60%),
+        linear-gradient(160deg, #E0F2FE 0%, #F0F9FF 55%, #E0F2FE 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 32px 16px;
+    }
+    .card {
+      width: 100%;
+      max-width: 460px;
+      background: var(--surface);
+      border-radius: 20px;
+      padding: 34px 30px;
+      box-shadow: 0 18px 45px rgba(14, 165, 233, 0.18);
+      border: 1px solid rgba(14, 165, 233, 0.14);
+    }
+    .card--wide { max-width: 780px; }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 6px;
+    }
+    .brand__dot {
+      width: 12px; height: 12px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--sky), var(--gold-light));
+    }
+    .brand__name {
+      font-weight: 700;
+      letter-spacing: .08em;
+      font-size: .82rem;
+      color: var(--sky);
+      text-transform: uppercase;
+    }
+    h1 { font-size: 1.5rem; margin: 6px 0 4px; }
+    .subtitle { color: var(--muted); font-size: .92rem; margin: 0 0 22px; }
+    label { display: block; font-size: .86rem; font-weight: 600; margin-bottom: 6px; }
+    .input {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid #D7E3EC;
+      border-radius: 12px;
+      font-size: .95rem;
+      background: #FAFCFE;
+      transition: border-color .15s, box-shadow .15s;
+    }
+    .input:focus {
+      outline: none;
+      border-color: var(--sky);
+      box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.16);
+    }
+    .field { margin-bottom: 16px; }
+    .helptext { color: var(--muted); font-size: .78rem; margin-top: 5px; }
+    .errors { list-style: none; margin: 6px 0 0; padding: 0; }
+    .errors li { color: #B91C1C; font-size: .82rem; }
+    .btn {
+      width: 100%;
+      border: none;
+      cursor: pointer;
+      padding: 13px 18px;
+      border-radius: 12px;
+      font-size: .97rem;
+      font-weight: 700;
+      color: #3B2A05;
+      background: linear-gradient(135deg, var(--gold-light), var(--gold-soft) 55%, var(--gold));
+      box-shadow: 0 10px 22px rgba(170, 119, 28, 0.28);
+      transition: transform .12s, box-shadow .12s;
+    }
+    .btn:hover { transform: translateY(-1px); box-shadow: 0 14px 26px rgba(170, 119, 28, 0.34); }
+    .btn--ghost {
+      background: transparent;
+      color: var(--sky);
+      border: 1px solid rgba(14, 165, 233, .35);
+      box-shadow: none;
+      font-weight: 600;
+    }
+    .btn--ghost:hover { background: rgba(14, 165, 233, .07); transform: none; box-shadow: none; }
+    .links { margin-top: 18px; display: flex; flex-direction: column; gap: 10px; text-align: center; }
+    .links a { color: var(--gold); font-size: .88rem; font-weight: 600; text-decoration: none; }
+    .links a:hover { color: var(--gold-light); }
+    .messages { list-style: none; margin: 0 0 18px; padding: 0; display: grid; gap: 8px; }
+    .messages li {
+      padding: 11px 14px; border-radius: 11px; font-size: .87rem;
+      border: 1px solid transparent;
+    }
+    .messages .success { background: #ECFDF5; color: #047857; border-color: #A7F3D0; }
+    .messages .error   { background: #FEF2F2; color: #B91C1C; border-color: #FECACA; }
+    .messages .warning { background: #FFFBEB; color: #B45309; border-color: #FDE68A; }
+    .messages .info    { background: #EFF6FF; color: #1D4ED8; border-color: #BFDBFE; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; }
+    .stat {
+      background: #F8FBFE; border: 1px solid rgba(14, 165, 233, .16);
+      border-radius: 14px; padding: 16px;
+    }
+    .stat__label { color: var(--muted); font-size: .78rem; text-transform: uppercase; letter-spacing: .05em; }
+    .stat__value { font-size: 1.6rem; font-weight: 700; color: var(--sky); margin-top: 4px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 12px; font-size: .89rem; }
+    th, td { text-align: left; padding: 9px 10px; border-bottom: 1px solid #EAF2F8; }
+    th { color: var(--muted); font-size: .78rem; text-transform: uppercase; letter-spacing: .04em; }
+    .topbar {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 12px; margin-bottom: 20px; flex-wrap: wrap;
+    }
+    .pill {
+      display: inline-block; padding: 3px 10px; border-radius: 999px;
+      font-size: .74rem; font-weight: 700;
+      background: rgba(14, 165, 233, .1); color: var(--sky);
+    }
+    form.inline { display: inline; }
+  </style>
+</head>
+<body>
+  <div class="card {% block card_class %}{% endblock %}">
+    <div class="brand">
+      <span class="brand__dot"></span>
+      <span class="brand__name">HORASOCIAL PRO</span>
+    </div>
+
+    {% if messages %}
+      <ul class="messages">
+        {% for message in messages %}
+          <li class="{{ message.tags }}">{{ message }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+
+    {% block content %}{% endblock %}
+  </div>
+</body>
+</html>
