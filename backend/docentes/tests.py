@@ -12,7 +12,7 @@ from django.test import TestCase
 from django.urls import reverse
 from django.utils import timezone
 
-from .models import Actividad, Asistencia, Sesion, Usuario
+from .models import Actividad, Asistencia, Sesion, SolicitudRecuperacion, Usuario
 
 CORREO = 'docente@test.local'
 CODIGO = 'DOC-9999'
@@ -198,3 +198,78 @@ class ApiLoginMaestroTests(BaseModuloDocentes):
         )
         self.assertEqual(respuesta.status_code, 302)
         self.assertIn('/login/', respuesta['Location'])
+
+
+class RecuperarContrasenaTests(BaseModuloDocentes):
+    """Formulario 'olvide mi contrasena'."""
+
+    DATOS = {
+        'usuario': CORREO,
+        'nombre_completo': 'Docente de Prueba',
+        'telefono': '3001234567',
+        'asignatura': 'Matematicas',
+    }
+
+    def test_crea_solicitud_pendiente_y_vuelve_al_login(self):
+        respuesta = self.client.post(reverse('docentes:recuperar'), self.DATOS)
+        self.assertEqual(respuesta.status_code, 302)
+        self.assertEqual(respuesta['Location'], reverse('docentes:login'))
+        solicitud = SolicitudRecuperacion.objects.get(usuario=CORREO)
+        self.assertEqual(solicitud.estado, SolicitudRecuperacion.ESTADO_PENDIENTE)
+        self.assertEqual(solicitud.asignatura, 'Matematicas')
+        self.assertEqual(solicitud.telefono, '3001234567')
+
+    def test_muestra_la_confirmacion_en_el_login(self):
+        respuesta = self.client.post(
+            reverse('docentes:recuperar'), self.DATOS, follow=True,
+        )
+        self.assertContains(respuesta, 'Solicitud registrada')
+
+    def test_rechaza_un_telefono_invalido(self):
+        datos = dict(self.DATOS, telefono='123')
+        respuesta = self.client.post(reverse('docentes:recuperar'), datos)
+        self.assertEqual(respuesta.status_code, 200)
+        self.assertContains(respuesta, 'telefono valido')
+        self.assertFalse(SolicitudRecuperacion.objects.exists())
+
+    def test_no_permite_dos_solicitudes_pendientes(self):
+        self.client.post(reverse('docentes:recuperar'), self.DATOS)
+        respuesta = self.client.post(reverse('docentes:recuperar'), self.DATOS)
+        self.assertEqual(respuesta.status_code, 200)
+        self.assertContains(respuesta, 'Ya existe una solicitud pendiente')
+        self.assertEqual(SolicitudRecuperacion.objects.count(), 1)
+
+    def test_la_pagina_ofrece_volver_al_login(self):
+        respuesta = self.client.get(reverse('docentes:recuperar'))
+        self.assertEqual(respuesta.status_code, 200)
+        self.assertContains(respuesta, reverse('docentes:login'))
+
+
+class RegistroTests(BaseModuloDocentes):
+    """Registro de docentes con contrasena cifrada."""
+
+    def test_registra_un_docente_con_clave_cifrada(self):
+        respuesta = self.client.post(reverse('docentes:registro'), {
+            'nombre_completo': 'Nuevo Docente',
+            'correo': 'nuevo@test.local',
+            'codigo': 'DOC-1111',
+            'grado': 'Ciencias',
+            'password1': 'ClaveNueva2026*',
+            'password2': 'ClaveNueva2026*',
+        })
+        self.assertEqual(respuesta.status_code, 302)
+        creado = Usuario.objects.get(correo='nuevo@test.local')
+        self.assertEqual(creado.rol, Usuario.ROL_PROFESOR)
+        self.assertTrue(creado.check_password('ClaveNueva2026*'))
+        self.assertNotIn('ClaveNueva2026*', creado.password)
+
+    def test_rechaza_correos_duplicados(self):
+        respuesta = self.client.post(reverse('docentes:registro'), {
+            'nombre_completo': 'Otro Docente',
+            'correo': CORREO,
+            'grado': '',
+            'password1': 'ClaveNueva2026*',
+            'password2': 'ClaveNueva2026*',
+        })
+        self.assertEqual(respuesta.status_code, 200)
+        self.assertContains(respuesta, 'Ya existe una cuenta')
