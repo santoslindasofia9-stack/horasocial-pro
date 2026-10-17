@@ -100,7 +100,8 @@
       border-radius: 50%;
       opacity: 0;
       box-shadow: 0 0 4px rgba(148, 178, 214, 0.45);
-      animation: sparkle-twinkle 4s ease-in-out infinite;
+      /* Delay/duration/max-opacity come from per-element --d / --dur / --so */
+      animation: sparkle-twinkle var(--dur, 4s) ease-in-out var(--d, 0s) infinite;
       will-change: opacity;
     }
     /* Occasional four-point star glint */
@@ -109,7 +110,14 @@
       height: 9px;
       background: #ffffff;
       clip-path: polygon(50% 0, 61% 39%, 100% 50%, 61% 61%, 50% 100%, 39% 61%, 0 50%, 39% 39%);
-      --so: 0.7;
+      --so: 0.55;
+    }
+    /* Literal "✨" glyph sparkles: pastel text twinkles, no dot geometry */
+    .sparkle.glyph {
+      border-radius: 0;
+      box-shadow: none;
+      line-height: 1;
+      --so: 0.55;
     }
     @keyframes sparkle-twinkle {
       0%, 100% { opacity: 0; }
@@ -119,15 +127,31 @@
       .sparkle, .sparkle.glint { animation: none; opacity: 0.35; }
     }
 
-    /* Pink pastel interactive tint: duplicate wave set revealed near the cursor.
-       Mask coordinates come from --mx/--my (relative to this layer's own box). */
-    .flow-field.flow-pink {
-      -webkit-mask-image: radial-gradient(circle 260px at var(--mx, -400px) var(--my, -400px), #000 0%, transparent 70%);
-      mask-image: radial-gradient(circle 260px at var(--mx, -400px) var(--my, -400px), #000 0%, transparent 70%);
+    /* Pink pastel waves — two pink copies sit over the dominant blue field:
+       1) .flow-pink-static — always-on pastel pink revealed across diagonal
+          "tramos" via a static linear-gradient mask; no mouse movement needed.
+       2) .flow-pink — cursor-reactive layer: radial mask follows --mx/--my
+          (written by a single rAF tick), parked off-canvas until the pointer moves. */
+    .flow-field.flow-pink-static {
+      -webkit-mask-image: linear-gradient(115deg, transparent 6%, #000 20%, transparent 34%, #000 48%, transparent 62%, #000 76%, transparent 90%);
+      mask-image: linear-gradient(115deg, transparent 6%, #000 20%, transparent 34%, #000 48%, transparent 62%, #000 76%, transparent 90%);
       -webkit-mask-clip: no-clip;
       mask-clip: no-clip;
     }
-    .flow-field.flow-pink svg { opacity: 0.45; }
+    .flow-field.flow-pink-static svg { opacity: 0.42; }
+    .flow-field.flow-pink {
+      -webkit-mask-image: radial-gradient(circle 280px at var(--mx, -400px) var(--my, -400px), #000 0%, transparent 70%);
+      mask-image: radial-gradient(circle 280px at var(--mx, -400px) var(--my, -400px), #000 0%, transparent 70%);
+      -webkit-mask-clip: no-clip;
+      mask-clip: no-clip;
+    }
+    .flow-field.flow-pink svg { opacity: 0.55; }
+
+    /* Developer credit: discreet tracked-out line under the copyright */
+    .dev-credit {
+      color: rgba(170, 119, 28, 0.85);
+      letter-spacing: 0.08em;
+    }
   </style>
 </head>
 <body class="bg-white font-body-md text-on-surface overflow-hidden min-h-screen h-screen relative flex flex-col justify-between">
@@ -193,14 +217,74 @@
 </svg>
 </div>
 
+<!-- Static pink tramos: always-on pastel pink across diagonal stretches, no cursor needed -->
+<div class="flow-field flow-pink-static wiggle" aria-hidden="true">
+    <svg viewBox="0 0 1600 900" preserveAspectRatio="none">
+        <defs>
+            <linearGradient id="gradPinkStatic" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#FFB6C1"/>
+                <stop offset="50%" stop-color="#f9c6d3"/>
+                <stop offset="100%" stop-color="#FFD1DC"/>
+            </linearGradient>
+        </defs>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.11" transform="translate(0 6.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.14" transform="translate(11 24.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.17" transform="translate(22 43.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.20" transform="translate(33 61.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.22" transform="translate(44 80.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.25" transform="translate(55 98.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.27" transform="translate(66 117.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.30" transform="translate(77 135.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.32" transform="translate(88 154.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.34" transform="translate(99 172.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.37" transform="translate(110 191.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.39" transform="translate(121 209.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.41" transform="translate(132 228.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.42" transform="translate(143 246.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.44" transform="translate(154 265.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.46" transform="translate(165 283.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.47" transform="translate(176 302.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.48" transform="translate(187 320.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.49" transform="translate(198 339.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.50" transform="translate(209 357.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.51" transform="translate(220 376.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.51" transform="translate(231 394.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.52" transform="translate(242 413.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.52" transform="translate(253 431.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.52" transform="translate(264 450.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.52" transform="translate(275 468.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.51" transform="translate(286 487.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.51" transform="translate(297 505.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.50" transform="translate(308 524.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.49" transform="translate(319 542.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.48" transform="translate(330 561.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.47" transform="translate(341 579.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.46" transform="translate(352 598.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.44" transform="translate(363 616.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.42" transform="translate(374 635.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.41" transform="translate(385 653.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.39" transform="translate(396 672.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.37" transform="translate(407 690.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.34" transform="translate(418 709.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.32" transform="translate(429 727.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.30" transform="translate(440 746.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.27" transform="translate(451 764.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.25" transform="translate(462 783.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.22" transform="translate(473 801.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.20" transform="translate(484 820.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.17" transform="translate(495 838.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.14" transform="translate(506 857.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.11" transform="translate(517 875.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    </svg>
+</div>
 <!-- Pink pastel overlay: duplicate of the wave set, revealed near the cursor via CSS mask -->
 <div class="flow-field flow-pink wiggle" aria-hidden="true">
     <svg viewBox="0 0 1600 900" preserveAspectRatio="none">
         <defs>
             <linearGradient id="gradPink" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stop-color="#ffd9e5"/>
-                <stop offset="50%" stop-color="#f7c8da"/>
-                <stop offset="100%" stop-color="#e8b7d0"/>
+                <stop offset="0%" stop-color="#FFB6C1"/>
+                <stop offset="50%" stop-color="#f9c6d3"/>
+                <stop offset="100%" stop-color="#FFD1DC"/>
             </linearGradient>
         </defs>
 <path class="wf-l" stroke="url(#gradPink)" opacity="0.11" transform="translate(0 6.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
@@ -305,6 +389,8 @@
 <div class="mb-sm">
 <span class="font-label-md text-label-md font-bold text-on-surface">HORASOCIAL PRO</span>
 <p class="font-label-sm text-label-sm text-on-surface-variant">© 2026 HORASOCIAL PRO: Gestión de Servicio Social Escolar</p>
+<!-- Developer credit -->
+<p class="font-label-sm text-label-sm dev-credit">Desarrollado por: Linda Santos</p>
 </div>
 <nav class="flex justify-center gap-md mb-1">
 <a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary" href="#">Términos</a>
@@ -334,37 +420,73 @@ document.querySelectorAll('.role-disabled').forEach(function (card) {
     });
 });
 
-// Sparkle field: subtle twinkling dots across the screen (decorative only)
+// Sparkle field: stratified twinkling dots covering the full viewport
+// (decorative only). The viewport is divided into an even grid of cells and
+// exactly one sparkle is placed per cell (centre + jitter confined to the
+// cell), so the distribution never clumps and reaches top to bottom.
 (function buildSparkles() {
     var layer = document.querySelector('.sparkle-layer');
     if (!layer) return;
 
-    var COUNT = 20;       // total sparkles
-    var GLINT_EVERY = 7;  // every 7th sparkle is a four-point star glint (~3 total)
-    var palette = ['#ffffff', '#f6e7bd', '#cfe8ff']; // white / soft gold / soft blue
-    var seed = 20261017;  // fixed seed: identical layout on every load
+    var COLS = 8;             // grid columns
+    var ROWS = 4;             // grid rows → 32 cells
+    var COUNT = COLS * ROWS;  // 32 elements: 28 dots + 4 "✨" glyphs
+    var GLYPH_CELLS = [5, 14, 22, 30]; // cells holding a "✨" glyph
+    var GLINT_EVERY = 7;      // every 7th non-glyph cell is a star glint (~5)
+    var seed = 20261017;      // fixed seed: identical layout on every load
 
     function rand() {
         seed = (seed * 1664525 + 1013904223) % 4294967296;
         return seed / 4294967296;
     }
 
+    // Dot palette, target weights: white 35%, pastel pink 25%, gold 20%, sky 20%
+    function pickColor(r) {
+        if (r < 0.35) return '#ffffff';
+        if (r < 0.60) return '#FFD1DC';
+        if (r < 0.80) return '#E6C687';
+        return '#cde9ff';
+    }
+    // Glyph palettes stay pastel (never pure white, it would vanish on white)
+    function pickGlyphColor(r) {
+        if (r < 0.40) return '#FFD1DC';
+        if (r < 0.75) return '#E6C687';
+        return '#cde9ff';
+    }
+
+    var cellW = 100 / COLS;
+    var cellH = 100 / ROWS;
     var frag = document.createDocumentFragment();
     for (var i = 0; i < COUNT; i++) {
+        var col = i % COLS;
+        var row = Math.floor(i / COLS);
         var dot = document.createElement('span');
-        var isGlint = (i % GLINT_EVERY) === 3;
-        dot.className = isGlint ? 'sparkle glint' : 'sparkle';
-        dot.style.left = (4 + rand() * 92).toFixed(2) + '%';
-        dot.style.top = (3 + rand() * 94).toFixed(2) + '%';
-        if (!isGlint) {
+        var isGlyph = GLYPH_CELLS.indexOf(i) !== -1;
+        var isGlint = !isGlyph && (i % GLINT_EVERY) === 3;
+        dot.className = isGlyph ? 'sparkle glyph' : (isGlint ? 'sparkle glint' : 'sparkle');
+
+        // Stratified placement: cell centre + jitter that stays inside the cell
+        var left = (col + 0.5) * cellW + (rand() - 0.5) * cellW * 0.7;
+        var top = (row + 0.5) * cellH + (rand() - 0.5) * cellH * 0.7;
+        dot.style.left = Math.min(97, Math.max(2, left)).toFixed(2) + '%';
+        dot.style.top = Math.min(97, Math.max(2, top)).toFixed(2) + '%';
+
+        if (isGlyph) {
+            dot.textContent = '✨';
+            dot.style.fontSize = (10 + rand() * 4).toFixed(1) + 'px'; // 10–14px
+            dot.style.color = pickGlyphColor(rand());
+            dot.style.setProperty('--so', (0.45 + rand() * 0.1).toFixed(2)); // capped at 0.55
+        } else if (isGlint) {
+            dot.style.setProperty('--so', '0.55');
+        } else {
             var size = (2 + rand() * 3).toFixed(1); // 2–5 px
             dot.style.width = size + 'px';
             dot.style.height = size + 'px';
-            dot.style.background = palette[Math.floor(rand() * palette.length)];
-            dot.style.setProperty('--so', (0.35 + rand() * 0.4).toFixed(2));
+            dot.style.background = pickColor(rand());
+            dot.style.setProperty('--so', (0.25 + rand() * 0.3).toFixed(2)); // capped at 0.55
         }
-        dot.style.animationDuration = (3.5 + rand() * 3).toFixed(2) + 's';
-        dot.style.animationDelay = (-rand() * 6).toFixed(2) + 's';
+        dot.style.setProperty('--dur', (3.5 + rand() * 3).toFixed(2) + 's');
+        dot.style.setProperty('--d', (-rand() * 6).toFixed(2) + 's');
         frag.appendChild(dot);
     }
     layer.appendChild(frag);
