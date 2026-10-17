@@ -13,11 +13,14 @@ La contrasena nunca se compara en texto plano: `authenticate()` recalcula el
 hash (PBKDF2) y lo contrasta con la columna `password` de la tabla `usuariosa`.
 """
 
+import json
+from functools import wraps
+
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.http import url_has_allowed_host_and_scheme
@@ -256,3 +259,98 @@ def api_login_maestro(request):
 
     messages.error(request, MENSAJE_CREDENCIALES)
     return redirect('docentes:login')
+
+
+# ==========================================================================
+# API JSON PARA LAS PAGINAS ESTATICAS (server.js en :3000, Live Server :5500)
+# ==========================================================================
+
+# Origenes autorizados a consumir la API desde otro puerto. Si el frontend se
+# publica en otro dominio, agregarlo aqui.
+ORIGENES_PERMITIDOS = {
+    'http://localhost:3000',
+    'http://127.0.0.1:3000',
+    'http://localhost:5500',
+    'http://127.0.0.1:5500',
+}
+
+
+def habilita_cors(view):
+    """
+    Agrega las cabeceras CORS a la respuesta.
+
+    Las paginas decoradas se sirven desde otro puerto (server.js en el 3000),
+    asi que el navegador aplica la politica de mismo origen: sin
+    `Access-Control-Allow-Origin` descarta la respuesta aunque el servidor la
+    haya generado bien.
+    """
+
+    @wraps(view)
+    def envoltura(request, *args, **kwargs):
+        respuesta = view(request, *args, **kwargs)
+        origen = request.headers.get('Origin', '')
+        if origen in ORIGENES_PERMITIDOS:
+            respuesta['Access-Control-Allow-Origin'] = origen
+            respuesta['Access-Control-Allow-Methods'] = 'POST, OPTIONS'
+            respuesta['Access-Control-Allow-Headers'] = 'Content-Type'
+            respuesta['Vary'] = 'Origin'
+        return respuesta
+
+    return envoltura
+
+
+def primer_error(formulario):
+    """Primer mensaje de error de un formulario, para responder en JSON."""
+    for errores in formulario.errors.get_json_data().values():
+        if errores:
+            return errores[0].get('message', 'Datos invalidos.')
+    return 'Datos invalidos.'
+
+
+@csrf_exempt
+@habilita_cors
+@require_http_methods(['POST', 'OPTIONS'])
+def api_recuperar_contrasena_maestro(request):
+    """
+    Endpoint JSON del formulario 'olvide mi contrasena'.
+
+    El HTML envia {usuario, nombre, telefono, asignatura} como JSON y espera
+    {"success": true}. Reutiliza `RecuperarContrasenaForm`, de modo que aplican
+    exactamente las mismas validaciones que el formulario de Django: telefono
+    de minimo 7 digitos y sin solicitudes pendientes duplicadas.
+    """
+
+    if request.method == 'OPTIONS':
+        # Preflight que dispara el navegador por Content-Type: application/json.
+        return HttpResponse(status=204)
+
+    try:
+        datos = json.loads(request.body or b'{}')
+    except (TypeError, ValueError):
+        return JsonResponse(
+            {'success': False, 'error': 'El cuerpo de la peticion no es JSON valido.'},
+            status=400,
+        )
+
+    if not isinstance(datos, dict):
+        return JsonResponse(
+            {'success': False, 'error': 'El cuerpo de la peticion debe ser un objeto JSON.'},
+            status=400,
+        )
+
+    # El HTML manda `nombre`; el modelo lo llama `nombre_completo`.
+    formulario = RecuperarContrasenaForm({
+        'usuario': str(datos.get('usuario', '')).strip(),
+        'nombre_completo': str(datos.get('nombre', '')).strip(),
+        'telefono': str(datos.get('telefono', '')).strip(),
+        'asignatura': str(datos.get('asignatura', '')).strip(),
+    })
+
+    if not formulario.is_valid():
+        return JsonResponse(
+            {'success': False, 'error': primer_error(formulario)},
+            status=400,
+        )
+
+    solicitud = formulario.save()
+    return JsonResponse({'success': True, 'folio': solicitud.id})

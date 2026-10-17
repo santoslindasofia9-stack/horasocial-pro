@@ -27,4 +27,11 @@ urlpatterns = [
     # Compatibilidad: el HTML actual postea a /api/login-maestro
     # (mismos campos `username` y `password` del server.js original).
     path('api/login-maestro', docentes_views.api_login_maestro, name='api-login-maestro'),
+
+    # El formulario de recuperacion envia JSON y espera {"success": true}.
+    path(
+        'api/recuperar-contrasena-maestro',
+        docentes_views.api_recuperar_contrasena_maestro,
+        name='api-recuperar-contrasena-maestro',
+    ),
 ]

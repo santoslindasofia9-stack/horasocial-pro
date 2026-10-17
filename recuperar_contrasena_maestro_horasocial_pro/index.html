@@ -548,6 +548,10 @@
 </footer>
 
 <script>
+// Backend Django: registra la solicitud en MySQL (Laragon).
+// Si el backend se mueve de host o puerto, cambiar solo esta URL.
+const API_BASE = 'http://127.0.0.1:8000';
+
 document.getElementById('recoveryForm').addEventListener('submit', async (e) => {
   e.preventDefault();
   const form = e.target;
@@ -583,7 +587,7 @@ document.getElementById('recoveryForm').addEventListener('submit', async (e) => 
   }
 
   try {
-    const res = await fetch('/api/recuperar-contrasena-maestro', {
+    const res = await fetch(API_BASE + '/api/recuperar-contrasena-maestro', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)

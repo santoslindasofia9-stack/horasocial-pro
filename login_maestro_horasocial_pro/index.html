@@ -492,7 +492,9 @@
 <div class="login-card">
 <h1>Iniciar Sesión: <span class="rol">profesores</span></h1>
 
-<form id="loginForm" action="/api/login-maestro" method="post" autocomplete="on">
+<!-- Backend Django: autenticacion real contra MySQL (Laragon).
+     Si el backend se mueve de host o puerto, cambiar solo esta URL. -->
+<form id="loginForm" action="http://127.0.0.1:8000/api/login-maestro" method="post" autocomplete="on">
 <div class="field">
 <label for="username">Código o correo electrónico</label>
 <div class="input-wrap">

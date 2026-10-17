@@ -6,7 +6,9 @@ Se ejecutan con:
 Usan una base de datos de prueba aparte, asi que no tocan los datos reales.
 """
 
+import json
 from datetime import timedelta
+from pathlib import Path
 
 from django.test import TestCase
 from django.urls import reverse
@@ -273,3 +275,96 @@ class RegistroTests(BaseModuloDocentes):
         })
         self.assertEqual(respuesta.status_code, 200)
         self.assertContains(respuesta, 'Ya existe una cuenta')
+
+
+class ApiRecuperarContrasenaTests(BaseModuloDocentes):
+    """Endpoint JSON que consume el formulario estatico de recuperacion."""
+
+    def _ruta(self):
+        return reverse('api-recuperar-contrasena-maestro')
+
+    def _post(self, payload, **extra):
+        return self.client.post(
+            self._ruta(),
+            data=json.dumps(payload),
+            content_type='application/json',
+            **extra,
+        )
+
+    def test_crea_la_solicitud_y_responde_success(self):
+        respuesta = self._post({
+            'usuario': CORREO,
+            'nombre': 'Docente de Prueba',
+            'telefono': '3001234567',
+            'asignatura': 'Matematicas',
+        })
+        self.assertEqual(respuesta.status_code, 200)
+        self.assertTrue(respuesta.json()['success'])
+        solicitud = SolicitudRecuperacion.objects.get(usuario=CORREO)
+        # El HTML envia `nombre` y el modelo lo guarda en `nombre_completo`.
+        self.assertEqual(solicitud.nombre_completo, 'Docente de Prueba')
+        self.assertEqual(solicitud.asignatura, 'Matematicas')
+
+    def test_telefono_corto_responde_400(self):
+        respuesta = self._post({
+            'usuario': CORREO,
+            'nombre': 'Docente de Prueba',
+            'telefono': '123',
+            'asignatura': 'Matematicas',
+        })
+        self.assertEqual(respuesta.status_code, 400)
+        self.assertFalse(respuesta.json()['success'])
+        self.assertFalse(SolicitudRecuperacion.objects.exists())
+
+    def test_json_invalido_responde_400(self):
+        respuesta = self.client.post(
+            self._ruta(), data='no soy json', content_type='application/json',
+        )
+        self.assertEqual(respuesta.status_code, 400)
+        self.assertFalse(respuesta.json()['success'])
+
+    def test_preflight_options_responde_204_con_cors(self):
+        respuesta = self.client.options(
+            self._ruta(), HTTP_ORIGIN='http://localhost:3000',
+        )
+        self.assertEqual(respuesta.status_code, 204)
+        self.assertEqual(
+            respuesta['Access-Control-Allow-Origin'], 'http://localhost:3000',
+        )
+
+    def test_origen_no_autorizado_no_recibe_cors(self):
+        respuesta = self.client.options(
+            self._ruta(), HTTP_ORIGIN='http://sitio-desconocido.example',
+        )
+        self.assertNotIn('Access-Control-Allow-Origin', respuesta)
+
+    def test_el_post_exitoso_tambien_lleva_cors(self):
+        respuesta = self._post({
+            'usuario': CORREO,
+            'nombre': 'Docente de Prueba',
+            'telefono': '3001234567',
+            'asignatura': 'Matematicas',
+        }, HTTP_ORIGIN='http://localhost:3000')
+        self.assertEqual(respuesta['Access-Control-Allow-Origin'], 'http://localhost:3000')
+
+
+class PaginasEstaticasConectadasTests(TestCase):
+    """
+    Guarda contra la regresion: si alguien vuelve a dejar las paginas
+    decoradas apuntando a las rutas muertas de server.js, vuelven los 404.
+    """
+
+    RAIZ = Path(__file__).resolve().parents[2]
+
+    def _leer(self, carpeta):
+        return (self.RAIZ / carpeta / 'index.html').read_text(encoding='utf-8')
+
+    def test_login_apunta_al_backend_de_django(self):
+        html = self._leer('login_maestro_horasocial_pro')
+        self.assertIn('action="http://127.0.0.1:8000/api/login-maestro"', html)
+        self.assertNotIn('action="/api/login-maestro"', html)
+
+    def test_recuperacion_apunta_al_backend_de_django(self):
+        html = self._leer('recuperar_contrasena_maestro_horasocial_pro')
+        self.assertIn("fetch(API_BASE + '/api/recuperar-contrasena-maestro'", html)
+        self.assertNotIn("fetch('/api/recuperar-contrasena-maestro'", html)
