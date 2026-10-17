@@ -116,8 +116,6 @@
   .stat .m{font-size:26px;color:var(--sky-500)}
   .stat b{font-size:25px;font-weight:800;color:var(--navy-900);line-height:1.1}
   .stat small{font-size:11px;font-weight:700;color:var(--slate)}
-  .stat.accent .m{color:var(--sky-600)}
-  .stat.accent b{color:var(--sky-600)}
 
   /* ---------- buscador ---------- */
   .search{position:relative;margin-bottom:14px}
@@ -185,8 +183,7 @@
   .b-chip.sc{background:#ede9fe;color:#6d28d9}
   .s-chip{font-size:10px;font-weight:800;padding:4px 9px;border-radius:999px;white-space:nowrap}
   .s-chip.ok{background:#d1fae5;color:#047857}
-  .s-chip.pend{background:#fef3c7;color:#b45309}
-  .s-chip.exc{background:#fee2e2;color:#b91c1c}
+    .s-chip.pend{background:#fef3c7;color:#b45309}
   .s-btns{display:flex;gap:6px}
   .btn-ico{width:34px;height:34px;border-radius:11px;border:1px solid var(--card-brd);
     background:var(--sky-50);color:var(--sky-700);display:flex;align-items:center;justify-content:center;
@@ -289,8 +286,6 @@
   .mov-row .mv-f{display:block;font-size:12px;font-weight:800;color:var(--ink)}
   .mov-row .mv-txt small{font-size:11px;color:var(--slate);font-weight:600;display:block;margin-top:2px}
   .mov-row .mv-h{font-size:12.5px;font-weight:800;color:var(--sky-600);white-space:nowrap}
-  .exc-box{padding-top:14px;border-top:1px dashed var(--card-brd);display:flex;flex-direction:column;gap:9px}
-  .exc-box p{font-size:12px;font-weight:700;color:var(--slate);line-height:1.5}
   .vbtn{display:inline-flex;align-items:center;gap:6px;background:var(--sky-600);color:#fff;border:0;border-radius:12px;
     padding:10px 13px;font-family:inherit;font-size:11.5px;font-weight:800;cursor:pointer;flex:0 0 auto;
     transition:background .2s,transform .12s,box-shadow .2s}
@@ -459,7 +454,6 @@
     <div class="stats">
       <div class="stat"><span class="m material-symbols-outlined">group</span><b id="stTotal">12</b><small>Total estudiantes</small></div>
       <div class="stat"><span class="m material-symbols-outlined">task_alt</span><b id="stAlDia">6</b><small>Al día</small></div>
-      <div class="stat accent"><span class="m material-symbols-outlined">description</span><b id="stExcusa">3</b><small>Con excusa</small></div>
       <div class="stat"><span class="m material-symbols-outlined">schedule</span><b id="stHoras">119</b><small>Horas registradas</small></div>
     </div>
   </section>
@@ -476,7 +470,6 @@
       <button class="chip" type="button" data-filtro="Brigada Ambiental">Brigada Ambiental</button>
       <button class="chip" type="button" data-filtro="Apoyo Académico">Apoyo Académico</button>
       <button class="chip" type="button" data-filtro="Servicios Comunitarios">Servicios Comunitarios</button>
-      <button class="chip" type="button" data-filtro="Excusas">Excusas</button>
     </div>
   </section>
 
@@ -494,10 +487,10 @@
 <!-- nav inferior glass + íconos, bien distribuida -->
 <nav>
   <div class="nav-inner">
-    <a class="nav-item" data-go data-file="../dashboard_maestro_horasocial_pro/index.html" data-served="/maestro/dashboard" href="/maestro/dashboard"><span class="ic"><span class="material-symbols-outlined">grid_view</span></span><small>Panel</small></a>
+    <a class="nav-item" data-go data-file="../dashboard_maestro_horasocial_pro/index.html" data-served="/profesor/dashboard" href="/profesor/dashboard"><span class="ic"><span class="material-symbols-outlined">grid_view</span></span><small>Panel</small></a>
     <a class="nav-item active" href="#"><span class="ic"><span class="material-symbols-outlined">group</span></span><small>Estudiantes</small></a>
-    <a class="nav-item" data-go data-file="../gestion_tecnica_maestro_horasocial_pro/index.html" data-served="/maestro/tecnico" href="/maestro/tecnico"><span class="ic"><span class="material-symbols-outlined">manage_accounts</span></span><small>Técnica</small></a>
-    <a class="nav-item" data-go data-file="../mensajes_maestro_horasocial_pro/index.html" data-served="/maestro/mensajes" href="/maestro/mensajes"><span class="ic"><span class="material-symbols-outlined">chat</span></span><small>Mensajes</small></a>
+    <a class="nav-item" data-go data-file="../gestion_tecnica_maestro_horasocial_pro/index.html" data-served="/profesor/tecnica" href="/profesor/tecnica"><span class="ic"><span class="material-symbols-outlined">manage_accounts</span></span><small>Técnica</small></a>
+    <a class="nav-item" data-go data-file="../mensajes_maestro_horasocial_pro/index.html" data-served="/profesor/mensajes" href="/profesor/mensajes"><span class="ic"><span class="material-symbols-outlined">chat</span></span><small>Mensajes</small></a>
   </div>
 </nav>
 
@@ -611,8 +604,7 @@
     function clsBrigada(b){ return b === 'Brigada Ambiental' ? 'ba' : (b === 'Apoyo Académico' ? 'aa' : 'sc'); }
     function chipEstado(e){
       if (e.estado === 'Al día') return '<span class="s-chip ok">Al día</span>';
-      if (e.estado === 'Pendiente') return '<span class="s-chip pend">Pendiente</span>';
-      return '<span class="s-chip exc">Excusa</span>';
+      return '<span class="s-chip pend">Pendiente</span>';
     }
 
     /* ---------- avatares: refuerzo del onerror inline ---------- */
@@ -648,11 +640,11 @@
           historial: [ { f: '9 sep',  h: 4, n: 'Brigada ambiental' }, { f: '6 sep',  h: 5, n: 'Brigada ambiental' }, { f: '3 sep',  h: 3, n: 'Brigada ambiental' } ] },
         { nombre: 'Samuel Rojas',         brigada: 'Brigada Ambiental',      codigo: 'HS-2026-002', horas: 10, estado: 'Pendiente', correo: 'samuel.rojas@horasocial.edu', telefono: '+57 300 222 3344',
           historial: [ { f: '8 sep',  h: 4, n: 'Brigada ambiental' }, { f: '4 sep',  h: 3, n: 'Brigada ambiental' }, { f: '1 sep',  h: 3, n: 'Brigada ambiental' } ] },
-        { nombre: 'Mariana Cárdenas',     brigada: 'Apoyo Académico',        codigo: 'HS-2026-003', horas: 8,  estado: 'Excusa',    correo: 'mariana.cardenas@horasocial.edu', telefono: '+57 300 333 4455',
+        { nombre: 'Mariana Cárdenas',     brigada: 'Apoyo Académico',        codigo: 'HS-2026-003', horas: 8,  estado: 'Pendiente',    correo: 'mariana.cardenas@horasocial.edu', telefono: '+57 300 333 4455',
           historial: [ { f: '7 sep',  h: 3, n: 'Apoyo académico' }, { f: '2 sep',  h: 3, n: 'Apoyo académico' }, { f: '29 ago', h: 2, n: 'Apoyo académico' } ] },
         { nombre: 'Sebastián Gómez',      brigada: 'Servicios Comunitarios', codigo: 'HS-2026-004', horas: 14, estado: 'Al día',     correo: 'sebastian.gomez@horasocial.edu', telefono: '+57 300 444 5566',
           historial: [ { f: '10 sep', h: 5, n: 'Servicios comunitarios' }, { f: '6 sep',  h: 4, n: 'Servicios comunitarios' }, { f: '1 sep',  h: 5, n: 'Servicios comunitarios' } ] },
-        { nombre: 'Isabella Torres',      brigada: 'Brigada Ambiental',      codigo: 'HS-2026-005', horas: 9,  estado: 'Excusa',    correo: 'isabella.torres@horasocial.edu', telefono: '+57 300 555 6677',
+        { nombre: 'Isabella Torres',      brigada: 'Brigada Ambiental',      codigo: 'HS-2026-005', horas: 9,  estado: 'Pendiente',    correo: 'isabella.torres@horasocial.edu', telefono: '+57 300 555 6677',
           historial: [ { f: '7 sep',  h: 3, n: 'Brigada ambiental' }, { f: '5 sep',  h: 3, n: 'Brigada ambiental' }, { f: '31 ago', h: 3, n: 'Brigada ambiental' } ] },
         { nombre: 'Juan David Muñoz',     brigada: 'Apoyo Académico',        codigo: 'HS-2026-006', horas: 6,  estado: 'Pendiente', correo: 'juan.munoz@horasocial.edu', telefono: '+57 300 666 7788',
           historial: [ { f: '8 sep',  h: 2, n: 'Apoyo académico' }, { f: '4 sep',  h: 2, n: 'Apoyo académico' }, { f: '30 ago', h: 2, n: 'Apoyo académico' } ] },
@@ -666,7 +658,7 @@
           historial: [ { f: '9 sep',  h: 5, n: 'Servicios comunitarios' }, { f: '6 sep',  h: 4, n: 'Servicios comunitarios' }, { f: '2 sep',  h: 4, n: 'Servicios comunitarios' } ] },
         { nombre: 'Laura Gutiérrez',      brigada: 'Brigada Ambiental',      codigo: 'HS-2026-011', horas: 8,  estado: 'Al día',     correo: 'laura.gutierrez@horasocial.edu', telefono: '+57 300 202 2233',
           historial: [ { f: '8 sep',  h: 3, n: 'Brigada ambiental' }, { f: '5 sep',  h: 3, n: 'Brigada ambiental' }, { f: '1 sep',  h: 2, n: 'Brigada ambiental' } ] },
-        { nombre: 'Daniel Salazar',       brigada: 'Apoyo Académico',        codigo: 'HS-2026-012', horas: 5,  estado: 'Excusa',    correo: 'daniel.salazar@horasocial.edu', telefono: '+57 300 303 3344',
+        { nombre: 'Daniel Salazar',       brigada: 'Apoyo Académico',        codigo: 'HS-2026-012', horas: 5,  estado: 'Pendiente',    correo: 'daniel.salazar@horasocial.edu', telefono: '+57 300 303 3344',
           historial: [ { f: '6 sep',  h: 2, n: 'Apoyo académico' }, { f: '3 sep',  h: 2, n: 'Apoyo académico' }, { f: '30 ago', h: 1, n: 'Apoyo académico' } ] }
       ];
     }
@@ -717,7 +709,6 @@
       return [
         { id: 1, texto: '3 estudiantes con horas pendientes de registro', tiempo: 'hace 5 min',  leido: false },
         { id: 2, texto: 'Brigada Ambiental registró 12 horas nuevas',      tiempo: 'hace 2 h',    leido: false },
-        { id: 3, texto: 'Nueva solicitud de excusa: Mariana Cárdenas',     tiempo: 'hace 3 h',    leido: false },
         { id: 4, texto: 'Reporte de Servicios Comunitarios por revisar',   tiempo: 'ayer',        leido: false }
       ];
     }
@@ -739,16 +730,14 @@
 
     /* ---------- stats ---------- */
     function renderStats(){
-      var total = est.length, alDia = 0, exc = 0, horasT = 0;
+      var total = est.length, alDia = 0, horasT = 0;
       est.forEach(function(s){
         if (s.estado === 'Al día') alDia++;
-        if (s.estado === 'Excusa') exc++;
         horasT += s.horas;
       });
-      var a = $('stTotal'), b = $('stAlDia'), c = $('stExcusa'), d = $('stHoras');
+      var a = $('stTotal'), b = $('stAlDia'), d = $('stHoras');
       if (a) a.textContent = total;
       if (b) b.textContent = alDia;
-      if (c) c.textContent = exc;
       if (d) d.textContent = horasT;
     }
 
@@ -760,7 +749,7 @@
     function filtrados(){
       var q = norm($('stSearch') ? $('stSearch').value : '');
       return est.filter(function(s){
-        var okF = filtroActual === 'Todas' || (filtroActual === 'Excusas' ? s.estado === 'Excusa' : s.brigada === filtroActual);
+        var okF = filtroActual === 'Todas' || s.brigada === filtroActual;
         var okQ = !q || norm(s.nombre).indexOf(q) !== -1 || norm(s.codigo).indexOf(q) !== -1;
         return okF && okQ;
       });
@@ -826,10 +815,6 @@
       s.historial.forEach(function(m){
         movs += '<div class="mov-row"><div class="mv-txt"><span class="mv-f">' + esc(m.f) + '</span><small>' + esc(m.n) + '</small></div><b class="mv-h">+' + m.h + ' h</b></div>';
       });
-      var exc = s.estado === 'Excusa'
-        ? '<div class="exc-box"><p>Este estudiante tiene una excusa pendiente por validar. Al aprobarla, su estado pasará a Al día.</p>' +
-          '<button class="vbtn" type="button" data-excusa="' + esc(s.codigo) + '"><span class="material-symbols-outlined">how_to_reg</span>Aprobar excusa</button></div>'
-        : '';
       box.innerHTML =
         '<div class="phero">' +
           '<div class="s-av ' + cls + '">' + esc(iniciales(s.nombre)) + '</div>' +
@@ -845,8 +830,7 @@
           '<div class="bar-row"><span>Progreso · ' + s.horas + ' / ' + META + ' h</span><b>' + p + '%</b></div>' +
           '<div class="bar"><div class="bar-fill" style="width:' + p + '%"></div></div>' +
         '</div>' +
-        '<div class="mov-h">Historial de movimientos</div>' + movs +
-        exc;
+        '<div class="mov-h">Historial de movimientos</div>' + movs;
     }
 
     /* ---------- modal registrar horas ---------- */
@@ -937,20 +921,6 @@
         var s2 = byCodigo(hb.getAttribute('data-horas'));
         if (s2) abrirHoras(s2);
       }
-    });
-
-    var perfilBody = $('perfilBody');
-    if (perfilBody) perfilBody.addEventListener('click', function(e){
-      var btn = e.target && e.target.closest ? e.target.closest('[data-excusa]') : null;
-      if (!btn) return;
-      var s = byCodigo(btn.getAttribute('data-excusa'));
-      if (!s || s.estado !== 'Excusa') return;
-      s.estado = 'Al día';
-      guardarEstudiantes();
-      renderStats();
-      renderList();
-      renderPerfilModal(s);
-      toast('Excusa aprobada: ' + s.nombre);
     });
 
     var btnReg = $('btnRegistrarHoras');

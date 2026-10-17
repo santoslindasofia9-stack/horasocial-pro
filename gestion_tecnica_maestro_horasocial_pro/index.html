@@ -561,10 +561,10 @@
 <!-- nav inferior glass + íconos, bien distribuida -->
 <nav>
   <div class="nav-inner">
-    <a class="nav-item" data-go data-file="../dashboard_maestro_horasocial_pro/index.html" data-served="/maestro/dashboard" href="/maestro/dashboard"><span class="ic"><span class="material-symbols-outlined">grid_view</span></span><small>Panel</small></a>
-    <a class="nav-item" data-go data-file="../gestion_estudiantes_maestro_horasocial_pro/index.html" data-served="/maestro/estudiantes" href="/maestro/estudiantes"><span class="ic"><span class="material-symbols-outlined">group</span></span><small>Estudiantes</small></a>
+    <a class="nav-item" data-go data-file="../dashboard_maestro_horasocial_pro/index.html" data-served="/profesor/dashboard" href="/profesor/dashboard"><span class="ic"><span class="material-symbols-outlined">grid_view</span></span><small>Panel</small></a>
+    <a class="nav-item" data-go data-file="../gestion_estudiantes_maestro_horasocial_pro/index.html" data-served="/profesor/estudiantes" href="/profesor/estudiantes"><span class="ic"><span class="material-symbols-outlined">group</span></span><small>Estudiantes</small></a>
     <a class="nav-item active" href="#"><span class="ic"><span class="material-symbols-outlined">manage_accounts</span></span><small>Técnica</small></a>
-    <a class="nav-item" data-go data-file="../mensajes_maestro_horasocial_pro/index.html" data-served="/maestro/mensajes" href="/maestro/mensajes"><span class="ic"><span class="material-symbols-outlined">chat</span></span><small>Mensajes</small></a>
+    <a class="nav-item" data-go data-file="../mensajes_maestro_horasocial_pro/index.html" data-served="/profesor/mensajes" href="/profesor/mensajes"><span class="ic"><span class="material-symbols-outlined">chat</span></span><small>Mensajes</small></a>
   </div>
 </nav>
 
@@ -936,8 +936,7 @@
       return [
         { id: 1, texto: '3 estudiantes esperan verificación de asistencia', tiempo: 'hace 5 min',  leido: false },
         { id: 2, texto: 'Brigada Ambiental registró 5 horas nuevas',        tiempo: 'hace 2 h',    leido: false },
-        { id: 3, texto: 'Nuevo reporte de Apoyo Académico',                 tiempo: 'ayer',        leido: false },
-        { id: 4, texto: 'Solicitud de excusa recibida: Juan Pérez',         tiempo: 'hace 2 días', leido: false }
+        { id: 3, texto: 'Nuevo reporte de Apoyo Académico',                 tiempo: 'ayer',        leido: false }
       ];
     }
     function cargarNotifs(){

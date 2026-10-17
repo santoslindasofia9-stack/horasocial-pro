@@ -231,9 +231,9 @@
 <!-- nav inferior -->
 <nav>
   <div class="nav-inner">
-    <a class="nav-item" data-go data-file="../dashboard_maestro_horasocial_pro/index.html" data-served="/maestro/dashboard" href="/maestro/dashboard"><span class="ic"><span class="material-symbols-outlined">grid_view</span></span><small>Panel</small></a>
-    <a class="nav-item" data-go data-file="../gestion_estudiantes_maestro_horasocial_pro/index.html" data-served="/maestro/estudiantes" href="/maestro/estudiantes"><span class="ic"><span class="material-symbols-outlined">group</span></span><small>Estudiantes</small></a>
-    <a class="nav-item" data-go data-file="../gestion_tecnica_maestro_horasocial_pro/index.html" data-served="/maestro/tecnico" href="/maestro/tecnico"><span class="ic"><span class="material-symbols-outlined">manage_accounts</span></span><small>Técnica</small></a>
+    <a class="nav-item" data-go data-file="../dashboard_maestro_horasocial_pro/index.html" data-served="/profesor/dashboard" href="/profesor/dashboard"><span class="ic"><span class="material-symbols-outlined">grid_view</span></span><small>Panel</small></a>
+    <a class="nav-item" data-go data-file="../gestion_estudiantes_maestro_horasocial_pro/index.html" data-served="/profesor/estudiantes" href="/profesor/estudiantes"><span class="ic"><span class="material-symbols-outlined">group</span></span><small>Estudiantes</small></a>
+    <a class="nav-item" data-go data-file="../gestion_tecnica_maestro_horasocial_pro/index.html" data-served="/profesor/tecnica" href="/profesor/tecnica"><span class="ic"><span class="material-symbols-outlined">manage_accounts</span></span><small>Técnica</small></a>
     <a class="nav-item active" href="#"><span class="ic"><span class="material-symbols-outlined">chat</span></span><small>Mensajes</small></a>
   </div>
 </nav>
@@ -300,7 +300,7 @@
         leidos[s.id] = true; LS.set('horasocial_maestro_msg_leidos_v1', leidos);
         var target = (location.protocol === 'file:')
           ? '../chat_maestro_horasocial_pro/index.html?id=' + s.id
-          : '/maestro/chat?id=' + s.id;
+          : '/profesor/chat?id=' + s.id;
         window.location.assign(target);
       });
       box.appendChild(row);

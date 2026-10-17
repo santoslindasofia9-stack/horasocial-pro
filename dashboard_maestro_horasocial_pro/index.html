@@ -266,7 +266,6 @@
   .att-info small{font-size:11.5px;color:var(--slate);font-weight:600;display:block;margin-top:3px;line-height:1.45}
   .t-chip{display:inline-block;font-size:10px;font-weight:800;padding:3px 8px;border-radius:999px;margin-left:6px;vertical-align:middle}
   .t-normal{background:var(--sky-100);color:var(--sky-700)}
-  .t-excusa{background:#ffedd5;color:#c2410c}
   .vbtn{display:inline-flex;align-items:center;gap:6px;background:var(--sky-600);color:#fff;border:0;border-radius:12px;
     padding:10px 13px;font-family:inherit;font-size:11.5px;font-weight:800;cursor:pointer;flex:0 0 auto;
     transition:background .2s,transform .12s,box-shadow .2s}
@@ -504,7 +503,7 @@
   <section>
     <div class="sec-head"><h3><span class="m material-symbols-outlined">bolt</span>Accesos rápidos</h3></div>
     <div class="quick">
-      <a class="qcard" id="btnVerificar" href="/maestro/estudiantes" role="button" aria-label="Verificar asistencia">
+      <a class="qcard" id="btnVerificar" href="/profesor/estudiantes" role="button" aria-label="Verificar asistencia">
         <span class="qico amber"><span class="material-symbols-outlined">how_to_reg</span></span>
         <span class="qinfo"><b>Verificar Asistencia</b><small id="pendSmall">12 pendientes hoy</small></span>
         <span class="material-symbols-outlined arr">arrow_forward_ios</span>
@@ -541,10 +540,10 @@
 <!-- nav inferior glass + íconos, bien distribuida -->
 <nav>
   <div class="nav-inner">
-    <a class="nav-item active" data-go data-file="#" data-served="/maestro/dashboard" href="#"><span class="ic"><span class="material-symbols-outlined">grid_view</span></span><small>Panel</small></a>
-    <a class="nav-item" data-go data-file="../gestion_estudiantes_maestro_horasocial_pro/index.html" data-served="/maestro/estudiantes" href="/maestro/estudiantes"><span class="ic"><span class="material-symbols-outlined">group</span></span><small>Estudiantes</small></a>
-    <a class="nav-item" data-go data-file="../gestion_tecnica_maestro_horasocial_pro/index.html" data-served="/maestro/tecnico" href="/maestro/tecnico"><span class="ic"><span class="material-symbols-outlined">manage_accounts</span></span><small>Técnica</small></a>
-    <a class="nav-item" data-go data-file="../mensajes_maestro_horasocial_pro/index.html" data-served="/maestro/mensajes" href="/maestro/mensajes"><span class="ic"><span class="material-symbols-outlined">chat</span></span><small>Mensajes</small></a>
+    <a class="nav-item active" data-go data-file="#" data-served="/profesor/dashboard" href="#"><span class="ic"><span class="material-symbols-outlined">grid_view</span></span><small>Panel</small></a>
+    <a class="nav-item" data-go data-file="../gestion_estudiantes_maestro_horasocial_pro/index.html" data-served="/profesor/estudiantes" href="/profesor/estudiantes"><span class="ic"><span class="material-symbols-outlined">group</span></span><small>Estudiantes</small></a>
+    <a class="nav-item" data-go data-file="../gestion_tecnica_maestro_horasocial_pro/index.html" data-served="/profesor/tecnica" href="/profesor/tecnica"><span class="ic"><span class="material-symbols-outlined">manage_accounts</span></span><small>Técnica</small></a>
+    <a class="nav-item" data-go data-file="../mensajes_maestro_horasocial_pro/index.html" data-served="/profesor/mensajes" href="/profesor/mensajes"><span class="ic"><span class="material-symbols-outlined">chat</span></span><small>Mensajes</small></a>
   </div>
 </nav>
 
@@ -694,18 +693,15 @@
     /* ---------- asistencia en localStorage ---------- */
     function seedAsistencia(){
       return [
-        { id: 1,  nombre: 'Valentina Ospina',      actividad: 'Brigada Ambiental',      fecha: '8 sep',  horas: 4, tipo: 'normal', v: false },
-        { id: 2,  nombre: 'Samuel Rojas',          actividad: 'Brigada Ambiental',      fecha: '8 sep',  horas: 3, tipo: 'normal', v: false },
-        { id: 3,  nombre: 'Mariana Cárdenas',      actividad: 'Apoyo Académico',        fecha: '8 sep',  horas: 2, tipo: 'excusa', v: false },
-        { id: 4,  nombre: 'Sebastián Gómez',       actividad: 'Servicios Comunitarios', fecha: '8 sep',  horas: 4, tipo: 'normal', v: false },
-        { id: 5,  nombre: 'Isabella Torres',       actividad: 'Brigada Ambiental',      fecha: '9 sep',  horas: 3, tipo: 'excusa', v: false },
-        { id: 6,  nombre: 'Juan David Muñoz',      actividad: 'Apoyo Académico',        fecha: '9 sep',  horas: 2, tipo: 'normal', v: false },
-        { id: 7,  nombre: 'Sofía Ramírez',         actividad: 'Servicios Comunitarios', fecha: '9 sep',  horas: 5, tipo: 'normal', v: false },
-        { id: 8,  nombre: 'Andrés Felipe Castro',  actividad: 'Brigada Ambiental',      fecha: '9 sep',  horas: 3, tipo: 'normal', v: false },
-        { id: 9,  nombre: 'Camila Arias',          actividad: 'Apoyo Académico',        fecha: '9 sep',  horas: 2, tipo: 'normal', v: false },
-        { id: 10, nombre: 'Nicolás Herrera',       actividad: 'Servicios Comunitarios', fecha: '10 sep', horas: 4, tipo: 'excusa', v: false },
-        { id: 11, nombre: 'Laura Gutiérrez',       actividad: 'Brigada Ambiental',      fecha: '10 sep', horas: 3, tipo: 'normal', v: false },
-        { id: 12, nombre: 'Daniel Salazar',        actividad: 'Apoyo Académico',        fecha: '10 sep', horas: 2, tipo: 'normal', v: false }
+        { id: 1,  nombre: 'Valentina Ospina',      actividad: 'Brigada Ambiental',      fecha: '8 sep',  horas: 4, v: false },
+        { id: 2,  nombre: 'Samuel Rojas',          actividad: 'Brigada Ambiental',      fecha: '8 sep',  horas: 3, v: false },
+        { id: 4,  nombre: 'Sebastián Gómez',       actividad: 'Servicios Comunitarios', fecha: '8 sep',  horas: 4, v: false },
+        { id: 6,  nombre: 'Juan David Muñoz',      actividad: 'Apoyo Académico',        fecha: '9 sep',  horas: 2, v: false },
+        { id: 7,  nombre: 'Sofía Ramírez',         actividad: 'Servicios Comunitarios', fecha: '9 sep',  horas: 5, v: false },
+        { id: 8,  nombre: 'Andrés Felipe Castro',  actividad: 'Brigada Ambiental',      fecha: '9 sep',  horas: 3, v: false },
+        { id: 9,  nombre: 'Camila Arias',          actividad: 'Apoyo Académico',        fecha: '9 sep',  horas: 2, v: false },
+        { id: 11, nombre: 'Laura Gutiérrez',       actividad: 'Brigada Ambiental',      fecha: '10 sep', horas: 3, v: false },
+        { id: 12, nombre: 'Daniel Salazar',        actividad: 'Apoyo Académico',        fecha: '10 sep', horas: 2, v: false }
       ];
     }
     function cargarAsistencia(){
@@ -730,8 +726,7 @@
       return [
         { id: 1, texto: '3 estudiantes esperan verificación de asistencia', tiempo: 'hace 5 min',  leido: false },
         { id: 2, texto: 'Brigada Ambiental registró 5 horas nuevas',        tiempo: 'hace 2 h',    leido: false },
-        { id: 3, texto: 'Nuevo reporte de Apoyo Académico',                 tiempo: 'ayer',        leido: false },
-        { id: 4, texto: 'Solicitud de excusa recibida: Juan Pérez',         tiempo: 'hace 2 días', leido: false }
+        { id: 3, texto: 'Nuevo reporte de Apoyo Académico',                 tiempo: 'ayer',        leido: false }
       ];
     }
     function cargarNotifs(){
@@ -825,8 +820,8 @@
       if (all) all.classList.toggle('show', pend === 0);
       var html = '';
       att.forEach(function(r){
-        var tcls = r.tipo === 'excusa' ? 't-chip t-excusa' : 't-chip t-normal';
-        var ttxt = r.tipo === 'excusa' ? 'Excusa' : 'Normal';
+        var tcls = 't-chip t-normal';
+        var ttxt = 'Normal';
         html += '<div class="att-row' + (r.v ? ' done' : '') + '" data-id="' + r.id + '">' +
           '<div class="att-info"><b>' + esc(r.nombre) + '</b>' +
           '<small>' + esc(r.actividad) + ' · ' + esc(r.fecha) + ' · ' + r.horas + ' h<span class="' + tcls + '">' + ttxt + '</span></small></div>' +
