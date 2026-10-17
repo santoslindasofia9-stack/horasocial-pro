@@ -188,14 +188,20 @@
       letter-spacing: 0.08em;
       text-transform: uppercase;
       color: #fff;
-      background: var(--sky);
+      background: linear-gradient(135deg, #D4AF37, #F3E5AB, #AA771C);
       border: none;
       border-radius: 10px;
       cursor: pointer;
-      box-shadow: 0 2px 8px rgba(56, 189, 248, 0.35);
-      transition: background .2s ease, transform .15s ease, box-shadow .2s ease;
+      border: 1px solid rgba(170, 119, 28, 0.55);
+      box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+      text-shadow: 0 1px 2px rgba(122, 84, 6, 0.55);
+      transition: background .2s ease, transform .15s ease, box-shadow .2s ease, filter .2s ease;
     }
-    .btn-ingresar:hover { background: var(--sky-dark); box-shadow: 0 4px 12px rgba(56, 189, 248, 0.45); }
+    .btn-ingresar:hover {
+      background: linear-gradient(135deg, #D4AF37, #F3E5AB, #AA771C);
+      filter: brightness(1.05);
+      box-shadow: 0 6px 20px rgba(212, 175, 55, 0.55);
+    }
     .btn-ingresar:active { transform: scale(0.98); }
     .forgot {
       display: inline-block;
@@ -237,6 +243,48 @@
       .login-card { padding: 24px 18px; }
       .site-footer { justify-content: center; }
     }
+
+    /* ---- decorative layers ported from welcome / role selection ---- */
+    /* Decorative sparkle layer: subtle twinkling dots behind the content */
+        .sparkle-layer {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        .sparkle{position:absolute;border-radius:50%;opacity:0;animation:sparkle-twinkle var(--dur,4s) ease-in-out var(--d,0s) infinite;will-change:opacity}
+        .sparkle.c-pink{background:#F472B6;box-shadow:0 0 7px 1px rgba(244,114,182,.65)}
+        .sparkle.c-gold{background:#E0A526;box-shadow:0 0 7px 1px rgba(224,165,38,.65)}
+        .sparkle.c-sky{background:#38BDF8;box-shadow:0 0 7px 1px rgba(56,189,248,.65)}
+        .sparkle.c-rose{background:#EC4899;box-shadow:0 0 8px 2px rgba(236,72,153,.6)}
+        .sparkle.glint{width:13px;height:13px;border-radius:0;background:#EC4899;clip-path:polygon(50% 0,61% 39%,100% 50%,61% 61%,50% 100%,39% 61%,0 50%,39% 39%);filter:drop-shadow(0 0 4px rgba(236,72,153,.55));--so:.85}
+        .sparkle.glint.c-gold{background:#E0A526;filter:drop-shadow(0 0 4px rgba(224,165,38,.55))}
+        .sparkle.glint.c-sky{background:#38BDF8;filter:drop-shadow(0 0 4px rgba(56,189,248,.55))}
+        @keyframes sparkle-twinkle{0%,100%{opacity:0}50%{opacity:var(--so,.5)}}
+        @media (prefers-reduced-motion: reduce){.sparkle{animation:none;opacity:.7}}
+
+    /* Pink pastel waves — two pink copies sit over the dominant blue field:
+           1) .flow-pink-static — always-on pastel pink revealed across diagonal
+              "tramos" via a static linear-gradient mask; no mouse movement needed.
+           2) .flow-pink — cursor-reactive layer: radial mask follows --mx/--my
+              (written by a single rAF tick), parked off-canvas until the pointer moves. */
+        .flow-field.flow-pink-static {
+            -webkit-mask-image: linear-gradient(115deg, transparent 2%, #000 14%, transparent 28%, #000 42%, transparent 56%, #000 70%, transparent 84%);
+            mask-image: linear-gradient(115deg, transparent 2%, #000 14%, transparent 28%, #000 42%, transparent 56%, #000 70%, transparent 84%);
+            -webkit-mask-clip: no-clip;
+            mask-clip: no-clip;
+        }
+        .flow-field.flow-pink-static svg { opacity: 0.9; }
+        .flow-field.flow-pink {
+            -webkit-mask-image: radial-gradient(circle 340px at var(--mx, -400px) var(--my, -400px), #000 0%, transparent 70%);
+            mask-image: radial-gradient(circle 340px at var(--mx, -400px) var(--my, -400px), #000 0%, transparent 70%);
+            -webkit-mask-clip: no-clip;
+            mask-clip: no-clip;
+        }
+        .flow-field.flow-pink svg { opacity: 1; }
+        /* Pink layers render as a wider glint riding on top of the thin blue lines */
+        .flow-field.flow-pink-static .wf-l, .flow-field.flow-pink .wf-l { stroke-width: 1.3; }
 </style>
 </head>
 <body>
@@ -302,6 +350,129 @@
 </svg>
 </div>
 
+
+<!-- Static pink tramos: always-on pastel pink across diagonal stretches, no cursor needed -->
+<div class="flow-field flow-pink-static wiggle" aria-hidden="true">
+    <svg viewBox="0 0 1600 900" preserveAspectRatio="none">
+        <defs>
+            <linearGradient id="gradPinkStatic" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#FFA9C6"/>
+                <stop offset="50%" stop-color="#F58BB5"/>
+                <stop offset="100%" stop-color="#E97CA8"/>
+            </linearGradient>
+        </defs>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.23" transform="translate(0 6.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.28" transform="translate(11 24.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.33" transform="translate(22 43.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.40" transform="translate(33 61.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.44" transform="translate(44 80.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.51" transform="translate(55 98.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.54" transform="translate(66 117.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.60" transform="translate(77 135.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.65" transform="translate(88 154.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.68" transform="translate(99 172.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.74" transform="translate(110 191.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.75" transform="translate(121 209.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.75" transform="translate(132 228.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.75" transform="translate(143 246.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.75" transform="translate(154 265.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.75" transform="translate(165 283.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.75" transform="translate(176 302.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.75" transform="translate(187 320.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.75" transform="translate(198 339.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.75" transform="translate(209 357.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.75" transform="translate(220 376.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.75" transform="translate(231 394.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.75" transform="translate(242 413.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.75" transform="translate(253 431.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.75" transform="translate(264 450.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.75" transform="translate(275 468.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.75" transform="translate(286 487.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.75" transform="translate(297 505.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.75" transform="translate(308 524.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.75" transform="translate(319 542.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.75" transform="translate(330 561.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.75" transform="translate(341 579.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.75" transform="translate(352 598.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.75" transform="translate(363 616.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.75" transform="translate(374 635.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.75" transform="translate(385 653.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.75" transform="translate(396 672.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.74" transform="translate(407 690.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.68" transform="translate(418 709.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.65" transform="translate(429 727.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.60" transform="translate(440 746.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.54" transform="translate(451 764.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.51" transform="translate(462 783.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.44" transform="translate(473 801.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.40" transform="translate(484 820.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.33" transform="translate(495 838.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.28" transform="translate(506 857.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.23" transform="translate(517 875.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    </svg>
+</div>
+<!-- Pink pastel overlay: duplicate of the wave set, revealed near the cursor via CSS mask -->
+<div class="flow-field flow-pink wiggle" aria-hidden="true">
+    <svg viewBox="0 0 1600 900" preserveAspectRatio="none">
+        <defs>
+            <linearGradient id="gradPink" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#FFA9C6"/>
+                <stop offset="50%" stop-color="#F58BB5"/>
+                <stop offset="100%" stop-color="#E97CA8"/>
+            </linearGradient>
+        </defs>
+<path class="wf-l" stroke="url(#gradPink)" opacity="0.23" transform="translate(0 6.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPink)" opacity="0.28" transform="translate(11 24.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPink)" opacity="0.33" transform="translate(22 43.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPink)" opacity="0.40" transform="translate(33 61.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPink)" opacity="0.44" transform="translate(44 80.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPink)" opacity="0.51" transform="translate(55 98.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPink)" opacity="0.54" transform="translate(66 117.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPink)" opacity="0.60" transform="translate(77 135.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPink)" opacity="0.65" transform="translate(88 154.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPink)" opacity="0.68" transform="translate(99 172.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPink)" opacity="0.74" transform="translate(110 191.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPink)" opacity="0.75" transform="translate(121 209.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPink)" opacity="0.75" transform="translate(132 228.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPink)" opacity="0.75" transform="translate(143 246.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPink)" opacity="0.75" transform="translate(154 265.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPink)" opacity="0.75" transform="translate(165 283.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPink)" opacity="0.75" transform="translate(176 302.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPink)" opacity="0.75" transform="translate(187 320.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPink)" opacity="0.75" transform="translate(198 339.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPink)" opacity="0.75" transform="translate(209 357.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPink)" opacity="0.75" transform="translate(220 376.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPink)" opacity="0.75" transform="translate(231 394.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPink)" opacity="0.75" transform="translate(242 413.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPink)" opacity="0.75" transform="translate(253 431.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPink)" opacity="0.75" transform="translate(264 450.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPink)" opacity="0.75" transform="translate(275 468.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPink)" opacity="0.75" transform="translate(286 487.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPink)" opacity="0.75" transform="translate(297 505.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPink)" opacity="0.75" transform="translate(308 524.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPink)" opacity="0.75" transform="translate(319 542.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPink)" opacity="0.75" transform="translate(330 561.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPink)" opacity="0.75" transform="translate(341 579.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPink)" opacity="0.75" transform="translate(352 598.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPink)" opacity="0.75" transform="translate(363 616.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPink)" opacity="0.75" transform="translate(374 635.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPink)" opacity="0.75" transform="translate(385 653.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPink)" opacity="0.75" transform="translate(396 672.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPink)" opacity="0.74" transform="translate(407 690.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPink)" opacity="0.68" transform="translate(418 709.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPink)" opacity="0.65" transform="translate(429 727.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPink)" opacity="0.60" transform="translate(440 746.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPink)" opacity="0.54" transform="translate(451 764.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPink)" opacity="0.51" transform="translate(462 783.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPink)" opacity="0.44" transform="translate(473 801.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPink)" opacity="0.40" transform="translate(484 820.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPink)" opacity="0.33" transform="translate(495 838.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPink)" opacity="0.28" transform="translate(506 857.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPink)" opacity="0.23" transform="translate(517 875.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+    </svg>
+</div>
+<!-- Decorative sparkle layer: twinkling dots behind the content -->
+<div class="sparkle-layer" aria-hidden="true"></div>
 <!-- Header: logo + slogan -->
 <header class="site-header">
 <img class="logo" alt="HORASOCIAL PRO Logo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBl0_W9o0isr1E81a1ecAaftLUFNSxWfoq4b2vQUpjiQJIGuEArx0ORA6uZeLxm4VwWZWYbxI31qfhIPVKxaidEz7wwBHPuS5AOaWO7vHr7LoOOcO_UVoMvFFWEAcllJ_HhnLwIEaJKAcEkGB9P7PVxfsnjDl_Xv6BUMooxWANxcRFdtFaOBVbxtyECYSl3ZkLhzSTsfzEfCBZUmL1g3hVO8rUpNIAMSP5j-a4s1waL7ePWk4Ia51DIBDexIXSwj2bjEfDFejB0NrOU"/>
@@ -372,5 +543,83 @@ document.getElementById('loginForm').addEventListener('submit', (e) => {
 if (location.protocol === 'file:') {
   document.getElementById('forgotLink').href = '../recuperar_contrasena_maestro_horasocial_pro/index.html';
 }
+
+
+    // Sparkle field: stratified twinkling dots covering the full viewport
+        // (decorative only). The viewport is divided into an even grid of cells and
+        // exactly one sparkle is placed per cell (centre + jitter confined to the
+        // cell), so the distribution never clumps and reaches top to bottom.
+        (function buildSparkles() {
+            const layer = document.querySelector('.sparkle-layer');
+            if (!layer) return;
+
+            const COLS = 8;
+            const ROWS = 6;                                  // 48 cells
+            const COUNT = COLS * ROWS;
+            const STAR_CELLS = [3, 12, 21, 27, 36, 44];      // six star glints, spread top-to-bottom
+            const DOTS = ['c-pink', 'c-gold', 'c-sky', 'c-rose'];
+            let seed = 20261017;                             // fixed seed: identical layout every load
+            function rand() { seed = (seed * 1664525 + 1013904223) % 4294967296; return seed / 4294967296; }
+
+            const cellW = 100 / COLS, cellH = 100 / ROWS;
+            const frag = document.createDocumentFragment();
+            for (let i = 0; i < COUNT; i++) {
+                const col = i % COLS, row = Math.floor(i / COLS);
+                const dot = document.createElement('span');
+                const isStar = STAR_CELLS.indexOf(i) !== -1;
+                const left = (col + 0.5) * cellW + (rand() - 0.5) * cellW * 0.7;
+                const top  = (row + 0.5) * cellH + (rand() - 0.5) * cellH * 0.7;
+                dot.style.left = Math.min(97, Math.max(2, left)).toFixed(2) + '%';
+                dot.style.top  = Math.min(97, Math.max(2, top)).toFixed(2) + '%';
+
+                if (isStar) {
+                    dot.className = 'sparkle glint ' + DOTS[Math.floor(rand() * DOTS.length)];
+                } else {
+                    dot.className = 'sparkle ' + DOTS[Math.floor(rand() * DOTS.length)];
+                    const size = (3 + rand() * 4).toFixed(1);    // 3-7 px
+                    dot.style.width = size + 'px';
+                    dot.style.height = size + 'px';
+                    dot.style.setProperty('--so', (0.45 + rand() * 0.45).toFixed(2)); // 0.45-0.90
+                }
+                dot.style.setProperty('--dur', (2.5 + rand() * 2.5).toFixed(2) + 's');
+                dot.style.setProperty('--d', (-rand() * 5).toFixed(2) + 's');
+                frag.appendChild(dot);
+            }
+            layer.appendChild(frag);
+        })();
+
+        // Pink pastel tint// Pink pastel tint: reveal the duplicate (pink) wave set near the cursor.
+        // --mx/--my are consumed by the CSS mask on .flow-pink; coordinates are
+        // relative to the .flow-field bounding rect and applied inside a single
+        // rAF tick, so mousemove never causes layout thrash.
+        (function pinkTint() {
+            const field = document.querySelector('.flow-field');
+            const pink = document.querySelector('.flow-pink');
+            if (!field || !pink) return;
+
+            let rect = field.getBoundingClientRect();
+            let lastX = -400;
+            let lastY = -400;
+            let queued = false;
+
+            function apply() {
+                queued = false;
+                pink.style.setProperty('--mx', lastX + 'px');
+                pink.style.setProperty('--my', lastY + 'px');
+            }
+
+            document.addEventListener('mousemove', (e) => {
+                // Both layers carry the same .wiggle translation, so the transformed
+                // rect maps the cursor straight into the mask's local coordinate space.
+                lastX = e.clientX - rect.left;
+                lastY = e.clientY - rect.top;
+                if (!queued) {
+                    queued = true;
+                    requestAnimationFrame(apply);
+                }
+            }, { passive: true });
+
+            window.addEventListener('resize', () => { rect = field.getBoundingClientRect(); });
+        })();
 </script>
 </body></html>
