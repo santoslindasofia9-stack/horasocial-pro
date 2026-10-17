@@ -95,37 +95,16 @@
       pointer-events: none;
       overflow: hidden;
     }
-    .sparkle {
-      position: absolute;
-      border-radius: 50%;
-      opacity: 0;
-      box-shadow: 0 0 4px rgba(148, 178, 214, 0.45);
-      /* Delay/duration/max-opacity come from per-element --d / --dur / --so */
-      animation: sparkle-twinkle var(--dur, 4s) ease-in-out var(--d, 0s) infinite;
-      will-change: opacity;
-    }
-    /* Occasional four-point star glint */
-    .sparkle.glint {
-      width: 9px;
-      height: 9px;
-      background: #ffffff;
-      clip-path: polygon(50% 0, 61% 39%, 100% 50%, 61% 61%, 50% 100%, 39% 61%, 0 50%, 39% 39%);
-      --so: 0.72;
-    }
-    /* Literal "✨" glyph sparkles: pastel text twinkles, no dot geometry */
-    .sparkle.glyph {
-      border-radius: 0;
-      box-shadow: none;
-      line-height: 1;
-      --so: 0.55;
-    }
-    @keyframes sparkle-twinkle {
-      0%, 100% { opacity: 0; }
-      50% { opacity: var(--so, 0.5); }
-    }
-    @media (prefers-reduced-motion: reduce) {
-      .sparkle, .sparkle.glint { animation: none; opacity: 0.35; }
-    }
+    .sparkle{position:absolute;border-radius:50%;opacity:0;animation:sparkle-twinkle var(--dur,4s) ease-in-out var(--d,0s) infinite;will-change:opacity}
+    .sparkle.c-pink{background:#F472B6;box-shadow:0 0 7px 1px rgba(244,114,182,.65)}
+    .sparkle.c-gold{background:#E0A526;box-shadow:0 0 7px 1px rgba(224,165,38,.65)}
+    .sparkle.c-sky{background:#38BDF8;box-shadow:0 0 7px 1px rgba(56,189,248,.65)}
+    .sparkle.c-rose{background:#EC4899;box-shadow:0 0 8px 2px rgba(236,72,153,.6)}
+    .sparkle.glint{width:13px;height:13px;border-radius:0;background:#EC4899;clip-path:polygon(50% 0,61% 39%,100% 50%,61% 61%,50% 100%,39% 61%,0 50%,39% 39%);filter:drop-shadow(0 0 4px rgba(236,72,153,.55));--so:.85}
+    .sparkle.glint.c-gold{background:#E0A526;filter:drop-shadow(0 0 4px rgba(224,165,38,.55))}
+    .sparkle.glint.c-sky{background:#38BDF8;filter:drop-shadow(0 0 4px rgba(56,189,248,.55))}
+    @keyframes sparkle-twinkle{0%,100%{opacity:0}50%{opacity:var(--so,.5)}}
+    @media (prefers-reduced-motion: reduce){.sparkle{animation:none;opacity:.7}}
 
     /* Pink pastel waves — two pink copies sit over the dominant blue field:
        1) .flow-pink-static — always-on pastel pink revealed across diagonal
@@ -133,19 +112,21 @@
        2) .flow-pink — cursor-reactive layer: radial mask follows --mx/--my
           (written by a single rAF tick), parked off-canvas until the pointer moves. */
     .flow-field.flow-pink-static {
-      -webkit-mask-image: linear-gradient(115deg, transparent 4%, #000 16%, transparent 30%, #000 44%, transparent 58%, #000 72%, transparent 86%);
-      mask-image: linear-gradient(115deg, transparent 4%, #000 16%, transparent 30%, #000 44%, transparent 58%, #000 72%, transparent 86%);
+      -webkit-mask-image: linear-gradient(115deg, transparent 2%, #000 14%, transparent 28%, #000 42%, transparent 56%, #000 70%, transparent 84%);
+      mask-image: linear-gradient(115deg, transparent 2%, #000 14%, transparent 28%, #000 42%, transparent 56%, #000 70%, transparent 84%);
       -webkit-mask-clip: no-clip;
       mask-clip: no-clip;
     }
-    .flow-field.flow-pink-static svg { opacity: 0.58; }
+    .flow-field.flow-pink-static svg { opacity: 0.9; }
     .flow-field.flow-pink {
-      -webkit-mask-image: radial-gradient(circle 320px at var(--mx, -400px) var(--my, -400px), #000 0%, transparent 70%);
-      mask-image: radial-gradient(circle 320px at var(--mx, -400px) var(--my, -400px), #000 0%, transparent 70%);
+      -webkit-mask-image: radial-gradient(circle 380px at var(--mx, -400px) var(--my, -400px), #000 0%, transparent 70%);
+      mask-image: radial-gradient(circle 380px at var(--mx, -400px) var(--my, -400px), #000 0%, transparent 70%);
       -webkit-mask-clip: no-clip;
       mask-clip: no-clip;
     }
-    .flow-field.flow-pink svg { opacity: 0.68; }
+    .flow-field.flow-pink svg { opacity: 1; }
+    /* Pink layers render as a wider glint riding on top of the thin blue lines */
+    .flow-field.flow-pink-static .wf-l, .flow-field.flow-pink .wf-l { stroke-width: 1.6; }
 
     /* Developer credit: discreet tracked-out line under the copyright */
     .dev-credit {
@@ -236,59 +217,59 @@
     <svg viewBox="0 0 1600 900" preserveAspectRatio="none">
         <defs>
             <linearGradient id="gradPinkStatic" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stop-color="#FFB6C1"/>
-                <stop offset="50%" stop-color="#f9c6d3"/>
-                <stop offset="100%" stop-color="#FFD1DC"/>
+                <stop offset="0%" stop-color="#FF8FB8"/>
+                <stop offset="50%" stop-color="#F472B6"/>
+                <stop offset="100%" stop-color="#EC4899"/>
             </linearGradient>
         </defs>
-<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.11" transform="translate(0 6.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
-<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.14" transform="translate(11 24.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
-<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.17" transform="translate(22 43.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
-<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.20" transform="translate(33 61.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
-<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.22" transform="translate(44 80.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
-<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.25" transform="translate(55 98.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
-<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.27" transform="translate(66 117.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
-<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.30" transform="translate(77 135.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
-<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.32" transform="translate(88 154.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
-<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.34" transform="translate(99 172.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
-<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.37" transform="translate(110 191.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
-<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.39" transform="translate(121 209.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
-<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.41" transform="translate(132 228.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
-<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.42" transform="translate(143 246.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
-<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.44" transform="translate(154 265.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
-<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.46" transform="translate(165 283.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
-<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.47" transform="translate(176 302.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
-<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.48" transform="translate(187 320.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
-<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.49" transform="translate(198 339.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
-<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.50" transform="translate(209 357.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
-<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.51" transform="translate(220 376.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
-<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.51" transform="translate(231 394.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
-<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.52" transform="translate(242 413.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
-<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.52" transform="translate(253 431.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
-<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.52" transform="translate(264 450.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
-<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.52" transform="translate(275 468.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
-<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.51" transform="translate(286 487.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
-<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.51" transform="translate(297 505.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
-<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.50" transform="translate(308 524.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
-<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.49" transform="translate(319 542.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
-<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.48" transform="translate(330 561.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
-<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.47" transform="translate(341 579.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
-<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.46" transform="translate(352 598.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
-<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.44" transform="translate(363 616.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
-<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.42" transform="translate(374 635.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
-<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.41" transform="translate(385 653.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
-<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.39" transform="translate(396 672.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
-<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.37" transform="translate(407 690.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
-<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.34" transform="translate(418 709.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
-<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.32" transform="translate(429 727.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
-<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.30" transform="translate(440 746.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
-<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.27" transform="translate(451 764.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
-<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.25" transform="translate(462 783.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
-<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.22" transform="translate(473 801.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
-<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.20" transform="translate(484 820.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
-<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.17" transform="translate(495 838.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
-<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.14" transform="translate(506 857.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
-<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.11" transform="translate(517 875.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.21" transform="translate(0 6.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.27" transform="translate(11 24.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.32" transform="translate(22 43.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.38" transform="translate(33 61.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.42" transform="translate(44 80.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.48" transform="translate(55 98.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.51" transform="translate(66 117.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.57" transform="translate(77 135.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.61" transform="translate(88 154.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.65" transform="translate(99 172.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.70" transform="translate(110 191.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.74" transform="translate(121 209.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.78" transform="translate(132 228.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.80" transform="translate(143 246.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.84" transform="translate(154 265.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.87" transform="translate(165 283.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.89" transform="translate(176 302.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.91" transform="translate(187 320.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.93" transform="translate(198 339.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.95" transform="translate(209 357.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.97" transform="translate(220 376.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.97" transform="translate(231 394.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.99" transform="translate(242 413.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.99" transform="translate(253 431.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.99" transform="translate(264 450.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.99" transform="translate(275 468.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.97" transform="translate(286 487.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.97" transform="translate(297 505.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.95" transform="translate(308 524.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.93" transform="translate(319 542.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.91" transform="translate(330 561.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.89" transform="translate(341 579.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.87" transform="translate(352 598.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.84" transform="translate(363 616.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.80" transform="translate(374 635.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.78" transform="translate(385 653.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.74" transform="translate(396 672.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.70" transform="translate(407 690.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.65" transform="translate(418 709.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.61" transform="translate(429 727.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.57" transform="translate(440 746.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.51" transform="translate(451 764.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.48" transform="translate(462 783.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.42" transform="translate(473 801.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.38" transform="translate(484 820.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.32" transform="translate(495 838.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.27" transform="translate(506 857.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPinkStatic)" opacity="0.21" transform="translate(517 875.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
     </svg>
 </div>
 <!-- Pink pastel overlay: duplicate of the wave set, revealed near the cursor via CSS mask -->
@@ -296,59 +277,59 @@
     <svg viewBox="0 0 1600 900" preserveAspectRatio="none">
         <defs>
             <linearGradient id="gradPink" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stop-color="#FFB6C1"/>
-                <stop offset="50%" stop-color="#f9c6d3"/>
-                <stop offset="100%" stop-color="#FFD1DC"/>
+                <stop offset="0%" stop-color="#FF8FB8"/>
+                <stop offset="50%" stop-color="#F472B6"/>
+                <stop offset="100%" stop-color="#EC4899"/>
             </linearGradient>
         </defs>
-<path class="wf-l" stroke="url(#gradPink)" opacity="0.11" transform="translate(0 6.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
-<path class="wf-l" stroke="url(#gradPink)" opacity="0.14" transform="translate(11 24.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
-<path class="wf-l" stroke="url(#gradPink)" opacity="0.17" transform="translate(22 43.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
-<path class="wf-l" stroke="url(#gradPink)" opacity="0.20" transform="translate(33 61.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
-<path class="wf-l" stroke="url(#gradPink)" opacity="0.22" transform="translate(44 80.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
-<path class="wf-l" stroke="url(#gradPink)" opacity="0.25" transform="translate(55 98.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
-<path class="wf-l" stroke="url(#gradPink)" opacity="0.27" transform="translate(66 117.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
-<path class="wf-l" stroke="url(#gradPink)" opacity="0.30" transform="translate(77 135.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
-<path class="wf-l" stroke="url(#gradPink)" opacity="0.32" transform="translate(88 154.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
-<path class="wf-l" stroke="url(#gradPink)" opacity="0.34" transform="translate(99 172.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
-<path class="wf-l" stroke="url(#gradPink)" opacity="0.37" transform="translate(110 191.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
-<path class="wf-l" stroke="url(#gradPink)" opacity="0.39" transform="translate(121 209.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
-<path class="wf-l" stroke="url(#gradPink)" opacity="0.41" transform="translate(132 228.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
-<path class="wf-l" stroke="url(#gradPink)" opacity="0.42" transform="translate(143 246.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
-<path class="wf-l" stroke="url(#gradPink)" opacity="0.44" transform="translate(154 265.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
-<path class="wf-l" stroke="url(#gradPink)" opacity="0.46" transform="translate(165 283.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
-<path class="wf-l" stroke="url(#gradPink)" opacity="0.47" transform="translate(176 302.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
-<path class="wf-l" stroke="url(#gradPink)" opacity="0.48" transform="translate(187 320.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
-<path class="wf-l" stroke="url(#gradPink)" opacity="0.49" transform="translate(198 339.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
-<path class="wf-l" stroke="url(#gradPink)" opacity="0.50" transform="translate(209 357.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
-<path class="wf-l" stroke="url(#gradPink)" opacity="0.51" transform="translate(220 376.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
-<path class="wf-l" stroke="url(#gradPink)" opacity="0.51" transform="translate(231 394.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
-<path class="wf-l" stroke="url(#gradPink)" opacity="0.52" transform="translate(242 413.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
-<path class="wf-l" stroke="url(#gradPink)" opacity="0.52" transform="translate(253 431.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
-<path class="wf-l" stroke="url(#gradPink)" opacity="0.52" transform="translate(264 450.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
-<path class="wf-l" stroke="url(#gradPink)" opacity="0.52" transform="translate(275 468.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
-<path class="wf-l" stroke="url(#gradPink)" opacity="0.51" transform="translate(286 487.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
-<path class="wf-l" stroke="url(#gradPink)" opacity="0.51" transform="translate(297 505.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
-<path class="wf-l" stroke="url(#gradPink)" opacity="0.50" transform="translate(308 524.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
-<path class="wf-l" stroke="url(#gradPink)" opacity="0.49" transform="translate(319 542.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
-<path class="wf-l" stroke="url(#gradPink)" opacity="0.48" transform="translate(330 561.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
-<path class="wf-l" stroke="url(#gradPink)" opacity="0.47" transform="translate(341 579.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
-<path class="wf-l" stroke="url(#gradPink)" opacity="0.46" transform="translate(352 598.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
-<path class="wf-l" stroke="url(#gradPink)" opacity="0.44" transform="translate(363 616.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
-<path class="wf-l" stroke="url(#gradPink)" opacity="0.42" transform="translate(374 635.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
-<path class="wf-l" stroke="url(#gradPink)" opacity="0.41" transform="translate(385 653.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
-<path class="wf-l" stroke="url(#gradPink)" opacity="0.39" transform="translate(396 672.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
-<path class="wf-l" stroke="url(#gradPink)" opacity="0.37" transform="translate(407 690.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
-<path class="wf-l" stroke="url(#gradPink)" opacity="0.34" transform="translate(418 709.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
-<path class="wf-l" stroke="url(#gradPink)" opacity="0.32" transform="translate(429 727.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
-<path class="wf-l" stroke="url(#gradPink)" opacity="0.30" transform="translate(440 746.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
-<path class="wf-l" stroke="url(#gradPink)" opacity="0.27" transform="translate(451 764.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
-<path class="wf-l" stroke="url(#gradPink)" opacity="0.25" transform="translate(462 783.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
-<path class="wf-l" stroke="url(#gradPink)" opacity="0.22" transform="translate(473 801.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
-<path class="wf-l" stroke="url(#gradPink)" opacity="0.20" transform="translate(484 820.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
-<path class="wf-l" stroke="url(#gradPink)" opacity="0.17" transform="translate(495 838.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
-<path class="wf-l" stroke="url(#gradPink)" opacity="0.14" transform="translate(506 857.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
-<path class="wf-l" stroke="url(#gradPink)" opacity="0.11" transform="translate(517 875.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPink)" opacity="0.21" transform="translate(0 6.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPink)" opacity="0.27" transform="translate(11 24.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPink)" opacity="0.32" transform="translate(22 43.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPink)" opacity="0.38" transform="translate(33 61.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPink)" opacity="0.42" transform="translate(44 80.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPink)" opacity="0.48" transform="translate(55 98.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPink)" opacity="0.51" transform="translate(66 117.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPink)" opacity="0.57" transform="translate(77 135.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPink)" opacity="0.61" transform="translate(88 154.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPink)" opacity="0.65" transform="translate(99 172.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPink)" opacity="0.70" transform="translate(110 191.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPink)" opacity="0.74" transform="translate(121 209.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPink)" opacity="0.78" transform="translate(132 228.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPink)" opacity="0.80" transform="translate(143 246.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPink)" opacity="0.84" transform="translate(154 265.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPink)" opacity="0.87" transform="translate(165 283.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPink)" opacity="0.89" transform="translate(176 302.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPink)" opacity="0.91" transform="translate(187 320.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPink)" opacity="0.93" transform="translate(198 339.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPink)" opacity="0.95" transform="translate(209 357.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPink)" opacity="0.97" transform="translate(220 376.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPink)" opacity="0.97" transform="translate(231 394.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPink)" opacity="0.99" transform="translate(242 413.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPink)" opacity="0.99" transform="translate(253 431.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPink)" opacity="0.99" transform="translate(264 450.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPink)" opacity="0.99" transform="translate(275 468.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPink)" opacity="0.97" transform="translate(286 487.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPink)" opacity="0.97" transform="translate(297 505.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPink)" opacity="0.95" transform="translate(308 524.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPink)" opacity="0.93" transform="translate(319 542.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPink)" opacity="0.91" transform="translate(330 561.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPink)" opacity="0.89" transform="translate(341 579.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPink)" opacity="0.87" transform="translate(352 598.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPink)" opacity="0.84" transform="translate(363 616.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPink)" opacity="0.80" transform="translate(374 635.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPink)" opacity="0.78" transform="translate(385 653.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPink)" opacity="0.74" transform="translate(396 672.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPink)" opacity="0.70" transform="translate(407 690.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPink)" opacity="0.65" transform="translate(418 709.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPink)" opacity="0.61" transform="translate(429 727.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPink)" opacity="0.57" transform="translate(440 746.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPink)" opacity="0.51" transform="translate(451 764.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPink)" opacity="0.48" transform="translate(462 783.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPink)" opacity="0.42" transform="translate(473 801.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPink)" opacity="0.38" transform="translate(484 820.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPink)" opacity="0.32" transform="translate(495 838.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPink)" opacity="0.27" transform="translate(506 857.0)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
+<path class="wf-l" stroke="url(#gradPink)" opacity="0.21" transform="translate(517 875.5)" d="M-740,0 C-460,-56 -300,56 -60,0 C220,-56 380,56 620,0 C860,-56 1020,56 1260,0 C1480,-40 1570,-20 1660,-8"/>
     </svg>
 </div>
 <!-- Decorative sparkle layer: twinkling dots behind the content -->
@@ -440,69 +421,39 @@ document.querySelectorAll('.role-disabled').forEach(function (card) {
 // exactly one sparkle is placed per cell (centre + jitter confined to the
 // cell), so the distribution never clumps and reaches top to bottom.
 (function buildSparkles() {
-    var layer = document.querySelector('.sparkle-layer');
+    const layer = document.querySelector('.sparkle-layer');
     if (!layer) return;
 
-    var COLS = 8;             // grid columns
-    var ROWS = 5;             // grid rows → 40 cells
-    var COUNT = COLS * ROWS;  // 40 elements: 35 dots + 5 "✨" glyphs
-    var GLYPH_CELLS = [5, 14, 22, 30, 37]; // cells holding a "✨" glyph (one per row)
-    var GLINT_EVERY = 7;      // every 7th non-glyph cell is a star glint (~5)
-    var seed = 20261017;      // fixed seed: identical layout on every load
+    const COLS = 8;
+    const ROWS = 6;                                  // 48 cells
+    const COUNT = COLS * ROWS;
+    const STAR_CELLS = [3, 12, 21, 27, 36, 44];      // six star glints, spread top-to-bottom
+    const DOTS = ['c-pink', 'c-gold', 'c-sky', 'c-rose'];
+    let seed = 20261017;                             // fixed seed: identical layout every load
+    function rand() { seed = (seed * 1664525 + 1013904223) % 4294967296; return seed / 4294967296; }
 
-    function rand() {
-        seed = (seed * 1664525 + 1013904223) % 4294967296;
-        return seed / 4294967296;
-    }
-
-    // Dot palette, target weights: white 35%, pastel pink 25%, gold 20%, sky 20%
-    function pickColor(r) {
-        if (r < 0.35) return '#ffffff';
-        if (r < 0.60) return '#FFD1DC';
-        if (r < 0.80) return '#E6C687';
-        return '#cde9ff';
-    }
-    // Glyph palettes stay pastel (never pure white, it would vanish on white)
-    function pickGlyphColor(r) {
-        if (r < 0.40) return '#FFD1DC';
-        if (r < 0.75) return '#E6C687';
-        return '#cde9ff';
-    }
-
-    var cellW = 100 / COLS;
-    var cellH = 100 / ROWS;
-    var frag = document.createDocumentFragment();
-    for (var i = 0; i < COUNT; i++) {
-        var col = i % COLS;
-        var row = Math.floor(i / COLS);
-        var dot = document.createElement('span');
-        var isGlyph = GLYPH_CELLS.indexOf(i) !== -1;
-        var isGlint = !isGlyph && (i % GLINT_EVERY) === 3;
-        dot.className = isGlyph ? 'sparkle glyph' : (isGlint ? 'sparkle glint' : 'sparkle');
-
-        // Stratified placement: cell centre + jitter that stays inside the cell
-        var left = (col + 0.5) * cellW + (rand() - 0.5) * cellW * 0.7;
-        var top = (row + 0.5) * cellH + (rand() - 0.5) * cellH * 0.7;
+    const cellW = 100 / COLS, cellH = 100 / ROWS;
+    const frag = document.createDocumentFragment();
+    for (let i = 0; i < COUNT; i++) {
+        const col = i % COLS, row = Math.floor(i / COLS);
+        const dot = document.createElement('span');
+        const isStar = STAR_CELLS.indexOf(i) !== -1;
+        const left = (col + 0.5) * cellW + (rand() - 0.5) * cellW * 0.7;
+        const top  = (row + 0.5) * cellH + (rand() - 0.5) * cellH * 0.7;
         dot.style.left = Math.min(97, Math.max(2, left)).toFixed(2) + '%';
-        dot.style.top = Math.min(97, Math.max(2, top)).toFixed(2) + '%';
+        dot.style.top  = Math.min(97, Math.max(2, top)).toFixed(2) + '%';
 
-        if (isGlyph) {
-            dot.textContent = '✨';
-            dot.style.fontSize = (10 + rand() * 4).toFixed(1) + 'px'; // 10–14px
-            dot.style.color = pickGlyphColor(rand());
-            dot.style.setProperty('--so', (0.45 + rand() * 0.1).toFixed(2)); // capped at 0.55
-                } else if (isGlint) {
-                    dot.style.setProperty('--so', '0.72');
+        if (isStar) {
+            dot.className = 'sparkle glint ' + DOTS[Math.floor(rand() * DOTS.length)];
         } else {
-            var size = (2 + rand() * 3).toFixed(1); // 2–5 px
-            if (i % 8 === 0) { size = '5.0'; } // guarantee a few full-size 5px dots
+            dot.className = 'sparkle ' + DOTS[Math.floor(rand() * DOTS.length)];
+            const size = (3 + rand() * 4).toFixed(1);    // 3-7 px
             dot.style.width = size + 'px';
             dot.style.height = size + 'px';
-            dot.style.background = pickColor(rand());
-            dot.style.setProperty('--so', (0.3 + rand() * 0.38).toFixed(2)); // capped at 0.68
+            dot.style.setProperty('--so', (0.45 + rand() * 0.45).toFixed(2)); // 0.45-0.90
         }
-        dot.style.setProperty('--dur', (3.5 + rand() * 3).toFixed(2) + 's');
-        dot.style.setProperty('--d', (-rand() * 6).toFixed(2) + 's');
+        dot.style.setProperty('--dur', (2.5 + rand() * 2.5).toFixed(2) + 's');
+        dot.style.setProperty('--d', (-rand() * 5).toFixed(2) + 's');
         frag.appendChild(dot);
     }
     layer.appendChild(frag);
