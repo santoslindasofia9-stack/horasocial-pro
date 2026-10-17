@@ -110,7 +110,7 @@
       height: 9px;
       background: #ffffff;
       clip-path: polygon(50% 0, 61% 39%, 100% 50%, 61% 61%, 50% 100%, 39% 61%, 0 50%, 39% 39%);
-      --so: 0.55;
+      --so: 0.72;
     }
     /* Literal "✨" glyph sparkles: pastel text twinkles, no dot geometry */
     .sparkle.glyph {
@@ -133,19 +133,19 @@
        2) .flow-pink — cursor-reactive layer: radial mask follows --mx/--my
           (written by a single rAF tick), parked off-canvas until the pointer moves. */
     .flow-field.flow-pink-static {
-      -webkit-mask-image: linear-gradient(115deg, transparent 6%, #000 20%, transparent 34%, #000 48%, transparent 62%, #000 76%, transparent 90%);
-      mask-image: linear-gradient(115deg, transparent 6%, #000 20%, transparent 34%, #000 48%, transparent 62%, #000 76%, transparent 90%);
+      -webkit-mask-image: linear-gradient(115deg, transparent 4%, #000 16%, transparent 30%, #000 44%, transparent 58%, #000 72%, transparent 86%);
+      mask-image: linear-gradient(115deg, transparent 4%, #000 16%, transparent 30%, #000 44%, transparent 58%, #000 72%, transparent 86%);
       -webkit-mask-clip: no-clip;
       mask-clip: no-clip;
     }
-    .flow-field.flow-pink-static svg { opacity: 0.42; }
+    .flow-field.flow-pink-static svg { opacity: 0.58; }
     .flow-field.flow-pink {
-      -webkit-mask-image: radial-gradient(circle 280px at var(--mx, -400px) var(--my, -400px), #000 0%, transparent 70%);
-      mask-image: radial-gradient(circle 280px at var(--mx, -400px) var(--my, -400px), #000 0%, transparent 70%);
+      -webkit-mask-image: radial-gradient(circle 320px at var(--mx, -400px) var(--my, -400px), #000 0%, transparent 70%);
+      mask-image: radial-gradient(circle 320px at var(--mx, -400px) var(--my, -400px), #000 0%, transparent 70%);
       -webkit-mask-clip: no-clip;
       mask-clip: no-clip;
     }
-    .flow-field.flow-pink svg { opacity: 0.55; }
+    .flow-field.flow-pink svg { opacity: 0.68; }
 
     /* Developer credit: discreet tracked-out line under the copyright */
     .dev-credit {
@@ -444,9 +444,9 @@ document.querySelectorAll('.role-disabled').forEach(function (card) {
     if (!layer) return;
 
     var COLS = 8;             // grid columns
-    var ROWS = 4;             // grid rows → 32 cells
-    var COUNT = COLS * ROWS;  // 32 elements: 28 dots + 4 "✨" glyphs
-    var GLYPH_CELLS = [5, 14, 22, 30]; // cells holding a "✨" glyph
+    var ROWS = 5;             // grid rows → 40 cells
+    var COUNT = COLS * ROWS;  // 40 elements: 35 dots + 5 "✨" glyphs
+    var GLYPH_CELLS = [5, 14, 22, 30, 37]; // cells holding a "✨" glyph (one per row)
     var GLINT_EVERY = 7;      // every 7th non-glyph cell is a star glint (~5)
     var seed = 20261017;      // fixed seed: identical layout on every load
 
@@ -491,14 +491,15 @@ document.querySelectorAll('.role-disabled').forEach(function (card) {
             dot.style.fontSize = (10 + rand() * 4).toFixed(1) + 'px'; // 10–14px
             dot.style.color = pickGlyphColor(rand());
             dot.style.setProperty('--so', (0.45 + rand() * 0.1).toFixed(2)); // capped at 0.55
-        } else if (isGlint) {
-            dot.style.setProperty('--so', '0.55');
+                } else if (isGlint) {
+                    dot.style.setProperty('--so', '0.72');
         } else {
             var size = (2 + rand() * 3).toFixed(1); // 2–5 px
+            if (i % 8 === 0) { size = '5.0'; } // guarantee a few full-size 5px dots
             dot.style.width = size + 'px';
             dot.style.height = size + 'px';
             dot.style.background = pickColor(rand());
-            dot.style.setProperty('--so', (0.25 + rand() * 0.3).toFixed(2)); // capped at 0.55
+            dot.style.setProperty('--so', (0.3 + rand() * 0.38).toFixed(2)); // capped at 0.68
         }
         dot.style.setProperty('--dur', (3.5 + rand() * 3).toFixed(2) + 's');
         dot.style.setProperty('--d', (-rand() * 6).toFixed(2) + 's');
