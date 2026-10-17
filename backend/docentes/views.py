@@ -20,6 +20,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.urls import reverse
+from django.utils.http import url_has_allowed_host_and_scheme
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST, require_http_methods
 
@@ -99,7 +100,16 @@ def login_view(request):
                 else:
                     messages.success(request, f'Bienvenido, {autenticado.nombre_completo}.')
 
-                siguiente = request.GET.get('next') or reverse('docentes:dashboard')
+                # 'next' lo agrega login_required al redirigir. Se valida
+                # contra el host actual: sin esto se puede usar el login para
+                # mandar al usuario a un sitio externo (redireccion abierta).
+                siguiente = request.GET.get('next')
+                if not url_has_allowed_host_and_scheme(
+                    siguiente,
+                    allowed_hosts={request.get_host()},
+                    require_https=request.is_secure(),
+                ):
+                    siguiente = reverse('docentes:dashboard')
                 return redirect(siguiente)
 
     return render(request, 'docentes/login.html', {'form': form})
