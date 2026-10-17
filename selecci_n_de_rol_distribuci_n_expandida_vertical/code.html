@@ -152,6 +152,20 @@
       color: rgba(170, 119, 28, 0.85);
       letter-spacing: 0.08em;
     }
+
+    /* Golden help link: matches the teacher card / primary action gold */
+    .help-gold {
+      color: #AA771C;
+      font-weight: 600;
+      text-shadow: 0 0 10px rgba(212, 175, 55, 0.35);
+      transition: color 0.25s ease, text-shadow 0.25s ease;
+    }
+    .help-gold:hover,
+    .help-gold:focus-visible {
+      color: #D4AF37;
+      text-shadow: 0 0 14px rgba(212, 175, 55, 0.6);
+      text-decoration: underline;
+    }
   </style>
 </head>
 <body class="bg-white font-body-md text-on-surface overflow-hidden min-h-screen h-screen relative flex flex-col justify-between">
@@ -383,7 +397,7 @@
 <div class="mb-sm">
 <p class="font-label-md text-label-md text-outline">
         ¿Necesitas ayuda? 
-        <a class="text-bright-sky font-semibold hover:underline" href="javascript:void(0)" onclick="irSobre();return false;">Sobre horas sociales</a>
+        <a class="help-gold" href="/sobre" onclick="return irSobre();">Sobre horas sociales</a>
 </p>
 </div>
 <div class="mb-sm">
@@ -400,7 +414,8 @@
 </footer>
 <!-- Reusable discreet toast: small dark pill, bottom-center -->
 <div class="flow-toast" id="flowToast" role="status" aria-live="polite"></div>
-<script>function irSobre(){if(location.protocol==='file:'){location.href='../sobre_horasocial_pro_identidad_y_prop_sito/code.html'}else{location.href='/sobre'}}</script>
+<script>// Help link: real navigation over HTTP (/sobre), relative fallback when opened from disk
+function irSobre(){if(location.protocol==='file:'){location.href='../sobre_horasocial_pro_identidad_y_prop_sito/code.html';return false;}return true}</script>
 <script>
 // Toast helper: single reusable element, visible for ~2.2s
 var toastTimer = null;
