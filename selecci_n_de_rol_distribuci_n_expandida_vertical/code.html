@@ -45,7 +45,7 @@
       z-index: 1;
     }
 
-    /* Golden highlight â€” active teacher role */
+    /* Golden highlight — active teacher role */
     .role-golden {
       border: 1.5px solid #D4AF37;
       background: linear-gradient(160deg, #fffdf5 0%, #fdf7e8 55%, #f8ecd0 100%);
@@ -106,10 +106,10 @@
     @keyframes sparkle-twinkle{0%,100%{opacity:0}50%{opacity:var(--so,.5)}}
     @media (prefers-reduced-motion: reduce){.sparkle{animation:none;opacity:.7}}
 
-    /* Pink pastel waves â€” two pink copies sit over the dominant blue field:
-       1) .flow-pink-static â€” always-on pastel pink revealed across diagonal
+    /* Pink pastel waves — two pink copies sit over the dominant blue field:
+       1) .flow-pink-static — always-on pastel pink revealed across diagonal
           "tramos" via a static linear-gradient mask; no mouse movement needed.
-       2) .flow-pink â€” cursor-reactive layer: radial mask follows --mx/--my
+       2) .flow-pink — cursor-reactive layer: radial mask follows --mx/--my
           (written by a single rAF tick), parked off-canvas until the pointer moves. */
     .flow-field.flow-pink-static {
       -webkit-mask-image: linear-gradient(115deg, transparent 2%, #000 14%, transparent 28%, #000 42%, transparent 56%, #000 70%, transparent 84%);
@@ -342,7 +342,7 @@
 </div>
 <div class="text-center px-margin-mobile">
 <p class="font-headline-sm text-headline-sm flex flex-col items-center gap-1">
-<span class="text-institutional-blue font-bold">Formando lÃ­deres.</span>
+<span class="text-institutional-blue font-bold">Formando líderes.</span>
 <span class="text-bright-sky font-bold">Trackeando tu impacto.</span>
 </p>
 </div>
@@ -357,7 +357,7 @@
 </div>
 <h3 class="font-label-md text-label-md text-on-surface font-bold leading-tight">Estudiante</h3>
 </button>
-<!-- Card 2: Profesor (only active role: teacher module) â€” golden highlight -->
+<!-- Card 2: Profesor (only active role: teacher module) — golden highlight -->
 <button type="button" onclick="if(location.protocol==='file:'){location.href='../login_maestro_horasocial_pro/index.html'}else{location.href='/profesor/login'}" class="role-golden group flex flex-col aspect-square bg-white rounded-xl shadow-md border border-surface-variant/20 transition-all duration-300 active:scale-95 items-center justify-center p-2 text-center">
 <div class="w-12 h-12 rounded-full bg-secondary role-icon flex items-center justify-center mb-sm shadow-sm">
 <span class="material-symbols-outlined text-white text-2xl">group</span>
@@ -377,18 +377,18 @@
 <footer class="w-full px-margin-mobile pb-sm pt-md text-center">
 <div class="mb-sm">
 <p class="font-label-md text-label-md text-outline">
-        Â¿Necesitas ayuda? 
+        ¿Necesitas ayuda? 
         <a class="help-gold" href="/sobre" onclick="return irSobre();">Sobre horas sociales</a>
 </p>
 </div>
 <div class="mb-sm">
 <span class="font-label-md text-label-md font-bold text-on-surface">HORASOCIAL PRO</span>
-<p class="font-label-sm text-label-sm text-on-surface-variant">Â© 2026 HORASOCIAL PRO: GestiÃ³n de Servicio Social Escolar</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">© 2026 HORASOCIAL PRO: Gestión de Servicio Social Escolar</p>
 <!-- Developer credit -->
 <p class="font-label-sm text-label-sm dev-credit">Desarrollado por: Linda Santos</p>
 </div>
 <nav class="flex justify-center gap-md mb-1">
-<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary" href="#">TÃ©rminos</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary" href="#">Términos</a>
 <a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary" href="#">Privacidad</a>
 <a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary" href="#">Contacto</a>
 </nav>
@@ -412,7 +412,7 @@ function mostrarToast(msg) {
 // Disabled roles (Estudiante / Administrador): no navigation, discreet notice only
 document.querySelectorAll('.role-disabled').forEach(function (card) {
     card.addEventListener('click', function () {
-        mostrarToast('Este mÃ³dulo estarÃ¡ disponible prÃ³ximamente.');
+        mostrarToast('Este módulo estará disponible próximamente.');
     });
 });
 
