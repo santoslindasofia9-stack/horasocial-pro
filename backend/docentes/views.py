@@ -377,8 +377,8 @@ def api_sesion_actual(request):
     Devuelve quien tiene la sesion abierta.
 
     El dashboard decorado la consulta con `credentials: 'include'` para
-    mostrar el nombre real del docente en lugar del placeholder "Maestro
-    Ricardo", y para no quedar accesible sin sesion.
+    mostrar el nombre real del docente en lugar del nombre por defecto de la
+    maqueta, y para no quedar accesible sin sesion.
 
     Detalle de cookies: el frontend (:3000) y el backend (:8000) son ORIGENES
     distintos, pero el MISMO SITIO (SameSite no compara puertos). Por eso la
