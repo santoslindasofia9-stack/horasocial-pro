@@ -194,6 +194,53 @@ class RecuperarContrasenaForm(forms.ModelForm):
         return usuario
 
 
+class RestablecerContrasenaForm(forms.Form):
+    """
+    Paso 2 de la recuperacion: fija la contrasena nueva.
+
+    Solo valida la clave (los mismos validadores de Django que usa el
+    registro). La identificacion del docente la resuelve la vista: este
+    formulario recibe ya al usuario verificado.
+    """
+
+    password1 = forms.CharField(
+        label='Nueva contrasena',
+        widget=forms.PasswordInput(attrs={
+            'class': 'input',
+            'placeholder': 'Nueva contrasena',
+            'autocomplete': 'new-password',
+        }),
+        help_text='Minimo 8 caracteres, no puede ser solo numeros.',
+    )
+    password2 = forms.CharField(
+        label='Confirmar nueva contrasena',
+        widget=forms.PasswordInput(attrs={
+            'class': 'input',
+            'placeholder': 'Confirmar nueva contrasena',
+            'autocomplete': 'new-password',
+        }),
+    )
+
+    def __init__(self, usuario, *args, **kwargs):
+        # El usuario real permite validar la similitud con nombre/correo.
+        self.usuario = usuario
+        super().__init__(*args, **kwargs)
+
+    def clean_password1(self):
+        password = self.cleaned_data.get('password1')
+        if password:
+            password_validation.validate_password(password, self.usuario)
+        return password
+
+    def clean(self):
+        datos = super().clean()
+        password1 = datos.get('password1')
+        password2 = datos.get('password2')
+        if password1 and password2 and password1 != password2:
+            self.add_error('password2', 'Las dos contrasenas no coinciden.')
+        return datos
+
+
 class CambiarContrasenaForm(forms.Form):
     """Cambio de contrasena de un docente ya autenticado."""
 

@@ -215,6 +215,14 @@
     }
     .msg.ok { display: block; background: #E6F7EE; color: #0E5C22; border: 1px solid #B7E5C8; }
     .msg.err { display: block; background: #FDECEA; color: #93000A; border: 1px solid #F5C6C0; }
+    /* Regla de la clave nueva, del paso 2 */
+    .hint {
+      font-size: 12px;
+      line-height: 1.5;
+      color: var(--muted-soft);
+      text-align: left;
+      margin-top: 2px;
+    }
 
     /* Footer */
     .site-footer {
@@ -491,8 +499,8 @@
 <!-- Recovery card: profesores -->
 <main class="recovery-wrap">
 <div class="recovery-card">
-<h1>Recuperar contraseña</h1>
-<p class="subtitle">Envía la solicitud con tus datos. El administrador la revisará y autorizará tu acceso.</p>
+<h1 id="cardTitle">Recuperar contraseña</h1>
+<p class="subtitle" id="cardSubtitle">Envía la solicitud con tus datos. Al confirmarlos vas a poder definir tu contraseña nueva.</p>
 
 <form id="recoveryForm">
 <div class="field">
@@ -530,8 +538,31 @@
 <button class="btn-enviar" type="submit">ENVIAR SOLICITUD</button>
 </form>
 
-<div class="msg" id="msgOk">Solicitud enviada correctamente. El administrador revisará tus datos y autorizará tu acceso.</div>
-<div class="msg err" id="msgErr">No se pudo enviar la solicitud. Probalo nuevamente.</div>
+<!-- Paso 2: se revela solo despues de enviar la solicitud validada. -->
+<form id="passwordForm" style="display:none">
+<div class="field">
+<label for="password1">Nueva contraseña</label>
+<div class="input-wrap">
+<span class="material-symbols-outlined icon">lock</span>
+<input id="password1" name="password1" type="password" placeholder="Nueva contraseña" autocomplete="new-password" required minlength="8"/>
+</div>
+</div>
+
+<div class="field">
+<label for="password2">Confirmar nueva contraseña</label>
+<div class="input-wrap">
+<span class="material-symbols-outlined icon">lock</span>
+<input id="password2" name="password2" type="password" placeholder="Repite la nueva contraseña" autocomplete="new-password" required minlength="8"/>
+</div>
+</div>
+
+<p class="hint">Mínimo 8 caracteres, sin ser solo números.</p>
+
+<button class="btn-enviar" type="submit">RESTABLECER CONTRASEÑA</button>
+</form>
+
+<div class="msg" id="msgOk">Contraseña restablecida correctamente. Te llevamos al inicio de sesión para que ingreses con tu nueva contraseña.</div>
+<div class="msg err" id="msgErr" style="display:none">No se pudo enviar la solicitud. Probalo nuevamente.</div>
 
 <a class="back-link" id="backLink" href="/profesor/login">← Volver al inicio de sesión</a>
 </div>
@@ -552,14 +583,59 @@
 // Si el backend se mueve de host o puerto, cambiar solo esta URL.
 const API_BASE = 'http://127.0.0.1:8000';
 
-document.getElementById('recoveryForm').addEventListener('submit', async (e) => {
-  e.preventDefault();
-  const form = e.target;
-  const btn = form.querySelector('.btn-enviar');
-  const msgOk = document.getElementById('msgOk');
-  const msgErr = document.getElementById('msgErr');
+// A donde vuelve la pagina despues de fijar la clave nueva: la ruta del
+// server.js en :3000, o el archivo local cuando se abre con doble clic.
+const LOGIN_URL = location.protocol === 'file:'
+  ? '../login_maestro_horasocial_pro/index.html'
+  : '/profesor/login';
+
+const formDatos = document.getElementById('recoveryForm');
+const formClave = document.getElementById('passwordForm');
+const cardTitle = document.getElementById('cardTitle');
+const cardSubtitle = document.getElementById('cardSubtitle');
+const msgOk = document.getElementById('msgOk');
+const msgErr = document.getElementById('msgErr');
+
+// Datos del paso 1. Se reenvian en el paso 2 para que el backend vuelva a
+// comprobar la identidad antes de escribir la clave nueva en `usuariosa`.
+let identidad = null;
+
+function ocultarMensajes() {
   msgOk.style.display = 'none';
   msgErr.style.display = 'none';
+}
+
+function mostrarError(texto) {
+  msgErr.textContent = texto || 'No se pudo enviar la solicitud. Probalo nuevamente.';
+  msgErr.style.display = 'block';
+}
+
+// Paso 1 -> paso 2: los datos quedaron validados, ahora se pide la clave.
+function pasarAlPasoDeLaClave(payload) {
+  identidad = payload;
+  ocultarMensajes();
+  formDatos.style.display = 'none';
+  formClave.style.display = 'block';
+  cardTitle.textContent = 'Nueva contraseña';
+  cardSubtitle.textContent = 'Datos verificados. Ahora define la contraseña con la que vas a ingresar.';
+  formDatos.reset();
+  document.getElementById('password1').focus();
+}
+
+function mostrarExito() {
+  formClave.style.display = 'none';
+  ocultarMensajes();
+  cardTitle.textContent = 'Contraseña restablecida';
+  cardSubtitle.textContent = 'Ya puedes iniciar sesión con tu contraseña nueva.';
+  msgOk.style.display = 'block';
+  // Vuelve solo al inicio de sesion para entrar con la clave recien creada.
+  setTimeout(() => { window.location.href = LOGIN_URL; }, 4000);
+}
+
+formDatos.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const btn = formDatos.querySelector('.btn-enviar');
+  ocultarMensajes();
   btn.disabled = true;
   btn.textContent = 'ENVIANDO...';
 
@@ -575,10 +651,9 @@ document.getElementById('recoveryForm').addEventListener('submit', async (e) => 
       const list = JSON.parse(localStorage.getItem('horasocial_maestro_solicitudes_v1')) || [];
       list.push(Object.assign({}, payload, { estado: 'Pendiente', fecha: new Date().toISOString() }));
       localStorage.setItem('horasocial_maestro_solicitudes_v1', JSON.stringify(list));
-      msgOk.style.display = 'block';
-      form.reset();
+      pasarAlPasoDeLaClave(payload);
     } catch (err) {
-      msgErr.style.display = 'block';
+      mostrarError();
     } finally {
       btn.disabled = false;
       btn.textContent = 'ENVIAR SOLICITUD';
@@ -594,16 +669,71 @@ document.getElementById('recoveryForm').addEventListener('submit', async (e) => 
     });
     const data = await res.json().catch(() => ({}));
     if (res.ok && data.success) {
-      msgOk.style.display = 'block';
-      form.reset();
+      pasarAlPasoDeLaClave(payload);
     } else {
-      msgErr.style.display = 'block';
+      mostrarError(data.error);
     }
   } catch (err) {
-    msgErr.style.display = 'block';
+    mostrarError('No se pudo conectar con el servidor. Revisa que el backend este corriendo en ' + API_BASE + '.');
   } finally {
     btn.disabled = false;
     btn.textContent = 'ENVIAR SOLICITUD';
+  }
+});
+
+// Paso 2: fija la contrasena nueva y cierra la solicitud en la base.
+formClave.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const btn = formClave.querySelector('.btn-enviar');
+  ocultarMensajes();
+
+  const password1 = document.getElementById('password1').value;
+  const password2 = document.getElementById('password2').value;
+
+  if (password1 !== password2) {
+    mostrarError('Las dos contraseñas no coinciden.');
+    return;
+  }
+
+  if (!identidad) {
+    // Caso defensivo: el paso 2 solo deberia abrirse tras el paso 1.
+    formClave.style.display = 'none';
+    formDatos.style.display = 'block';
+    cardTitle.textContent = 'Recuperar contraseña';
+    mostrarError('Vuelve a enviar la solicitud con tus datos.');
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'GUARDANDO...';
+
+  const payload = Object.assign({}, identidad, { password1: password1, password2: password2 });
+
+  if (location.protocol === 'file:') {
+    // Sin backend no hay donde guardar: se muestra la confirmacion local.
+    btn.disabled = false;
+    btn.textContent = 'RESTABLECER CONTRASEÑA';
+    mostrarExito();
+    return;
+  }
+
+  try {
+    const res = await fetch(API_BASE + '/api/restablecer-contrasena-maestro', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    const data = await res.json().catch(() => ({}));
+    if (res.ok && data.success) {
+      mostrarExito();
+    } else {
+      mostrarError(data.error);
+    }
+  } catch (err) {
+    mostrarError('No se pudo conectar con el servidor. Revisa que el backend este corriendo en ' + API_BASE + '.');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'RESTABLECER CONTRASEÑA';
   }
 });
 

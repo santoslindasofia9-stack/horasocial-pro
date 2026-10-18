@@ -393,6 +393,175 @@ class ApiRecuperarContrasenaTests(BaseModuloDocentes):
         self.assertEqual(respuesta['Access-Control-Allow-Origin'], 'http://localhost:3000')
 
 
+class ApiRestablecerContrasenaTests(BaseModuloDocentes):
+    """
+    Paso 2 del formulario decorado: fija la contrasena nueva.
+
+    Prueba que la clave quede cifrada en `usuariosa`, que la solicitud pase a
+    'Restablecida' y que un tercero no pueda entrar solo con adivinar el
+    codigo: el nombre tiene que coincidir con el de la cuenta.
+    """
+
+    NUEVA_CLAVE = 'NuevaClave2026*'
+
+    def _ruta(self):
+        return reverse('api-restablecer-contrasena-maestro')
+
+    def _post(self, payload, **extra):
+        return self.client.post(
+            self._ruta(),
+            data=json.dumps(payload),
+            content_type='application/json',
+            **extra,
+        )
+
+    def _payload(self, **cambios):
+        payload = {
+            'usuario': CODIGO,
+            'nombre': 'Docente de Prueba',
+            'telefono': '3001234567',
+            'asignatura': 'Matematicas',
+            'password1': self.NUEVA_CLAVE,
+            'password2': self.NUEVA_CLAVE,
+        }
+        payload.update(cambios)
+        return payload
+
+    def _enviar_paso_1(self):
+        return self.client.post(
+            reverse('api-recuperar-contrasena-maestro'),
+            data=json.dumps({
+                'usuario': CODIGO,
+                'nombre': 'Docente de Prueba',
+                'telefono': '3001234567',
+                'asignatura': 'Matematicas',
+            }),
+            content_type='application/json',
+        )
+
+    def test_cambia_la_clave_y_responde_success(self):
+        respuesta = self._post(self._payload())
+        self.assertEqual(respuesta.status_code, 200)
+        self.assertTrue(respuesta.json()['success'])
+        docente = Usuario.objects.get(pk=self.docente.pk)
+        self.assertTrue(docente.check_password(self.NUEVA_CLAVE))
+        self.assertFalse(docente.check_password(CLAVE))
+
+    def test_guarda_el_hash_y_nunca_el_texto_plano(self):
+        self._post(self._payload())
+        guardado = Usuario.objects.get(pk=self.docente.pk).password
+        self.assertTrue(guardado.startswith('pbkdf2_'))
+        self.assertNotIn(self.NUEVA_CLAVE, guardado)
+
+    def test_cierra_la_solicitud_del_paso_1_como_restablecida(self):
+        self._enviar_paso_1()
+        self.assertEqual(SolicitudRecuperacion.objects.count(), 1)
+        self._post(self._payload())
+        solicitud = SolicitudRecuperacion.objects.get(usuario=CODIGO)
+        self.assertEqual(solicitud.estado, SolicitudRecuperacion.ESTADO_RESTABLECIDA)
+        self.assertIsNotNone(solicitud.fecha_resolucion)
+
+    def test_sin_paso_1_crea_la_solicitud_ya_resuelta(self):
+        """El paso 2 se puede repetir tras recargar la pagina."""
+        self._post(self._payload())
+        self.assertEqual(SolicitudRecuperacion.objects.count(), 1)
+        solicitud = SolicitudRecuperacion.objects.get()
+        self.assertEqual(solicitud.estado, SolicitudRecuperacion.ESTADO_RESTABLECIDA)
+        self.assertEqual(solicitud.telefono, '3001234567')
+
+    def test_un_nombre_distinto_no_puede_cambiar_la_clave(self):
+        """Codigo + nombre es la prueba de identidad: el nombre falla, nada se escribe."""
+        respuesta = self._post(self._payload(nombre='Otra Persona'))
+        self.assertEqual(respuesta.status_code, 403)
+        self.assertFalse(respuesta.json()['success'])
+        self.assertTrue(Usuario.objects.get(pk=self.docente.pk).check_password(CLAVE))
+        self.assertFalse(SolicitudRecuperacion.objects.exists())
+
+    def test_el_nombre_no_distingue_mayusculas_ni_tildes(self):
+        respuesta = self._post(self._payload(nombre='  docente DE   prueba '))
+        self.assertEqual(respuesta.status_code, 200)
+        self.assertTrue(
+            Usuario.objects.get(pk=self.docente.pk).check_password(self.NUEVA_CLAVE),
+        )
+
+    def test_un_identificador_inexistente_no_revela_si_existe(self):
+        respuesta = self._post(self._payload(usuario='nadie@test.local'))
+        otra = self._post(self._payload(usuario=CODIGO, nombre='Otra Persona'))
+        self.assertEqual(respuesta.status_code, 403)
+        self.assertEqual(respuesta.json()['error'], otra.json()['error'])
+
+    def test_un_estudiante_no_puede_restablecer(self):
+        respuesta = self._post(self._payload(
+            usuario='EST-9999',
+            nombre='Alumno de Prueba',
+        ))
+        self.assertEqual(respuesta.status_code, 403)
+        self.assertTrue(
+            Usuario.objects.get(pk=self.estudiante.pk).check_password(CLAVE),
+        )
+
+    def test_claves_distintas_responden_400(self):
+        respuesta = self._post(self._payload(password2='OtraClave2026*'))
+        self.assertEqual(respuesta.status_code, 400)
+        self.assertIn('coinciden', respuesta.json()['error'])
+        self.assertTrue(Usuario.objects.get(pk=self.docente.pk).check_password(CLAVE))
+
+    def test_clave_solo_numerica_responde_400(self):
+        respuesta = self._post(self._payload(
+            password1='12345678', password2='12345678',
+        ))
+        self.assertEqual(respuesta.status_code, 400)
+        self.assertFalse(Usuario.objects.get(pk=self.docente.pk).check_password('12345678'))
+
+    def test_telefono_corto_responde_400(self):
+        respuesta = self._post(self._payload(telefono='123'))
+        self.assertEqual(respuesta.status_code, 400)
+        self.assertFalse(SolicitudRecuperacion.objects.exists())
+
+    def test_json_invalido_responde_400(self):
+        respuesta = self.client.post(
+            self._ruta(), data='no soy json', content_type='application/json',
+        )
+        self.assertEqual(respuesta.status_code, 400)
+        self.assertFalse(respuesta.json()['success'])
+
+    def test_libera_una_cuenta_bloqueada_por_intentos(self):
+        """Quien recupera la clave vuelve a poder entrar aunque este bloqueada."""
+        Usuario.objects.filter(pk=self.docente.pk).update(
+            intentos_fallidos=5,
+            estado_cuenta=Usuario.ESTADO_BLOQUEADO,
+        )
+        self._post(self._payload())
+        docente = Usuario.objects.get(pk=self.docente.pk)
+        self.assertEqual(docente.estado_cuenta, Usuario.ESTADO_ACTIVO)
+        self.assertEqual(docente.intentos_fallidos, 0)
+
+    def test_preflight_options_responde_204_con_cors(self):
+        respuesta = self.client.options(
+            self._ruta(), HTTP_ORIGIN='http://localhost:3000',
+        )
+        self.assertEqual(respuesta.status_code, 204)
+        self.assertEqual(
+            respuesta['Access-Control-Allow-Origin'], 'http://localhost:3000',
+        )
+
+    def test_el_post_exitoso_tambien_lleva_cors(self):
+        respuesta = self._post(self._payload(), HTTP_ORIGIN='http://127.0.0.1:3000')
+        self.assertEqual(
+            respuesta['Access-Control-Allow-Origin'], 'http://127.0.0.1:3000',
+        )
+
+    def test_con_ese_nuevo_login_se_abre_el_panel(self):
+        """El flujo completo: clave nueva -> login -> dashboard."""
+        self._post(self._payload())
+        respuesta = self.client.post(
+            reverse('docentes:login'),
+            {'identificador': CODIGO, 'password': self.NUEVA_CLAVE},
+        )
+        self.assertEqual(respuesta.status_code, 302)
+        self.assertEqual(respuesta['Location'], reverse('docentes:dashboard'))
+
+
 class ApiSesionActualTests(BaseModuloDocentes):
     """
     Quien tiene la sesion abierta.
@@ -465,6 +634,23 @@ class PaginasEstaticasConectadasTests(TestCase):
         html = self._leer('recuperar_contrasena_maestro_horasocial_pro')
         self.assertIn("fetch(API_BASE + '/api/recuperar-contrasena-maestro'", html)
         self.assertNotIn("fetch('/api/recuperar-contrasena-maestro'", html)
+
+    def test_recuperacion_ofrece_el_paso_de_la_clave_nueva(self):
+        """
+        Enviar la solicitud tiene que abrir el recuadro para escribir la clave
+        nueva, y ese recuadro tiene que apuntar al segundo endpoint del
+        backend (rutas absolutas, nunca relativas a server.js).
+        """
+        html = self._leer('recuperar_contrasena_maestro_horasocial_pro')
+        self.assertIn('id="passwordForm"', html)
+        self.assertIn('id="password1"', html)
+        self.assertIn('id="password2"', html)
+        self.assertIn(
+            "fetch(API_BASE + '/api/restablecer-contrasena-maestro'", html,
+        )
+        self.assertNotIn(
+            "fetch('/api/restablecer-contrasena-maestro'", html,
+        )
 
     def test_el_dashboard_consulta_la_sesion_del_backend(self):
         """

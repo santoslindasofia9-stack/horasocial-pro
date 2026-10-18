@@ -35,6 +35,14 @@ urlpatterns = [
         name='api-recuperar-contrasena-maestro',
     ),
 
+    # Paso 2 del mismo formulario: fija la contrasena nueva en `usuariosa`
+    # y cierra la solicitud en `solicitudes_recuperacion_maestros`.
+    path(
+        'api/restablecer-contrasena-maestro',
+        docentes_views.api_restablecer_contrasena_maestro,
+        name='api-restablecer-contrasena-maestro',
+    ),
+
     # El dashboard decorado pregunta quien tiene la sesion abierta, para
     # mostrar el nombre real en lugar de un placeholder.
     path(

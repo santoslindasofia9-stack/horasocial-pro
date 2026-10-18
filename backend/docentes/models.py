@@ -427,16 +427,25 @@ class SolicitudRecuperacion(models.Model):
     """
     Solicitud de 'olvide mi contrasena' de un docente.
 
-    Flujo: el docente envia la solicitud con datos de validacion -> queda
-    'Pendiente' -> un directivo la aprueba desde el admin. No se envia la
-    contrasena: el docente define una nueva desde su perfil.
+    Dos caminos hasta la fecha:
+
+    1. Flujo heredado: el docente envia los datos -> 'Pendiente' -> un
+       directivo la aprueba desde el admin -> 'Autorizado'.
+    2. Flujo del formulario decorado: el paso 2 de la pagina (fijar la
+       contrasena nueva) cierra la solicitud en el mismo momento ->
+       'Restablecida', con `fecha_resolucion` marcada.
+
+    En ningun caso se guarda la contrasena aqui: solo la trazabilidad. La
+    clave nueva vive cifrada (PBKDF2) en `usuariosa.password`.
     """
 
     ESTADO_PENDIENTE = 'Pendiente'
     ESTADO_AUTORIZADO = 'Autorizado'
+    ESTADO_RESTABLECIDA = 'Restablecida'
     ESTADO_CHOICES = [
         (ESTADO_PENDIENTE, 'Pendiente'),
         (ESTADO_AUTORIZADO, 'Autorizado'),
+        (ESTADO_RESTABLECIDA, 'Restablecida'),
     ]
 
     id = models.AutoField(primary_key=True)
@@ -446,6 +455,10 @@ class SolicitudRecuperacion(models.Model):
     asignatura = models.CharField(max_length=100)
     fecha_solicitud = models.DateTimeField(auto_now_add=True)
     estado = models.CharField(max_length=20, choices=ESTADO_CHOICES, default=ESTADO_PENDIENTE)
+    fecha_resolucion = models.DateTimeField(
+        'fecha de resolucion', null=True, blank=True,
+        help_text='Momento en que se fijo la contrasena nueva.',
+    )
 
     class Meta:
         db_table = 'solicitudes_recuperacion_maestros'
