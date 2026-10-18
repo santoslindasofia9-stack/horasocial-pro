@@ -275,6 +275,16 @@
     background:#ede9fe;color:#6d28d9;white-space:nowrap}
   .mat-btns{display:flex;gap:8px;flex-wrap:wrap}
   .mat-btns .vbtn{padding:8px 12px}
+  /* tarjeta para sumar material nuevo al taller */
+  .mat-add{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
+    width:100%;min-height:150px;padding:18px;cursor:pointer;text-align:center;
+    border:2px dashed #bae6fd;border-radius:18px;background:rgba(240,249,255,.6);
+    color:var(--sky-700);font-family:inherit;transition:border-color .15s,background .15s,transform .12s}
+  .mat-add:hover{border-color:var(--sky-400);background:#e0f2fe}
+  .mat-add:active{transform:scale(.99)}
+  .mat-add .material-symbols-outlined{font-size:30px}
+  .mat-add b{font-size:13px;font-weight:800}
+  .mat-add small{font-size:10.5px;font-weight:700;color:var(--slate)}
   .mat-desc{background:var(--sky-50);border:1px solid var(--sky-200);border-radius:14px;
     padding:14px 16px;font-size:12.5px;font-weight:600;color:var(--ink);line-height:1.65;margin-top:4px}
 
@@ -520,7 +530,7 @@
       <div class="stat"><span class="m material-symbols-outlined">handyman</span><b id="kTools">3</b><small>Herramientas</small></div>
       <div class="stat"><span class="m material-symbols-outlined">construction</span><b id="kUso">0</b><small>En uso</small></div>
       <div class="stat accent"><span class="m material-symbols-outlined">pending_actions</span><b id="kPend">5</b><small>Reportes pendientes</small></div>
-      <div class="stat"><span class="m material-symbols-outlined">menu_book</span><b id="kMat">9</b><small>Material educativo</small></div>
+      <div class="stat"><span class="m material-symbols-outlined">menu_book</span><b id="kMat">3</b><small>Material educativo</small></div>
     </div>
   </section>
 
@@ -576,7 +586,6 @@
       <button class="chip" type="button" data-filtro="Soldadura">Soldadura</button>
       <button class="chip" type="button" data-filtro="Electricidad">Electricidad</button>
       <button class="chip" type="button" data-filtro="Carpintería">Carpintería</button>
-      <button class="chip" type="button" data-filtro="General">General</button>
     </div>
     <div id="matList" style="margin-top:14px"></div>
   </section>
@@ -690,6 +699,56 @@
   </div>
 </div>
 
+<!-- modal: agregar material educativo -->
+<div class="modal-backdrop" id="matAddModal" role="dialog" aria-modal="true" aria-label="Agregar material educativo">
+  <div class="modal" role="document">
+    <div class="modal-head">
+      <div>
+        <h3><span class="m material-symbols-outlined">add_circle</span>Agregar Material</h3>
+        <p>Sumá un recurso nuevo al material del taller</p>
+      </div>
+      <button class="modal-x" id="xMatAdd" type="button" aria-label="Cerrar"><span class="material-symbols-outlined">close</span></button>
+    </div>
+    <div class="modal-body">
+      <div class="f-field">
+        <label for="matTitulo">Título</label>
+        <input id="matTitulo" type="text" maxlength="90" placeholder="Ej: Soldadura por puntos paso a paso">
+      </div>
+      <div class="f-row2">
+        <div class="f-field">
+          <label for="matTipo">Tipo</label>
+          <select id="matTipo">
+            <option>Video</option>
+            <option>Guía</option>
+            <option>Presentación</option>
+            <option>Plantilla</option>
+            <option>Enlace</option>
+          </select>
+        </div>
+        <div class="f-field">
+          <label for="matArea">Área</label>
+          <select id="matArea">
+            <option>Soldadura</option>
+            <option>Electricidad</option>
+            <option>Carpintería</option>
+            <option>General</option>
+          </select>
+        </div>
+      </div>
+      <div class="f-field">
+        <label for="matDesc">Descripción (opcional)</label>
+        <textarea id="matDesc" maxlength="200" placeholder="Para qué sirve y cómo usarlo con los estudiantes"></textarea>
+      </div>
+      <div class="f-field">
+        <label for="matArchivo">Archivo (opcional)</label>
+        <input id="matArchivo" type="file" accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.jpg,.jpeg,.png,.mp4,.txt">
+        <div class="f-hint">Si subís un archivo, "Descargar" lo entrega directo. Sin archivo queda como recurso de consulta.</div>
+      </div>
+      <button class="vbtn full" id="btnMatAdd" type="button"><span class="material-symbols-outlined">library_add</span>Agregar material</button>
+    </div>
+  </div>
+</div>
+
 <!-- panel de notificaciones -->
 <div class="notif-panel" id="notifPanel" role="dialog" aria-label="Notificaciones">
   <div class="notif-head">
@@ -714,7 +773,7 @@
 
     var LS_TOOLS = 'horasocial_maestro_tecnica_v2';   /* v2: inventario reducido a 3 equipos */
     var LS_REPS = 'horasocial_maestro_reportes_tecnicos_v1';
-    var LS_MAT = 'horasocial_maestro_material_v1';
+    var LS_MAT = 'horasocial_maestro_material_v2';   /* v2: catalogo inicial de 3 recursos */
     var LS_NOTIF = 'horasocial_maestro_notif_v1';
     var MESES = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
 
@@ -893,17 +952,13 @@
     }
 
     /* ---------- material educativo en localStorage ---------- */
+    /* Tres recursos, uno por taller. Desde la tarjeta "Agregar material"
+       el docente suma los que quiera y quedan guardados en el navegador. */
     function seedMat(){
       return [
-        { id: 1, titulo: 'Cómo hacer una unión de perfiles',      tipo: 'Video',        area: 'Soldadura',    icono: 'play_circle',       desc: 'Paso a paso para soldar perfiles de acero con el proceso MMA.' },
-        { id: 2, titulo: 'Guía rápida de seguridad en taller',    tipo: 'Guía',         area: 'General',      icono: 'menu_book',         desc: 'Normas obligatorias de protección personal y manejo de equipos.' },
-        { id: 3, titulo: 'Circuitos básicos: práctica 1',         tipo: 'Presentación', area: 'Electricidad', icono: 'slideshow',         desc: 'Armado de circuitos serie y paralelo con multímetro.' },
-        { id: 4, titulo: 'Mantenimiento de herramientas',         tipo: 'Guía',         area: 'General',      icono: 'build',             desc: 'Cuidado, limpieza y almacenamiento de cada equipo.' },
-        { id: 5, titulo: 'Maquetas en madera paso a paso',        tipo: 'Video',        area: 'Carpintería',  icono: 'play_circle',       desc: 'Técnicas de corte, ensamble y acabado para maquetas.' },
-        { id: 6, titulo: 'Plantilla: planilla de horas de taller', tipo: 'Plantilla',   area: 'General',      icono: 'description',       desc: 'Planilla editable para registrar horas de práctica.' },
-        { id: 7, titulo: 'Mediciones con multímetro',             tipo: 'Video',        area: 'Electricidad', icono: 'play_circle',       desc: 'Cómo medir voltaje, corriente y continuidad.' },
-        { id: 8, titulo: 'Proyectos de soldadura nivel 1',        tipo: 'Presentación', area: 'Soldadura',    icono: 'slideshow',         desc: 'Ideas de proyectos iniciales para estudiantes.' },
-        { id: 9, titulo: 'Normas de bioseguridad',                tipo: 'Guía',         area: 'General',      icono: 'health_and_safety', desc: 'Protocolos de higiene y primeros auxilios en el taller.' }
+        { id: 1, titulo: 'Cómo hacer una unión de perfiles', tipo: 'Video',        area: 'Soldadura',    icono: 'play_circle', desc: 'Paso a paso para soldar perfiles de acero con el proceso MMA.' },
+        { id: 2, titulo: 'Circuitos básicos: práctica 1',    tipo: 'Presentación', area: 'Electricidad', icono: 'slideshow',   desc: 'Armado de circuitos serie y paralelo con multímetro.' },
+        { id: 3, titulo: 'Maquetas en madera paso a paso',   tipo: 'Video',        area: 'Carpintería',  icono: 'play_circle', desc: 'Técnicas de corte, ensamble y acabado para maquetas.' }
       ];
     }
     function cargarMat(){
@@ -920,6 +975,7 @@
       }
     }
     var mat = cargarMat();
+    function guardarMat(){ try{ localStorage.setItem(LS_MAT, JSON.stringify(mat)); }catch(e){} }
     function byMatId(id){ var r = null; mat.forEach(function(m){ if (m.id === id) r = m; }); return r; }
     var matArea = 'Todas';
 
@@ -927,6 +983,10 @@
       var list = $('matList'); if (!list) return;
       var data = mat.filter(function(m){ return matArea === 'Todas' || m.area === matArea; });
       var html = '';
+      if (!data.length){
+        html += '<div class="s-empty show"><span class="material-symbols-outlined">library_books</span>' +
+          '<span>Todavía no hay material en ' + esc(matArea) + '</span></div>';
+      }
       data.forEach(function(m){
         html += '<div class="mat-card">' +
           '<div class="mat-top">' +
@@ -942,6 +1002,12 @@
           '</div>' +
         '</div>';
       });
+      /* Espacio para sumar material nuevo, siempre disponible. */
+      html += '<button class="mat-add" type="button" id="matAddBtn">' +
+        '<span class="material-symbols-outlined">add_circle</span>' +
+        '<b>Agregar material</b>' +
+        '<small>Sumá un video, guía o presentación al taller</small>' +
+      '</button>';
       list.innerHTML = html;
     }
 
@@ -1039,7 +1105,83 @@
           '<div class="pinfo-row"><span class="material-symbols-outlined">category</span><span>Área: ' + esc(m.area) + '</span></div>' +
           '<div class="pinfo-row"><span class="material-symbols-outlined">' + m.icono + '</span><span>Tipo: ' + esc(m.tipo) + '</span></div>' +
         '</div>' +
-        '<div class="mat-desc">' + esc(m.desc) + '</div>';
+        '<div class="mat-desc">' + esc(m.desc) + '</div>' +
+        (m.archivo_nombre
+          ? '<div class="pinfo"><div class="pinfo-row"><span class="material-symbols-outlined">attach_file</span>' +
+            '<span>Archivo: ' + esc(m.archivo_nombre) + '</span></div></div>'
+          : '');
+    }
+
+    /* Material nuevo: no hay tabla en la base para esto, asi que se guarda
+       en el navegador junto con los otros recursos del catalogo. */
+    function abrirMatAdd(){
+      ['matTitulo','matDesc'].forEach(function(id){ var e = $(id); if (e) e.value = ''; });
+      var t = $('matTipo'), a = $('matArea'), f = $('matArchivo');
+      if (t) t.value = 'Video';
+      if (a) a.value = matArea === 'Todas' ? 'Soldadura' : matArea;
+      if (f) f.value = '';
+      abrirModal($('matAddModal'));
+    }
+
+    function iconoMaterial(tipo){
+      if (tipo === 'Video') return 'play_circle';
+      if (tipo === 'Presentación') return 'slideshow';
+      if (tipo === 'Plantilla') return 'description';
+      if (tipo === 'Enlace') return 'link';
+      return 'menu_book';
+    }
+
+    function agregarMaterial(){
+      var titulo = ($('matTitulo') && $('matTitulo').value.trim()) || '';
+      if (!titulo){ toast('Ponele un título al material'); return; }
+
+      var tipo = ($('matTipo') && $('matTipo').value) || 'Guía';
+      var area = ($('matArea') && $('matArea').value) || 'General';
+      var desc = (($('matDesc') && $('matDesc').value.trim()) || 'Recurso agregado por el docente.');
+      var archivo = ($('matArchivo') && $('matArchivo').files && $('matArchivo').files[0]) || null;
+
+      var nuevo = {
+        id: Date.now(),
+        titulo: titulo,
+        tipo: tipo,
+        area: area,
+        icono: iconoMaterial(tipo),
+        desc: desc,
+        archivo_nombre: archivo ? archivo.name : ''
+      };
+
+      if (archivo){
+        /* El archivo se guarda como data URL para que "Descargar" funcione
+           aunque la pantalla se abra como archivo. */
+        var lector = new FileReader();
+        var btn = $('btnMatAdd');
+        if (btn) btn.disabled = true;
+        lector.onload = function(){
+          nuevo.archivo = lector.result;
+          cerrarMatAdd(nuevo);
+        };
+        lector.onerror = function(){
+          if (btn) btn.disabled = false;
+          toast('No se pudo leer el archivo');
+        };
+        lector.readAsDataURL(archivo);
+        return;
+      }
+
+      cerrarMatAdd(nuevo);
+    }
+
+    function cerrarMatAdd(nuevo){
+      var btn = $('btnMatAdd'); if (btn) btn.disabled = false;
+      mat.push(nuevo);
+      guardarMat();
+      notifs.unshift({ id: Date.now() + 1, texto: 'Material agregado: ' + nuevo.titulo + ' · ' + nuevo.area, tiempo: 'hace un momento', leido: false });
+      guardarNotifs();
+      renderNotifs();
+      renderMats();
+      renderStats();
+      cerrarModal($('matAddModal'));
+      toast('Material agregado');
     }
 
     /* ---------- exportar CSV ---------- */
@@ -1136,6 +1278,8 @@
 
     var matList = $('matList');
     if (matList) matList.addEventListener('click', function(e){
+      /* La tarjeta "Agregar material" se pinta dentro de la grilla. */
+      if (e.target && e.target.closest && e.target.closest('#matAddBtn')){ abrirMatAdd(); return; }
       var el = e.target && e.target.closest ? e.target.closest('[data-ver],[data-desc]') : null;
       if (!el) return;
       var id = parseInt(el.getAttribute(el.hasAttribute('data-ver') ? 'data-ver' : 'data-desc'), 10);
@@ -1144,9 +1288,27 @@
       if (el.hasAttribute('data-ver')){
         renderMatModal(m);
         abrirModal($('matModal'));
+      } else if (m.archivo){
+        /* Descarga real del archivo que subio el docente. */
+        var a = document.createElement('a');
+        a.href = m.archivo;
+        a.download = m.archivo_nombre || m.titulo;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        toast('Descargando: ' + m.titulo);
       } else {
         toast('Descarga iniciada: ' + m.titulo);
       }
+    });
+
+    /* ---------- bindings: agregar material educativo ---------- */
+    var btnMatAdd = $('btnMatAdd'), xMatAdd = $('xMatAdd'), mMatAdd = $('matAddModal');
+    if (btnMatAdd) btnMatAdd.addEventListener('click', agregarMaterial);
+    if (xMatAdd) xMatAdd.addEventListener('click', function(){ cerrarModal(mMatAdd); });
+    if (mMatAdd) mMatAdd.addEventListener('click', function(e){ if (e.target === mMatAdd) cerrarModal(mMatAdd); });
+    document.addEventListener('keydown', function(e){
+      if (e.key === 'Escape') cerrarModal($('matAddModal'));
     });
 
     /* ---------- sesiones de taller ---------- */
