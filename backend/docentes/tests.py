@@ -205,7 +205,27 @@ class ApiLoginMaestroTests(BaseModuloDocentes):
         self.assertEqual(respuesta.status_code, 302)
         self.assertEqual(respuesta['Location'], settings.DASHBOARD_DOCENTE_URL)
 
-    def test_clave_mala_vuelve_al_login(self):
+    def test_clave_mala_vuelve_al_login_decorado(self):
+        """Un intento fallido vuelve al formulario decorado, no a Django.
+
+        Antes rebotaba a `docentes:login`, una pantalla plana que ofrece
+        "olvide mi contrasena": el docente creia que lo habian mandado al
+        formulario de recuperacion.
+        """
+        respuesta = self.client.post(
+            reverse('api-login-maestro'),
+            {'username': CORREO, 'password': 'clave-incorrecta'},
+        )
+        self.assertEqual(respuesta.status_code, 302)
+        self.assertEqual(
+            respuesta['Location'],
+            settings.LOGIN_DOCENTE_URL + '?error=credenciales',
+        )
+        self.assertNotIn('_auth_user_id', self.client.session)
+
+    @override_settings(LOGIN_DOCENTE_URL='')
+    def test_clave_mala_vuelve_al_login_de_django_sin_frontend(self):
+        """Sin frontend decorado configurado cae al login de Django."""
         respuesta = self.client.post(
             reverse('api-login-maestro'),
             {'username': CORREO, 'password': 'clave-incorrecta'},
@@ -213,6 +233,18 @@ class ApiLoginMaestroTests(BaseModuloDocentes):
         self.assertEqual(respuesta.status_code, 302)
         self.assertEqual(respuesta['Location'], reverse('docentes:login'))
         self.assertNotIn('_auth_user_id', self.client.session)
+
+    def test_datos_incompletos_vuelven_al_login_decorado(self):
+        """Un formulario vacio no debe aterrizar en las pantallas de Django."""
+        respuesta = self.client.post(
+            reverse('api-login-maestro'),
+            {'username': '', 'password': ''},
+        )
+        self.assertEqual(respuesta.status_code, 302)
+        self.assertEqual(
+            respuesta['Location'],
+            settings.LOGIN_DOCENTE_URL + '?error=credenciales',
+        )
 
 
 class RecuperarContrasenaTests(BaseModuloDocentes):
@@ -443,3 +475,20 @@ class PaginasEstaticasConectadasTests(TestCase):
         self.assertIn("fetch(API + '/api/sesion-actual'", html)
         self.assertIn("credentials: 'include'", html)
         self.assertIn("/profesor/login", html)
+
+    def test_el_dashboard_avisa_cuando_no_hay_sesion(self):
+        """
+        Sin sesion, el panel vuelve al login con la marca de error para que el
+        docente vea el aviso en el formulario decorado.
+        """
+        html = self._leer('dashboard_maestro_horasocial_pro')
+        self.assertIn('/profesor/login?error=sesion', html)
+
+    def test_el_login_muestra_el_aviso_de_error_en_la_propia_pagina(self):
+        """
+        El formulario decorado lee `?error=` y muestra el aviso ahi mismo, en
+        vez de dejar que el docente aterrice en las pantallas planas de Django.
+        """
+        html = self._leer('login_maestro_horasocial_pro')
+        self.assertIn('id="loginError"', html)
+        self.assertIn("get('error')", html)

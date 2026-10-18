@@ -229,6 +229,33 @@ def cambiar_contrasena_view(request):
 # COMPATIBILIDAD CON EL FRONTEND EXISTENTE
 # ==========================================================================
 
+def _url_login_decorado():
+    """
+    URL del formulario decorado de login, o cadena vacia si no esta configurada.
+
+    El destino sale de settings y NUNCA de la peticion: un destino que viniera
+    del cliente seria una redireccion abierta.
+    """
+    return getattr(settings, 'LOGIN_DOCENTE_URL', '')
+
+
+def _respuesta_login_fallido():
+    """
+    Devuelve al formulario decorado con la marca de error.
+
+    Sin `LOGIN_DOCENTE_URL` configurada cae al login de Django, que es el
+    comportamiento historico. Con ella, el docente vuelve al formulario que
+    estaba usando en vez de aterrizar en una pantalla plana que ofrece
+    "olvide mi contrasena".
+    """
+    destino = _url_login_decorado()
+    if not destino:
+        return redirect('docentes:login')
+
+    separador = '&' if '?' in destino else '?'
+    return HttpResponseRedirect('%s%serror=credenciales' % (destino, separador))
+
+
 @csrf_exempt
 @require_POST
 def api_login_maestro(request):
@@ -246,7 +273,7 @@ def api_login_maestro(request):
 
     if not identificador or not password:
         messages.error(request, 'Debes ingresar usuario y contrasena.')
-        return redirect('docentes:login')
+        return _respuesta_login_fallido()
 
     usuario = buscar_usuario(identificador)
 
@@ -267,7 +294,7 @@ def api_login_maestro(request):
             return HttpResponseRedirect(reverse('docentes:dashboard'))
 
     messages.error(request, MENSAJE_CREDENCIALES)
-    return redirect('docentes:login')
+    return _respuesta_login_fallido()
 
 
 # ==========================================================================

@@ -1179,7 +1179,7 @@
     .then(function(respuesta){ return respuesta.json(); })
     .then(function(datos){
       if (!datos || !datos.autenticado){
-        location.replace('/profesor/login');
+        location.replace('/profesor/login?error=sesion');
         return;
       }
       pintarDocente(datos);
@@ -1187,7 +1187,7 @@
     .catch(function(){
       /* Sin respuesta del backend no se puede confirmar la sesion: se manda
          al login en lugar de dejar el panel a medias. */
-      location.replace('/profesor/login');
+      location.replace('/profesor/login?error=sesion');
     });
 
   function pintarDocente(datos){

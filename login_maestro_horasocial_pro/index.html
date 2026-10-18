@@ -212,6 +212,20 @@
       text-decoration: none;
     }
     .forgot:hover { text-decoration: underline; }
+    .login-error {
+      margin-bottom: 20px;
+      padding: 10px 14px;
+      font-family: "Inter", sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      line-height: 1.45;
+      text-align: left;
+      color: #B42318;
+      background: #FEF3F2;
+      border: 1px solid #FDA29B;
+      border-radius: 10px;
+    }
+    .login-error[hidden] { display: none; }
 
     /* Footer */
     .site-footer {
@@ -494,6 +508,7 @@
 
 <!-- Backend Django: autenticacion real contra MySQL (Laragon).
      Si el backend se mueve de host o puerto, cambiar solo esta URL. -->
+<div class="login-error" id="loginError" role="alert" hidden></div>
 <form id="loginForm" action="http://127.0.0.1:8000/api/login-maestro" method="post" autocomplete="on">
 <div class="field">
 <label for="username">Código o correo electrónico</label>
@@ -551,6 +566,30 @@ if (location.protocol === 'file:') {
   document.getElementById('forgotLink').href = '../recuperar_contrasena_maestro_horasocial_pro/index.html';
 }
 
+// El backend devuelve aqui con ?error=<codigo> cuando el intento falla o la
+// sesion no llego a abrirse. Asi el aviso aparece en ESTE formulario en vez de
+// aterrizar en las pantallas planas de Django, que ofrecen "olvide mi
+// contrasena" y confunden al docente.
+(function mostrarErrorDeLogin() {
+  const MOTIVOS = {
+    credenciales: 'Código o correo y contraseña incorrectos. Verifica tus datos e inténtalo de nuevo.',
+    sesion: 'Tu sesión no está activa. Ingresa de nuevo para continuar.'
+  };
+
+  const codigo = new URLSearchParams(location.search).get('error');
+  if (!codigo || !MOTIVOS[codigo]) return;
+
+  const caja = document.getElementById('loginError');
+  caja.textContent = MOTIVOS[codigo];
+  caja.hidden = false;
+
+  // Se limpia el parametro para que una recarga no repita el aviso.
+  if (location.protocol !== 'file:') {
+    history.replaceState(null, '', location.pathname);
+  }
+
+  document.getElementById('username').focus();
+})();
 
     // Sparkle field: stratified twinkling dots covering the full viewport
         // (decorative only). The viewport is divided into an even grid of cells and

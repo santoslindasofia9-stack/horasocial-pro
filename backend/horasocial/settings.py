@@ -120,6 +120,15 @@ DASHBOARD_DOCENTE_URL = os.environ.get(
     'http://127.0.0.1:3000/profesor/dashboard',
 )
 
+# A donde vuelve el formulario decorado cuando el login FALLA. Sin esto, un
+# intento fallido rebotaba a las pantallas planas de Django y el docente
+# terminaba en una pagina que ofrece "olvide mi contrasena" en vez de volver
+# al formulario que estaba usando. Con cadena vacia, vuelve al login de Django.
+LOGIN_DOCENTE_URL = os.environ.get(
+    'LOGIN_DOCENTE_URL',
+    'http://127.0.0.1:3000/profesor/login',
+)
+
 
 # Password validation
 # https://docs.djangoproject.com/en/6.1/ref/settings/#auth-password-validators
