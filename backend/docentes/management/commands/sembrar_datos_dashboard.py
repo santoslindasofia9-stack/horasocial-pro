@@ -4,6 +4,10 @@ Comando de gestion: siembra datos reales para el panel del docente.
 Uso:
     python manage.py sembrar_datos_dashboard
 
+Con `--limpiar` borra primero las asistencias de las sesiones del docente,
+util para dejar el panel en el juego exacto de la demostracion (10
+estudiantes). No toca usuarios ni actividades.
+
 Es idempotente. Las claves naturales son:
     - usuario  -> codigo academico
     - actividad -> nombre_actividad
@@ -26,7 +30,7 @@ from docentes.models import Actividad, Asistencia, Sesion, Usuario
 CODIGO_DOCENTE = 'sofia'
 CLAVE_ESTUDIANTE = 'Estudiante2026*'
 
-# (codigo, nombre, grado) - 18 estudiantes, grado alternado 10-A / 11-B.
+# (codigo, nombre, grado) - 10 estudiantes, grado alternado 10-A / 11-B.
 ESTUDIANTES = [
     ('EST-D01', 'Camilo Andres Vera', '10-A'),
     ('EST-D02', 'Valentina Rojas', '11-B'),
@@ -38,14 +42,6 @@ ESTUDIANTES = [
     ('EST-D08', 'Gabriela Fuentes', '11-B'),
     ('EST-D09', 'Sebastian Ortiz', '10-A'),
     ('EST-D10', 'Laura Jimenez', '11-B'),
-    ('EST-D11', 'Andres Felipe Mora', '10-A'),
-    ('EST-D12', 'Carolina Velez', '11-B'),
-    ('EST-D13', 'Diego Alexander Ruiz', '10-A'),
-    ('EST-D14', 'Paula Natalia Mendez', '11-B'),
-    ('EST-D15', 'Juan Esteban Lara', '10-A'),
-    ('EST-D16', 'Andrea Christine Salas', '11-B'),
-    ('EST-D17', 'Felipe Andres Cardenas', '10-A'),
-    ('EST-D18', 'Maria Jose Pineda', '11-B'),
 ]
 
 # (nombre, categoria, descripcion)
@@ -89,11 +85,11 @@ ASISTENCIAS = [
      Asistencia.VALIDACION_CUMPLIDA, Asistencia.CONFIRMACION_ASISTE, 4),
     (2, ['EST-D07'],
      Asistencia.VALIDACION_INASISTENCIA, Asistencia.CONFIRMACION_NO_ASISTE, 0),
-    (3, ['EST-D08', 'EST-D09', 'EST-D10', 'EST-D11'],
+    (3, ['EST-D08', 'EST-D09', 'EST-D10'],
      Asistencia.VALIDACION_POR_VALIDAR, Asistencia.CONFIRMACION_ASISTE, 4),
-    (4, ['EST-D12', 'EST-D13', 'EST-D14', 'EST-D15'],
+    (4, ['EST-D08', 'EST-D09'],
      Asistencia.VALIDACION_POR_VALIDAR, Asistencia.CONFIRMACION_ASISTE, 4),
-    (5, ['EST-D16', 'EST-D17', 'EST-D18'],
+    (5, ['EST-D10'],
      Asistencia.VALIDACION_POR_VALIDAR, Asistencia.CONFIRMACION_ASISTE, 4),
 ]
 
@@ -107,6 +103,17 @@ class Command(BaseCommand):
     def log(self, mensaje):
         self.stdout.write(f'  {mensaje}')
 
+    def add_arguments(self, parser):
+        parser.add_argument(
+            '--limpiar',
+            action='store_true',
+            help=(
+                'Borra las asistencias de las sesiones de este docente antes de '
+                'sembrar. Sirve para dejar el panel en el juego de datos exacto '
+                'de la demostracion (no toca usuarios ni actividades).'
+            ),
+        )
+
     def handle(self, *args, **options):
         docente = Usuario.objects.filter(codigo=CODIGO_DOCENTE).first()
         if docente is None:
@@ -115,6 +122,13 @@ class Command(BaseCommand):
                 'Crealo antes de sembrar los datos del panel.',
             ))
             return
+
+        if options.get('limpiar'):
+            borradas, _ = Asistencia.objects.filter(
+                id_sesion__id_profesor=docente,
+            ).delete()
+            self.stdout.write('')
+            self.log(f'Limpiar      : {borradas} asistencias borradas')
 
         creados = {'estudiantes': 0, 'actividades': 0, 'sesiones': 0, 'asistencias': 0}
         reuse = {'estudiantes': 0, 'actividades': 0, 'sesiones': 0, 'asistencias': 0}

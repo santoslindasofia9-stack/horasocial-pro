@@ -470,9 +470,9 @@
   <section>
     <div class="sec-head"><h3><span class="m material-symbols-outlined">monitoring</span>Resumen</h3></div>
     <div class="stats">
-      <div class="stat"><span class="m material-symbols-outlined">group</span><b id="stTotal">12</b><small>Total estudiantes</small></div>
-      <div class="stat"><span class="m material-symbols-outlined">task_alt</span><b id="stAlDia">6</b><small>Al día</small></div>
-      <div class="stat"><span class="m material-symbols-outlined">schedule</span><b id="stHoras">119</b><small>Horas registradas</small></div>
+      <div class="stat"><span class="m material-symbols-outlined">group</span><b id="stTotal">10</b><small>Total estudiantes</small></div>
+      <div class="stat"><span class="m material-symbols-outlined">task_alt</span><b id="stAlDia">5</b><small>Al día</small></div>
+      <div class="stat"><span class="m material-symbols-outlined">schedule</span><b id="stHoras">106</b><small>Horas registradas</small></div>
     </div>
   </section>
 
@@ -619,7 +619,12 @@
     function keyOpen(el, fn){ if (!el) return; el.addEventListener('keydown', function(e){ if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); fn(); } }); }
     function byCodigo(cod){ var r = null; est.forEach(function(s){ if (s.codigo === cod) r = s; }); return r; }
     function pct(e){ return Math.round(e.horas / META * 100); }
-    function clsBrigada(b){ return b === 'Brigada Ambiental' ? 'ba' : (b === 'Apoyo Académico' ? 'aa' : 'sc'); }
+    function clsBrigada(b){
+      var n = norm(b);
+      if (n.indexOf('jardin') !== -1 || n.indexOf('ambiental') !== -1) return 'ba';
+      if (n.indexOf('refuerzo') !== -1 || n.indexOf('academ') !== -1) return 'aa';
+      return 'sc';
+    }
     function chipEstado(e){
       if (e.estado === 'Al día') return '<span class="s-chip ok">Al día</span>';
       return '<span class="s-chip pend">Pendiente</span>';
@@ -673,11 +678,7 @@
         { nombre: 'Camila Arias',         brigada: 'Apoyo Académico',        codigo: 'HS-2026-009', horas: 7,  estado: 'Al día',     correo: 'camila.arias@horasocial.edu', telefono: '+57 300 999 1001',
           historial: [ { f: '7 sep',  h: 3, n: 'Apoyo académico' }, { f: '3 sep',  h: 2, n: 'Apoyo académico' }, { f: '31 ago', h: 2, n: 'Apoyo académico' } ] },
         { nombre: 'Nicolás Herrera',      brigada: 'Servicios Comunitarios', codigo: 'HS-2026-010', horas: 13, estado: 'Pendiente', correo: 'nicolas.herrera@horasocial.edu', telefono: '+57 300 101 1122',
-          historial: [ { f: '9 sep',  h: 5, n: 'Servicios comunitarios' }, { f: '6 sep',  h: 4, n: 'Servicios comunitarios' }, { f: '2 sep',  h: 4, n: 'Servicios comunitarios' } ] },
-        { nombre: 'Laura Gutiérrez',      brigada: 'Brigada Ambiental',      codigo: 'HS-2026-011', horas: 8,  estado: 'Al día',     correo: 'laura.gutierrez@horasocial.edu', telefono: '+57 300 202 2233',
-          historial: [ { f: '8 sep',  h: 3, n: 'Brigada ambiental' }, { f: '5 sep',  h: 3, n: 'Brigada ambiental' }, { f: '1 sep',  h: 2, n: 'Brigada ambiental' } ] },
-        { nombre: 'Daniel Salazar',       brigada: 'Apoyo Académico',        codigo: 'HS-2026-012', horas: 5,  estado: 'Pendiente',    correo: 'daniel.salazar@horasocial.edu', telefono: '+57 300 303 3344',
-          historial: [ { f: '6 sep',  h: 2, n: 'Apoyo académico' }, { f: '3 sep',  h: 2, n: 'Apoyo académico' }, { f: '30 ago', h: 1, n: 'Apoyo académico' } ] }
+          historial: [ { f: '9 sep',  h: 5, n: 'Servicios comunitarios' }, { f: '6 sep',  h: 4, n: 'Servicios comunitarios' }, { f: '2 sep',  h: 4, n: 'Servicios comunitarios' } ] }
       ];
     }
     function cargarEstudiantes(){
@@ -695,6 +696,56 @@
     }
     function guardarEstudiantes(){ try{ localStorage.setItem(LS_EST, JSON.stringify(est)); }catch(e){} }
     var est = cargarEstudiantes();
+
+    /* ---------- datos reales del backend ---------- */
+    var API = 'http://127.0.0.1:8000';
+    var real = false;   /* true cuando la lista viene de la base de datos */
+    function pintarChips(estudiantes){
+      var box = $('filterChips');
+      if (!box) return;
+      var nombres = [];
+      estudiantes.forEach(function(s){
+        if (s.brigada && nombres.indexOf(s.brigada) === -1) nombres.push(s.brigada);
+      });
+      var html = '<button class="chip active" type="button" data-filtro="Todas">Todas</button>';
+      nombres.forEach(function(n){
+        html += '<button class="chip" type="button" data-filtro="' + esc(n) + '">' + esc(n) + '</button>';
+      });
+      box.innerHTML = html;
+      /* el clic se resuelve por delegacion en el binding, no hace falta re-enganchar */
+    }
+    function aplicarEstudiantes(d){
+      real = true;
+      est.length = 0;
+      (d.estudiantes || []).forEach(function(s){
+        est.push({
+          nombre: s.nombre,
+          brigada: s.brigada,
+          codigo: s.codigo,
+          grado: s.grado,
+          horas: s.horas,
+          pendientes: s.pendientes,
+          meta: s.meta,
+          estado: s.estado === 'Al dia' ? 'Al día' : 'Pendiente',
+          correo: s.correo,
+          telefono: '',
+          historial: (s.historial || []).map(function(h){
+            return { f: h.f, h: h.h, n: h.n };
+          })
+        });
+      });
+      filtroActual = 'Todas';
+      pintarChips(d.estudiantes || []);
+      renderStats();
+      renderList();
+      renderNotifs();
+    }
+    function cargarEstudiantesReal(){
+      fetch(API + '/api/estudiantes-maestro', { credentials: 'include' })
+        .then(function(r){ if (!r.ok) throw 0; return r.json(); })
+        .then(function(d){ if (d && d.autenticado) aplicarEstudiantes(d); })
+        .catch(function(){ real = false; });
+    }
 
     /* ---------- perfil del maestro en localStorage ---------- */
     function perfilDefault(){ return { nombre: 'Sofia', telefono: '+57 300 123 4567', correo: 'sofia@horasocial.edu', sede: 'Sede Principal' }; }
@@ -767,7 +818,7 @@
     function filtrados(){
       var q = norm($('stSearch') ? $('stSearch').value : '');
       return est.filter(function(s){
-        var okF = filtroActual === 'Todas' || s.brigada === filtroActual;
+        var okF = filtroActual === 'Todas' || norm(s.brigada) === norm(filtroActual);
         var okQ = !q || norm(s.nombre).indexOf(q) !== -1 || norm(s.codigo).indexOf(q) !== -1;
         return okF && okQ;
       });
@@ -1000,6 +1051,7 @@
     renderStats();
     renderList();
     renderNotifs();
+    if (!isFile()) cargarEstudiantesReal();
   })();
 </script>
 

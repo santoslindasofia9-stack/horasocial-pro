@@ -783,6 +783,124 @@ def _datos_panel(docente):
     }
 
 
+MESES_CORTOS = [
+    'ene', 'feb', 'mar', 'abr', 'may', 'jun',
+    'jul', 'ago', 'sep', 'oct', 'nov', 'dic',
+]
+
+META_HORAS = 80
+
+
+def _fecha_corta(fecha):
+    """'12 oct' en la zona local, el formato que usa la lista de estudiantes."""
+    if not fecha:
+        return ''
+    local = timezone.localtime(fecha)
+    return f'{local.day} {MESES_CORTOS[local.month - 1]}'
+
+
+def _historial_estudiante(docente, estudiante):
+    """
+    Movimientos del estudiante en las sesiones de este docente, del mas
+    reciente al mas antiguo: fecha corta, horas y nombre de la actividad.
+    """
+    registros = (
+        Asistencia.objects
+        .filter(id_estudiante=estudiante, id_sesion__id_profesor=docente)
+        .select_related('id_sesion__id_tipo')
+        .order_by('-id_sesion__fecha_hora', '-id_registro')
+    )
+    return [
+        {
+            'f': _fecha_corta(registro.id_sesion.fecha_hora),
+            'h': registro.horas_ganadas,
+            'n': registro.id_sesion.id_tipo.nombre_actividad,
+            'validacion': registro.validacion_prof,
+        }
+        for registro in registros
+    ]
+
+
+def _fila_estudiante(docente, estudiante):
+    """
+    Una fila de la pantalla de estudiantes: horas validadas, horas por
+    validar y estado. Un estudiante esta 'Al dia' cuando ya tiene horas
+    reconocidas y no le queda ninguna asistencia esperando validacion.
+    """
+    asistencias = Asistencia.objects.filter(
+        id_estudiante=estudiante, id_sesion__id_profesor=docente,
+    )
+    horas = _suma_horas(
+        asistencias.filter(validacion_prof=Asistencia.VALIDACION_CUMPLIDA),
+    )
+    pendientes = asistencias.filter(
+        validacion_prof=Asistencia.VALIDACION_POR_VALIDAR,
+    ).count()
+    ultima = (
+        asistencias
+        .select_related('id_sesion__id_tipo')
+        .order_by('-id_sesion__fecha_hora', '-id_registro')
+        .first()
+    )
+    return {
+        'id': estudiante.pk,
+        'nombre': estudiante.nombre_completo,
+        'codigo': estudiante.codigo or f'EST-{estudiante.pk}',
+        'correo': estudiante.correo,
+        'grado': estudiante.grado or '',
+        'brigada': ultima.id_sesion.id_tipo.nombre_actividad if ultima else 'Sin brigada',
+        'horas': horas,
+        'pendientes': pendientes,
+        'meta': META_HORAS,
+        'pct': _porcentaje(horas, META_HORAS),
+        'estado': 'Al dia' if (horas > 0 and pendientes == 0) else 'Pendiente',
+        'historial': _historial_estudiante(docente, estudiante),
+    }
+
+
+def _datos_estudiantes(docente):
+    """Carga completa que consume la pantalla de estudiantes."""
+    filas = [
+        _fila_estudiante(docente, estudiante)
+        for estudiante in docente.estudiantes_a_cargo.order_by('nombre_completo')
+    ]
+    return {
+        'autenticado': True,
+        'docente': {'nombre': docente.nombre_completo},
+        'stats': {
+            'total': len(filas),
+            'al_dia': sum(1 for fila in filas if fila['estado'] == 'Al dia'),
+            'horas': sum(fila['horas'] for fila in filas),
+            'meta': META_HORAS,
+        },
+        'estudiantes': filas,
+    }
+
+
+@csrf_exempt
+@habilita_cors
+@require_http_methods(['GET', 'OPTIONS'])
+def api_estudiantes_maestro(request):
+    """
+    Estudiantes a cargo del docente con la sesion abierta.
+
+    Cada fila trae las horas validadas, las que esperan validacion, la
+    brigada de su ultimo movimiento y el historial de asistencias. Los
+    contadores salen de las mismas asistencias que valida el panel, asi
+    que aprobar una asistencia ahi se refleja aqui de inmediato.
+    """
+
+    if request.method == 'OPTIONS':
+        # Preflight que dispara el navegador por Content-Type: application/json.
+        return HttpResponse(status=204)
+
+    docente = _docente_en_sesion(request)
+    if docente is None:
+        return _respuesta_sin_sesion()
+
+    return JsonResponse(_datos_estudiantes(docente))
+
+
 @csrf_exempt
 @habilita_cors
 @require_http_methods(['GET', 'OPTIONS'])

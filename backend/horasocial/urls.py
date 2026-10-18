@@ -59,6 +59,13 @@ urlpatterns = [
         name='api-dashboard-maestro',
     ),
 
+    # Estudiantes a cargo del docente con horas, estado e historial.
+    path(
+        'api/estudiantes-maestro',
+        docentes_views.api_estudiantes_maestro,
+        name='api-estudiantes-maestro',
+    ),
+
     # Validar o rechazar una asistencia desde el panel (con los contadores
     # ya recalculados en la respuesta).
     path(

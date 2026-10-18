@@ -758,9 +758,10 @@ class ApiPanelMaestroTests(BaseModuloDocentes):
     def _abrir_sesion(self):
         self.client.login(username=CORREO, password=CLAVE)
 
-    def test_sin_sesion_los_tres_endpoints_responden_401(self):
+    def test_sin_sesion_los_endpoints_del_panel_responden_401(self):
         casos = [
             ('dashboard', self._dashboard()),
+            ('estudiantes', self._estudiantes()),
             ('accion', self._accion(
                 {'id_registro': self.pendiente.pk, 'accion': 'aprobar'},
             )),
@@ -815,6 +816,75 @@ class ApiPanelMaestroTests(BaseModuloDocentes):
         self.assertLessEqual(len(datos['notifs']), 4)
         for aviso in datos['notifs']:
             self.assertEqual(set(aviso), {'id', 'txt', 'hora', 'leido'})
+
+    def _estudiantes(self, **extra):
+        return self.client.get(reverse('api-estudiantes-maestro'), **extra)
+
+    def test_la_pantalla_de_estudiantes_tiene_la_forma_esperada(self):
+        self._abrir_sesion()
+        respuesta = self._estudiantes()
+        self.assertEqual(respuesta.status_code, 200)
+        datos = respuesta.json()
+
+        self.assertTrue(datos['autenticado'])
+        self.assertEqual(datos['docente']['nombre'], self.docente.nombre_completo)
+        self.assertEqual(
+            datos['stats'],
+            # Un alumno ya validado (4 h) y otro esperando validacion.
+            {'total': 2, 'al_dia': 1, 'horas': 4, 'meta': 80},
+        )
+
+        self.assertEqual(len(datos['estudiantes']), 2)
+        for fila in datos['estudiantes']:
+            self.assertEqual(
+                set(fila),
+                {
+                    'id', 'nombre', 'codigo', 'correo', 'grado', 'brigada',
+                    'horas', 'pendientes', 'meta', 'pct', 'estado', 'historial',
+                },
+            )
+            self.assertEqual(fila['meta'], 80)
+
+    def test_el_estudiante_validado_queda_al_dia_y_el_pendiente_no(self):
+        self._abrir_sesion()
+        por_codigo = {
+            fila['codigo']: fila
+            for fila in self._estudiantes().json()['estudiantes']
+        }
+
+        al_dia = por_codigo[self.estudiante.codigo]
+        self.assertEqual(al_dia['estado'], 'Al dia')
+        self.assertEqual(al_dia['horas'], 4)
+        self.assertEqual(al_dia['pendientes'], 0)
+        self.assertEqual(al_dia['historial'][0]['h'], 4)
+
+        esperando = por_codigo[self.estudiante2.codigo]
+        self.assertEqual(esperando['estado'], 'Pendiente')
+        self.assertEqual(esperando['horas'], 0)
+        self.assertEqual(esperando['pendientes'], 1)
+
+    def test_las_dos_pantallas_muestran_los_mismos_numeros(self):
+        """El panel y la pantalla de estudiantes no pueden divergir."""
+        self._abrir_sesion()
+        panel = self._dashboard().json()['stats']
+        estudiantes = self._estudiantes().json()['stats']
+
+        self.assertEqual(estudiantes['total'], panel['estudiantes'])
+        self.assertEqual(estudiantes['horas'], panel['horas_totales'])
+
+    def test_aprobar_en_el_panel_se_refleja_en_la_pantalla_de_estudiantes(self):
+        """Validar una asistencia actualiza las dos pantallas a la vez."""
+        self._abrir_sesion()
+        antes = self._estudiantes().json()['stats']
+        self.assertEqual(antes['al_dia'], 1)
+
+        self._accion({'id_registro': self.pendiente.pk, 'accion': 'aprobar'})
+
+        despues = self._estudiantes().json()['stats']
+        self.assertEqual(despues['al_dia'], 2)
+        self.assertEqual(despues['horas'], antes['horas'] + 4)
+        # Y el panel ya no tiene pendientes que validar.
+        self.assertEqual(self._dashboard().json()['stats']['pendientes'], 0)
 
     def test_un_docente_sin_sesiones_ve_arreglos_vacios(self):
         """Los estados vacios del panel son arreglos, nunca null."""
