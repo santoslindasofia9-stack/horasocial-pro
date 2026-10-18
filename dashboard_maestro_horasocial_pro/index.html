@@ -968,9 +968,14 @@
       return MESES[h.getMonth()] + ' de ' + h.getFullYear();
     }
     function datosReporte(){
-      var acts = [];
-      ACTIVIDADES.forEach(function(a){ acts.push({ nombre: a.nombre, estudiantes: a.estudiantes, horas: a.horas, pct: pctAct(a) }); });
-      return { estudiantes: 75, actividades: acts, horasTotales: 1240, pendientes: pendientesDe(att) };
+      if (repData && repData.resumen){
+        var acts = [];
+        (repData.actividades || []).forEach(function(a){ acts.push({ nombre: a.nombre, estudiantes: a.estudiantes, horas: a.horas, pct: a.pct }); });
+        return { estudiantes: repData.resumen.estudiantes, actividades: acts, horasTotales: repData.resumen.horas_totales, pendientes: repData.resumen.pendientes };
+      }
+      var acts2 = [];
+      ACTIVIDADES.forEach(function(a){ acts2.push({ nombre: a.nombre, estudiantes: a.estudiantes, horas: a.horas, pct: pctAct(a) }); });
+      return { estudiantes: 75, actividades: acts2, horasTotales: 1240, pendientes: pendientesDe(att) };
     }
     function pdfGenerar(tipo){
       var d = datosReporte();
@@ -1083,9 +1088,131 @@
       setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); }, 400);
     }
     function generarReporte(tipo){
-      var ok = typeof window.jspdf !== 'undefined' && typeof window.jspdf.jsPDF === 'function';
-      if (ok){ pdfGenerar(tipo); } else { txtGenerar(tipo); }
-      toast(tipo === 'semanal' ? 'Reporte semanal descargado' : 'Reporte mensual descargado');
+      var descargar = function(){
+        var ok = typeof window.jspdf !== 'undefined' && typeof window.jspdf.jsPDF === 'function';
+        if (ok){ pdfGenerar(tipo); } else { txtGenerar(tipo); }
+        toast(tipo === 'semanal' ? 'Reporte semanal descargado' : 'Reporte mensual descargado');
+      };
+      if (isFile()){ descargar(); return; }
+      /* con backend: el PDF se arma con los datos reales del periodo */
+      fetch(API + '/api/reporte-maestro?tipo=' + tipo, { credentials: 'include' })
+        .then(function(r){ if (!r.ok) throw 0; return r.json(); })
+        .then(function(d){ repData = d; descargar(); })
+        .catch(function(){ descargar(); });
+    }
+
+    /* ---------- datos reales del backend ---------- */
+    var API = 'http://127.0.0.1:8000';
+    var real = false;                 /* true cuando el panel carga desde la API */
+    var repData = null;               /* datos del reporte descargable */
+    var CHIPS = [
+      { chip: 'energy_savings_leaf', cls: 'green' },
+      { chip: 'school', cls: 'blue' },
+      { chip: 'volunteer_activism', cls: 'purple' }
+    ];
+    function fmtFecha(s){
+      if (!s) return '';
+      var p = String(s).split(' ')[0].split('-');
+      if (p.length < 3) return s;
+      return parseInt(p[2], 10) + ' ' + MESES[parseInt(p[1], 10) - 1].slice(0, 3);
+    }
+    function pintarStats(st){
+      var cards = document.querySelectorAll('.stats .stat b');
+      if (cards.length >= 4){
+        cards[0].textContent = st.estudiantes;
+        cards[1].textContent = st.actividades;
+        cards[2].textContent = st.horas_totales;
+        cards[3].textContent = st.pendientes;
+      }
+      $('pendCount') && ($('pendCount').textContent = st.pendientes);
+      var s = $('pendSmall');
+      if (s) s.textContent = st.pendientes === 0 ? 'Sin pendientes hoy' : st.pendientes + ' pendientes hoy';
+      var r = $('repSmall');
+      if (r) r.textContent = st.pendientes === 0 ? 'Sin reportes pendientes' : st.pendientes + ' reportes nuevos';
+    }
+    function pintarBrigadas(brigadas){
+      var box = document.querySelector('.brigades');
+      if (!box) return;
+      var html = '';
+      brigadas.forEach(function(b, i){
+        var meta = CHIPS[i % CHIPS.length];
+        html += '<div class="brigade click" data-act="b' + b.id + '" role="button" tabindex="0" aria-label="Ver ' + esc(b.nombre) + '">' +
+          '<div class="brigade-top">' +
+            '<div class="chip ' + meta.cls + '"><span class="material-symbols-outlined">' + meta.chip + '</span></div>' +
+            '<div class="brigade-info"><h4>' + esc(b.nombre) + '</h4><small>' + b.estudiantes + ' estudiantes activos</small></div>' +
+          '</div>' +
+          '<div><div class="bar-row"><span>Progreso de Brigada</span><b>' + b.pct + '%</b></div>' +
+          '<div class="bar"><div class="bar-fill" style="width:' + b.pct + '%"></div></div></div>' +
+        '</div>';
+      });
+      box.innerHTML = html;
+      var head = box.closest('section') && box.closest('section').querySelector('.sec-head span');
+      if (head) head.textContent = brigadas.length + ' activas';
+      /* re-engancha el clic de las tarjetas nuevas */
+      box.querySelectorAll('.brigade.click').forEach(function(c){
+        var open = function(){ actFocus = c.getAttribute('data-act'); abrirModal($('modalActividades')); };
+        c.addEventListener('click', open);
+        keyOpen(c, open);
+      });
+    }
+    function mapaActividades(brigadas){
+      return brigadas.map(function(b, i){
+        var meta = CHIPS[i % CHIPS.length];
+        var base = Math.max(b.horas, 1);
+        return {
+          id: 'b' + b.id, nombre: b.nombre, sub: b.estudiantes + ' estudiantes activos',
+          chip: meta.chip, cls: meta.cls, estado: 'Activa',
+          estudiantes: b.estudiantes, horas: b.horas, meta: b.meta,
+          spark: [Math.round(base * 0.3), Math.round(base * 0.5), Math.round(base * 0.7), b.horas],
+          movs: []
+        };
+      });
+    }
+    function aplicarPanel(d){
+      real = true;
+      ACTIVIDADES.length = 0;
+      mapaActividades(d.brigadas).forEach(function(a){ ACTIVIDADES.push(a); });
+      att.length = 0;
+      d.pendientes.forEach(function(p){
+        att.push({ id: p.id_registro, nombre: p.estudiante, actividad: p.actividad, fecha: fmtFecha(p.fecha), horas: 4, v: false });
+      });
+      reps.length = 0;
+      d.pendientes.forEach(function(p){
+        reps.push({ id: p.id_registro, estudiante: p.estudiante, actividad: p.actividad, fecha: fmtFecha(p.fecha), horas: 4, estado: 'Pendiente' });
+      });
+      notifs.length = 0;
+      (d.notifs || []).forEach(function(n){
+        notifs.push({ id: parseInt(String(n.id).replace(/\D/g, ''), 10) || notifs.length + 1, texto: n.txt, tiempo: n.hora, leido: !!n.leido });
+      });
+      pintarStats(d.stats);
+      pintarBrigadas(d.brigadas);
+      renderActividades(null);
+      renderNotifs();
+      renderReportes();
+      actualizarContadores(d.stats.pendientes);
+    }
+    function cargarPanelReal(){
+      fetch(API + '/api/dashboard-maestro', { credentials: 'include' })
+        .then(function(r){ if (!r.ok) throw 0; return r.json(); })
+        .then(function(d){ if (d && d.autenticado) aplicarPanel(d); })
+        .catch(function(){ real = false; });
+    }
+    /* acciones sobre asistencia: con backend manda la API, sin backend sigue el mock local */
+    function accionAsistencia(id, aprobar, alTerminar){
+      if (!real){ alTerminar(true); return; }
+      fetch(API + '/api/asistencia-accion', {
+        method: 'POST', credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id_registro: id, accion: aprobar ? 'aprobar' : 'rechazar', horas: 4 })
+      })
+        .then(function(r){ if (!r.ok) throw 0; return r.json(); })
+        .then(function(d){
+          if (d && d.success){
+            pintarStats(d.stats);
+            alTerminar(true);
+          } else { alTerminar(false); }
+        })
+        .catch(function(){ alTerminar(false); });
     }
 
     /* ---------- bindings ---------- */
@@ -1119,10 +1246,18 @@
       var rec = null;
       reps.forEach(function(r){ if (r.id === id) rec = r; });
       if (!rec || rec.estado !== 'Pendiente') return;
-      rec.estado = aprobar ? 'Aprobado' : 'Rechazado';
-      guardarReportes();
-      renderReportes();
-      toast((aprobar ? 'Reporte aprobado: ' : 'Reporte rechazado: ') + rec.estudiante);
+      btn.disabled = true;
+      accionAsistencia(id, aprobar, function(ok){
+        if (!ok){ btn.disabled = false; toast('No se pudo actualizar la asistencia'); return; }
+        rec.estado = aprobar ? 'Aprobado' : 'Rechazado';
+        guardarReportes();
+        var a = null;
+        att.forEach(function(x){ if (x.id === id) a = x; });
+        if (a) a.v = true;
+        guardarAsistencia(att);
+        renderReportes();
+        toast((aprobar ? 'Reporte aprobado: ' : 'Reporte rechazado: ') + rec.estudiante);
+      });
     });
 
     var mA = $('modalActividades'), mS = $('modalAsistencia'), mR = $('modalReportes');
@@ -1143,18 +1278,22 @@
       var rec = null;
       att.forEach(function(r){ if (r.id === id) rec = r; });
       if (!rec || rec.v) return;
-      rec.v = true;
-      guardarAsistencia(att);
-      var pend = pendientesDe(att);
-      actualizarContadores(pend);
-      var row = btn.closest('.att-row');
-      if (row){ row.classList.add('done'); btn.outerHTML = '<span class="vchip"><span class="material-symbols-outlined">check</span>Verificada</span>'; }
-      var done = att.length - pend;
-      var pt = $('attProgressTxt'), pb = $('attProgressBar'), all = $('attAllDone');
-      if (pt) pt.innerHTML = '<span>Progreso de verificación</span><b>' + done + ' de ' + att.length + ' verificadas</b>';
-      if (pb) pb.style.width = (att.length ? Math.round(done / att.length * 100) : 0) + '%';
-      if (all) all.classList.toggle('show', pend === 0);
-      toast('Asistencia verificada: ' + rec.nombre);
+      btn.disabled = true;
+      accionAsistencia(id, true, function(ok){
+        if (!ok){ btn.disabled = false; toast('No se pudo verificar la asistencia'); return; }
+        rec.v = true;
+        guardarAsistencia(att);
+        var pend = pendientesDe(att);
+        actualizarContadores(pend);
+        var row = btn.closest('.att-row');
+        if (row){ row.classList.add('done'); btn.outerHTML = '<span class="vchip"><span class="material-symbols-outlined">check</span>Verificada</span>'; }
+        var done = att.length - pend;
+        var pt = $('attProgressTxt'), pb = $('attProgressBar'), all = $('attAllDone');
+        if (pt) pt.innerHTML = '<span>Progreso de verificación</span><b>' + done + ' de ' + att.length + ' verificadas</b>';
+        if (pb) pb.style.width = (att.length ? Math.round(done / att.length * 100) : 0) + '%';
+        if (all) all.classList.toggle('show', pend === 0);
+        toast('Asistencia verificada: ' + rec.nombre);
+      });
     });
 
     var btnNotif = $('btnNotif'), panel = $('notifPanel');
@@ -1186,6 +1325,7 @@
     actualizarContadores(pendientesDe(att));
     renderNotifs();
     renderReportes();
+    if (!isFile()) cargarPanelReal();
   })();
 </script>
 
