@@ -112,6 +112,14 @@ LOGIN_URL = 'docentes:login'
 LOGIN_REDIRECT_URL = 'docentes:dashboard'
 LOGOUT_REDIRECT_URL = 'docentes:login'
 
+# A donde vuelve el formulario decorado de login (server.js en :3000) despues
+# de autenticar contra MySQL. Si el frontend se publica en otro host o puerto,
+# cambiar SOLO esta URL. Con cadena vacia, el login vuelve al panel de Django.
+DASHBOARD_DOCENTE_URL = os.environ.get(
+    'DASHBOARD_DOCENTE_URL',
+    'http://127.0.0.1:3000/profesor/dashboard',
+)
+
 
 # Password validation
 # https://docs.djangoproject.com/en/6.1/ref/settings/#auth-password-validators

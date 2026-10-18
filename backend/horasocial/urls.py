@@ -34,4 +34,12 @@ urlpatterns = [
         docentes_views.api_recuperar_contrasena_maestro,
         name='api-recuperar-contrasena-maestro',
     ),
+
+    # El dashboard decorado pregunta quien tiene la sesion abierta, para
+    # mostrar el nombre real en lugar de un placeholder.
+    path(
+        'api/sesion-actual',
+        docentes_views.api_sesion_actual,
+        name='api-sesion-actual',
+    ),
 ]

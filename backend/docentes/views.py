@@ -255,6 +255,15 @@ def api_login_maestro(request):
         if autenticado is not None:
             usuario.reiniciar_intentos()
             login(request, autenticado)
+
+            # El formulario decorado vive en otro puerto (:3000). Con una URL
+            # configurada, el docente aterriza directo en el dashboard
+            # decorado con la sesion ya abierta; sin ella, en el panel de
+            # Django. El destino sale de settings y NUNCA de la peticion: un
+            # destino que viniera del cliente seria una redireccion abierta.
+            destino = getattr(settings, 'DASHBOARD_DOCENTE_URL', '')
+            if destino:
+                return HttpResponseRedirect(destino)
             return HttpResponseRedirect(reverse('docentes:dashboard'))
 
     messages.error(request, MENSAJE_CREDENCIALES)
@@ -291,8 +300,13 @@ def habilita_cors(view):
         origen = request.headers.get('Origin', '')
         if origen in ORIGENES_PERMITIDOS:
             respuesta['Access-Control-Allow-Origin'] = origen
-            respuesta['Access-Control-Allow-Methods'] = 'POST, OPTIONS'
+            respuesta['Access-Control-Allow-Methods'] = 'GET, POST, OPTIONS'
             respuesta['Access-Control-Allow-Headers'] = 'Content-Type'
+            # El dashboard decorado manda la cookie de sesion en el fetch
+            # (`credentials: 'include'`). Sin esta cabecera el navegador
+            # descarta la respuesta. Con credenciales NO se puede responder
+            # '*': hay que devolver el origen exacto, como se hace arriba.
+            respuesta['Access-Control-Allow-Credentials'] = 'true'
             respuesta['Vary'] = 'Origin'
         return respuesta
 
@@ -354,3 +368,36 @@ def api_recuperar_contrasena_maestro(request):
 
     solicitud = formulario.save()
     return JsonResponse({'success': True, 'folio': solicitud.id})
+
+
+@habilita_cors
+@require_http_methods(['GET', 'OPTIONS'])
+def api_sesion_actual(request):
+    """
+    Devuelve quien tiene la sesion abierta.
+
+    El dashboard decorado la consulta con `credentials: 'include'` para
+    mostrar el nombre real del docente en lugar del placeholder "Maestro
+    Ricardo", y para no quedar accesible sin sesion.
+
+    Detalle de cookies: el frontend (:3000) y el backend (:8000) son ORIGENES
+    distintos, pero el MISMO SITIO (SameSite no compara puertos). Por eso la
+    cookie de sesion viaja en el fetch. Requisito: usar `127.0.0.1` en los dos
+    lados, porque `localhost` y `127.0.0.1` SI son sitios distintos.
+    """
+
+    if request.method == 'OPTIONS':
+        # Preflight que dispara el navegador por el fetch con credenciales.
+        return HttpResponse(status=204)
+
+    if not request.user.is_authenticated:
+        return JsonResponse({'autenticado': False})
+
+    return JsonResponse({
+        'autenticado': True,
+        'id_usuario': request.user.pk,
+        'nombre': request.user.nombre_completo,
+        'correo': request.user.correo,
+        'rol': request.user.rol,
+        'es_docente': request.user.es_docente,
+    })

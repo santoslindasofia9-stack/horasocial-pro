@@ -10,7 +10,8 @@ import json
 from datetime import timedelta
 from pathlib import Path
 
-from django.test import TestCase
+from django.conf import settings
+from django.test import TestCase, override_settings
 from django.urls import reverse
 from django.utils import timezone
 
@@ -185,7 +186,9 @@ class RedireccionAbiertaTests(BaseModuloDocentes):
 class ApiLoginMaestroTests(BaseModuloDocentes):
     """Puente con el formulario HTML existente."""
 
+    @override_settings(DASHBOARD_DOCENTE_URL='')
     def test_autentica_y_redirige_al_panel(self):
+        """Sin frontend decorado configurado, el login va al panel de Django."""
         respuesta = self.client.post(
             reverse('api-login-maestro'),
             {'username': CORREO, 'password': CLAVE},
@@ -193,13 +196,23 @@ class ApiLoginMaestroTests(BaseModuloDocentes):
         self.assertEqual(respuesta.status_code, 302)
         self.assertEqual(respuesta['Location'], reverse('docentes:dashboard'))
 
+    def test_autentica_y_redirige_al_dashboard_decorado(self):
+        """Con el frontend decorado configurado, el login aterriza alli."""
+        respuesta = self.client.post(
+            reverse('api-login-maestro'),
+            {'username': CORREO, 'password': CLAVE},
+        )
+        self.assertEqual(respuesta.status_code, 302)
+        self.assertEqual(respuesta['Location'], settings.DASHBOARD_DOCENTE_URL)
+
     def test_clave_mala_vuelve_al_login(self):
         respuesta = self.client.post(
             reverse('api-login-maestro'),
             {'username': CORREO, 'password': 'clave-incorrecta'},
         )
         self.assertEqual(respuesta.status_code, 302)
-        self.assertIn('/login/', respuesta['Location'])
+        self.assertEqual(respuesta['Location'], reverse('docentes:login'))
+        self.assertNotIn('_auth_user_id', self.client.session)
 
 
 class RecuperarContrasenaTests(BaseModuloDocentes):
@@ -348,6 +361,58 @@ class ApiRecuperarContrasenaTests(BaseModuloDocentes):
         self.assertEqual(respuesta['Access-Control-Allow-Origin'], 'http://localhost:3000')
 
 
+class ApiSesionActualTests(BaseModuloDocentes):
+    """
+    Quien tiene la sesion abierta.
+
+    Es lo que consulta el dashboard decorado para saludar al docente real y
+    para no quedar accesible sin login.
+    """
+
+    def _ruta(self):
+        return reverse('api-sesion-actual')
+
+    def _get(self, **extra):
+        return self.client.get(self._ruta(), **extra)
+
+    def test_sin_sesion_responde_no_autenticado(self):
+        respuesta = self._get()
+        self.assertEqual(respuesta.status_code, 200)
+        self.assertFalse(respuesta.json()['autenticado'])
+
+    def test_con_sesion_devuelve_los_datos_del_docente(self):
+        self.client.login(username=CORREO, password=CLAVE)
+        respuesta = self._get()
+        self.assertEqual(respuesta.status_code, 200)
+        datos = respuesta.json()
+        self.assertTrue(datos['autenticado'])
+        self.assertEqual(datos['nombre'], self.docente.nombre_completo)
+        self.assertEqual(datos['correo'], CORREO)
+        self.assertTrue(datos['es_docente'])
+
+    def test_responde_con_credenciales_para_el_fetch_cross_origin(self):
+        """
+        El fetch del dashboard va con `credentials: 'include'`. Sin
+        Access-Control-Allow-Credentials el navegador descarta la respuesta y
+        el panel nunca reconoceria la sesion.
+        """
+        respuesta = self._get(HTTP_ORIGIN='http://127.0.0.1:3000')
+        self.assertEqual(
+            respuesta['Access-Control-Allow-Origin'], 'http://127.0.0.1:3000',
+        )
+        self.assertEqual(respuesta['Access-Control-Allow-Credentials'], 'true')
+
+    def test_origen_no_autorizado_no_recibe_cors(self):
+        respuesta = self._get(HTTP_ORIGIN='http://sitio-desconocido.example')
+        self.assertNotIn('Access-Control-Allow-Origin', respuesta)
+
+    def test_preflight_options_responde_204(self):
+        respuesta = self.client.options(
+            self._ruta(), HTTP_ORIGIN='http://127.0.0.1:3000',
+        )
+        self.assertEqual(respuesta.status_code, 204)
+
+
 class PaginasEstaticasConectadasTests(TestCase):
     """
     Guarda contra la regresion: si alguien vuelve a dejar las paginas
@@ -368,3 +433,13 @@ class PaginasEstaticasConectadasTests(TestCase):
         html = self._leer('recuperar_contrasena_maestro_horasocial_pro')
         self.assertIn("fetch(API_BASE + '/api/recuperar-contrasena-maestro'", html)
         self.assertNotIn("fetch('/api/recuperar-contrasena-maestro'", html)
+
+    def test_el_dashboard_consulta_la_sesion_del_backend(self):
+        """
+        El panel decorado no muestra el placeholder de la maqueta: pregunta
+        por la sesion real y se protege si no hay ninguna abierta.
+        """
+        html = self._leer('dashboard_maestro_horasocial_pro')
+        self.assertIn("fetch(API + '/api/sesion-actual'", html)
+        self.assertIn("credentials: 'include'", html)
+        self.assertIn("/profesor/login", html)

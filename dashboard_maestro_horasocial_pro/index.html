@@ -425,7 +425,7 @@
       <div class="av-fb" id="avFallback">MR</div>
     </div>
     <div class="hi">
-      <h1>Maestro Ricardo</h1>
+      <h1 id="nombreDocente">Maestro Ricardo</h1>
       <p>Panel del Maestro</p>
     </div>
     <button class="bell" id="btnNotif" type="button" aria-label="Notificaciones">
@@ -439,7 +439,7 @@
 
   <!-- saludo -->
   <section class="greet">
-    <h2>Panel de Control: Maestro Ricardo</h2>
+    <h2 id="tituloControl">Panel de Control: Maestro Ricardo</h2>
     <p>Bienvenido de nuevo. Aquí tienes el resumen de tus brigadas y el progreso de los estudiantes bajo tu supervisión.</p>
   </section>
 
@@ -1163,6 +1163,62 @@
     renderNotifs();
     renderReportes();
   })();
+</script>
+
+<!-- Sesion real: el panel no queda accesible sin login y muestra el nombre
+     del docente autenticado en lugar del placeholder de la maqueta. -->
+<script>
+(function sesionReal(){
+  /* En vista local (file://) no hay backend ni cookies: se deja la maqueta
+     intacta, igual que hace el resto de la pagina. */
+  if (location.protocol === 'file:') return;
+
+  var API = 'http://127.0.0.1:8000';
+
+  fetch(API + '/api/sesion-actual', { credentials: 'include' })
+    .then(function(respuesta){ return respuesta.json(); })
+    .then(function(datos){
+      if (!datos || !datos.autenticado){
+        location.replace('/profesor/login');
+        return;
+      }
+      pintarDocente(datos);
+    })
+    .catch(function(){
+      /* Sin respuesta del backend no se puede confirmar la sesion: se manda
+         al login en lugar de dejar el panel a medias. */
+      location.replace('/profesor/login');
+    });
+
+  function pintarDocente(datos){
+    var nombre = (datos.nombre || '').trim();
+    if (!nombre) return;
+
+    var saludo = document.getElementById('nombreDocente');
+    if (saludo) saludo.textContent = nombre;
+
+    var titulo = document.getElementById('tituloControl');
+    if (titulo) titulo.textContent = 'Panel de Control: ' + nombre;
+
+    var avatar = document.querySelector('header .avatar');
+    if (avatar) avatar.setAttribute('aria-label', 'Perfil de ' + nombre);
+
+    var foto = document.getElementById('avImg');
+    if (foto) foto.setAttribute('alt', 'Foto de ' + nombre);
+
+    var iniciales = document.getElementById('avFallback');
+    if (iniciales) iniciales.textContent = inicialesDe(nombre);
+  }
+
+  /* "Prof. Sofia Santos" -> "SS": se descarta el tratamiento y se toman las
+     iniciales del nombre y del apellido. */
+  function inicialesDe(nombre){
+    var partes = nombre.replace(/^(prof|ing|lic|dr|dra)\.?\s+/i, '').trim().split(/\s+/);
+    var primera = (partes[0] || '').charAt(0);
+    var ultima = partes.length > 1 ? partes[partes.length - 1].charAt(0) : '';
+    return (primera + ultima).toUpperCase();
+  }
+})();
 </script>
 </body>
 </html>
