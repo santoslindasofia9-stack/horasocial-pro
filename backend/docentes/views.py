@@ -15,6 +15,7 @@ hash (PBKDF2) y lo contrasta con la columna `password` de la tabla `usuariosa`.
 
 import json
 import unicodedata
+from datetime import datetime, time, timedelta
 from functools import wraps
 
 from django.conf import settings
@@ -22,6 +23,8 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
+from django.db.models import Sum
+from django.db.models.functions import Coalesce
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
@@ -39,7 +42,7 @@ from .forms import (
     RestablecerContrasenaForm,
     buscar_usuario,
 )
-from .models import Docente, SolicitudRecuperacion, Usuario
+from .models import Actividad, Asistencia, Docente, Sesion, SolicitudRecuperacion, Usuario
 
 
 # ==========================================================================
@@ -570,4 +573,387 @@ def api_sesion_actual(request):
         'correo': request.user.correo,
         'rol': request.user.rol,
         'es_docente': request.user.es_docente,
+    })
+
+
+# ==========================================================================
+# API JSON DEL PANEL DEL DOCENTE (datos reales de MySQL)
+# ==========================================================================
+
+def _docente_en_sesion(request):
+    """
+    Docente con la sesion abierta, o None.
+
+    El panel no es publico: sin sesion, o con una sesion de otro rol, la
+    respuesta es 401 con la misma marca que el frontend usa para volver
+    al login.
+    """
+    usuario = request.user
+    if not usuario.is_authenticated or not usuario.es_docente:
+        return None
+    # Se devuelve la vista proxy `Docente` para reutilizar sus propiedades
+    # (estudiantes a cargo, horas validadas) en lugar de repetir las queries.
+    return Docente.objects.filter(pk=usuario.pk).first()
+
+
+def _respuesta_sin_sesion():
+    return JsonResponse({'autenticado': False, 'error': 'sesion'}, status=401)
+
+
+def _formato_corta(fecha):
+    """Fecha local 'YYYY-MM-DD HH:MM' (el panel la pinta tal cual)."""
+    if not fecha:
+        return None
+    return timezone.localtime(fecha).strftime('%Y-%m-%d %H:%M')
+
+
+def _rango(dias):
+    """
+    Rango local [desde, hasta] de los ultimos `dias` dias incluyendo hoy.
+
+    Devuelve tambien los limites como datetimes aware [inicio, fin) para
+    filtrar en base de datos sin depender de la zona del servidor.
+    """
+    hasta = timezone.localdate()
+    desde = hasta - timedelta(days=dias - 1)
+    inicio = timezone.make_aware(datetime.combine(desde, time.min))
+    fin = timezone.make_aware(datetime.combine(hasta + timedelta(days=1), time.min))
+    return desde, hasta, inicio, fin
+
+
+def _asistencias_en(queryset, inicio, fin):
+    """
+    Asistencias con fecha de referencia dentro del rango [inicio, fin).
+
+    La fecha de referencia es la confirmacion del estudiante y, si no hay
+    registro de confirmacion, la fecha de la sesion: una validacion sin
+    `fecha_confirmacion` no debe desaparecer del reporte.
+    """
+    return (
+        queryset
+        .annotate(fecha_ref=Coalesce('fecha_confirmacion', 'id_sesion__fecha_hora'))
+        .filter(fecha_ref__gte=inicio, fecha_ref__lt=fin)
+    )
+
+
+def _suma_horas(queryset):
+    return queryset.aggregate(total=Sum('horas_ganadas'))['total'] or 0
+
+
+def _pendientes_de(docente):
+    return Asistencia.objects.filter(
+        id_sesion__id_profesor=docente,
+        validacion_prof=Asistencia.VALIDACION_POR_VALIDAR,
+    )
+
+
+def _actividades_de(docente):
+    return (
+        Actividad.objects.filter(sesiones__id_profesor=docente)
+        .distinct()
+        .order_by('nombre_actividad')
+    )
+
+
+def _porcentaje(horas, meta):
+    if not meta:
+        return 0
+    return max(0, min(100, round(horas / meta * 100)))
+
+
+def _estadisticas_panel(docente):
+    """Los cuatro contadores que el panel repite en cada respuesta."""
+    return {
+        'estudiantes': docente.estudiantes_a_cargo.count(),
+        'actividades': docente.sesiones_dirigidas.values('id_tipo').distinct().count(),
+        'horas_totales': docente.total_horas_validadas(),
+        'pendientes': _pendientes_de(docente).count(),
+    }
+
+
+def _brigadas_panel(docente):
+    """Sesiones del docente agrupadas por actividad (brigada)."""
+    brigadas = []
+    ahora = timezone.now()
+    for actividad in _actividades_de(docente):
+        sesiones = docente.sesiones_dirigidas.filter(id_tipo=actividad)
+        asistencias = Asistencia.objects.filter(
+            id_sesion__id_profesor=docente,
+            id_sesion__id_tipo=actividad,
+        )
+        horas = _suma_horas(
+            asistencias.filter(validacion_prof=Asistencia.VALIDACION_CUMPLIDA),
+        )
+        meta = sum(sesion.cupos_max for sesion in sesiones)
+        proxima = (
+            sesiones
+            .filter(estado=Sesion.ESTADO_PROGRAMADA, fecha_hora__gt=ahora)
+            .order_by('fecha_hora')
+            .values_list('fecha_hora', flat=True)
+            .first()
+        )
+        brigadas.append({
+            'id': actividad.id_tipo,
+            'nombre': actividad.nombre_actividad,
+            'estudiantes': asistencias.values('id_estudiante').distinct().count(),
+            'horas': horas,
+            'meta': meta,
+            'pct': _porcentaje(horas, meta),
+            'proxima': _formato_corta(proxima),
+        })
+    return brigadas
+
+
+def _filas_pendientes(docente):
+    """Asistencias 'Por Validar' en orden cronologico de sesion."""
+    registros = (
+        _pendientes_de(docente)
+        .select_related('id_estudiante', 'id_sesion__id_tipo')
+        .order_by('id_sesion__fecha_hora', 'id_registro')
+    )
+    return [
+        {
+            'id_registro': registro.id_registro,
+            'estudiante': registro.id_estudiante.nombre_completo,
+            'actividad': registro.id_sesion.id_tipo.nombre_actividad,
+            'fecha': _formato_corta(registro.id_sesion.fecha_hora),
+            'ubicacion': registro.id_sesion.ubicacion,
+            'confirmacion': registro.confirmacion,
+        }
+        for registro in registros
+    ]
+
+
+def _notificaciones(docente, stats):
+    """Tres avisos en espanol derivados de los datos del panel."""
+    proxima = (
+        docente.sesiones_dirigidas
+        .filter(estado=Sesion.ESTADO_PROGRAMADA, fecha_hora__gt=timezone.now())
+        .order_by('fecha_hora')
+        .first()
+    )
+    _, _, inicio, fin = _rango(7)
+    horas_semana = _suma_horas(_asistencias_en(
+        Asistencia.objects.filter(
+            id_sesion__id_profesor=docente,
+            validacion_prof=Asistencia.VALIDACION_CUMPLIDA,
+        ),
+        inicio,
+        fin,
+    ))
+    return [
+        {
+            'id': 'n1',
+            'txt': (
+                f"{stats['pendientes']} asistencias esperan tu validacion"
+                if stats['pendientes'] else 'No quedan asistencias por validar'
+            ),
+            'hora': 'hace 5 min',
+            'leido': False,
+        },
+        {
+            'id': 'n2',
+            'txt': (
+                f'Tu proxima sesion es {_formato_corta(proxima.fecha_hora)} '
+                f'en {proxima.ubicacion}'
+                if proxima else 'No tienes sesiones programadas'
+            ),
+            'hora': 'hoy',
+            'leido': False,
+        },
+        {
+            'id': 'n3',
+            'txt': f'{horas_semana} horas validadas esta semana',
+            'hora': 'hace 1 h',
+            'leido': True,
+        },
+    ]
+
+
+def _datos_panel(docente):
+    """Carga completa que consume el panel decorado."""
+    stats = _estadisticas_panel(docente)
+    return {
+        'autenticado': True,
+        'docente': {'nombre': docente.nombre_completo},
+        'stats': stats,
+        'brigadas': _brigadas_panel(docente),
+        'pendientes': _filas_pendientes(docente),
+        'notifs': _notificaciones(docente, stats),
+    }
+
+
+@csrf_exempt
+@habilita_cors
+@require_http_methods(['GET', 'OPTIONS'])
+def api_dashboard_maestro(request):
+    """
+    Panel del docente con datos reales: estadisticas, brigadas, asistencias
+    que esperan validacion y avisos del encabezado.
+
+    Todo sale del alcance del docente con la sesion abierta; los estados
+    vacios son arreglos [], nunca null.
+    """
+
+    if request.method == 'OPTIONS':
+        # Preflight que dispara el navegador por Content-Type: application/json.
+        return HttpResponse(status=204)
+
+    docente = _docente_en_sesion(request)
+    if docente is None:
+        return _respuesta_sin_sesion()
+
+    return JsonResponse(_datos_panel(docente))
+
+
+@csrf_exempt
+@habilita_cors
+@require_http_methods(['POST', 'OPTIONS'])
+def api_asistencia_accion(request):
+    """
+    Valida o rechaza una asistencia desde el panel.
+
+    `aprobar` marca 'Cumplida' con las horas indicadas (4 por defecto,
+    acotadas a 0-24); `rechazar` marca 'Inasistencia' y deja las horas en 0.
+    Solo el docente de la sesion puede hacerlo: una asistencia ajena
+    responde 403 sin tocar la base de datos. La respuesta devuelve los
+    mismos contadores que ya recalcula el dashboard.
+    """
+
+    if request.method == 'OPTIONS':
+        # Preflight que dispara el navegador por Content-Type: application/json.
+        return HttpResponse(status=204)
+
+    docente = _docente_en_sesion(request)
+    if docente is None:
+        return _respuesta_sin_sesion()
+
+    try:
+        datos = json.loads(request.body or b'{}')
+    except (TypeError, ValueError):
+        return JsonResponse(
+            {'success': False, 'error': 'El cuerpo de la peticion no es JSON valido.'},
+            status=400,
+        )
+
+    if not isinstance(datos, dict):
+        return JsonResponse(
+            {'success': False, 'error': 'El cuerpo de la peticion debe ser un objeto JSON.'},
+            status=400,
+        )
+
+    try:
+        id_registro = int(datos.get('id_registro'))
+    except (TypeError, ValueError):
+        return JsonResponse(
+            {'success': False, 'error': 'Falta el id_registro.'},
+            status=400,
+        )
+
+    accion = str(datos.get('accion', '')).strip().lower()
+    if accion not in ('aprobar', 'rechazar'):
+        return JsonResponse(
+            {'success': False, 'error': 'accion invalida'},
+            status=400,
+        )
+
+    try:
+        horas = int(datos.get('horas', 4))
+    except (TypeError, ValueError):
+        return JsonResponse(
+            {'success': False, 'error': 'horas invalidas'},
+            status=400,
+        )
+    horas = max(0, min(24, horas))
+
+    registro = (
+        Asistencia.objects
+        .select_related('id_sesion')
+        .filter(pk=id_registro)
+        .first()
+    )
+    if registro is None:
+        return JsonResponse(
+            {'success': False, 'error': 'registro no encontrado'},
+            status=404,
+        )
+
+    # Alcance: la sesion de la asistencia tiene que ser del docente en sesion.
+    if registro.id_sesion.id_profesor_id != docente.pk:
+        return JsonResponse({'success': False, 'error': 'no autorizado'}, status=403)
+
+    if accion == 'aprobar':
+        registro.validacion_prof = Asistencia.VALIDACION_CUMPLIDA
+        registro.horas_ganadas = horas
+    else:
+        registro.validacion_prof = Asistencia.VALIDACION_INASISTENCIA
+        registro.horas_ganadas = 0
+    registro.save(update_fields=['validacion_prof', 'horas_ganadas'])
+
+    return JsonResponse({'success': True, 'stats': _estadisticas_panel(docente)})
+
+
+@csrf_exempt
+@habilita_cors
+@require_http_methods(['GET', 'OPTIONS'])
+def api_reporte_maestro(request):
+    """
+    Reporte semanal (ultimos 7 dias) o mensual (ultimos 30) del docente.
+
+    El periodo se aplica a la fecha de confirmacion de la asistencia (con la
+    fecha de la sesion como respaldo): `horas_totales` son las horas
+    'Cumplida' dentro del periodo, mientras que estudiantes, actividades y
+    pendientes describen el alcance completo del docente.
+    """
+
+    if request.method == 'OPTIONS':
+        # Preflight que dispara el navegador por Content-Type: application/json.
+        return HttpResponse(status=204)
+
+    docente = _docente_en_sesion(request)
+    if docente is None:
+        return _respuesta_sin_sesion()
+
+    tipo = str(request.GET.get('tipo', '')).strip().lower()
+    if tipo not in ('semanal', 'mensual'):
+        return JsonResponse({'success': False, 'error': 'tipo invalido'}, status=400)
+
+    desde, hasta, inicio, fin = _rango(7 if tipo == 'semanal' else 30)
+    en_periodo = _asistencias_en(
+        Asistencia.objects.filter(id_sesion__id_profesor=docente), inicio, fin,
+    )
+
+    resumen = {
+        'estudiantes': docente.estudiantes_a_cargo.count(),
+        'actividades': docente.sesiones_dirigidas.values('id_tipo').distinct().count(),
+        'horas_totales': _suma_horas(
+            en_periodo.filter(validacion_prof=Asistencia.VALIDACION_CUMPLIDA),
+        ),
+        'pendientes': _pendientes_de(docente).count(),
+    }
+
+    actividades = []
+    for actividad in _actividades_de(docente):
+        base = en_periodo.filter(id_sesion__id_tipo=actividad)
+        horas = _suma_horas(
+            base.filter(validacion_prof=Asistencia.VALIDACION_CUMPLIDA),
+        )
+        # La meta es el total de cupos de la brigada, no solo los del periodo.
+        meta = sum(
+            docente.sesiones_dirigidas.filter(id_tipo=actividad)
+            .values_list('cupos_max', flat=True)
+        )
+        actividades.append({
+            'nombre': actividad.nombre_actividad,
+            'estudiantes': base.values('id_estudiante').distinct().count(),
+            'horas': horas,
+            'meta': meta,
+            'pct': _porcentaje(horas, meta),
+        })
+
+    return JsonResponse({
+        'tipo': tipo,
+        'periodo': {'desde': desde.isoformat(), 'hasta': hasta.isoformat()},
+        'resumen': resumen,
+        'actividades': actividades,
     })

@@ -7,7 +7,7 @@ Usan una base de datos de prueba aparte, asi que no tocan los datos reales.
 """
 
 import json
-from datetime import timedelta
+from datetime import date, timedelta
 from pathlib import Path
 
 from django.conf import settings
@@ -678,3 +678,263 @@ class PaginasEstaticasConectadasTests(TestCase):
         html = self._leer('login_maestro_horasocial_pro')
         self.assertIn('id="loginError"', html)
         self.assertIn("get('error')", html)
+
+
+class ApiPanelMaestroTests(BaseModuloDocentes):
+    """
+    Panel del docente con datos reales: dashboard, validacion y reporte.
+
+    Los tres endpoints exigen sesion de docente. El panel refleja los
+    contadores reales de las asistencias, valida solo registros del alcance
+    del docente y el reporte respeta la forma semanal/mensual.
+    """
+
+    @classmethod
+    def setUpTestData(cls):
+        super().setUpTestData()
+        cls.estudiante2 = Usuario.objects.create_user(
+            correo='alumno2@test.local',
+            password=CLAVE,
+            nombre_completo='Segundo Alumno',
+            codigo='EST-9998',
+            rol=Usuario.ROL_ESTUDIANTE,
+        )
+        # Una asistencia pendiente en la sesion del docente base...
+        cls.pendiente = Asistencia.objects.create(
+            id_sesion=cls.sesion,
+            id_estudiante=cls.estudiante2,
+            confirmacion=Asistencia.CONFIRMACION_ASISTE,
+            validacion_prof=Asistencia.VALIDACION_POR_VALIDAR,
+            horas_ganadas=4,
+            fecha_confirmacion=timezone.now(),
+        )
+        # ...y la ya validada, fechada hoy para que entre en el periodo del
+        # reporte semanal.
+        Asistencia.objects.filter(
+            id_sesion=cls.sesion,
+            id_estudiante=cls.estudiante,
+        ).update(fecha_confirmacion=timezone.now())
+
+        # Un segundo docente con su propia sesion y asistencia: sirve para
+        # probar que nadie valida registros ajenos.
+        cls.otro_docente = Usuario.objects.create_user(
+            correo='otro@test.local',
+            password=CLAVE,
+            nombre_completo='Otro Docente',
+            codigo='DOC-8888',
+            rol=Usuario.ROL_PROFESOR,
+        )
+        cls.otra_sesion = Sesion.objects.create(
+            id_profesor=cls.otro_docente,
+            id_tipo=cls.actividad,
+            fecha_hora=timezone.now() + timedelta(days=2),
+            ubicacion='Salon 9',
+            cupos_max=10,
+            cupos_disponibles=10,
+        )
+        cls.otra_asistencia = Asistencia.objects.create(
+            id_sesion=cls.otra_sesion,
+            id_estudiante=cls.estudiante,
+            confirmacion=Asistencia.CONFIRMACION_ASISTE,
+            validacion_prof=Asistencia.VALIDACION_POR_VALIDAR,
+            horas_ganadas=4,
+            fecha_confirmacion=timezone.now(),
+        )
+
+    def _dashboard(self, **extra):
+        return self.client.get(reverse('api-dashboard-maestro'), **extra)
+
+    def _accion(self, payload, **extra):
+        return self.client.post(
+            reverse('api-asistencia-accion'),
+            data=json.dumps(payload),
+            content_type='application/json',
+            **extra,
+        )
+
+    def _reporte(self, tipo):
+        return self.client.get(reverse('api-reporte-maestro'), {'tipo': tipo})
+
+    def _abrir_sesion(self):
+        self.client.login(username=CORREO, password=CLAVE)
+
+    def test_sin_sesion_los_tres_endpoints_responden_401(self):
+        casos = [
+            ('dashboard', self._dashboard()),
+            ('accion', self._accion(
+                {'id_registro': self.pendiente.pk, 'accion': 'aprobar'},
+            )),
+            ('reporte', self._reporte('semanal')),
+        ]
+        for nombre, respuesta in casos:
+            with self.subTest(endpoint=nombre):
+                self.assertEqual(respuesta.status_code, 401)
+                self.assertEqual(
+                    respuesta.json(),
+                    {'autenticado': False, 'error': 'sesion'},
+                )
+
+    def test_el_dashboard_entrega_las_claves_y_los_contadores_reales(self):
+        self._abrir_sesion()
+        respuesta = self._dashboard()
+        self.assertEqual(respuesta.status_code, 200)
+        datos = respuesta.json()
+
+        self.assertTrue(datos['autenticado'])
+        self.assertEqual(datos['docente']['nombre'], self.docente.nombre_completo)
+        self.assertEqual(
+            datos['stats'],
+            {
+                # Los dos alumnos con asistencia en la sesion del docente.
+                'estudiantes': 2,
+                'actividades': 1,
+                # La asistencia validada 'Cumplida' de 4 horas.
+                'horas_totales': 4,
+                'pendientes': 1,
+            },
+        )
+
+        self.assertEqual(len(datos['brigadas']), 1)
+        brigada = datos['brigadas'][0]
+        self.assertEqual(brigada['nombre'], self.actividad.nombre_actividad)
+        self.assertEqual(brigada['estudiantes'], 2)
+        self.assertEqual(brigada['horas'], 4)
+        self.assertEqual(brigada['meta'], 10)
+        self.assertEqual(brigada['pct'], 40)
+        self.assertIsNotNone(brigada['proxima'])
+
+        self.assertEqual(len(datos['pendientes']), 1)
+        fila = datos['pendientes'][0]
+        self.assertEqual(fila['id_registro'], self.pendiente.pk)
+        self.assertEqual(fila['estudiante'], self.estudiante2.nombre_completo)
+        self.assertEqual(fila['actividad'], self.actividad.nombre_actividad)
+        self.assertEqual(fila['ubicacion'], self.sesion.ubicacion)
+        self.assertEqual(fila['confirmacion'], Asistencia.CONFIRMACION_ASISTE)
+
+        self.assertGreaterEqual(len(datos['notifs']), 2)
+        self.assertLessEqual(len(datos['notifs']), 4)
+        for aviso in datos['notifs']:
+            self.assertEqual(set(aviso), {'id', 'txt', 'hora', 'leido'})
+
+    def test_un_docente_sin_sesiones_ve_arreglos_vacios(self):
+        """Los estados vacios del panel son arreglos, nunca null."""
+        vacio = Usuario.objects.create_user(
+            correo='vacio@test.local',
+            password=CLAVE,
+            nombre_completo='Docente Sin Sesiones',
+            codigo='DOC-7777',
+            rol=Usuario.ROL_PROFESOR,
+        )
+        self.client.login(username=vacio.correo, password=CLAVE)
+        datos = self._dashboard().json()
+        self.assertEqual(datos['brigadas'], [])
+        self.assertEqual(datos['pendientes'], [])
+        self.assertEqual(
+            datos['stats'],
+            {'estudiantes': 0, 'actividades': 0, 'horas_totales': 0, 'pendientes': 0},
+        )
+        self.assertGreaterEqual(len(datos['notifs']), 2)
+
+    def test_aprobar_valida_la_asistencia_y_baja_los_pendientes(self):
+        self._abrir_sesion()
+        pendientes_antes = self._dashboard().json()['stats']['pendientes']
+
+        respuesta = self._accion({
+            'id_registro': self.pendiente.pk,
+            'accion': 'aprobar',
+            'horas': 3,
+        })
+        self.assertEqual(respuesta.status_code, 200)
+        datos = respuesta.json()
+        self.assertTrue(datos['success'])
+        self.assertEqual(datos['stats']['pendientes'], pendientes_antes - 1)
+        self.assertEqual(datos['stats']['horas_totales'], 4 + 3)
+
+        self.pendiente.refresh_from_db()
+        self.assertEqual(self.pendiente.validacion_prof, Asistencia.VALIDACION_CUMPLIDA)
+        self.assertEqual(self.pendiente.horas_ganadas, 3)
+
+    def test_las_horas_se_acotan_a_0_24(self):
+        self._abrir_sesion()
+        self._accion({
+            'id_registro': self.pendiente.pk,
+            'accion': 'aprobar',
+            'horas': 99,
+        })
+        self.pendiente.refresh_from_db()
+        self.assertEqual(self.pendiente.horas_ganadas, 24)
+
+    def test_rechazar_marca_inasistencia_sin_horas(self):
+        self._abrir_sesion()
+        respuesta = self._accion({
+            'id_registro': self.pendiente.pk,
+            'accion': 'rechazar',
+        })
+        self.assertEqual(respuesta.status_code, 200)
+        self.assertTrue(respuesta.json()['success'])
+
+        self.pendiente.refresh_from_db()
+        self.assertEqual(
+            self.pendiente.validacion_prof, Asistencia.VALIDACION_INASISTENCIA,
+        )
+        self.assertEqual(self.pendiente.horas_ganadas, 0)
+
+    def test_no_se_puede_validar_una_asistencia_de_otro_docente(self):
+        self._abrir_sesion()
+        respuesta = self._accion({
+            'id_registro': self.otra_asistencia.pk,
+            'accion': 'aprobar',
+        })
+        self.assertEqual(respuesta.status_code, 403)
+        self.assertEqual(respuesta.json(), {'success': False, 'error': 'no autorizado'})
+
+        self.otra_asistencia.refresh_from_db()
+        self.assertEqual(
+            self.otra_asistencia.validacion_prof, Asistencia.VALIDACION_POR_VALIDAR,
+        )
+
+    def test_el_reporte_semanal_y_mensual_tienen_su_forma(self):
+        self._abrir_sesion()
+        for tipo, dias in (('semanal', 7), ('mensual', 30)):
+            with self.subTest(tipo=tipo):
+                respuesta = self._reporte(tipo)
+                self.assertEqual(respuesta.status_code, 200)
+                datos = respuesta.json()
+
+                self.assertEqual(datos['tipo'], tipo)
+                self.assertEqual(sorted(datos['periodo']), ['desde', 'hasta'])
+                desde = date.fromisoformat(datos['periodo']['desde'])
+                hasta = date.fromisoformat(datos['periodo']['hasta'])
+                self.assertEqual(hasta, timezone.localdate())
+                self.assertEqual((hasta - desde).days, dias - 1)
+
+                self.assertEqual(datos['resumen']['estudiantes'], 2)
+                self.assertEqual(datos['resumen']['actividades'], 1)
+                self.assertEqual(datos['resumen']['pendientes'], 1)
+                # La asistencia validada hoy entra en ambos periodos.
+                self.assertEqual(datos['resumen']['horas_totales'], 4)
+
+                self.assertEqual(len(datos['actividades']), 1)
+                fila = datos['actividades'][0]
+                self.assertEqual(
+                    set(fila), {'nombre', 'estudiantes', 'horas', 'meta', 'pct'},
+                )
+                self.assertEqual(fila['nombre'], self.actividad.nombre_actividad)
+                self.assertEqual(fila['horas'], 4)
+                self.assertEqual(fila['meta'], 10)
+                self.assertEqual(fila['pct'], 40)
+
+    def test_un_tipo_invalido_responde_400(self):
+        self._abrir_sesion()
+        respuesta = self._reporte('anual')
+        self.assertEqual(respuesta.status_code, 400)
+        self.assertEqual(respuesta.json(), {'success': False, 'error': 'tipo invalido'})
+
+    def test_preflight_options_del_dashboard_responde_204_con_cors(self):
+        respuesta = self.client.options(
+            reverse('api-dashboard-maestro'), HTTP_ORIGIN='http://localhost:3000',
+        )
+        self.assertEqual(respuesta.status_code, 204)
+        self.assertEqual(
+            respuesta['Access-Control-Allow-Origin'], 'http://localhost:3000',
+        )

@@ -50,4 +50,27 @@ urlpatterns = [
         docentes_views.api_sesion_actual,
         name='api-sesion-actual',
     ),
+
+    # Panel del docente con datos reales: estadisticas, brigadas y
+    # asistencias que esperan validacion.
+    path(
+        'api/dashboard-maestro',
+        docentes_views.api_dashboard_maestro,
+        name='api-dashboard-maestro',
+    ),
+
+    # Validar o rechazar una asistencia desde el panel (con los contadores
+    # ya recalculados en la respuesta).
+    path(
+        'api/asistencia-accion',
+        docentes_views.api_asistencia_accion,
+        name='api-asistencia-accion',
+    ),
+
+    # Reporte semanal o mensual de horas y pendientes del docente.
+    path(
+        'api/reporte-maestro',
+        docentes_views.api_reporte_maestro,
+        name='api-reporte-maestro',
+    ),
 ]
