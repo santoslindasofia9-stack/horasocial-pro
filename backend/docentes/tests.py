@@ -7,15 +7,25 @@ Usan una base de datos de prueba aparte, asi que no tocan los datos reales.
 """
 
 import json
-from datetime import date, timedelta
+import shutil
+import tempfile
+from datetime import date, time, timedelta
 from pathlib import Path
 
 from django.conf import settings
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase, override_settings
 from django.urls import reverse
 from django.utils import timezone
 
-from .models import Actividad, Asistencia, Sesion, SolicitudRecuperacion, Usuario
+from .models import (
+    Actividad,
+    Asistencia,
+    Sesion,
+    SolicitudRecuperacion,
+    Usuario,
+    UsuarioSesion,
+)
 
 CORREO = 'docente@test.local'
 CODIGO = 'DOC-9999'
@@ -762,6 +772,10 @@ class ApiPanelMaestroTests(BaseModuloDocentes):
         casos = [
             ('dashboard', self._dashboard()),
             ('estudiantes', self._estudiantes()),
+            ('usuariosesion', self._usuariosesion()),
+            ('usuariosesion_accion', self._usuariosesion_accion(
+                {'id_registro': 1, 'accion': 'completar'},
+            )),
             ('accion', self._accion(
                 {'id_registro': self.pendiente.pk, 'accion': 'aprobar'},
             )),
@@ -819,6 +833,31 @@ class ApiPanelMaestroTests(BaseModuloDocentes):
 
     def _estudiantes(self, **extra):
         return self.client.get(reverse('api-estudiantes-maestro'), **extra)
+
+    def _usuariosesion(self, **extra):
+        return self.client.get(reverse('api-usuariosesion-maestro'), **extra)
+
+    def _usuariosesion_accion(self, payload, **extra):
+        return self.client.post(
+            reverse('api-usuariosesion-accion'),
+            data=json.dumps(payload),
+            content_type='application/json',
+            **extra,
+        )
+
+    def _registrar_usuariosesion(self, **datos):
+        """Registra una actividad por el mismo camino que usa el formulario."""
+        payload = {
+            'titulo': 'Seguridad en el taller',
+            'taller': 'Taller 1',
+            'fecha': (timezone.localdate() + timedelta(days=3)).isoformat(),
+            'hora': '08:30',
+            'duracion': '2 h',
+            'nota': 'Llevar guantes',
+            'estudiantes': [self.estudiante.pk, self.estudiante2.pk],
+        }
+        payload.update(datos)
+        return self.client.post(reverse('api-usuariosesion-maestro'), data=payload)
 
     def test_la_pantalla_de_estudiantes_tiene_la_forma_esperada(self):
         self._abrir_sesion()
@@ -1008,3 +1047,285 @@ class ApiPanelMaestroTests(BaseModuloDocentes):
         self.assertEqual(
             respuesta['Access-Control-Allow-Origin'], 'http://localhost:3000',
         )
+
+
+class ApiUsuarioSesionTests(BaseModuloDocentes):
+    """
+    Actividades que el docente registra en la tabla `usuariosesion`.
+
+    El formulario de "Programar Sesiones de Taller" crea la fila con fecha,
+    hora, duracion, estudiantes convocados y la evidencia subida; la accion
+    posterior solo la marca Completada o Cancelada. Nadie toca filas ajenas.
+    """
+
+    @classmethod
+    def setUpTestData(cls):
+        super().setUpTestData()
+        cls.estudiante2 = Usuario.objects.create_user(
+            correo='alumno2@test.local',
+            password=CLAVE,
+            nombre_completo='Segundo Alumno',
+            codigo='EST-9998',
+            rol=Usuario.ROL_ESTUDIANTE,
+        )
+        cls.otro_docente = Usuario.objects.create_user(
+            correo='otro@test.local',
+            password=CLAVE,
+            nombre_completo='Otro Docente',
+            codigo='DOC-8888',
+            rol=Usuario.ROL_PROFESOR,
+        )
+
+    def setUp(self):
+        # Las evidencias subidas en los tests no deben quedar en el repo.
+        self.media = tempfile.mkdtemp(prefix='hs-media-')
+        self.addCleanup(shutil.rmtree, self.media, True)
+        self.ajuste_media = override_settings(MEDIA_ROOT=self.media)
+        self.ajuste_media.enable()
+        self.addCleanup(self.ajuste_media.disable)
+
+    def _abrir_sesion(self):
+        self.client.login(username=CORREO, password=CLAVE)
+
+    def _lista(self, **extra):
+        return self.client.get(reverse('api-usuariosesion-maestro'), **extra)
+
+    def _accion(self, payload, **extra):
+        return self.client.post(
+            reverse('api-usuariosesion-accion'),
+            data=json.dumps(payload),
+            content_type='application/json',
+            **extra,
+        )
+
+    def _registrar(self, **datos):
+        payload = {
+            'titulo': 'Seguridad en el taller',
+            'taller': 'Taller 1',
+            'fecha': (timezone.localdate() + timedelta(days=3)).isoformat(),
+            'hora': '08:30',
+            'duracion': '2 h',
+            'nota': 'Llevar guantes',
+            'estudiantes': [self.estudiante.pk, self.estudiante2.pk],
+        }
+        payload.update(datos)
+        return self.client.post(reverse('api-usuariosesion-maestro'), data=payload)
+
+    # ---------------------------------------------------------------- lista
+
+    def test_la_lista_arranca_vacia_con_la_forma_esperada(self):
+        self._abrir_sesion()
+        respuesta = self._lista()
+        self.assertEqual(respuesta.status_code, 200)
+        datos = respuesta.json()
+
+        self.assertTrue(datos['autenticado'])
+        self.assertEqual(datos['docente']['nombre'], self.docente.nombre_completo)
+        self.assertEqual(datos['tabla'], 'usuariosesion')
+        self.assertEqual(
+            datos['stats'], {'total': 0, 'programadas': 0, 'completadas': 0},
+        )
+        self.assertEqual(datos['registros'], [])
+
+    # --------------------------------------------------------------- crear
+
+    def test_registrar_una_actividad_guarda_la_fila_y_devuelve_201(self):
+        self._abrir_sesion()
+        respuesta = self._registrar()
+        self.assertEqual(respuesta.status_code, 201)
+        datos = respuesta.json()
+
+        self.assertTrue(datos['success'])
+        self.assertEqual(
+            datos['stats'], {'total': 1, 'programadas': 1, 'completadas': 0},
+        )
+
+        fila = datos['registro']
+        self.assertEqual(
+            set(fila),
+            {
+                'id', 'titulo', 'nota', 'taller', 'fecha', 'hora', 'duracion',
+                'estado', 'evidencia', 'evidencia_url', 'subida', 'estudiantes',
+            },
+        )
+        self.assertEqual(fila['titulo'], 'Seguridad en el taller')
+        self.assertEqual(fila['taller'], 'Taller 1')
+        self.assertEqual(fila['hora'], '08:30')
+        self.assertEqual(fila['duracion'], '2 h')
+        self.assertEqual(fila['estado'], UsuarioSesion.ESTADO_PROGRAMADA)
+        self.assertEqual(fila['evidencia'], '')
+        self.assertEqual(fila['nota'], 'Llevar guantes')
+
+        # La fila existe de verdad en la tabla y quedo a nombre del docente.
+        registro = UsuarioSesion.objects.get(pk=fila['id'])
+        self.assertEqual(registro.id_docente_id, self.docente.pk)
+        self.assertEqual(registro.descripcion, 'Llevar guantes')
+
+        # Y convoco a los dos estudiantes elegidos, con sus iniciales.
+        convocados = sorted(e.codigo for e in registro.estudiantes.all())
+        self.assertEqual(convocados, sorted([self.estudiante.codigo, 'EST-9998']))
+        self.assertEqual(
+            {e['iniciales'] for e in fila['estudiantes']}, {'AD', 'SA'},
+        )
+
+    def test_registrar_con_evidencia_guarda_el_archivo(self):
+        self._abrir_sesion()
+        evidencia = SimpleUploadedFile(
+            'planilla.txt', b'lista de asistencia', content_type='text/plain',
+        )
+        respuesta = self._registrar(evidencia=evidencia)
+        self.assertEqual(respuesta.status_code, 201)
+
+        fila = respuesta.json()['registro']
+        self.assertTrue(fila['evidencia'].endswith('planilla.txt'))
+        self.assertIn('/media/evidencias/', fila['evidencia_url'])
+
+        registro = UsuarioSesion.objects.get(pk=fila['id'])
+        with open(registro.evidencia.path, 'rb') as archivo:
+            self.assertEqual(archivo.read(), b'lista de asistencia')
+
+    def test_registrar_por_json_tambien_funciona(self):
+        self._abrir_sesion()
+        respuesta = self.client.post(
+            reverse('api-usuariosesion-maestro'),
+            data=json.dumps({
+                'titulo': 'Manejo de herramientas',
+                'fecha': timezone.localdate().isoformat(),
+                'hora': '10:00',
+                'duracion': '3 h',
+                'estudiantes': [self.estudiante.pk],
+            }),
+            content_type='application/json',
+        )
+        self.assertEqual(respuesta.status_code, 201)
+        self.assertEqual(respuesta.json()['registro']['taller'], 'Bodega general')
+
+    def test_solo_los_estudiantes_quedan_convocados(self):
+        self._abrir_sesion()
+        respuesta = self._registrar(
+            estudiantes=[self.estudiante.pk, self.otro_docente.pk],
+        )
+        self.assertEqual(respuesta.status_code, 201)
+
+        registro = UsuarioSesion.objects.get(pk=respuesta.json()['registro']['id'])
+        self.assertEqual(
+            [e.pk for e in registro.estudiantes.all()], [self.estudiante.pk],
+        )
+
+    def test_las_actividades_mas_nuevas_van_primero(self):
+        self._abrir_sesion()
+        hoy = timezone.localdate()
+        self._registrar(titulo='Vieja', fecha=(hoy + timedelta(days=1)).isoformat(), hora='07:00')
+        self._registrar(titulo='Nueva', fecha=(hoy + timedelta(days=5)).isoformat(), hora='09:00')
+
+        titulos = [f['titulo'] for f in self._lista().json()['registros']]
+        self.assertEqual(titulos, ['Nueva', 'Vieja'])
+
+    def test_datos_invalidos_responden_400(self):
+        self._abrir_sesion()
+        casos = {
+            'sin titulo': {'titulo': '   '},
+            'sin fecha': {'fecha': ''},
+            'fecha mal formada': {'fecha': '3 de octubre'},
+            'sin hora': {'hora': ''},
+            'hora mal formada': {'hora': '8:30 de la mañana'},
+            'duracion invalida': {'duracion': '5 h'},
+        }
+        for nombre, cambio in casos.items():
+            with self.subTest(caso=nombre):
+                respuesta = self._registrar(**cambio)
+                self.assertEqual(respuesta.status_code, 400)
+                self.assertFalse(respuesta.json()['success'])
+        self.assertFalse(UsuarioSesion.objects.exists())
+
+    def test_un_json_invalido_responde_400(self):
+        self._abrir_sesion()
+        respuesta = self.client.post(
+            reverse('api-usuariosesion-maestro'),
+            data='{no es json',
+            content_type='application/json',
+        )
+        self.assertEqual(respuesta.status_code, 400)
+        self.assertFalse(respuesta.json()['success'])
+
+    # -------------------------------------------------------------- accion
+
+    def test_completar_y_cancelar_cambian_el_estado(self):
+        self._abrir_sesion()
+        primero = self._registrar(titulo='Soldadura').json()['registro']['id']
+        segundo = self._registrar(titulo='Electricidad').json()['registro']['id']
+
+        respuesta = self._accion({'id_registro': primero, 'accion': 'completar'})
+        self.assertEqual(respuesta.status_code, 200)
+        self.assertEqual(
+            respuesta.json()['registro']['estado'], UsuarioSesion.ESTADO_COMPLETADA,
+        )
+        self.assertEqual(
+            respuesta.json()['stats'], {'total': 2, 'programadas': 1, 'completadas': 1},
+        )
+        self.assertEqual(
+            UsuarioSesion.objects.get(pk=primero).estado,
+            UsuarioSesion.ESTADO_COMPLETADA,
+        )
+
+        respuesta = self._accion({'id_registro': segundo, 'accion': 'cancelar'})
+        self.assertEqual(respuesta.status_code, 200)
+        self.assertEqual(
+            respuesta.json()['registro']['estado'], UsuarioSesion.ESTADO_CANCELADA,
+        )
+
+    def test_marcar_la_actividad_de_otro_docente_responde_403(self):
+        self._abrir_sesion()
+        ajena = UsuarioSesion.objects.create(
+            id_docente=self.otro_docente,
+            titulo='Actividad ajena',
+            taller='Taller 9',
+            fecha=timezone.localdate(),
+            hora=time(9, 0),
+        )
+
+        respuesta = self._accion({'id_registro': ajena.pk, 'accion': 'completar'})
+        self.assertEqual(respuesta.status_code, 403)
+        ajena.refresh_from_db()
+        self.assertEqual(ajena.estado, UsuarioSesion.ESTADO_PROGRAMADA)
+
+    def test_una_accion_o_un_registro_invalido_no_tocan_nada(self):
+        self._abrir_sesion()
+        registro = self._registrar().json()['registro']['id']
+
+        casos = [
+            ({'id_registro': registro, 'accion': 'borrar'}, 400),
+            ({'accion': 'completar'}, 400),
+            ({'id_registro': 999999, 'accion': 'completar'}, 404),
+        ]
+        for payload, esperado in casos:
+            with self.subTest(payload=payload):
+                self.assertEqual(self._accion(payload).status_code, esperado)
+
+        self.assertEqual(
+            UsuarioSesion.objects.get(pk=registro).estado,
+            UsuarioSesion.ESTADO_PROGRAMADA,
+        )
+
+    def test_el_preflight_responde_204_con_cors(self):
+        respuesta = self.client.options(
+            reverse('api-usuariosesion-maestro'), HTTP_ORIGIN='http://localhost:3000',
+        )
+        self.assertEqual(respuesta.status_code, 204)
+        self.assertEqual(
+            respuesta['Access-Control-Allow-Origin'], 'http://localhost:3000',
+        )
+
+    def test_cada_docente_solo_ve_sus_propias_actividades(self):
+        self._abrir_sesion()
+        self._registrar(titulo='Mia')
+        UsuarioSesion.objects.create(
+            id_docente=self.otro_docente,
+            titulo='De otro',
+            taller='Taller 9',
+            fecha=timezone.localdate(),
+            hora=time(9, 0),
+        )
+
+        titulos = [f['titulo'] for f in self._lista().json()['registros']]
+        self.assertEqual(titulos, ['Mia'])

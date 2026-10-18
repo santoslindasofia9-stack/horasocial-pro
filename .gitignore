@@ -16,3 +16,7 @@ env/
 .pytest_cache/
 htmlcov/
 .coverage
+
+# Evidencias que suben los docentes desde el formulario (MEDIA_ROOT)
+backend/media/
+

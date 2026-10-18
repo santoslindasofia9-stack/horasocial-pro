@@ -175,6 +175,11 @@ STATICFILES_DIRS = [
     BASE_DIR / 'static',
 ]
 
+# Archivos subidos por los usuarios (evidencias de las actividades del
+# Centro de Control Tecnico). En produccion esto vive fuera del repositorio.
+MEDIA_URL = 'media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
 
 # Email
 # En desarrollo los correos se imprimen en la consola del servidor.

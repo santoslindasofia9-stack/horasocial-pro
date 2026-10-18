@@ -204,6 +204,14 @@
     display:inline-flex;align-items:center;gap:4px}
   .ses-tag .material-symbols-outlined{font-size:12px}
   .ses-tag.dur{background:#ede9fe;color:#6d28d9;border-color:#e9e2fc}
+  /* evidencia y nota que quedan guardadas en la tabla usuariosesion */
+  .ses-evi{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+  .ses-evi a,.ses-evi span.ses-nota{display:inline-flex;align-items:center;gap:5px;font-size:10.5px;
+    font-weight:800;padding:4px 10px;border-radius:999px;border:1px dashed #bfdbfe;background:#f0f9ff;
+    color:var(--sky-600);text-decoration:none;max-width:100%}
+  .ses-evi span.ses-nota{border-style:solid;border-color:var(--card-brd);background:var(--card);color:var(--slate)}
+  .ses-evi a:hover{border-color:var(--sky-400);background:#e0f2fe}
+  .ses-evi .material-symbols-outlined{font-size:12px}
   .ses-sts{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
   .ses-pip{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;
     font-family:'Plus Jakarta Sans',sans-serif;font-size:10.5px;font-weight:800;letter-spacing:.2px;
@@ -509,7 +517,7 @@
   <!-- KPIs -->
   <section>
     <div class="stats">
-      <div class="stat"><span class="m material-symbols-outlined">handyman</span><b id="kTools">12</b><small>Herramientas</small></div>
+      <div class="stat"><span class="m material-symbols-outlined">handyman</span><b id="kTools">3</b><small>Herramientas</small></div>
       <div class="stat"><span class="m material-symbols-outlined">construction</span><b id="kUso">0</b><small>En uso</small></div>
       <div class="stat accent"><span class="m material-symbols-outlined">pending_actions</span><b id="kPend">5</b><small>Reportes pendientes</small></div>
       <div class="stat"><span class="m material-symbols-outlined">menu_book</span><b id="kMat">9</b><small>Material educativo</small></div>
@@ -527,7 +535,6 @@
       <button class="chip" type="button" data-filtro="Soldadura">Soldadura</button>
       <button class="chip" type="button" data-filtro="Electricidad">Electricidad</button>
       <button class="chip" type="button" data-filtro="Carpintería">Carpintería</button>
-      <button class="chip" type="button" data-filtro="General">General</button>
     </div>
     <div class="filter-chips" id="toolStateFilter" style="margin-top:8px">
       <button class="chip active" type="button" data-festado="Todos">Todos</button>
@@ -673,6 +680,11 @@
         <label for="sesNota">Nota (opcional)</label>
         <textarea id="sesNota" maxlength="200" placeholder="Materiales, indicaciones o recordatorios de la sesión"></textarea>
       </div>
+      <div class="f-field">
+        <label for="sesEvidencia">Evidencia (opcional)</label>
+        <input id="sesEvidencia" type="file" accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.jpeg,.png,.txt">
+        <div class="f-hint">Subí la planilla, la lista de asistencia o una foto de la actividad. Se guarda en la tabla usuariosesion.</div>
+      </div>
       <button class="vbtn full" id="btnSesSave" type="button"><span class="material-symbols-outlined">event_available</span>Programar sesión</button>
     </div>
   </div>
@@ -700,7 +712,7 @@
     function isFile(){ return location.protocol === 'file:'; }
     function go(fileHref, servedHref){ window.location.assign(isFile() ? fileHref : servedHref); }
 
-    var LS_TOOLS = 'horasocial_maestro_tecnica_v1';
+    var LS_TOOLS = 'horasocial_maestro_tecnica_v2';   /* v2: inventario reducido a 3 equipos */
     var LS_REPS = 'horasocial_maestro_reportes_tecnicos_v1';
     var LS_MAT = 'horasocial_maestro_material_v1';
     var LS_NOTIF = 'horasocial_maestro_notif_v1';
@@ -735,32 +747,16 @@
     });
 
     /* ---------- herramientas en localStorage ---------- */
+    /* Tres equipos, uno por taller y uno por estado: Disponible, En uso y
+       En mantenimiento. Es el inventario real del Centro de Control. */
     function seedTools(){
       return [
-        { id: 1,  nombre: 'Soldadora Inverter 200 A',    categoria: 'Soldadura',    estado: 'Disponible',       ubicacion: 'Taller 1', icono: 'power',
+        { id: 1, nombre: 'Soldadora Inverter 200 A', categoria: 'Soldadura',    estado: 'Disponible',       ubicacion: 'Taller 1', icono: 'power',
           historial: [ { f: '9 sep',  t: 'Liberada' }, { f: '8 sep',  t: 'Puesta en uso' }, { f: '2 sep',  t: 'Restaurada' } ] },
-        { id: 2,  nombre: 'Careta de soldadura',          categoria: 'Soldadura',    estado: 'En uso',           ubicacion: 'Taller 1', icono: 'flip',
-          historial: [ { f: '9 sep',  t: 'Puesta en uso' }, { f: '4 sep',  t: 'Liberada' } ] },
-        { id: 3,  nombre: 'Amoladora angular 4 1/2"',     categoria: 'Soldadura',    estado: 'En uso',           ubicacion: 'Taller 1', icono: 'settings',
-          historial: [ { f: '9 sep',  t: 'Puesta en uso' }, { f: '7 sep',  t: 'Restaurada' } ] },
-        { id: 4,  nombre: 'Taladro percutor 13 mm',       categoria: 'Electricidad', estado: 'Disponible',       ubicacion: 'Taller 2', icono: 'hardware',
-          historial: [ { f: '8 sep',  t: 'Liberada' }, { f: '6 sep',  t: 'Puesta en uso' } ] },
-        { id: 5,  nombre: 'Multímetro digital',           categoria: 'Electricidad', estado: 'En uso',           ubicacion: 'Taller 2', icono: 'electrical_services',
+        { id: 2, nombre: 'Multímetro digital',       categoria: 'Electricidad', estado: 'En uso',           ubicacion: 'Taller 2', icono: 'electrical_services',
           historial: [ { f: '9 sep',  t: 'Puesta en uso' }, { f: '3 sep',  t: 'Liberada' }, { f: '1 sep',  t: 'Puesta en uso' } ] },
-        { id: 6,  nombre: 'Juego de destornilladores',    categoria: 'Electricidad', estado: 'Disponible',       ubicacion: 'Taller 2', icono: 'handyman',
-          historial: [ { f: '7 sep',  t: 'Liberada' }, { f: '5 sep',  t: 'Puesta en uso' } ] },
-        { id: 7,  nombre: 'Sierra circular 7 1/4"',       categoria: 'Carpintería',  estado: 'En mantenimiento', ubicacion: 'Taller 3', icono: 'carpenter',
-          historial: [ { f: '9 sep',  t: 'Puesta en mantenimiento' }, { f: '5 sep',  t: 'Liberada' }, { f: '2 sep',  t: 'Puesta en uso' } ] },
-        { id: 8,  nombre: 'Cepillo de carpintero',        categoria: 'Carpintería',  estado: 'Disponible',       ubicacion: 'Taller 3', icono: 'precision_manufacturing',
-          historial: [ { f: '8 sep',  t: 'Liberada' }, { f: '4 sep',  t: 'Puesta en uso' } ] },
-        { id: 9,  nombre: 'Escuadra y nivel',             categoria: 'Carpintería',  estado: 'Disponible',       ubicacion: 'Taller 3', icono: 'straighten',
-          historial: [ { f: '6 sep',  t: 'Liberada' }, { f: '1 sep',  t: 'Puesta en uso' } ] },
-        { id: 10, nombre: 'Compresor de aire 50 L',       categoria: 'General',      estado: 'En mantenimiento', ubicacion: 'Taller 1', icono: 'air',
-          historial: [ { f: '9 sep',  t: 'Puesta en mantenimiento' }, { f: '6 sep',  t: 'Restaurada' } ] },
-        { id: 11, nombre: 'Caja de herramientas 21 pzs',  categoria: 'General',      estado: 'En uso',           ubicacion: 'Bodega',  icono: 'construction',
-          historial: [ { f: '9 sep',  t: 'Puesta en uso' }, { f: '3 sep',  t: 'Liberada' } ] },
-        { id: 12, nombre: 'Guantes de seguridad (x10)',   categoria: 'General',      estado: 'Disponible',       ubicacion: 'Bodega',  icono: 'shield',
-          historial: [ { f: '7 sep',  t: 'Liberada' }, { f: '2 sep',  t: 'Puesta en uso' } ] }
+        { id: 3, nombre: 'Sierra circular 7 1/4"',   categoria: 'Carpintería',  estado: 'En mantenimiento', ubicacion: 'Taller 3', icono: 'carpenter',
+          historial: [ { f: '9 sep',  t: 'Puesta en mantenimiento' }, { f: '5 sep',  t: 'Liberada' }, { f: '2 sep',  t: 'Puesta en uso' } ] }
       ];
     }
     function cargarTools(){
@@ -1215,6 +1211,73 @@
     function bySesId(id){ var r = null; sesiones.forEach(function(x){ if (x.id === id) r = x; }); return r; }
     var sesSel = {};
 
+    /* ---------- usuariosesion: actividades reales del docente ---------- */
+    var API = 'http://127.0.0.1:8000';
+    var real = false;   /* true cuando las actividades vienen de la tabla usuariosesion */
+    function inicialesDe(nombre){
+      var p = String(nombre).split(' ').filter(Boolean);
+      if (!p.length) return '??';
+      if (p.length === 1) return p[0].slice(0, 2).toUpperCase();
+      return (p[0][0] + p[1][0]).toUpperCase();
+    }
+    function aplicarUsuariosesion(d){
+      real = true;
+      sesiones.length = 0;
+      (d.registros || []).forEach(function(r){
+        sesiones.push({
+          id: r.id,
+          fecha: r.fecha,
+          hora: r.hora,
+          dur: r.duracion,
+          tema: r.titulo,
+          taller: r.taller,
+          estudiantes: (r.estudiantes || []).map(function(e){
+            return { id: e.id, nombre: e.nombre, iniciales: e.iniciales };
+          }),
+          estado: r.estado,
+          nota: r.nota,
+          evidencia: r.evidencia,
+          evidencia_url: r.evidencia_url,
+          subida: r.subida
+        });
+      });
+      renderSesiones();
+      renderStats();
+    }
+    function cargarUsuariosesion(){
+      fetch(API + '/api/usuariosesion-maestro', { credentials: 'include' })
+        .then(function(r){ if (!r.ok) throw 0; return r.json(); })
+        .then(function(d){ if (d && d.autenticado) aplicarUsuariosesion(d); })
+        .catch(function(){ real = false; });
+    }
+    /* Los estudiantes convocados salen de la misma lista real que la
+       pantalla de estudiantes, asi las dos pantallas coinciden. */
+    function cargarChipsEstudiantes(){
+      fetch(API + '/api/estudiantes-maestro', { credentials: 'include' })
+        .then(function(r){ if (!r.ok) throw 0; return r.json(); })
+        .then(function(d){
+          if (!d || !d.autenticado || !d.estudiantes || !d.estudiantes.length) return;
+          ESTUDIANTES_SES = d.estudiantes.map(function(s){
+            return { id: s.id, nombre: s.nombre, iniciales: inicialesDe(s.nombre) };
+          });
+        })
+        .catch(function(){});
+    }
+    function accionSesion(id, accion, cb){
+      if (!real){ cb(true); return; }
+      fetch(API + '/api/usuariosesion-accion', {
+        method: 'POST', credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id_registro: id, accion: accion })
+      })
+        .then(function(r){ if (!r.ok) throw 0; return r.json(); })
+        .then(function(d){
+          if (d && d.success){ cargarUsuariosesion(); cb(true); }
+          else { cb(false); }
+        })
+        .catch(function(){ cb(false); });
+    }
+
     function pipsSesion(ses){
       var html = '';
       ses.estudiantes.forEach(function(e){
@@ -1243,6 +1306,7 @@
             '<span class="ses-tag dur"><span class="material-symbols-outlined">schedule</span>' + esc(s.dur) + '</span>' +
           '</div>' +
           '<div class="ses-sts">' + pipsSesion(s) + '</div>' +
+          eviSesion(s) +
           '<div class="ses-btns">' +
             '<button class="vbtn" type="button" data-com="' + s.id + '"><span class="material-symbols-outlined">check</span>Completar</button>' +
             '<button class="tb-btn ghost" type="button" data-del="' + s.id + '"><span class="material-symbols-outlined">close</span>Cancelar</button>' +
@@ -1266,10 +1330,25 @@
               '<span class="ses-tag dur">' + esc(s.dur) + '</span>' +
             '</div>' +
             '<div class="ses-sts">' + pipsSesion(s) + '</div>' +
+            eviSesion(s) +
           '</div>';
         });
         doneBox.innerHTML = dh;
       }
+    }
+
+    /* Evidencia subida y nota de la actividad: lo que quedo guardado en
+       usuariosesion. En modo demo (archivo) no hay archivo ni nota. */
+    function eviSesion(s){
+      var h = '';
+      if (s.evidencia_url){
+        var nombre = String(s.evidencia || s.evidencia_url).split('/').pop();
+        h += '<a href="' + esc(s.evidencia_url) + '" target="_blank" rel="noopener">' +
+          '<span class="material-symbols-outlined">attach_file</span>' + esc(nombre) + '</a>';
+      }
+      if (s.nota) h += '<span class="ses-nota"><span class="material-symbols-outlined">sticky_note_2</span>' + esc(s.nota) + '</span>';
+      if (s.subida) h += '<span class="ses-nota"><span class="material-symbols-outlined">cloud_done</span>Subida ' + esc(s.subida) + '</span>';
+      return h ? '<div class="ses-evi">' + h + '</div>' : '';
     }
 
     function renderChipsSes(){
@@ -1298,6 +1377,7 @@
       var t = $('sesTema'); if (t) t.selectedIndex = 0;
       var ta = $('sesTaller'); if (ta) ta.selectedIndex = 0;
       var n = $('sesNota'); if (n) n.value = '';
+      var ev = $('sesEvidencia'); if (ev) ev.value = '';
       renderChipsSes();
       abrirModal($('modalSesion'));
     }
@@ -1313,16 +1393,61 @@
       });
       if (!elegidos.length){ toast('Seleccioná al menos un estudiante'); return; }
       var d = $('sesDur'), t = $('sesTema'), ta = $('sesTaller'), n = $('sesNota');
+      var dur = d ? d.value : '2 h';
+      var tema = t ? t.value : 'Soldadura: unión de perfiles';
+      var taller = ta ? ta.value : 'Taller 1 · Soldadura';
+      var nota = n ? n.value.trim() : '';
+
+      if (!real){
+        guardarSesionLocal(fecha, hora, dur, tema, taller, elegidos, nota);
+        return;
+      }
+
+      /* Con backend el registro va a la tabla usuariosesion, con evidencia. */
+      var form = new FormData();
+      form.append('titulo', tema);
+      form.append('taller', taller);
+      form.append('fecha', fecha);
+      form.append('hora', hora);
+      form.append('duracion', dur);
+      form.append('nota', nota);
+      elegidos.forEach(function(e){ form.append('estudiantes', e.id); });
+      var file = $('sesEvidencia');
+      if (file && file.files && file.files[0]) form.append('evidencia', file.files[0]);
+
+      var btn = $('btnSesSave');
+      if (btn) btn.disabled = true;
+      fetch(API + '/api/usuariosesion-maestro', {
+        method: 'POST', credentials: 'include', body: form
+      })
+        .then(function(r){ return r.json().then(function(j){ return { ok: r.ok, j: j }; }); })
+        .then(function(res){
+          if (btn) btn.disabled = false;
+          if (!res.ok || !res.j.success){
+            toast(res.j.error || 'No se pudo registrar la actividad');
+            return;
+          }
+          cargarUsuariosesion();
+          cerrarModal($('modalSesion'));
+          toast('Actividad registrada en usuariosesion');
+        })
+        .catch(function(){
+          if (btn) btn.disabled = false;
+          toast('No se pudo registrar la actividad');
+        });
+    }
+    /* Camino sin backend (demo abierta como archivo): queda en el navegador. */
+    function guardarSesionLocal(fecha, hora, dur, tema, taller, elegidos, nota){
       var ses = {
         id: Date.now(),
         fecha: fecha,
         hora: hora,
-        dur: d ? d.value : '2 h',
-        tema: t ? t.value : 'Soldadura: unión de perfiles',
-        taller: ta ? ta.value : 'Taller 1 · Soldadura',
+        dur: dur,
+        tema: tema,
+        taller: taller,
         estudiantes: elegidos,
         estado: 'Programada',
-        nota: n ? n.value.trim() : ''
+        nota: nota
       };
       sesiones.push(ses);
       guardarSesiones();
@@ -1356,15 +1481,27 @@
       if (!s) return;
       if (btn.hasAttribute('data-com')){
         if (s.estado !== 'Programada') return;
-        s.estado = 'Completada';
-        guardarSesiones();
-        renderSesiones();
-        toast('Sesión completada: ' + s.tema);
+        btn.disabled = true;
+        accionSesion(id, 'completar', function(ok){
+          if (!ok){ btn.disabled = false; toast('No se pudo completar la actividad'); return; }
+          if (!real){
+            s.estado = 'Completada';
+            guardarSesiones();
+            renderSesiones();
+          }
+          toast('Sesión completada: ' + s.tema);
+        });
       } else {
-        sesiones = sesiones.filter(function(x){ return x.id !== id; });
-        guardarSesiones();
-        renderSesiones();
-        toast('Sesión cancelada');
+        btn.disabled = true;
+        accionSesion(id, 'cancelar', function(ok){
+          if (!ok){ btn.disabled = false; toast('No se pudo cancelar la actividad'); return; }
+          if (!real){
+            sesiones = sesiones.filter(function(x){ return x.id !== id; });
+            guardarSesiones();
+            renderSesiones();
+          }
+          toast('Sesión cancelada');
+        });
       }
     });
     var xSesion = $('xSesion'), mSesion = $('modalSesion');
@@ -1418,6 +1555,11 @@
     renderMats();
     renderSesiones();
     renderNotifs();
+    /* Servido desde el backend: las actividades salen de la tabla
+       usuariosesion (con su evidencia) y los estudiantes convocados son
+       los mismos de la pantalla de estudiantes. Abierto como archivo
+       (file:) se sigue usando el seed local. */
+    if (!isFile()){ cargarUsuariosesion(); cargarChipsEstudiantes(); }
   })();
 </script>
 

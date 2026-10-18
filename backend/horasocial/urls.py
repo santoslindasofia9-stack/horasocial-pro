@@ -7,6 +7,8 @@ Rutas principales:
     /api/login-maestro       -> puente con el formulario HTML existente
 """
 
+from django.conf import settings
+from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
 from django.views.generic import RedirectView
@@ -74,6 +76,20 @@ urlpatterns = [
         name='api-asistencia-accion',
     ),
 
+    # Actividades que el docente registra y sube (tabla usuariosesion).
+    path(
+        'api/usuariosesion-maestro',
+        docentes_views.api_usuariosesion_maestro,
+        name='api-usuariosesion-maestro',
+    ),
+
+    # Completar o cancelar una actividad registrada.
+    path(
+        'api/usuariosesion-accion',
+        docentes_views.api_usuariosesion_accion,
+        name='api-usuariosesion-accion',
+    ),
+
     # Reporte semanal o mensual de horas y pendientes del docente.
     path(
         'api/reporte-maestro',
@@ -81,3 +97,9 @@ urlpatterns = [
         name='api-reporte-maestro',
     ),
 ]
+
+# En desarrollo el runserver sirve las evidencias subidas desde MEDIA_ROOT.
+# En produccion esto lo hace el servidor web (nginx/apache), por eso solo
+# se agrega cuando DEBUG esta encendido.
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

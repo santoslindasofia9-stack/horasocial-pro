@@ -42,7 +42,15 @@ from .forms import (
     RestablecerContrasenaForm,
     buscar_usuario,
 )
-from .models import Actividad, Asistencia, Docente, Sesion, SolicitudRecuperacion, Usuario
+from .models import (
+    Actividad,
+    Asistencia,
+    Docente,
+    Sesion,
+    SolicitudRecuperacion,
+    Usuario,
+    UsuarioSesion,
+)
 
 
 # ==========================================================================
@@ -899,6 +907,267 @@ def api_estudiantes_maestro(request):
         return _respuesta_sin_sesion()
 
     return JsonResponse(_datos_estudiantes(docente))
+
+
+# ==========================================================================
+# USUARIO SESION: actividades que registra el docente (tabla usuariosesion)
+# ==========================================================================
+
+def _iniciales(nombre):
+    """Dos iniciales para los pines de estudiantes ('Valentina Rojas' -> VR)."""
+    partes = [p for p in str(nombre).split() if p]
+    if not partes:
+        return '??'
+    if len(partes) == 1:
+        return partes[0][:2].upper()
+    return (partes[0][0] + partes[1][0]).upper()
+
+
+def _fila_usuariosesion(registro):
+    """Una actividad registrada, con lo que el formulario vuelve a pintar."""
+    return {
+        'id': registro.id_registro,
+        'titulo': registro.titulo,
+        'nota': registro.descripcion or '',
+        'taller': registro.taller,
+        'fecha': registro.fecha.isoformat(),
+        'hora': registro.hora.strftime('%H:%M'),
+        'duracion': registro.duracion,
+        'estado': registro.estado,
+        'evidencia': registro.evidencia.name if registro.evidencia else '',
+        'evidencia_url': registro.evidencia.url if registro.evidencia else '',
+        'subida': _formato_corta(registro.fecha_registro),
+        'estudiantes': [
+            {
+                'id': estudiante.pk,
+                'nombre': estudiante.nombre_completo,
+                'iniciales': _iniciales(estudiante.nombre_completo),
+            }
+            for estudiante in registro.estudiantes.all().order_by('nombre_completo')
+        ],
+    }
+
+
+def _datos_usuariosesion(docente):
+    """Registros de la tabla usuariosesion del docente en sesion."""
+    registros = (
+        UsuarioSesion.objects
+        .filter(id_docente=docente)
+        .prefetch_related('estudiantes')
+    )
+    filas = [_fila_usuariosesion(registro) for registro in registros]
+    return {
+        'autenticado': True,
+        'docente': {'nombre': docente.nombre_completo},
+        'tabla': 'usuariosesion',
+        'stats': {
+            'total': len(filas),
+            'programadas': sum(1 for f in filas if f['estado'] == UsuarioSesion.ESTADO_PROGRAMADA),
+            'completadas': sum(1 for f in filas if f['estado'] == UsuarioSesion.ESTADO_COMPLETADA),
+        },
+        'registros': filas,
+    }
+
+
+def _crear_usuariosesion(docente, datos, archivos):
+    """
+    Registra una actividad nueva. `datos` es un mapping tipo QueryDict o dict
+    y `archivos` el request.FILES; devuelve (registro, error) con error None
+    cuando salio bien.
+    """
+    titulo = str(datos.get('titulo', '') or '').strip()
+    if not titulo:
+        return None, 'Falta la tematica de la actividad.'
+
+    taller = str(datos.get('taller', '') or '').strip() or 'Bodega general'
+
+    fecha_cruda = str(datos.get('fecha', '') or '').strip()
+    if not fecha_cruda:
+        return None, 'Falta la fecha de la actividad.'
+    try:
+        fecha = datetime.strptime(fecha_cruda, '%Y-%m-%d').date()
+    except ValueError:
+        return None, 'La fecha no tiene el formato esperado (AAAA-MM-DD).'
+
+    hora_cruda = str(datos.get('hora', '') or '').strip()
+    if not hora_cruda:
+        return None, 'Falta la hora de la actividad.'
+    try:
+        hora = datetime.strptime(hora_cruda, '%H:%M').time()
+    except ValueError:
+        return None, 'La hora no tiene el formato esperado (HH:MM).'
+
+    duracion = str(datos.get('duracion', '') or '').strip() or '2 h'
+    if duracion not in dict(UsuarioSesion.DURACION_CHOICES):
+        return None, 'La duracion debe ser 1 h, 2 h o 3 h.'
+
+    # Ojo: en un QueryDict (multipart) .get() devuelve solo el ultimo valor,
+    # por eso los convocados se leen con getlist. En JSON llegan como lista.
+    if hasattr(datos, 'getlist'):
+        ids = datos.getlist('estudiantes')
+    else:
+        ids = datos.get('estudiantes')
+        if ids is None:
+            ids = []
+        elif isinstance(ids, (str, int)):
+            ids = [ids]
+
+    limpios = []
+    for valor in ids:
+        try:
+            limpios.append(int(valor))
+        except (TypeError, ValueError):
+            continue
+
+    registro = UsuarioSesion.objects.create(
+        id_docente=docente,
+        titulo=titulo[:150],
+        descripcion=str(datos.get('nota', '') or '').strip() or None,
+        taller=taller[:100],
+        fecha=fecha,
+        hora=hora,
+        duracion=duracion,
+        estado=UsuarioSesion.ESTADO_PROGRAMADA,
+        evidencia=archivos.get('evidencia') if archivos else None,
+    )
+    if limpios:
+        convocados = Usuario.objects.filter(
+            pk__in=limpios, rol=Usuario.ROL_ESTUDIANTE,
+        )
+        registro.estudiantes.set(convocados)
+
+    return registro, None
+
+
+@csrf_exempt
+@habilita_cors
+@require_http_methods(['GET', 'POST', 'OPTIONS'])
+def api_usuariosesion_maestro(request):
+    """
+    Actividades del docente en la tabla `usuariosesion`.
+
+    GET  -> las actividades registradas (mas recientes primero) con sus
+            contadores y la evidencia subida.
+    POST -> registra una actividad nueva: tematica, taller, fecha, hora,
+            duracion, estudiantes convocados y la evidencia (multipart).
+            Tambien acepta JSON cuando no hay archivo.
+    """
+
+    if request.method == 'OPTIONS':
+        # Preflight que dispara el navegador por Content-Type: application/json.
+        return HttpResponse(status=204)
+
+    docente = _docente_en_sesion(request)
+    if docente is None:
+        return _respuesta_sin_sesion()
+
+    if request.method == 'GET':
+        return JsonResponse(_datos_usuariosesion(docente))
+
+    if request.content_type and 'application/json' in request.content_type:
+        try:
+            datos = json.loads(request.body or b'{}')
+        except (TypeError, ValueError):
+            return JsonResponse(
+                {'success': False, 'error': 'El cuerpo de la peticion no es JSON valido.'},
+                status=400,
+            )
+        if not isinstance(datos, dict):
+            return JsonResponse(
+                {'success': False, 'error': 'El cuerpo debe ser un objeto JSON.'},
+                status=400,
+            )
+        archivos = None
+    else:
+        datos = request.POST
+        archivos = request.FILES
+
+    registro, error = _crear_usuariosesion(docente, datos, archivos)
+    if error:
+        return JsonResponse({'success': False, 'error': error}, status=400)
+
+    return JsonResponse(
+        {
+            'success': True,
+            'registro': _fila_usuariosesion(registro),
+            'stats': _datos_usuariosesion(docente)['stats'],
+        },
+        status=201,
+    )
+
+
+@csrf_exempt
+@habilita_cors
+@require_http_methods(['POST', 'OPTIONS'])
+def api_usuariosesion_accion(request):
+    """
+    Marca una actividad registrada como 'Completada' o 'Cancelada'.
+
+    Solo el docente dueno del registro puede tocarlo: un registro ajeno
+    responde 403 sin escribir en la base.
+    """
+
+    if request.method == 'OPTIONS':
+        # Preflight que dispara el navegador por Content-Type: application/json.
+        return HttpResponse(status=204)
+
+    docente = _docente_en_sesion(request)
+    if docente is None:
+        return _respuesta_sin_sesion()
+
+    try:
+        datos = json.loads(request.body or b'{}')
+    except (TypeError, ValueError):
+        return JsonResponse(
+            {'success': False, 'error': 'El cuerpo de la peticion no es JSON valido.'},
+            status=400,
+        )
+
+    if not isinstance(datos, dict):
+        return JsonResponse(
+            {'success': False, 'error': 'El cuerpo debe ser un objeto JSON.'},
+            status=400,
+        )
+
+    try:
+        id_registro = int(datos.get('id_registro'))
+    except (TypeError, ValueError):
+        return JsonResponse(
+            {'success': False, 'error': 'Falta el id_registro.'},
+            status=400,
+        )
+
+    accion = str(datos.get('accion', '')).strip().lower()
+    if accion not in ('completar', 'cancelar'):
+        return JsonResponse(
+            {'success': False, 'error': 'accion invalida'},
+            status=400,
+        )
+
+    registro = UsuarioSesion.objects.filter(pk=id_registro).first()
+    if registro is None:
+        return JsonResponse(
+            {'success': False, 'error': 'registro no encontrado'},
+            status=404,
+        )
+
+    if registro.id_docente_id != docente.pk:
+        return JsonResponse({'success': False, 'error': 'no autorizado'}, status=403)
+
+    registro.estado = (
+        UsuarioSesion.ESTADO_COMPLETADA
+        if accion == 'completar'
+        else UsuarioSesion.ESTADO_CANCELADA
+    )
+    registro.save(update_fields=['estado'])
+
+    return JsonResponse(
+        {
+            'success': True,
+            'registro': _fila_usuariosesion(registro),
+            'stats': _datos_usuariosesion(docente)['stats'],
+        },
+    )
 
 
 @csrf_exempt

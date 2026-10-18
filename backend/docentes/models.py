@@ -468,3 +468,79 @@ class SolicitudRecuperacion(models.Model):
 
     def __str__(self):
         return f'{self.usuario} ({self.estado})'
+
+
+# ==========================================================================
+# USUARIO SESION / ACTIVIDAD DEL DOCENTE (tabla: usuariosesion)
+# ==========================================================================
+
+class UsuarioSesion(models.Model):
+    """
+    Actividad que un docente registra desde el Centro de Control Tecnico.
+
+    Es el registro propio del docente: que hizo, con que taller, cuando
+    (fecha y hora), cuanto duro, a que estudiantes convoco y la evidencia
+    que subio. Todo queda en la tabla `usuariosesion`.
+
+    Estados:
+
+    - 'Programada': registrada y todavia por ejecutar.
+    - 'Completada': ya se realizo (la evidencia esta cargada).
+    - 'Cancelada': se dio de baja.
+
+    `fecha` y `hora` son la programacion; `fecha_registro` es el momento
+    real en que se subio la actividad (se llena solo, no se edita).
+    """
+
+    ESTADO_PROGRAMADA = 'Programada'
+    ESTADO_COMPLETADA = 'Completada'
+    ESTADO_CANCELADA = 'Cancelada'
+    ESTADO_CHOICES = [
+        (ESTADO_PROGRAMADA, 'Programada'),
+        (ESTADO_COMPLETADA, 'Completada'),
+        (ESTADO_CANCELADA, 'Cancelada'),
+    ]
+
+    DURACION_CHOICES = [
+        ('1 h', '1 hora'),
+        ('2 h', '2 horas'),
+        ('3 h', '3 horas'),
+    ]
+
+    id_registro = models.AutoField(primary_key=True)
+    id_docente = models.ForeignKey(
+        Usuario, on_delete=models.CASCADE, db_column='id_docente',
+        related_name='actividades_registradas', verbose_name='docente',
+        limit_choices_to={'rol': Usuario.ROL_PROFESOR},
+    )
+    titulo = models.CharField('tematica', max_length=150)
+    descripcion = models.TextField('nota', blank=True, null=True)
+    taller = models.CharField(max_length=100)
+    fecha = models.DateField('fecha programada')
+    hora = models.TimeField('hora programada')
+    duracion = models.CharField(
+        max_length=20, choices=DURACION_CHOICES, default='2 h',
+    )
+    estado = models.CharField(
+        max_length=20, choices=ESTADO_CHOICES, default=ESTADO_PROGRAMADA,
+    )
+    evidencia = models.FileField(
+        'evidencia subida', upload_to='evidencias/%Y/%m/', blank=True, null=True,
+        help_text='Archivo que respalda la actividad (planilla, foto, lista).',
+    )
+    estudiantes = models.ManyToManyField(
+        Usuario, related_name='actividades_inscritas', blank=True,
+        limit_choices_to={'rol': Usuario.ROL_ESTUDIANTE},
+        help_text='Estudiantes convocados a la actividad.',
+    )
+    fecha_registro = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = 'usuariosesion'
+        verbose_name = 'Actividad registrada por el docente'
+        verbose_name_plural = 'Actividades registradas por los docentes'
+        ordering = ['-fecha', '-hora', '-id_registro']
+
+    def __str__(self):
+        return f'{self.titulo} ({self.fecha} {self.hora:%H:%M})'
+
