@@ -471,16 +471,16 @@ class SolicitudRecuperacion(models.Model):
 
 
 # ==========================================================================
-# USUARIO SESION / ACTIVIDAD DEL DOCENTE (tabla: usuariosesion)
+# USUARIO SESION / ACTIVIDAD DEL DOCENTE (tabla: sesionservicio)
 # ==========================================================================
 
-class UsuarioSesion(models.Model):
+class SesionServicio(models.Model):
     """
     Actividad que un docente registra desde el Centro de Control Tecnico.
 
     Es el registro propio del docente: que hizo, con que taller, cuando
     (fecha y hora), cuanto duro, a que estudiantes convoco y la evidencia
-    que subio. Todo queda en la tabla `usuariosesion`.
+    que subio. Todo queda en la tabla `sesionservicio`.
 
     Estados:
 
@@ -536,7 +536,7 @@ class UsuarioSesion(models.Model):
     fecha_registro = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        db_table = 'usuariosesion'
+        db_table = 'sesionservicio'
         verbose_name = 'Actividad registrada por el docente'
         verbose_name_plural = 'Actividades registradas por los docentes'
         ordering = ['-fecha', '-hora', '-id_registro']

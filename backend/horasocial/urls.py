@@ -76,18 +76,18 @@ urlpatterns = [
         name='api-asistencia-accion',
     ),
 
-    # Actividades que el docente registra y sube (tabla usuariosesion).
+    # Actividades que el docente registra y sube (tabla sesionservicio).
     path(
-        'api/usuariosesion-maestro',
-        docentes_views.api_usuariosesion_maestro,
-        name='api-usuariosesion-maestro',
+        'api/sesionservicio-maestro',
+        docentes_views.api_sesionservicio_maestro,
+        name='api-sesionservicio-maestro',
     ),
 
     # Completar o cancelar una actividad registrada.
     path(
-        'api/usuariosesion-accion',
-        docentes_views.api_usuariosesion_accion,
-        name='api-usuariosesion-accion',
+        'api/sesionservicio-accion',
+        docentes_views.api_sesionservicio_accion,
+        name='api-sesionservicio-accion',
     ),
 
     # Reporte semanal o mensual de horas y pendientes del docente.

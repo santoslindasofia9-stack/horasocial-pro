@@ -24,7 +24,7 @@ from .models import (
     Sesion,
     SolicitudRecuperacion,
     Usuario,
-    UsuarioSesion,
+    SesionServicio,
 )
 
 CORREO = 'docente@test.local'
@@ -772,8 +772,8 @@ class ApiPanelMaestroTests(BaseModuloDocentes):
         casos = [
             ('dashboard', self._dashboard()),
             ('estudiantes', self._estudiantes()),
-            ('usuariosesion', self._usuariosesion()),
-            ('usuariosesion_accion', self._usuariosesion_accion(
+            ('sesionservicio', self._sesionservicio()),
+            ('sesionservicio_accion', self._sesionservicio_accion(
                 {'id_registro': 1, 'accion': 'completar'},
             )),
             ('accion', self._accion(
@@ -834,18 +834,18 @@ class ApiPanelMaestroTests(BaseModuloDocentes):
     def _estudiantes(self, **extra):
         return self.client.get(reverse('api-estudiantes-maestro'), **extra)
 
-    def _usuariosesion(self, **extra):
-        return self.client.get(reverse('api-usuariosesion-maestro'), **extra)
+    def _sesionservicio(self, **extra):
+        return self.client.get(reverse('api-sesionservicio-maestro'), **extra)
 
-    def _usuariosesion_accion(self, payload, **extra):
+    def _sesionservicio_accion(self, payload, **extra):
         return self.client.post(
-            reverse('api-usuariosesion-accion'),
+            reverse('api-sesionservicio-accion'),
             data=json.dumps(payload),
             content_type='application/json',
             **extra,
         )
 
-    def _registrar_usuariosesion(self, **datos):
+    def _registrar_sesionservicio(self, **datos):
         """Registra una actividad por el mismo camino que usa el formulario."""
         payload = {
             'titulo': 'Seguridad en el taller',
@@ -857,7 +857,7 @@ class ApiPanelMaestroTests(BaseModuloDocentes):
             'estudiantes': [self.estudiante.pk, self.estudiante2.pk],
         }
         payload.update(datos)
-        return self.client.post(reverse('api-usuariosesion-maestro'), data=payload)
+        return self.client.post(reverse('api-sesionservicio-maestro'), data=payload)
 
     def test_la_pantalla_de_estudiantes_tiene_la_forma_esperada(self):
         self._abrir_sesion()
@@ -1049,9 +1049,9 @@ class ApiPanelMaestroTests(BaseModuloDocentes):
         )
 
 
-class ApiUsuarioSesionTests(BaseModuloDocentes):
+class ApiSesionServicioTests(BaseModuloDocentes):
     """
-    Actividades que el docente registra en la tabla `usuariosesion`.
+    Actividades que el docente registra en la tabla `sesionservicio`.
 
     El formulario de "Programar Sesiones de Taller" crea la fila con fecha,
     hora, duracion, estudiantes convocados y la evidencia subida; la accion
@@ -1088,11 +1088,11 @@ class ApiUsuarioSesionTests(BaseModuloDocentes):
         self.client.login(username=CORREO, password=CLAVE)
 
     def _lista(self, **extra):
-        return self.client.get(reverse('api-usuariosesion-maestro'), **extra)
+        return self.client.get(reverse('api-sesionservicio-maestro'), **extra)
 
     def _accion(self, payload, **extra):
         return self.client.post(
-            reverse('api-usuariosesion-accion'),
+            reverse('api-sesionservicio-accion'),
             data=json.dumps(payload),
             content_type='application/json',
             **extra,
@@ -1109,7 +1109,7 @@ class ApiUsuarioSesionTests(BaseModuloDocentes):
             'estudiantes': [self.estudiante.pk, self.estudiante2.pk],
         }
         payload.update(datos)
-        return self.client.post(reverse('api-usuariosesion-maestro'), data=payload)
+        return self.client.post(reverse('api-sesionservicio-maestro'), data=payload)
 
     # ---------------------------------------------------------------- lista
 
@@ -1121,7 +1121,7 @@ class ApiUsuarioSesionTests(BaseModuloDocentes):
 
         self.assertTrue(datos['autenticado'])
         self.assertEqual(datos['docente']['nombre'], self.docente.nombre_completo)
-        self.assertEqual(datos['tabla'], 'usuariosesion')
+        self.assertEqual(datos['tabla'], 'sesionservicio')
         self.assertEqual(
             datos['stats'], {'total': 0, 'programadas': 0, 'completadas': 0},
         )
@@ -1152,12 +1152,12 @@ class ApiUsuarioSesionTests(BaseModuloDocentes):
         self.assertEqual(fila['taller'], 'Taller 1')
         self.assertEqual(fila['hora'], '08:30')
         self.assertEqual(fila['duracion'], '2 h')
-        self.assertEqual(fila['estado'], UsuarioSesion.ESTADO_PROGRAMADA)
+        self.assertEqual(fila['estado'], SesionServicio.ESTADO_PROGRAMADA)
         self.assertEqual(fila['evidencia'], '')
         self.assertEqual(fila['nota'], 'Llevar guantes')
 
         # La fila existe de verdad en la tabla y quedo a nombre del docente.
-        registro = UsuarioSesion.objects.get(pk=fila['id'])
+        registro = SesionServicio.objects.get(pk=fila['id'])
         self.assertEqual(registro.id_docente_id, self.docente.pk)
         self.assertEqual(registro.descripcion, 'Llevar guantes')
 
@@ -1180,14 +1180,14 @@ class ApiUsuarioSesionTests(BaseModuloDocentes):
         self.assertTrue(fila['evidencia'].endswith('planilla.txt'))
         self.assertIn('/media/evidencias/', fila['evidencia_url'])
 
-        registro = UsuarioSesion.objects.get(pk=fila['id'])
+        registro = SesionServicio.objects.get(pk=fila['id'])
         with open(registro.evidencia.path, 'rb') as archivo:
             self.assertEqual(archivo.read(), b'lista de asistencia')
 
     def test_registrar_por_json_tambien_funciona(self):
         self._abrir_sesion()
         respuesta = self.client.post(
-            reverse('api-usuariosesion-maestro'),
+            reverse('api-sesionservicio-maestro'),
             data=json.dumps({
                 'titulo': 'Manejo de herramientas',
                 'fecha': timezone.localdate().isoformat(),
@@ -1207,7 +1207,7 @@ class ApiUsuarioSesionTests(BaseModuloDocentes):
         )
         self.assertEqual(respuesta.status_code, 201)
 
-        registro = UsuarioSesion.objects.get(pk=respuesta.json()['registro']['id'])
+        registro = SesionServicio.objects.get(pk=respuesta.json()['registro']['id'])
         self.assertEqual(
             [e.pk for e in registro.estudiantes.all()], [self.estudiante.pk],
         )
@@ -1236,12 +1236,12 @@ class ApiUsuarioSesionTests(BaseModuloDocentes):
                 respuesta = self._registrar(**cambio)
                 self.assertEqual(respuesta.status_code, 400)
                 self.assertFalse(respuesta.json()['success'])
-        self.assertFalse(UsuarioSesion.objects.exists())
+        self.assertFalse(SesionServicio.objects.exists())
 
     def test_un_json_invalido_responde_400(self):
         self._abrir_sesion()
         respuesta = self.client.post(
-            reverse('api-usuariosesion-maestro'),
+            reverse('api-sesionservicio-maestro'),
             data='{no es json',
             content_type='application/json',
         )
@@ -1258,25 +1258,25 @@ class ApiUsuarioSesionTests(BaseModuloDocentes):
         respuesta = self._accion({'id_registro': primero, 'accion': 'completar'})
         self.assertEqual(respuesta.status_code, 200)
         self.assertEqual(
-            respuesta.json()['registro']['estado'], UsuarioSesion.ESTADO_COMPLETADA,
+            respuesta.json()['registro']['estado'], SesionServicio.ESTADO_COMPLETADA,
         )
         self.assertEqual(
             respuesta.json()['stats'], {'total': 2, 'programadas': 1, 'completadas': 1},
         )
         self.assertEqual(
-            UsuarioSesion.objects.get(pk=primero).estado,
-            UsuarioSesion.ESTADO_COMPLETADA,
+            SesionServicio.objects.get(pk=primero).estado,
+            SesionServicio.ESTADO_COMPLETADA,
         )
 
         respuesta = self._accion({'id_registro': segundo, 'accion': 'cancelar'})
         self.assertEqual(respuesta.status_code, 200)
         self.assertEqual(
-            respuesta.json()['registro']['estado'], UsuarioSesion.ESTADO_CANCELADA,
+            respuesta.json()['registro']['estado'], SesionServicio.ESTADO_CANCELADA,
         )
 
     def test_marcar_la_actividad_de_otro_docente_responde_403(self):
         self._abrir_sesion()
-        ajena = UsuarioSesion.objects.create(
+        ajena = SesionServicio.objects.create(
             id_docente=self.otro_docente,
             titulo='Actividad ajena',
             taller='Taller 9',
@@ -1287,7 +1287,7 @@ class ApiUsuarioSesionTests(BaseModuloDocentes):
         respuesta = self._accion({'id_registro': ajena.pk, 'accion': 'completar'})
         self.assertEqual(respuesta.status_code, 403)
         ajena.refresh_from_db()
-        self.assertEqual(ajena.estado, UsuarioSesion.ESTADO_PROGRAMADA)
+        self.assertEqual(ajena.estado, SesionServicio.ESTADO_PROGRAMADA)
 
     def test_una_accion_o_un_registro_invalido_no_tocan_nada(self):
         self._abrir_sesion()
@@ -1303,13 +1303,13 @@ class ApiUsuarioSesionTests(BaseModuloDocentes):
                 self.assertEqual(self._accion(payload).status_code, esperado)
 
         self.assertEqual(
-            UsuarioSesion.objects.get(pk=registro).estado,
-            UsuarioSesion.ESTADO_PROGRAMADA,
+            SesionServicio.objects.get(pk=registro).estado,
+            SesionServicio.ESTADO_PROGRAMADA,
         )
 
     def test_el_preflight_responde_204_con_cors(self):
         respuesta = self.client.options(
-            reverse('api-usuariosesion-maestro'), HTTP_ORIGIN='http://localhost:3000',
+            reverse('api-sesionservicio-maestro'), HTTP_ORIGIN='http://localhost:3000',
         )
         self.assertEqual(respuesta.status_code, 204)
         self.assertEqual(
@@ -1319,7 +1319,7 @@ class ApiUsuarioSesionTests(BaseModuloDocentes):
     def test_cada_docente_solo_ve_sus_propias_actividades(self):
         self._abrir_sesion()
         self._registrar(titulo='Mia')
-        UsuarioSesion.objects.create(
+        SesionServicio.objects.create(
             id_docente=self.otro_docente,
             titulo='De otro',
             taller='Taller 9',

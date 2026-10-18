@@ -49,7 +49,7 @@ from .models import (
     Sesion,
     SolicitudRecuperacion,
     Usuario,
-    UsuarioSesion,
+    SesionServicio,
 )
 
 
@@ -910,7 +910,7 @@ def api_estudiantes_maestro(request):
 
 
 # ==========================================================================
-# USUARIO SESION: actividades que registra el docente (tabla usuariosesion)
+# USUARIO SESION: actividades que registra el docente (tabla sesionservicio)
 # ==========================================================================
 
 def _iniciales(nombre):
@@ -923,7 +923,7 @@ def _iniciales(nombre):
     return (partes[0][0] + partes[1][0]).upper()
 
 
-def _fila_usuariosesion(registro):
+def _fila_sesionservicio(registro):
     """Una actividad registrada, con lo que el formulario vuelve a pintar."""
     return {
         'id': registro.id_registro,
@@ -948,28 +948,28 @@ def _fila_usuariosesion(registro):
     }
 
 
-def _datos_usuariosesion(docente):
-    """Registros de la tabla usuariosesion del docente en sesion."""
+def _datos_sesionservicio(docente):
+    """Registros de la tabla sesionservicio del docente en sesion."""
     registros = (
-        UsuarioSesion.objects
+        SesionServicio.objects
         .filter(id_docente=docente)
         .prefetch_related('estudiantes')
     )
-    filas = [_fila_usuariosesion(registro) for registro in registros]
+    filas = [_fila_sesionservicio(registro) for registro in registros]
     return {
         'autenticado': True,
         'docente': {'nombre': docente.nombre_completo},
-        'tabla': 'usuariosesion',
+        'tabla': 'sesionservicio',
         'stats': {
             'total': len(filas),
-            'programadas': sum(1 for f in filas if f['estado'] == UsuarioSesion.ESTADO_PROGRAMADA),
-            'completadas': sum(1 for f in filas if f['estado'] == UsuarioSesion.ESTADO_COMPLETADA),
+            'programadas': sum(1 for f in filas if f['estado'] == SesionServicio.ESTADO_PROGRAMADA),
+            'completadas': sum(1 for f in filas if f['estado'] == SesionServicio.ESTADO_COMPLETADA),
         },
         'registros': filas,
     }
 
 
-def _crear_usuariosesion(docente, datos, archivos):
+def _crear_sesionservicio(docente, datos, archivos):
     """
     Registra una actividad nueva. `datos` es un mapping tipo QueryDict o dict
     y `archivos` el request.FILES; devuelve (registro, error) con error None
@@ -998,7 +998,7 @@ def _crear_usuariosesion(docente, datos, archivos):
         return None, 'La hora no tiene el formato esperado (HH:MM).'
 
     duracion = str(datos.get('duracion', '') or '').strip() or '2 h'
-    if duracion not in dict(UsuarioSesion.DURACION_CHOICES):
+    if duracion not in dict(SesionServicio.DURACION_CHOICES):
         return None, 'La duracion debe ser 1 h, 2 h o 3 h.'
 
     # Ojo: en un QueryDict (multipart) .get() devuelve solo el ultimo valor,
@@ -1019,7 +1019,7 @@ def _crear_usuariosesion(docente, datos, archivos):
         except (TypeError, ValueError):
             continue
 
-    registro = UsuarioSesion.objects.create(
+    registro = SesionServicio.objects.create(
         id_docente=docente,
         titulo=titulo[:150],
         descripcion=str(datos.get('nota', '') or '').strip() or None,
@@ -1027,7 +1027,7 @@ def _crear_usuariosesion(docente, datos, archivos):
         fecha=fecha,
         hora=hora,
         duracion=duracion,
-        estado=UsuarioSesion.ESTADO_PROGRAMADA,
+        estado=SesionServicio.ESTADO_PROGRAMADA,
         evidencia=archivos.get('evidencia') if archivos else None,
     )
     if limpios:
@@ -1042,9 +1042,9 @@ def _crear_usuariosesion(docente, datos, archivos):
 @csrf_exempt
 @habilita_cors
 @require_http_methods(['GET', 'POST', 'OPTIONS'])
-def api_usuariosesion_maestro(request):
+def api_sesionservicio_maestro(request):
     """
-    Actividades del docente en la tabla `usuariosesion`.
+    Actividades del docente en la tabla `sesionservicio`.
 
     GET  -> las actividades registradas (mas recientes primero) con sus
             contadores y la evidencia subida.
@@ -1062,7 +1062,7 @@ def api_usuariosesion_maestro(request):
         return _respuesta_sin_sesion()
 
     if request.method == 'GET':
-        return JsonResponse(_datos_usuariosesion(docente))
+        return JsonResponse(_datos_sesionservicio(docente))
 
     if request.content_type and 'application/json' in request.content_type:
         try:
@@ -1082,15 +1082,15 @@ def api_usuariosesion_maestro(request):
         datos = request.POST
         archivos = request.FILES
 
-    registro, error = _crear_usuariosesion(docente, datos, archivos)
+    registro, error = _crear_sesionservicio(docente, datos, archivos)
     if error:
         return JsonResponse({'success': False, 'error': error}, status=400)
 
     return JsonResponse(
         {
             'success': True,
-            'registro': _fila_usuariosesion(registro),
-            'stats': _datos_usuariosesion(docente)['stats'],
+            'registro': _fila_sesionservicio(registro),
+            'stats': _datos_sesionservicio(docente)['stats'],
         },
         status=201,
     )
@@ -1099,7 +1099,7 @@ def api_usuariosesion_maestro(request):
 @csrf_exempt
 @habilita_cors
 @require_http_methods(['POST', 'OPTIONS'])
-def api_usuariosesion_accion(request):
+def api_sesionservicio_accion(request):
     """
     Marca una actividad registrada como 'Completada' o 'Cancelada'.
 
@@ -1144,7 +1144,7 @@ def api_usuariosesion_accion(request):
             status=400,
         )
 
-    registro = UsuarioSesion.objects.filter(pk=id_registro).first()
+    registro = SesionServicio.objects.filter(pk=id_registro).first()
     if registro is None:
         return JsonResponse(
             {'success': False, 'error': 'registro no encontrado'},
@@ -1155,17 +1155,17 @@ def api_usuariosesion_accion(request):
         return JsonResponse({'success': False, 'error': 'no autorizado'}, status=403)
 
     registro.estado = (
-        UsuarioSesion.ESTADO_COMPLETADA
+        SesionServicio.ESTADO_COMPLETADA
         if accion == 'completar'
-        else UsuarioSesion.ESTADO_CANCELADA
+        else SesionServicio.ESTADO_CANCELADA
     )
     registro.save(update_fields=['estado'])
 
     return JsonResponse(
         {
             'success': True,
-            'registro': _fila_usuariosesion(registro),
-            'stats': _datos_usuariosesion(docente)['stats'],
+            'registro': _fila_sesionservicio(registro),
+            'stats': _datos_sesionservicio(docente)['stats'],
         },
     )
 

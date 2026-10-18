@@ -204,7 +204,7 @@
     display:inline-flex;align-items:center;gap:4px}
   .ses-tag .material-symbols-outlined{font-size:12px}
   .ses-tag.dur{background:#ede9fe;color:#6d28d9;border-color:#e9e2fc}
-  /* evidencia y nota que quedan guardadas en la tabla usuariosesion */
+  /* evidencia y nota que quedan guardadas en la tabla sesionservicio */
   .ses-evi{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
   .ses-evi a,.ses-evi span.ses-nota{display:inline-flex;align-items:center;gap:5px;font-size:10.5px;
     font-weight:800;padding:4px 10px;border-radius:999px;border:1px dashed #bfdbfe;background:#f0f9ff;
@@ -692,7 +692,7 @@
       <div class="f-field">
         <label for="sesEvidencia">Evidencia (opcional)</label>
         <input id="sesEvidencia" type="file" accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.jpeg,.png,.txt">
-        <div class="f-hint">Subí la planilla, la lista de asistencia o una foto de la actividad. Se guarda en la tabla usuariosesion.</div>
+        <div class="f-hint">Subí la planilla, la lista de asistencia o una foto de la actividad. Se guarda en la tabla sesionservicio.</div>
       </div>
       <button class="vbtn full" id="btnSesSave" type="button"><span class="material-symbols-outlined">event_available</span>Programar sesión</button>
     </div>
@@ -1373,16 +1373,16 @@
     function bySesId(id){ var r = null; sesiones.forEach(function(x){ if (x.id === id) r = x; }); return r; }
     var sesSel = {};
 
-    /* ---------- usuariosesion: actividades reales del docente ---------- */
+    /* ---------- sesionservicio: actividades reales del docente ---------- */
     var API = 'http://127.0.0.1:8000';
-    var real = false;   /* true cuando las actividades vienen de la tabla usuariosesion */
+    var real = false;   /* true cuando las actividades vienen de la tabla sesionservicio */
     function inicialesDe(nombre){
       var p = String(nombre).split(' ').filter(Boolean);
       if (!p.length) return '??';
       if (p.length === 1) return p[0].slice(0, 2).toUpperCase();
       return (p[0][0] + p[1][0]).toUpperCase();
     }
-    function aplicarUsuariosesion(d){
+    function aplicarSesionservicio(d){
       real = true;
       sesiones.length = 0;
       (d.registros || []).forEach(function(r){
@@ -1406,10 +1406,10 @@
       renderSesiones();
       renderStats();
     }
-    function cargarUsuariosesion(){
-      fetch(API + '/api/usuariosesion-maestro', { credentials: 'include' })
+    function cargarSesionservicio(){
+      fetch(API + '/api/sesionservicio-maestro', { credentials: 'include' })
         .then(function(r){ if (!r.ok) throw 0; return r.json(); })
-        .then(function(d){ if (d && d.autenticado) aplicarUsuariosesion(d); })
+        .then(function(d){ if (d && d.autenticado) aplicarSesionservicio(d); })
         .catch(function(){ real = false; });
     }
     /* Los estudiantes convocados salen de la misma lista real que la
@@ -1427,14 +1427,14 @@
     }
     function accionSesion(id, accion, cb){
       if (!real){ cb(true); return; }
-      fetch(API + '/api/usuariosesion-accion', {
+      fetch(API + '/api/sesionservicio-accion', {
         method: 'POST', credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ id_registro: id, accion: accion })
       })
         .then(function(r){ if (!r.ok) throw 0; return r.json(); })
         .then(function(d){
-          if (d && d.success){ cargarUsuariosesion(); cb(true); }
+          if (d && d.success){ cargarSesionservicio(); cb(true); }
           else { cb(false); }
         })
         .catch(function(){ cb(false); });
@@ -1500,7 +1500,7 @@
     }
 
     /* Evidencia subida y nota de la actividad: lo que quedo guardado en
-       usuariosesion. En modo demo (archivo) no hay archivo ni nota. */
+       sesionservicio. En modo demo (archivo) no hay archivo ni nota. */
     function eviSesion(s){
       var h = '';
       if (s.evidencia_url){
@@ -1565,7 +1565,7 @@
         return;
       }
 
-      /* Con backend el registro va a la tabla usuariosesion, con evidencia. */
+      /* Con backend el registro va a la tabla sesionservicio, con evidencia. */
       var form = new FormData();
       form.append('titulo', tema);
       form.append('taller', taller);
@@ -1579,7 +1579,7 @@
 
       var btn = $('btnSesSave');
       if (btn) btn.disabled = true;
-      fetch(API + '/api/usuariosesion-maestro', {
+      fetch(API + '/api/sesionservicio-maestro', {
         method: 'POST', credentials: 'include', body: form
       })
         .then(function(r){ return r.json().then(function(j){ return { ok: r.ok, j: j }; }); })
@@ -1589,9 +1589,9 @@
             toast(res.j.error || 'No se pudo registrar la actividad');
             return;
           }
-          cargarUsuariosesion();
+          cargarSesionservicio();
           cerrarModal($('modalSesion'));
-          toast('Actividad registrada en usuariosesion');
+          toast('Actividad registrada en sesionservicio');
         })
         .catch(function(){
           if (btn) btn.disabled = false;
@@ -1718,10 +1718,10 @@
     renderSesiones();
     renderNotifs();
     /* Servido desde el backend: las actividades salen de la tabla
-       usuariosesion (con su evidencia) y los estudiantes convocados son
+       sesionservicio (con su evidencia) y los estudiantes convocados son
        los mismos de la pantalla de estudiantes. Abierto como archivo
        (file:) se sigue usando el seed local. */
-    if (!isFile()){ cargarUsuariosesion(); cargarChipsEstudiantes(); }
+    if (!isFile()){ cargarSesionservicio(); cargarChipsEstudiantes(); }
   })();
 </script>
 
