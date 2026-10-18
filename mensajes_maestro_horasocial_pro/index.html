@@ -133,7 +133,20 @@
     font-size:13px;font-weight:700;opacity:0;transition:opacity .25s,transform .25s;
     pointer-events:none;z-index:100;white-space:nowrap;box-shadow:0 6px 20px rgba(12,74,110,.3)}
   #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-</style>
+
+  /* destellos de pantalla completa (mismo sistema que el login) */
+  .sparkles-screen{position:fixed;inset:0;z-index:3;pointer-events:none;overflow:hidden}
+  .sparkle-layer{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+  .sparkle{position:absolute;border-radius:50%;opacity:0;animation:sparkle-twinkle var(--dur,4s) ease-in-out var(--d,0s) infinite;will-change:opacity}
+  .sparkle.c-pink{background:#F472B6;box-shadow:0 0 7px 1px rgba(244,114,182,.65)}
+  .sparkle.c-gold{background:#E0A526;box-shadow:0 0 7px 1px rgba(224,165,38,.65)}
+  .sparkle.c-sky{background:#38BDF8;box-shadow:0 0 7px 1px rgba(56,189,248,.65)}
+  .sparkle.c-rose{background:#EC4899;box-shadow:0 0 8px 2px rgba(236,72,153,.6)}
+  .sparkle.glint{width:13px;height:13px;border-radius:0;background:#EC4899;clip-path:polygon(50% 0,61% 39%,100% 50%,61% 61%,50% 100%,39% 61%,0 50%,39% 39%);filter:drop-shadow(0 0 4px rgba(236,72,153,.55));--so:.85}
+  .sparkle.glint.c-gold{background:#E0A526;filter:drop-shadow(0 0 4px rgba(224,165,38,.55))}
+  .sparkle.glint.c-sky{background:#38BDF8;filter:drop-shadow(0 0 4px rgba(56,189,248,.55))}
+  @keyframes sparkle-twinkle{0%,100%{opacity:0}50%{opacity:var(--so,.5)}}
+  @media (prefers-reduced-motion: reduce){.sparkle{animation:none;opacity:.7}}</style>
 </head>
 <body>
 
@@ -336,5 +349,43 @@
   render();
 })();
 </script>
-</body>
+
+<!-- destellos alrededor de toda la pantalla -->
+<div class="sparkles-screen" aria-hidden="true"><div class="sparkle-layer"></div></div>
+<script>
+  /* destellos: misma grilla y semilla que el login */
+  (function buildSparkles() {
+    var layer = document.querySelector('.sparkles-screen .sparkle-layer');
+    if (!layer) return;
+    var COLS = 8, ROWS = 6, COUNT = COLS * ROWS;
+    var STAR_CELLS = [3, 12, 21, 27, 36, 44];
+    var DOTS = ['c-pink', 'c-gold', 'c-sky', 'c-rose'];
+    var seed = 20261017;
+    function rand() { seed = (seed * 1664525 + 1013904223) % 4294967296; return seed / 4294967296; }
+    var cellW = 100 / COLS, cellH = 100 / ROWS;
+    var frag = document.createDocumentFragment();
+    for (var i = 0; i < COUNT; i++) {
+      var col = i % COLS, row = Math.floor(i / COLS);
+      var dot = document.createElement('span');
+      var isStar = STAR_CELLS.indexOf(i) !== -1;
+      var left = (col + 0.5) * cellW + (rand() - 0.5) * cellW * 0.7;
+      var top = (row + 0.5) * cellH + (rand() - 0.5) * cellH * 0.7;
+      dot.style.left = Math.min(97, Math.max(2, left)).toFixed(2) + '%';
+      dot.style.top = Math.min(97, Math.max(2, top)).toFixed(2) + '%';
+      if (isStar) {
+        dot.className = 'sparkle glint ' + DOTS[Math.floor(rand() * DOTS.length)];
+      } else {
+        dot.className = 'sparkle ' + DOTS[Math.floor(rand() * DOTS.length)];
+        var size = (3 + rand() * 4).toFixed(1);
+        dot.style.width = size + 'px';
+        dot.style.height = size + 'px';
+        dot.style.setProperty('--so', (0.45 + rand() * 0.45).toFixed(2));
+      }
+      dot.style.setProperty('--dur', (2.5 + rand() * 2.5).toFixed(2) + 's');
+      dot.style.setProperty('--d', (-rand() * 5).toFixed(2) + 's');
+      frag.appendChild(dot);
+    }
+    layer.appendChild(frag);
+  })();
+</script></body>
 </html>

@@ -352,8 +352,8 @@
     .greet h2{font-size:24px}
   }
 
-  /* pie decorativo: destellos (mismo sistema que el login) */
-  .foot-brillos{position:relative;z-index:1;overflow:hidden;min-height:150px;margin-top:26px}
+  /* destellos de pantalla completa (mismo sistema que el login) */
+  .sparkles-screen{position:fixed;inset:0;z-index:3;pointer-events:none;overflow:hidden}
   .sparkle-layer{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden}
   .sparkle{position:absolute;border-radius:50%;opacity:0;animation:sparkle-twinkle var(--dur,4s) ease-in-out var(--d,0s) infinite;will-change:opacity}
   .sparkle.c-pink{background:#F472B6;box-shadow:0 0 7px 1px rgba(244,114,182,.65)}
@@ -551,10 +551,10 @@
 
 </div>
 
-<!-- pie decorativo con destellos, solo brillitos -->
-<footer class="foot-brillos" aria-hidden="true">
+<!-- destellos alrededor de toda la pantalla -->
+<div class="sparkles-screen" aria-hidden="true">
   <div class="sparkle-layer"></div>
-</footer>
+</div>
 
 <!-- nav inferior glass + íconos, bien distribuida -->
 <nav>
@@ -1243,7 +1243,7 @@
 <script>
   /* destellos del pie: misma grilla y semilla que el login */
   (function buildSparkles() {
-    var layer = document.querySelector('.foot-brillos .sparkle-layer');
+    var layer = document.querySelector('.sparkles-screen .sparkle-layer');
     if (!layer) return;
 
     var COLS = 8;
