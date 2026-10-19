@@ -544,3 +544,104 @@ class SesionServicio(models.Model):
     def __str__(self):
         return f'{self.titulo} ({self.fecha} {self.hora:%H:%M})'
 
+
+# ==========================================================================
+# MENSAJES DEL DOCENTE CON SUS ESTUDIANTES (tabla: mensajes)
+# ==========================================================================
+
+class Mensaje(models.Model):
+    """
+    Un mensaje del chat entre el docente y uno de sus estudiantes.
+
+    Todo el historial queda en la tabla `mensajes`: la bandeja del maestro
+    arma un hilo por estudiante y el chat muestra la conversacion completa.
+
+    `remitente` dice quien escribio (el docente o el estudiante) y
+    `contenido` es el texto, que puede venir vacio cuando el mensaje es
+    solo un adjunto. `adjunto` guarda la imagen o el archivo que se subio
+    desde el chat.
+
+    Estados:
+
+    - 'Enviado': todavia no lo leyo quien lo recibe. Alimenta el contador
+      de no leidos de la bandeja.
+    - 'Leido': ya se abrio la conversacion.
+
+    El lenguaje se revisa antes de guardar: la vista rechaza el mensaje
+    cuando trae palabras no permitidas, asi que esa fila nunca se crea.
+    """
+
+    REMITENTE_DOCENTE = 'Docente'
+    REMITENTE_ESTUDIANTE = 'Estudiante'
+    REMITENTE_CHOICES = [
+        (REMITENTE_DOCENTE, 'Docente'),
+        (REMITENTE_ESTUDIANTE, 'Estudiante'),
+    ]
+
+    ESTADO_ENVIADO = 'Enviado'
+    ESTADO_LEIDO = 'Leido'
+    ESTADO_CHOICES = [
+        (ESTADO_ENVIADO, 'Enviado'),
+        (ESTADO_LEIDO, 'Leido'),
+    ]
+
+    ADJUNTO_IMAGEN = 'imagen'
+    ADJUNTO_ARCHIVO = 'archivo'
+    ADJUNTO_CHOICES = [
+        (ADJUNTO_IMAGEN, 'Imagen'),
+        (ADJUNTO_ARCHIVO, 'Archivo'),
+    ]
+
+    id_mensaje = models.AutoField(primary_key=True)
+    id_docente = models.ForeignKey(
+        Usuario, on_delete=models.CASCADE, db_column='id_docente',
+        related_name='mensajes_enviados',
+        limit_choices_to={'rol': Usuario.ROL_PROFESOR},
+        verbose_name='docente',
+    )
+    id_estudiante = models.ForeignKey(
+        Usuario, on_delete=models.CASCADE, db_column='id_estudiante',
+        related_name='mensajes_recibidos',
+        limit_choices_to={'rol': Usuario.ROL_ESTUDIANTE},
+        verbose_name='estudiante',
+    )
+    remitente = models.CharField(
+        max_length=20, choices=REMITENTE_CHOICES, default=REMITENTE_DOCENTE,
+    )
+    contenido = models.TextField('mensaje', blank=True)
+    adjunto = models.FileField(
+        'archivo adjunto', upload_to='mensajes/%Y/%m/', blank=True, null=True,
+        help_text='Imagen o archivo que acompania al mensaje.',
+    )
+    adjunto_nombre = models.CharField(
+        'nombre original', max_length=150, blank=True,
+    )
+    adjunto_tipo = models.CharField(
+        'tipo de adjunto', max_length=20, choices=ADJUNTO_CHOICES, blank=True,
+    )
+    estado = models.CharField(
+        max_length=20, choices=ESTADO_CHOICES, default=ESTADO_ENVIADO,
+    )
+    fecha_hora = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = 'mensajes'
+        verbose_name = 'Mensaje del chat'
+        verbose_name_plural = 'Mensajes del chat'
+        # Orden natural de la conversacion: del mas viejo al mas nuevo.
+        ordering = ['fecha_hora', 'id_mensaje']
+        indexes = [
+            models.Index(
+                fields=['id_docente', 'id_estudiante', 'fecha_hora'],
+                name='idx_mensaje_hilo',
+            ),
+        ]
+
+    def __str__(self):
+        return f'{self.remitente}: {self.contenido[:40] or "(adjunto)"}'
+
+    @property
+    def es_imagen(self):
+        """True cuando el adjunto se puede mostrar como imagen."""
+        return self.adjunto_tipo == self.ADJUNTO_IMAGEN
+

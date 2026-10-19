@@ -14,6 +14,7 @@ hash (PBKDF2) y lo contrasta con la columna `password` de la tabla `usuariosa`.
 """
 
 import json
+import os
 import unicodedata
 from datetime import datetime, time, timedelta
 from functools import wraps
@@ -46,6 +47,7 @@ from .models import (
     Actividad,
     Asistencia,
     Docente,
+    Mensaje,
     Sesion,
     SolicitudRecuperacion,
     Usuario,
@@ -1344,3 +1346,462 @@ def api_reporte_maestro(request):
         'resumen': resumen,
         'actividades': actividades,
     })
+
+
+# ==========================================================================
+# MENSAJES Y CHAT (tabla: mensajes)
+# ==========================================================================
+
+# Lista negra del chat. La misma lista vive en el front
+# (chat_maestro_horasocial_pro) para avisar mientras se escribe, pero la que
+# DECIDE es esta: si el mensaje la trae, la fila nunca se guarda.
+PALABRAS_PROHIBIDAS = frozenset([
+    'culo', 'culos', 'puta', 'puto', 'putas', 'putos', 'putita', 'putear',
+    'puteada', 'puteadas', 'puterio', 'putazo', 'putazos',
+    'polla', 'pija', 'pijas', 'pijazo', 'pijazos',
+    'verga', 'vergas', 'vergazo', 'vergazos',
+    'mierda', 'mierdas', 'cagada', 'cagadas', 'cagar', 'cagado', 'cagon', 'cagona',
+    'pendejo', 'pendeja', 'pendejos', 'pendejas', 'pendejada', 'pendejadas',
+    'marica', 'maricon', 'maricones', 'mariconada', 'mariconadas',
+    'cabron', 'cabrona', 'cabronada', 'cabronadas', 'hijueputa', 'hijueputas',
+    'sorete', 'soretes',
+    'pelotudo', 'pelotuda', 'pelotudos', 'pelotudez', 'pelotudeces', 'pelotudisimo',
+    'boludo', 'boluda', 'boludos', 'boludez', 'boludeces', 'boludisimo',
+    'boludazo', 'recontraboludo', 'recontraboluda',
+    'choto', 'chota', 'chotos', 'chotas', 'chotear', 'choteada',
+    'concha', 'conchas', 'conchudo', 'conchuda',
+    'tarado', 'tarada', 'taradez',
+    'estupido', 'estupida', 'estupidos', 'estupidez', 'estupideces',
+])
+
+# Raices: si un token EMPIEZA con alguna, ya es ofensivo. Es lo que atrapa
+# las variantes ("boludito", "pendejito", "puteadita").
+RAICES_PROHIBIDAS = (
+    'culo', 'put', 'polla', 'pija', 'verga', 'mierd', 'cag',
+    'pendej', 'maric', 'cabron', 'hijueputa', 'sorete', 'pelotud',
+    'bolud', 'chot', 'conch', 'tarad', 'estupid',
+)
+
+# Frases de dos o tres palabras que solas no se ven en el token a token.
+FRASES_PROHIBIDAS = (
+    'puta madre', 'la puta madre', 'me cago', 'concha de la lora',
+    'hijo de mil', 'hijo de puta', 'hija de puta',
+    'hijos de puta', 'hijas de puta',
+)
+
+# Palabras que EMPIEZAN como una raiz de la lista negra pero no tienen nada
+# que ver: pijama empieza con "pija", culombio con "culo", putrefaccion con
+# "put". Se comparan exactas, asi que "pijamaputa" sigue cayendo.
+PALABRAS_PERMITIDAS = frozenset([
+    'pijama', 'pijamas', 'pijao', 'pijaos',
+    'culombio', 'culombios',
+    'putrefaccion', 'putrefacto', 'putrefacta', 'putrefactos', 'putrefactas',
+    'maricultura', 'mariculturas',
+])
+
+# Adjuntos: solo imagenes y documentos, con tope de peso.
+TAMANO_MAX_ADJUNTO = 5 * 1024 * 1024
+EXTENSIONES_IMAGEN = {'.jpg', '.jpeg', '.png', '.gif', '.webp', '.bmp'}
+EXTENSIONES_ARCHIVO = {
+    '.pdf', '.doc', '.docx', '.xls', '.xlsx', '.ppt', '.pptx', '.txt', '.csv', '.zip',
+}
+
+# Tiempo sin entrar a la plataforma para seguir contando como "en linea".
+VENTANA_EN_LINEA = timedelta(minutes=30)
+
+
+def _normalizar_lenguaje(texto):
+    """
+    Deja el texto en la forma que se compara: minusculas, sin tildes y con
+    los reemplazos tipicos de quien intenta disimular la palabra (0 por o,
+    3 por e, 4 por a, 5 y 7 por s, @ por a, $ por s, y la v antes de
+    consonante por u).
+    """
+    sin_tildes = ''.join(
+        caracter
+        for caracter in unicodedata.normalize('NFD', str(texto).lower())
+        if unicodedata.category(caracter) != 'Mn'
+    )
+
+    reemplazos = {'0': 'o', '3': 'e', '1': 'i', '4': 'a', '5': 's', '7': 's',
+                  '@': 'a', '$': 's'}
+    salida = []
+    for indice, caracter in enumerate(sin_tildes):
+        if caracter in reemplazos:
+            salida.append(reemplazos[caracter])
+            continue
+        if caracter == 'v':
+            siguiente = sin_tildes[indice + 1:indice + 2]
+            if siguiente and siguiente not in 'aeiou':
+                salida.append('u')
+                continue
+        salida.append(caracter)
+    return ''.join(salida)
+
+
+def _token_limpio(token):
+    """El token sin nada que no sea letra: 'p.u.t.a!!' -> 'puta'."""
+    return ''.join(
+        caracter
+        for caracter in _normalizar_lenguaje(token)
+        if 'a' <= caracter <= 'z'
+    )
+
+
+def _palabra_prohibida(token):
+    """True cuando el token es ofensivo por lista negra o por raiz."""
+    limpio = _token_limpio(token)
+    if not limpio or limpio in PALABRAS_PERMITIDAS:
+        return False
+    if limpio in PALABRAS_PROHIBIDAS:
+        return True
+    return any(limpio.startswith(raiz) for raiz in RAICES_PROHIBIDAS)
+
+
+def _palabras_ofensivas(texto):
+    """
+    Devuelve la lista de palabras/frases ofensivas encontradas en el texto.
+    Vacia significa que el mensaje se puede enviar.
+    """
+    encontradas = []
+    for token in str(texto).split():
+        if _palabra_prohibida(token):
+            encontradas.append(token)
+
+    normalizado = ' ' + ' '.join(_normalizar_lenguaje(texto).split()) + ' '
+    for frase in FRASES_PROHIBIDAS:
+        if frase in normalizado and frase not in encontradas:
+            encontradas.append(frase)
+    return encontradas
+
+
+def contiene_lenguaje_prohibido(texto):
+    """True cuando el texto trae alguna palabra o frase de la lista negra."""
+    return bool(_palabras_ofensivas(texto))
+
+
+def _tamano_legible(cantidad):
+    """'2,4 MB' / '180 KB' / '900 B' para mostrar el peso del adjunto."""
+    if cantidad >= 1024 * 1024:
+        return f'{cantidad / (1024 * 1024):.1f} MB'.replace('.', ',')
+    if cantidad >= 1024:
+        return f'{round(cantidad / 1024)} KB'
+    return f'{cantidad} B'
+
+
+def _de_mensaje(remitente):
+    """'me' cuando lo mando el docente, 'alum' cuando lo mando el estudiante."""
+    return 'me' if remitente == Mensaje.REMITENTE_DOCENTE else 'alum'
+
+
+def _fila_mensaje(request, mensaje):
+    """Una burbuja del chat, con el adjunto ya resuelto a URL absoluta."""
+    local = timezone.localtime(mensaje.fecha_hora)
+    adjunto = None
+    if mensaje.adjunto:
+        adjunto = {
+            'nombre': mensaje.adjunto_nombre or os.path.basename(mensaje.adjunto.name),
+            'tipo': mensaje.adjunto_tipo or Mensaje.ADJUNTO_ARCHIVO,
+            'url': request.build_absolute_uri(mensaje.adjunto.url),
+            'tamano': _tamano_legible(mensaje.adjunto.size),
+            'es_imagen': mensaje.es_imagen,
+        }
+    return {
+        'id': mensaje.id_mensaje,
+        'de': _de_mensaje(mensaje.remitente),
+        'texto': mensaje.contenido or '',
+        'hora': local.strftime('%H:%M'),
+        'fecha': local.strftime('%Y-%m-%d'),
+        'estado': mensaje.estado,
+        'adjunto': adjunto,
+    }
+
+
+def _en_linea(estudiante):
+    """Se considera en linea si entro a la plataforma hace menos de 30 min."""
+    ultimo = estudiante.last_login
+    return bool(ultimo and (timezone.now() - ultimo) <= VENTANA_EN_LINEA)
+
+
+def _brigada_de(docente, estudiante):
+    """La actividad de su ultimo movimiento, igual que en la pantalla de estudiantes."""
+    ultima = (
+        Asistencia.objects
+        .filter(id_estudiante=estudiante, id_sesion__id_profesor=docente)
+        .select_related('id_sesion__id_tipo')
+        .order_by('-id_sesion__fecha_hora', '-id_registro')
+        .first()
+    )
+    if ultima is None:
+        return 'Sin brigada'
+    return ultima.id_sesion.id_tipo.nombre_actividad
+
+
+def _datos_mensajes(request, docente):
+    """
+    Bandeja del maestro: un hilo por estudiante a cargo con el ultimo
+    mensaje, los no leidos y su estado de conexion.
+
+    Los mensajes se traen una sola vez y se agrupan en memoria, asi que el
+    listado no crece en consultas con la cantidad de estudiantes.
+    """
+    estudiantes = list(docente.estudiantes_a_cargo.order_by('nombre_completo'))
+    mensajes = Mensaje.objects.filter(id_docente=docente)
+
+    ultimos = {}
+    no_leidos = {}
+    con_adjunto = 0
+    for mensaje in mensajes:
+        clave = mensaje.id_estudiante_id
+        ultimos[clave] = mensaje
+        if mensaje.adjunto:
+            con_adjunto += 1
+        if (mensaje.remitente == Mensaje.REMITENTE_ESTUDIANTE
+                and mensaje.estado == Mensaje.ESTADO_ENVIADO):
+            no_leidos[clave] = no_leidos.get(clave, 0) + 1
+
+    conversaciones = []
+    for estudiante in estudiantes:
+        ultimo = ultimos.get(estudiante.pk)
+        local = timezone.localtime(ultimo.fecha_hora) if ultimo else None
+        conversaciones.append({
+            'id': estudiante.pk,
+            'nombre': estudiante.nombre_completo,
+            'codigo': estudiante.codigo or f'EST-{estudiante.pk}',
+            'grado': estudiante.grado or '',
+            'iniciales': _iniciales(estudiante.nombre_completo),
+            'brigada': _brigada_de(docente, estudiante),
+            'ultimo': (ultimo.contenido or '').strip() if ultimo else '',
+            'ultimo_adjunto': (ultimo.adjunto_tipo if ultimo and ultimo.adjunto else ''),
+            'ultimo_de': _de_mensaje(ultimo.remitente) if ultimo else '',
+            'hora': local.strftime('%H:%M') if local else '',
+            'fecha': local.strftime('%Y-%m-%d') if local else '',
+            'no_leidos': no_leidos.get(estudiante.pk, 0),
+            'en_linea': _en_linea(estudiante),
+        })
+
+    # Los hilos con movimiento van primero, del mas nuevo al mas viejo.
+    conversaciones.sort(
+        key=lambda fila: (fila['fecha'], fila['hora'], fila['nombre']),
+        reverse=True,
+    )
+
+    return {
+        'autenticado': True,
+        'docente': {'nombre': docente.nombre_completo},
+        'tabla': 'mensajes',
+        'stats': {
+            'conversaciones': len(conversaciones),
+            'con_mensajes': sum(1 for fila in conversaciones if fila['hora']),
+            'no_leidos': sum(no_leidos.values()),
+            'adjuntos': con_adjunto,
+        },
+        'conversaciones': conversaciones,
+    }
+
+
+def _datos_chat(request, docente, estudiante):
+    """
+    La conversacion completa con un estudiante. Al abrirla, los mensajes que
+    mando el estudiante pasan a 'Leido' (es el acuse de la bandeja).
+    """
+    mensajes = Mensaje.objects.filter(id_docente=docente, id_estudiante=estudiante)
+
+    sin_leer = mensajes.filter(
+        remitente=Mensaje.REMITENTE_ESTUDIANTE, estado=Mensaje.ESTADO_ENVIADO,
+    )
+    acusados = sin_leer.count()
+    if acusados:
+        sin_leer.update(estado=Mensaje.ESTADO_LEIDO)
+
+    return {
+        'autenticado': True,
+        'docente': {'nombre': docente.nombre_completo},
+        'estudiante': {
+            'id': estudiante.pk,
+            'nombre': estudiante.nombre_completo,
+            'codigo': estudiante.codigo or f'EST-{estudiante.pk}',
+            'grado': estudiante.grado or '',
+            'iniciales': _iniciales(estudiante.nombre_completo),
+            'brigada': _brigada_de(docente, estudiante),
+            'en_linea': _en_linea(estudiante),
+        },
+        'mensajes': [_fila_mensaje(request, mensaje) for mensaje in mensajes],
+        'leidos_ahora': acusados,
+        'limite_adjunto_mb': TAMANO_MAX_ADJUNTO // (1024 * 1024),
+    }
+
+
+def _estudiante_del_docente(docente, valor):
+    """
+    Resuelve el id de estudiante que llega del chat y comprueba que este a
+    cargo del docente en sesion. Devuelve None si no existe o es ajeno.
+    """
+    try:
+        identificador = int(valor)
+    except (TypeError, ValueError):
+        return None
+    return (
+        docente.estudiantes_a_cargo
+        .filter(pk=identificador)
+        .first()
+    )
+
+
+def _adjunto_valido(archivo):
+    """
+    Revisa peso y extension del adjunto. Devuelve (tipo, error): 'tipo' es
+    'imagen' o 'archivo', y 'error' viene con texto cuando no se acepta.
+    """
+    if archivo is None:
+        return '', None
+
+    if archivo.size > TAMANO_MAX_ADJUNTO:
+        return '', (
+            f'El adjunto pesa mas de {TAMANO_MAX_ADJUNTO // (1024 * 1024)} MB. '
+            'Subi una version mas liviana.'
+        )
+
+    extension = os.path.splitext(archivo.name or '')[1].lower()
+    if extension in EXTENSIONES_IMAGEN:
+        return Mensaje.ADJUNTO_IMAGEN, None
+    if extension in EXTENSIONES_ARCHIVO:
+        return Mensaje.ADJUNTO_ARCHIVO, None
+    return '', (
+        'Solo se pueden adjuntar imagenes (JPG, PNG, GIF, WEBP, BMP) '
+        'o documentos (PDF, Word, Excel, PowerPoint, TXT, CSV, ZIP).'
+    )
+
+
+def _enviar_mensaje(docente, estudiante, datos, archivos):
+    """
+    Crea el mensaje del docente. Devuelve (mensaje, error, ofensivas) con
+    error None cuando salio bien.
+
+    El idioma se revisa ANTES de crear la fila: un mensaje con palabras de
+    la lista negra no se guarda y vuelve con el motivo 'lenguaje'.
+    """
+    contenido = str(datos.get('contenido', '') or '').strip()
+    archivo = archivos.get('adjunto') if archivos else None
+
+    if not contenido and archivo is None:
+        return None, 'El mensaje esta vacio.', []
+
+    ofensivas = _palabras_ofensivas(contenido) if contenido else []
+    if ofensivas:
+        return None, (
+            'Tu mensaje tiene lenguaje no permitido en el chat. '
+            'Reescribilo sin esas palabras para poder enviarlo.'
+        ), ofensivas
+
+    tipo_adjunto, error_adjunto = _adjunto_valido(archivo)
+    if error_adjunto:
+        return None, error_adjunto, []
+
+    mensaje = Mensaje.objects.create(
+        id_docente=docente,
+        id_estudiante=estudiante,
+        remitente=Mensaje.REMITENTE_DOCENTE,
+        contenido=contenido,
+        adjunto=archivo,
+        adjunto_nombre=os.path.basename(archivo.name)[:150] if archivo else '',
+        adjunto_tipo=tipo_adjunto,
+        estado=Mensaje.ESTADO_ENVIADO,
+    )
+    return mensaje, None, []
+
+
+@csrf_exempt
+@habilita_cors
+@require_http_methods(['GET', 'POST', 'OPTIONS'])
+def api_mensajes_maestro(request):
+    """
+    Bandeja de mensajes del docente.
+
+    GET  -> un hilo por estudiante a cargo, con el ultimo mensaje, los no
+            leidos y el estado de conexion.
+    POST -> envia un mensaje (multipart con `adjunto`, o JSON sin archivo).
+            Si el texto trae lenguaje no permitido responde 400 con
+            motivo 'lenguaje' y no guarda nada.
+    """
+
+    if request.method == 'OPTIONS':
+        # Preflight que dispara el navegador por Content-Type: application/json.
+        return HttpResponse(status=204)
+
+    docente = _docente_en_sesion(request)
+    if docente is None:
+        return _respuesta_sin_sesion()
+
+    if request.method == 'GET':
+        return JsonResponse(_datos_mensajes(request, docente))
+
+    if request.content_type and 'multipart/form-data' in request.content_type:
+        datos, archivos = request.POST, request.FILES
+    else:
+        try:
+            cuerpo = json.loads(request.body or b'{}')
+        except (TypeError, ValueError):
+            return JsonResponse(
+                {'success': False, 'error': 'El cuerpo de la peticion no es JSON valido.'},
+                status=400,
+            )
+        if not isinstance(cuerpo, dict):
+            return JsonResponse(
+                {'success': False, 'error': 'El cuerpo debe ser un objeto JSON.'},
+                status=400,
+            )
+        datos, archivos = cuerpo, None
+
+    estudiante = _estudiante_del_docente(docente, datos.get('estudiante'))
+    if estudiante is None:
+        return JsonResponse(
+            {'success': False, 'error': 'estudiante no encontrado'},
+            status=404,
+        )
+
+    mensaje, error, ofensivas = _enviar_mensaje(docente, estudiante, datos, archivos)
+    if error:
+        respuesta = {'success': False, 'error': error}
+        if ofensivas:
+            respuesta['motivo'] = 'lenguaje'
+            respuesta['palabras'] = ofensivas
+        return JsonResponse(respuesta, status=400)
+
+    return JsonResponse({
+        'success': True,
+        'mensaje': _fila_mensaje(request, mensaje),
+        'estudiante': {
+            'id': estudiante.pk,
+            'nombre': estudiante.nombre_completo,
+        },
+    }, status=201)
+
+
+@csrf_exempt
+@habilita_cors
+@require_http_methods(['GET', 'OPTIONS'])
+def api_chat_maestro(request):
+    """
+    Conversacion completa con un estudiante a cargo (`?estudiante=<id>`).
+
+    Abrir el chat marca como leidos los mensajes que mando el estudiante, y
+    de paso devuelve los datos del contacto para pintar el encabezado.
+    """
+
+    if request.method == 'OPTIONS':
+        # Preflight que dispara el navegador por Content-Type: application/json.
+        return HttpResponse(status=204)
+
+    docente = _docente_en_sesion(request)
+    if docente is None:
+        return _respuesta_sin_sesion()
+
+    estudiante = _estudiante_del_docente(docente, request.GET.get('estudiante'))
+    if estudiante is None:
+        return JsonResponse(
+            {'success': False, 'error': 'estudiante no encontrado'},
+            status=404,
+        )
+
+    return JsonResponse(_datos_chat(request, docente, estudiante))

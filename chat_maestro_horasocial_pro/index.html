@@ -87,6 +87,19 @@
   .burbuja.escrib .dots i:nth-child(3){animation-delay:.3s}
   @keyframes bounce{0%,60%,100%{transform:translateY(0);opacity:.4}30%{transform:translateY(-4px);opacity:1}}
 
+  /* ---------- adjuntos dentro de la burbuja ---------- */
+  .burbuja .adj-img{display:block;max-width:220px;width:100%;border-radius:12px;margin-bottom:6px;
+    cursor:zoom-in;border:1px solid rgba(255,255,255,.35)}
+  .burbuja.alum .adj-img{border-color:rgba(12,74,110,.10)}
+  .burbuja .adj-doc{display:flex;align-items:center;gap:8px;text-decoration:none;color:inherit;
+    background:rgba(255,255,255,.22);border-radius:10px;padding:7px 9px;margin-bottom:6px}
+  .burbuja.alum .adj-doc{background:var(--sky-50)}
+  .burbuja .adj-doc .material-symbols-outlined{font-size:20px;flex:0 0 auto}
+  .burbuja .adj-doc b{display:block;font-size:11.5px;font-weight:800;max-width:170px;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .burbuja .adj-doc small{font-size:10px;font-weight:600;opacity:.8}
+  .burbuja p:empty{display:none}
+
   /* ---------- barra de escritura ---------- */
   .inputbar{position:fixed;left:0;right:0;bottom:0;z-index:30;
     background:rgba(255,255,255,.95);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
@@ -105,6 +118,36 @@
   .btn-send:active{transform:scale(.9)}
   .btn-send:disabled{opacity:.45;cursor:not-allowed}
   .btn-send .material-symbols-outlined{font-size:20px}
+  .btn-adj{width:40px;height:40px;border-radius:50%;flex:0 0 auto;display:flex;align-items:center;
+    justify-content:center;background:var(--sky-50);border:1px solid var(--card-brd);
+    color:var(--sky-700);cursor:pointer;transition:background .15s}
+  .btn-adj:hover{background:var(--sky-100, #e0f2fe)}
+  .btn-adj .material-symbols-outlined{font-size:20px}
+
+  /* tira del adjunto elegido */
+  .inputbar .adj-preview,.inputbar .aviso-lenguaje{max-width:var(--maxw);margin:0 auto 8px}
+  @media (min-width:720px){ .inputbar .adj-preview,.inputbar .aviso-lenguaje{max-width:760px} }
+  .adj-preview{display:flex;align-items:center;gap:9px;background:var(--sky-50);
+    border:1px solid var(--sky-200);border-radius:14px;padding:7px 10px}
+  .adj-preview[hidden]{display:none}
+  .adj-preview img{width:36px;height:36px;border-radius:8px;object-fit:cover;flex:0 0 auto}
+  .adj-preview img[hidden]{display:none}
+  .adj-preview .adj-ico{font-size:22px;color:var(--sky-600);flex:0 0 auto}
+  .adj-info{flex:1;min-width:0}
+  .adj-info b{display:block;font-size:12px;font-weight:800;color:var(--ink);
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .adj-info small{font-size:10.5px;font-weight:600;color:var(--slate)}
+  .adj-x{width:26px;height:26px;border-radius:50%;border:0;flex:0 0 auto;cursor:pointer;
+    background:rgba(12,74,110,.08);color:var(--slate);display:flex;align-items:center;justify-content:center}
+  .adj-x .material-symbols-outlined{font-size:16px}
+
+  /* aviso de lenguaje no permitido */
+  .aviso-lenguaje{display:flex;align-items:center;gap:7px;background:#fef2f2;border:1px solid #fecaca;
+    border-radius:14px;padding:8px 12px;font-size:11.5px;font-weight:700;color:#b91c1c}
+  .aviso-lenguaje[hidden]{display:none}
+  .aviso-lenguaje .material-symbols-outlined{font-size:17px;flex:0 0 auto}
+  .inputbar textarea.bloqueado{border-color:#fca5a5;background:#fff1f2}
+  .inputbar textarea.bloqueado:focus{border-color:#f87171;box-shadow:0 0 0 3px rgba(248,113,113,.18)}
   .hint{max-width:var(--maxw);margin:6px auto 0;font-size:10px;font-weight:600;color:#b6c2cf;
     text-align:center}
   @media (min-width:720px){ .hint{max-width:760px} }
@@ -224,11 +267,23 @@
 
 <!-- barra de escritura -->
 <div class="inputbar">
+  <div class="adj-preview" id="adjPreview" hidden>
+    <img id="adjThumb" alt="Vista previa del adjunto" hidden>
+    <span class="adj-ico material-symbols-outlined" id="adjIco">image</span>
+    <span class="adj-info"><b id="adjNombre"></b><small id="adjPeso"></small></span>
+    <button class="adj-x" id="adjQuitar" type="button" aria-label="Quitar el adjunto"><span class="material-symbols-outlined">close</span></button>
+  </div>
+  <div class="aviso-lenguaje" id="avisoLenguaje" hidden>
+    <span class="material-symbols-outlined">block</span>
+    <span id="avisoTexto">Tu mensaje tiene lenguaje no permitido. Corregilo para poder enviarlo.</span>
+  </div>
   <div class="in">
+    <button class="btn-adj" id="btnAdj" type="button" aria-label="Adjuntar imagen o archivo"><span class="material-symbols-outlined">attach_file</span></button>
     <textarea id="msjInput" rows="1" placeholder="Escribile a tu estudiante..." maxlength="500"></textarea>
     <button class="btn-send" id="btnSend" aria-label="Enviar" type="button"><span class="material-symbols-outlined">send</span></button>
   </div>
-  <div class="hint">El chat es un espacio formal con tus estudiantes. Las palabras inapropiadas se bloquean automáticamente.</div>
+  <input type="file" id="adjArchivo" accept="image/*,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.csv,.zip" hidden>
+  <div class="hint">El chat es un espacio formal con tus estudiantes. El lenguaje ofensivo bloquea el envío y admite imágenes o documentos de hasta 5 MB.</div>
 </div>
 
 <div id="toast"></div>
@@ -327,14 +382,35 @@
   for (var i = 0; i < ESTUDIANTES.length; i++){ if (ESTUDIANTES[i].id === id){ al = ESTUDIANTES[i]; break; } }
   if (!al) al = ESTUDIANTES[0];
 
-  $('tAva').textContent = al.iniciales;
-  if (!al.enLinea){
-    $('tAva').classList.add('off');
-    $('tSub').innerHTML = al.brigada + ' · <span class="offline"><i class="material-symbols-outlined" style="font-size:11px">schedule</i>Desconectado</span>';
-  } else {
-    $('tSub').innerHTML = al.brigada + ' · <span class="online"><i></i>En línea</span>';
+  /* ---------- datos reales del backend (tabla mensajes) ---------- */
+  /* Abierto desde el servidor el chat se llena con lo que hay en la base;
+     abierto como archivo (file:) queda la conversación de demostración. */
+  var API = 'http://127.0.0.1:8000';
+  var real = false;          // true cuando la conversación viene de la base
+  var contacto = null;
+  var maxAdjuntoMB = 5;      // lo confirma el backend al abrir el chat
+
+  function isFile(){ return location.protocol === 'file:'; }
+  function esc(t){
+    return String(t == null ? '' : t).replace(/[&<>"']/g, function(c){
+      return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c];
+    });
   }
-  $('tName').textContent = al.nombre;
+
+  /* Encabezado del contacto: iniciales, brigada y si está conectado. */
+  function pintarEncabezado(est){
+    var ava = $('tAva');
+    $('tAva').textContent = est.iniciales;
+    if (!est.enLinea){
+      $('tAva').classList.add('off');
+      $('tSub').innerHTML = esc(est.brigada) + ' · <span class="offline"><i class="material-symbols-outlined" style="font-size:11px">schedule</i>Desconectado</span>';
+    } else {
+      $('tAva').classList.remove('off');
+      $('tSub').innerHTML = esc(est.brigada) + ' · <span class="online"><i></i>En línea</span>';
+    }
+    $('tName').textContent = est.nombre;
+    return ava;
+  }
 
   /* ---------- persistencia del chat ---------- */
   var LS = { get:function(k,d){ try{ var v = localStorage.getItem(k); return v ? JSON.parse(v) : d; }catch(e){ return d; } },
@@ -343,22 +419,72 @@
   var chat = chats[al.id];
   if (!chat){ chat = SEMILLAS[al.id] ? SEMILLAS[al.id].slice() : []; chats[al.id] = chat; LS.set('horasocial_maestro_chat_v1', chats); }
 
+  pintarEncabezado(al);
+
   /* ---------- render ---------- */
   var msgs = $('msgs'), input = $('msjInput');
   function pad(n){ return (n < 10 ? '0' : '') + n; }
   function ahora(){ var d = new Date(); return pad(d.getHours()) + ':' + pad(d.getMinutes()); }
   function scrollBottom(){ window.scrollTo(0, document.body.scrollHeight); }
+
+  /* Ícono según la extensión del adjunto. */
+  function iconoAdj(nombre){
+    var n = String(nombre || '').toLowerCase();
+    if (/\.(png|jpe?g|gif|webp|bmp)$/.test(n)) return 'image';
+    if (n.indexOf('.pdf') !== -1) return 'picture_as_pdf';
+    if (/\.(xls|xlsx|csv)$/.test(n)) return 'table_chart';
+    if (/\.(ppt|pptx)$/.test(n)) return 'slideshow';
+    if (n.indexOf('.zip') !== -1) return 'folder_zip';
+    if (/\.(doc|docx|txt)$/.test(n)) return 'description';
+    return 'draft';
+  }
+
+  function pesoLegible(bytes){
+    if (bytes >= 1048576) return (bytes / 1048576).toFixed(1).replace('.', ',') + ' MB';
+    if (bytes >= 1024) return Math.round(bytes / 1024) + ' KB';
+    return bytes + ' B';
+  }
+
+  /* Una burbuja: adjunto (si lo hay), texto y hora. */
+  function burbuja(msg){
+    var b = document.createElement('div');
+    b.className = 'burbuja ' + (msg.de === 'me' ? 'me' : 'alum');
+    var adj = msg.adjunto;
+    if (adj){
+      if (adj.es_imagen){
+        var img = document.createElement('img');
+        img.className = 'adj-img';
+        img.src = adj.url;
+        img.alt = adj.nombre;
+        img.loading = 'lazy';
+        img.addEventListener('click', function(){ window.open(adj.url, '_blank'); });
+        b.appendChild(img);
+      } else {
+        var enlace = document.createElement('a');
+        enlace.className = 'adj-doc';
+        enlace.href = adj.url;
+        enlace.target = '_blank';
+        enlace.rel = 'noopener';
+        var ico = document.createElement('span');
+        ico.className = 'material-symbols-outlined';
+        ico.textContent = iconoAdj(adj.nombre);
+        var caja = document.createElement('span');
+        var nombre = document.createElement('b'); nombre.textContent = adj.nombre;
+        var peso = document.createElement('small'); peso.textContent = adj.tamano;
+        caja.appendChild(nombre); caja.appendChild(peso);
+        enlace.appendChild(ico); enlace.appendChild(caja);
+        b.appendChild(enlace);
+      }
+    }
+    if (msg.txt){ var p = document.createElement('p'); p.textContent = msg.txt; b.appendChild(p); }
+    var s = document.createElement('span'); s.textContent = msg.h; b.appendChild(s);
+    return b;
+  }
+
   function renderBurbujas(){
     var existentes = msgs.querySelectorAll('.burbuja');
     existentes.forEach(function(b){ b.remove(); });
-    chat.forEach(function(msg){
-      var b = document.createElement('div');
-      b.className = 'burbuja ' + (msg.de === 'me' ? 'me' : 'alum');
-      var p = document.createElement('p'); p.textContent = msg.txt;
-      var s = document.createElement('span'); s.textContent = msg.h;
-      b.appendChild(p); b.appendChild(s);
-      msgs.appendChild(b);
-    });
+    chat.forEach(function(msg){ msgs.appendChild(burbuja(msg)); });
     scrollBottom();
   }
   renderBurbujas();
@@ -383,6 +509,11 @@
     'mierd','chot','conch','gil','tarad','soret','cag','estupid','imbecil','verga','polla'];
   var FRASES = ['hijo de puta','hija de puta','hijos de puta','hijas de puta','puta madre',
     'la puta madre','me cago','concha de la lora','hijo de mil'];
+  /* Empiezan como una raíz pero no son ofensivas: pijama, culombio, etc.
+     Se comparan exactas, así que "pijamaputa" sigue cayendo. */
+  var PERMITIDAS = ['pijama','pijamas','pijao','pijaos','culombio','culombios',
+    'putrefaccion','putrefacto','putrefacta','putrefactos','putrefactas',
+    'maricultura','mariculturas'];
   function normalizar(s){
     return s.toLowerCase()
       .replace(/[áàäâ]/g,'a').replace(/[éèëê]/g,'e')
@@ -397,51 +528,61 @@
   }
   function esProhibida(tok){
     var t = tokenLimpio(tok);
+    if (!t || PERMITIDAS.indexOf(t) !== -1) return false;
     if (PROHIBIDAS.indexOf(t) !== -1) return true;
     for (var i = 0; i < STEMS.length; i++){
       if (t.indexOf(STEMS[i]) === 0) return true;
     }
     return false;
   }
-  function contieneProhibida(texto){
-    var partes = texto.split(/\s+/);
+  /* Devuelve las palabras y frases ofensivas encontradas. Vacío = se puede
+     enviar. Es el mismo criterio que aplica el backend, que es el que manda. */
+  function palabrasOfensivas(texto){
+    var encontradas = [];
+    var partes = String(texto).split(/\s+/);
     for (var i = 0; i < partes.length; i++){
-      if (esProhibida(partes[i])) return true;
+      if (partes[i] && esProhibida(partes[i])) encontradas.push(partes[i]);
     }
     var n = ' ' + normalizar(texto).replace(/\s+/g,' ') + ' ';
     for (var j = 0; j < FRASES.length; j++){
-      if (n.indexOf(FRASES[j]) !== -1) return true;
-    }
-    return false;
-  }
-  /* la palabra prohibida se reemplaza por '***' y se avisa con toast */
-  function sanitizar(texto){
-    var partes = texto.split(/\s+/);
-    var salida = [];
-    for (var i = 0; i < partes.length; i++){
-      salida.push(esProhibida(partes[i]) ? '***' : partes[i]);
-    }
-    var res = salida.join(' ');
-    var norm = ' ' + normalizar(res).replace(/\s+/g,' ') + ' ';
-    for (var j = 0; j < FRASES.length; j++){
-      var idx = norm.indexOf(FRASES[j]);
-      while (idx !== -1){
-        var ini = idx - 1, fin = ini + FRASES[j].length;
-        res = res.slice(0, ini) + '***' + res.slice(fin);
-        norm = ' ' + normalizar(res).replace(/\s+/g,' ') + ' ';
-        idx = norm.indexOf(FRASES[j]);
+      if (n.indexOf(FRASES[j]) !== -1 && encontradas.indexOf(FRASES[j]) === -1){
+        encontradas.push(FRASES[j]);
       }
     }
-    return res.replace(/\s+/g,' ').trim();
+    return encontradas;
   }
+  function contieneProhibida(texto){
+    return palabrasOfensivas(texto).length > 0;
+  }
+  /* ---------- bloqueo por lenguaje ----------
+     Escribir algo ofensivo no se corrige solo: se marca el campo, se avisa
+     en pantalla y el botón de enviar queda deshabilitado. El mensaje no sale. */
+  var btnSend = $('btnSend');
+  var avisoLenguaje = $('avisoLenguaje');
+  var avisoTexto = $('avisoTexto');
+  var bloqueado = false;
+  var enviando = false;
+
+  function refrescarBoton(){ btnSend.disabled = enviando || bloqueado; }
+  function marcarBloqueo(ofensivas){
+    bloqueado = true;
+    input.classList.add('bloqueado');
+    avisoLenguaje.hidden = false;
+    avisoTexto.textContent = (ofensivas && ofensivas.length)
+      ? 'No se puede enviar: escribiste "' + ofensivas.join('", "') + '". Corregilo y volvé a intentar.'
+      : 'Tu mensaje tiene lenguaje no permitido. Corregilo para poder enviarlo.';
+    refrescarBoton();
+  }
+  function limpiarBloqueo(){
+    bloqueado = false;
+    input.classList.remove('bloqueado');
+    avisoLenguaje.hidden = true;
+    refrescarBoton();
+  }
+
   input.addEventListener('input', function(){
-    var v = input.value;
-    if (!v) return;
-    if (contieneProhibida(v)){
-      input.value = sanitizar(v);
-      input.setSelectionRange(input.value.length, input.value.length);
-      toast('Esa palabra no está permitida en el chat');
-    }
+    if (contieneProhibida(input.value)) marcarBloqueo(palabrasOfensivas(input.value));
+    else limpiarBloqueo();
     autoGrow();
   });
   function autoGrow(){
@@ -449,17 +590,114 @@
     input.style.height = Math.min(input.scrollHeight, 110) + 'px';
   }
 
-  /* ---------- enviar ---------- */
-  function enviar(){
-    var texto = input.value.trim();
-    if (!texto) return;
-    if (contieneProhibida(texto)){
-      texto = sanitizar(texto);
-      toast('Tu mensaje contenía palabras no permitidas y fue filtrado');
+  /* ---------- adjunto elegido ---------- */
+  var archivoInput = $('adjArchivo');
+  var adjPreview = $('adjPreview');
+  var adjThumb = $('adjThumb');
+  var adjNombre = $('adjNombre');
+  var adjPeso = $('adjPeso');
+  var adjunto = null;
+
+  function quitarAdjunto(){
+    adjunto = null;
+    archivoInput.value = '';
+    adjPreview.hidden = true;
+    adjThumb.hidden = true;
+    adjThumb.removeAttribute('src');
+  }
+
+  function mostrarAdjunto(f){
+    var esImagen = (f.type || '').indexOf('image/') === 0;
+    adjunto = f;
+    adjNombre.textContent = f.name;
+    adjPeso.textContent = pesoLegible(f.size);
+    if (esImagen){
+      adjThumb.src = URL.createObjectURL(f);
+      adjThumb.hidden = false;
+    } else {
+      adjThumb.hidden = true;
+      adjThumb.removeAttribute('src');
     }
-    chat.push({de:'me', txt:texto, h:ahora()});
+    adjPreview.hidden = false;
+  }
+
+  $('btnAdj').addEventListener('click', function(){ archivoInput.click(); });
+  $('adjQuitar').addEventListener('click', quitarAdjunto);
+  archivoInput.addEventListener('change', function(){
+    var f = archivoInput.files && archivoInput.files[0];
+    if (!f){ quitarAdjunto(); return; }
+    if (f.size > maxAdjuntoMB * 1048576){
+      toast('El adjunto no puede pesar mas de ' + maxAdjuntoMB + ' MB');
+      archivoInput.value = '';
+      return;
+    }
+    mostrarAdjunto(f);
+    input.focus();
+  });
+
+  /* ---------- enviar ---------- */
+  function limpiarComposer(){
+    input.value = '';
+    quitarAdjunto();
+    limpiarBloqueo();
+    autoGrow();
+  }
+
+  function enviar(){
+    if (enviando) return;
+    var texto = input.value.trim();
+
+    /* Primera barrera: el lenguaje ofensivo no sale, y queda explicado. */
+    var ofensivas = palabrasOfensivas(texto);
+    if (ofensivas.length){
+      marcarBloqueo(ofensivas);
+      toast('Mensaje bloqueado: no se envió');
+      input.focus();
+      return;
+    }
+    if (!texto && !adjunto){ toast('Escribi un mensaje o adjunta un archivo'); return; }
+
+    if (real) enviarAlBackend(texto);
+    else enviarDemo(texto, adjunto);
+  }
+
+  /* Modo servidor: el texto y el adjunto se guardan en la tabla mensajes. */
+  function enviarAlBackend(texto){
+    enviando = true; refrescarBoton();
+    var datos = new FormData();
+    datos.append('estudiante', contacto ? contacto.id : id);
+    datos.append('contenido', texto);
+    if (adjunto) datos.append('adjunto', adjunto);
+
+    fetch(API + '/api/mensajes-maestro', { method:'POST', credentials:'include', body:datos })
+      .then(function(r){ return r.json().then(function(d){ return { ok:r.ok, d:d }; },
+                                                  function(){ return { ok:false, d:{} }; }); })
+      .then(function(res){
+        if (!res.ok || !res.d.success){
+          if (res.d.motivo === 'lenguaje') marcarBloqueo(res.d.palabras || []);
+          toast(res.d.error || 'No se pudo enviar el mensaje');
+          return;
+        }
+        var m = res.d.mensaje;
+        chat.push({ de:m.de, txt:m.texto, h:m.hora, adjunto:m.adjunto });
+        renderBurbujas();
+        limpiarComposer();
+      })
+      .catch(function(){ toast('No se pudo conectar con el servidor'); })
+      .then(function(){ enviando = false; refrescarBoton(); });
+  }
+
+  /* Modo demo (abierto como archivo): todo queda en el navegador. */
+  function enviarDemo(texto, archivo){
+    var guardado = { de:'me', txt:texto, h:ahora() };
+    if (archivo){
+      var esImagen = (archivo.type || '').indexOf('image/') === 0;
+      guardado.adjunto = { nombre:archivo.name, tipo:(esImagen ? 'imagen' : 'archivo'),
+        url:URL.createObjectURL(archivo), tamano:pesoLegible(archivo.size), es_imagen:esImagen };
+    }
+    chat.push(guardado);
     chats[al.id] = chat; LS.set('horasocial_maestro_chat_v1', chats);
-    input.value = ''; autoGrow();
+    limpiarComposer();
     renderBurbujas();
     /* respuesta simulada del estudiante */
     var ec = document.createElement('div');
@@ -474,10 +712,52 @@
       renderBurbujas();
     }, 1300);
   }
+
   $('btnSend').addEventListener('click', enviar);
   input.addEventListener('keydown', function(e){
     if (e.key === 'Enter' && !e.shiftKey){ e.preventDefault(); enviar(); }
   });
+
+  /* ---------- cargar la conversación real ---------- */
+  function pintarConversacion(d){
+    contacto = d.estudiante;
+    real = true;
+    if (d.limite_adjunto_mb) maxAdjuntoMB = d.limite_adjunto_mb;
+    pintarEncabezado({ iniciales:d.estudiante.iniciales, brigada:d.estudiante.brigada,
+      enLinea:d.estudiante.en_linea, nombre:d.estudiante.nombre });
+    chat = [];
+    (d.mensajes || []).forEach(function(m){
+      chat.push({ de:m.de, txt:m.texto, h:m.hora, adjunto:m.adjunto });
+    });
+    renderBurbujas();
+  }
+
+  function pedirChat(estudianteId){
+    return fetch(API + '/api/chat-maestro?estudiante=' + estudianteId, { credentials:'include' })
+      .then(function(r){ if (!r.ok) throw new Error('http ' + r.status); return r.json(); });
+  }
+
+  function cargarChatReal(){
+    var pedido = (/^\d+$/.test(id))
+      ? pedirChat(id)
+      : fetch(API + '/api/mensajes-maestro', { credentials:'include' })
+          .then(function(r){ if (!r.ok) throw new Error('http ' + r.status); return r.json(); })
+          .then(function(d){
+            var primera = (d.conversaciones || [])[0];
+            if (!primera) throw new Error('bandeja vacia');
+            id = String(primera.id);
+            return pedirChat(id);
+          });
+
+    pedido
+      .then(function(d){ if (d && d.autenticado) pintarConversacion(d); })
+      .catch(function(){
+        real = false;
+        if (!isFile()) toast('No se pudo abrir la conversación en el servidor');
+      });
+  }
+  if (!isFile()) cargarChatReal();
+  refrescarBoton();
 
   /* ---------- volver a la bandeja ---------- */
   $('btnBack').addEventListener('click', function(){

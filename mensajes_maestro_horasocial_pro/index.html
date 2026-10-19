@@ -90,6 +90,7 @@
   .m-t .ult{display:block;font-size:11.5px;font-weight:600;color:var(--slate);margin-top:5px;
     white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .m-t .ult b{display:inline;font-size:11.5px;font-weight:700;color:var(--ink)}
+  .m-t .ult .sin-msj{font-style:italic;color:#b6c2cf;font-weight:600}
   .m-right{flex:0 0 auto;display:flex;flex-direction:column;align-items:flex-end;gap:7px}
   .m-right .hora{font-size:10px;font-weight:700;color:#b6c2cf}
   .m-right .badge{min-width:19px;height:19px;border-radius:999px;background:var(--red-400);
@@ -269,6 +270,13 @@
   function isFile(){ return location.protocol === 'file:'; }
   function go(fileHref, servedHref){ window.location.assign(isFile() ? fileHref : servedHref); }
 
+  /* Escapa lo que viene de la base antes de meterlo con innerHTML. */
+  function esc(t){
+    return String(t == null ? '' : t).replace(/[&<>"']/g, function(c){
+      return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c];
+    });
+  }
+
   /* ---------- catálogo de estudiantes (mismo que el chat del maestro) ---------- */
   var ESTUDIANTES = [
     {id:'e1', nombre:'Valentina Ospina', brigada:'Ambiental', iniciales:'VO', ult:'Buen trabajo, Valentina. Mandame las fotos y te registro las horas.', hora:'08:20', noLeidos:2, enLinea:true},
@@ -281,6 +289,39 @@
     {id:'e8', nombre:'Andrés Felipe Castro', brigada:'Ambiental', iniciales:'AC', ult:'Perfecto, Andrés. Te anoto el registro de hoy.', hora:'17:00', noLeidos:0, enLinea:false},
     {id:'e9', nombre:'Camila Arias', brigada:'Académico', iniciales:'CA', ult:'Claro, Camila, después de la jornada de apoyo académico.', hora:'09:02', noLeidos:0, enLinea:true}
   ];
+
+  /* ---------- datos reales del backend (tabla mensajes) ---------- */
+  /* Abierto desde el servidor se pide la bandeja real del docente; abierto
+     como archivo (file:) se queda el catálogo de demostración de arriba. */
+  var API = 'http://127.0.0.1:8000';
+  var real = false;   // true cuando la lista viene de la base de datos
+
+  function aplicarConversaciones(d){
+    ESTUDIANTES = (d.conversaciones || []).map(function(c){
+      var texto = (c.ultimo || '').trim();
+      if (!texto && c.ultimo_adjunto) texto = 'Te envió un adjunto';
+      return {
+        id: String(c.id),
+        nombre: c.nombre,
+        brigada: c.brigada,
+        iniciales: c.iniciales,
+        ult: texto,
+        hora: c.hora || '',
+        noLeidos: c.no_leidos || 0,
+        enLinea: !!c.en_linea,
+        sinMensajes: !c.hora
+      };
+    });
+    real = true;
+    render();
+  }
+
+  function cargarMensajesReal(){
+    fetch(API + '/api/mensajes-maestro', { credentials: 'include' })
+      .then(function(r){ if (!r.ok) throw 0; return r.json(); })
+      .then(function(d){ if (d && d.autenticado) aplicarConversaciones(d); })
+      .catch(function(){ real = false; });
+  }
 
   /* ---------- estado de leídos ---------- */
   var LS = { get:function(k,d){ try{ var v = localStorage.getItem(k); return v ? JSON.parse(v) : d; }catch(e){ return d; } },
@@ -303,19 +344,31 @@
       var row = document.createElement('a');
       row.className = 'm-row';
       row.href = '#';
-      var noLeidos = leidos[s.id] ? 0 : s.noLeidos;
-      var badge = noLeidos > 0
-        ? '<span class="badge">' + noLeidos + '</span>'
-        : '<span class="seen"><span class="material-symbols-outlined">done_all</span>Visto</span>';
+      /* Con datos reales el no leído lo manda la base; en la demo lo
+         recuerda el navegador. */
+      var noLeidos = real ? s.noLeidos : (leidos[s.id] ? 0 : s.noLeidos);
+      var badge;
+      if (noLeidos > 0){
+        badge = '<span class="badge">' + noLeidos + '</span>';
+      } else if (s.sinMensajes){
+        badge = '';
+      } else {
+        badge = '<span class="seen"><span class="material-symbols-outlined">done_all</span>Visto</span>';
+      }
+      var ult = s.ult
+        ? (noLeidos > 0 ? '<b>' + esc(s.nombre) + ':</b> ' : '') + esc(s.ult)
+        : '<em class="sin-msj">Todavía no hay mensajes con este estudiante.</em>';
       row.innerHTML =
-        '<span class="m-ava' + (s.enLinea ? '' : ' gray') + '">' + s.iniciales + (s.enLinea ? '<i class="dot"></i>' : '') + '</span>' +
-        '<div class="m-t"><b>' + s.nombre + '</b><small>' + s.brigada + ' · Colegio Alfredo Correa</small>' +
-          '<span class="ult">' + (noLeidos > 0 ? '<b>' + s.nombre + ':</b> ' : '') + s.ult + '</span></div>' +
-        '<div class="m-right"><span class="hora">' + s.hora + '</span>' + badge + '</div>' +
+        '<span class="m-ava' + (s.enLinea ? '' : ' gray') + '">' + esc(s.iniciales) + (s.enLinea ? '<i class="dot"></i>' : '') + '</span>' +
+        '<div class="m-t"><b>' + esc(s.nombre) + '</b><small>' + esc(s.brigada) + ' · Colegio Alfredo Correa</small>' +
+          '<span class="ult">' + ult + '</span></div>' +
+        '<div class="m-right"><span class="hora">' + esc(s.hora) + '</span>' + badge + '</div>' +
         '<span class="m-arrow material-symbols-outlined">chevron_right</span>';
       row.addEventListener('click', function(e){
         e.preventDefault();
-        leidos[s.id] = true; LS.set('horasocial_maestro_msg_leidos_v1', leidos);
+        if (!real){
+          leidos[s.id] = true; LS.set('horasocial_maestro_msg_leidos_v1', leidos);
+        }
         var target = (location.protocol === 'file:')
           ? '../chat_maestro_horasocial_pro/index.html?id=' + s.id
           : '/profesor/chat?id=' + s.id;
@@ -352,6 +405,9 @@
   }
 
   render();
+
+  /* Abierto desde el servidor se reemplaza la demo por la bandeja real. */
+  if (!isFile()) cargarMensajesReal();
 })();
 </script>
 

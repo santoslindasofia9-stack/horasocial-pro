@@ -96,6 +96,21 @@ urlpatterns = [
         docentes_views.api_reporte_maestro,
         name='api-reporte-maestro',
     ),
+
+    # Bandeja de mensajes (tabla mensajes): hilos del docente con sus
+    # estudiantes. El POST envia un mensaje y rechaza el lenguaje ofensivo.
+    path(
+        'api/mensajes-maestro',
+        docentes_views.api_mensajes_maestro,
+        name='api-mensajes-maestro',
+    ),
+
+    # Conversacion completa con un estudiante a cargo.
+    path(
+        'api/chat-maestro',
+        docentes_views.api_chat_maestro,
+        name='api-chat-maestro',
+    ),
 ]
 
 # En desarrollo el runserver sirve las evidencias subidas desde MEDIA_ROOT.

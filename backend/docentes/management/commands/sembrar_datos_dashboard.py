@@ -13,19 +13,24 @@ Es idempotente. Las claves naturales son:
     - actividad -> nombre_actividad
     - sesion    -> (docente, actividad, fecha_hora)
     - asistencia -> (sesion, estudiante)
+    - mensaje   -> (docente, estudiante, remitente, contenido)
 
 Las fechas de las sesiones se anclan a la fecha de ejecucion con horas
 fijas (-18/-15/-12 dias realizadas, +7/+14/+21 dias programadas), de modo
 que una segunda corrida el mismo dia calcula exactamente las mismas fechas
 y reutiliza todo lo ya creado. Una segunda corrida reporta 0 creados.
+
+Los mensajes del chat tambien se anclan a la hora de ejecucion (minutos
+atras), asi que la bandeja siempre se ve con movimiento reciente.
 """
 
 from datetime import datetime, time, timedelta
 
+from django.core.files.base import ContentFile
 from django.core.management.base import BaseCommand
 from django.utils import timezone
 
-from docentes.models import Actividad, Asistencia, Sesion, Usuario
+from docentes.models import Actividad, Asistencia, Mensaje, Sesion, Usuario
 
 CODIGO_DOCENTE = 'sofia'
 CLAVE_ESTUDIANTE = 'Estudiante2026*'
@@ -89,9 +94,87 @@ ASISTENCIAS = [
      Asistencia.VALIDACION_POR_VALIDAR, Asistencia.CONFIRMACION_ASISTE, 4),
     (4, ['EST-D08', 'EST-D09'],
      Asistencia.VALIDACION_POR_VALIDAR, Asistencia.CONFIRMACION_ASISTE, 4),
-    (5, ['EST-D10'],
-     Asistencia.VALIDACION_POR_VALIDAR, Asistencia.CONFIRMACION_ASISTE, 4),
+                creados['asistencias'] += 1
+            else:
+                reuse['asistencias'] += 1
+
+        # ----------------------------- Mensajes ----------------------------
+        ahora = timezone.now()
+        for codigo, remitente, contenido, minutos, leido, con_adjunto in MENSAJES:
+            mensaje, creado = Mensaje.objects.get_or_create(
+                id_docente=docente,
+                id_estudiante=por_codigo[codigo],
+                remitente=remitente,
+                contenido=contenido,
+            )
+            if creado:
+                cambios = {
+                    'fecha_hora': ahora - timedelta(minutes=minutos),
+                    'estado': (Mensaje.ESTADO_LEIDO if leido
+                               else Mensaje.ESTADO_ENVIADO),
+                }
+                if con_adjunto:
+                    # El adjunto se guarda en MEDIA y la fila apunta a el.
+                    mensaje.adjunto.save(
+                        'plan-de-mejora.txt',
+                        ContentFile(PLAN_DE_MEJORA.encode('utf-8')),
+                        save=False,
+                    )
+                    mensaje.adjunto_nombre = 'plan-de-mejora.txt'
+                    mensaje.adjunto_tipo = Mensaje.ADJUNTO_ARCHIVO
+                    cambios['adjunto'] = mensaje.adjunto.name
+                    cambios['adjunto_nombre'] = mensaje.adjunto_nombre
+                    cambios['adjunto_tipo'] = mensaje.adjunto_tipo
+                # `fecha_hora` es auto_now_add, asi que el momento real de la
+                # conversacion se fija con un update posterior al insert.
+                Mensaje.objects.filter(pk=mensaje.pk).update(**cambios)
+                creados['mensajes'] += 1
+            else:
+                reuse['mensajes'] += 1
+
+        # Conexion de los estudiantes que la demo muestra en linea.
+        Usuario.objects.filter(
+            pk__in=[por_codigo[codigo].pk for codigo in EN_LINEA],
+        ).update(last_login=timezone.now() - timedelta(minutes=MINUTOS_EN_LINEA))
+
+# Documento que acompana uno de los mensajes sembrados.
+PLAN_DE_MEJORA = """PLAN DE MEJORA - SERVICIO SOCIAL
+Estudiante: Daniela Castro (EST-D04)
+Grado: 11-B
+
+1. Asistir puntualmente a las sesiones programadas.
+2. Entregar el registro fotografico de cada jornada.
+3. Completar las horas pendientes antes del cierre del periodo.
+
+Observacion del docente: se aprueba el plan y se hace seguimiento
+semanal durante las brigadas de refuerzo escolar.
+"""
+
+# Conversacion sembrada: (codigo, remitente, texto, minutos atras, leido, adjunto)
+# `leido` es el estado que ve la bandeja: los mensajes del estudiante sin leer
+# alimentan el contador de no leidos.
+DOCENTE = Mensaje.REMITENTE_DOCENTE
+ESTUDIANTE = Mensaje.REMITENTE_ESTUDIANTE
+
+MENSAJES = [
+    ('EST-D01', ESTUDIANTE, 'Profe, la charla de seguridad es en la biblioteca?',
+     240, True, False),
+    ('EST-D01', DOCENTE, 'Si, Camilo. Nos vemos a las 9:30 en la biblioteca municipal.',
+     225, True, False),
+    ('EST-D01', ESTUDIANTE, 'Perfecto, profe. Llevo el cuaderno de campo.',
+     35, False, False),
+    ('EST-D04', DOCENTE, 'Daniela, revisa el plan de mejora antes del viernes.',
+     310, True, False),
+    ('EST-D04', ESTUDIANTE, 'Le adjunto el plan de mejora corregido, profe.',
+     145, False, True),
+    ('EST-D08', DOCENTE, 'Gabriela, felicitaciones por la asistencia a la jornada.',
+     1560, True, False),
 ]
+
+# Estudiantes con sesion abierta: su `last_login` queda a minutos de la
+# corrida y el punto verde de la bandeja es un dato real, no un adorno.
+EN_LINEA = ['EST-D01', 'EST-D04', 'EST-D08']
+MINUTOS_EN_LINEA = 4
 
 
 class Command(BaseCommand):
@@ -130,8 +213,10 @@ class Command(BaseCommand):
             self.stdout.write('')
             self.log(f'Limpiar      : {borradas} asistencias borradas')
 
-        creados = {'estudiantes': 0, 'actividades': 0, 'sesiones': 0, 'asistencias': 0}
-        reuse = {'estudiantes': 0, 'actividades': 0, 'sesiones': 0, 'asistencias': 0}
+        creados = {'estudiantes': 0, 'actividades': 0, 'sesiones': 0,
+                   'asistencias': 0, 'mensajes': 0}
+        reuse = {'estudiantes': 0, 'actividades': 0, 'sesiones': 0,
+                 'asistencias': 0, 'mensajes': 0}
 
         # --------------------------- Estudiantes ---------------------------
         por_codigo = {}
