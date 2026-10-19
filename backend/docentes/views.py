@@ -344,7 +344,7 @@ def habilita_cors(view):
         origen = request.headers.get('Origin', '')
         if origen in ORIGENES_PERMITIDOS:
             respuesta['Access-Control-Allow-Origin'] = origen
-            respuesta['Access-Control-Allow-Methods'] = 'GET, POST, OPTIONS'
+            respuesta['Access-Control-Allow-Methods'] = 'GET, POST, DELETE, OPTIONS'
             respuesta['Access-Control-Allow-Headers'] = 'Content-Type'
             # El dashboard decorado manda la cookie de sesion en el fetch
             # (`credentials: 'include'`). Sin esta cabecera el navegador
@@ -1514,6 +1514,8 @@ def _fila_mensaje(request, mensaje):
         'fecha': local.strftime('%Y-%m-%d'),
         'estado': mensaje.estado,
         'adjunto': adjunto,
+        # El docente puede borrar cualquier mensaje de su hilo (para todos).
+        'se_puede_eliminar': True,
     }
 
 
@@ -1805,3 +1807,59 @@ def api_chat_maestro(request):
         )
 
     return JsonResponse(_datos_chat(request, docente, estudiante))
+
+
+@csrf_exempt
+@habilita_cors
+@require_http_methods(['DELETE', 'POST', 'OPTIONS'])
+def api_mensaje_eliminar(request, id_mensaje=None):
+    """
+    Elimina un mensaje del hilo del docente (borrado para todos).
+
+    El docente en sesion solo puede borrar mensajes de SUS conversaciones:
+    se comprueba que el mensaje le pertenezca (`id_docente`), asi un id ajeno
+    devuelve 404 y nunca se toca la conversacion de otro docente.
+
+    Acepta el id por la URL (`/api/mensaje-eliminar/<id>`) o en el cuerpo
+    JSON (`{"id": <id>}`), para que funcione tanto desde el chat como desde
+    la bandeja.
+    """
+
+    if request.method == 'OPTIONS':
+        return HttpResponse(status=204)
+
+    docente = _docente_en_sesion(request)
+    if docente is None:
+        return _respuesta_sin_sesion()
+
+    identificador = id_mensaje
+    if identificador is None:
+        try:
+            cuerpo = json.loads(request.body or b'{}')
+        except (TypeError, ValueError):
+            cuerpo = {}
+        if isinstance(cuerpo, dict):
+            identificador = cuerpo.get('id')
+
+    mensaje = (
+        Mensaje.objects
+        .filter(pk=identificador, id_docente=docente)
+        .first()
+    )
+    if mensaje is None:
+        return JsonResponse(
+            {'success': False, 'error': 'mensaje no encontrado'},
+            status=404,
+        )
+
+    # El adjunto se borra del disco junto con la fila (si lo tiene).
+    if mensaje.adjunto:
+        mensaje.adjunto.delete(save=False)
+    borrado = mensaje.id_mensaje
+    mensaje.delete()
+
+    return JsonResponse({
+        'success': True,
+        'eliminado': borrado,
+        'mensaje': 'Mensaje eliminado para todos.',
+    }, status=200)

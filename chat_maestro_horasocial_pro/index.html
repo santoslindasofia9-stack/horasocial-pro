@@ -72,6 +72,15 @@
   @keyframes popIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
   .burbuja p{word-wrap:break-word;overflow-wrap:break-word;white-space:pre-wrap}
   .burbuja span{display:block;font-size:9.5px;font-weight:700;margin-top:4px;text-align:right}
+
+  /* boton "eliminar para todos" dentro de la burbuja */
+  .burbuja{position:relative}
+  .burbuja .btn-del{position:absolute;top:-9px;right:-9px;width:24px;height:24px;border-radius:50%;
+    border:1px solid #fecaca;background:#fff;color:#dc2626;cursor:pointer;display:none;
+    align-items:center;justify-content:center;box-shadow:0 3px 8px rgba(220,38,38,.18);z-index:2}
+  .burbuja:hover .btn-del,.burbuja:focus-within .btn-del{display:flex}
+  .burbuja .btn-del .material-symbols-outlined{font-size:15px}
+  @media (hover:none){ .burbuja .btn-del{display:flex} }
   .burbuja.alum{align-self:flex-start;background:#fff;border:1px solid var(--card-brd);
     border-top-left-radius:5px;color:var(--ink)}
   .burbuja.alum span{color:#b6c2cf}
@@ -123,6 +132,21 @@
     color:var(--sky-700);cursor:pointer;transition:background .15s}
   .btn-adj:hover{background:var(--sky-100, #e0f2fe)}
   .btn-adj .material-symbols-outlined{font-size:20px}
+
+  /* ---------- selector de emojis ---------- */
+  .emoji-picker{position:fixed;left:14px;bottom:78px;z-index:40;width:min(300px,calc(100vw - 28px));
+    background:#fff;border:1px solid var(--card-brd);border-radius:16px;padding:10px;
+    box-shadow:0 14px 34px rgba(3,105,161,.18);display:grid;
+    grid-template-columns:repeat(8,1fr);gap:5px;max-height:230px;overflow-y:auto}
+  .emoji-picker[hidden]{display:none}
+  .emoji-picker button{width:100%;aspect-ratio:1;border:0;border-radius:9px;background:transparent;
+    font-size:19px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;
+    transition:background .12s,transform .1s}
+  .emoji-picker button:hover{background:var(--sky-50)}
+  .emoji-picker button:active{transform:scale(.88)}
+  .emoji-picker .emoji-titulo{grid-column:1/-1;font-size:10.5px;font-weight:800;color:var(--slate);
+    text-transform:uppercase;letter-spacing:.4px;margin:2px 0 1px;position:sticky;top:-10px;background:#fff;
+    padding:3px 0}
 
   /* tira del adjunto elegido */
   .inputbar .adj-preview,.inputbar .aviso-lenguaje{max-width:var(--maxw);margin:0 auto 8px}
@@ -279,9 +303,11 @@
   </div>
   <div class="in">
     <button class="btn-adj" id="btnAdj" type="button" aria-label="Adjuntar imagen o archivo"><span class="material-symbols-outlined">attach_file</span></button>
+    <button class="btn-adj" id="btnEmoji" type="button" aria-label="Insertar emoji"><span class="material-symbols-outlined">mood</span></button>
     <textarea id="msjInput" rows="1" placeholder="Escribile a tu estudiante..." maxlength="500"></textarea>
     <button class="btn-send" id="btnSend" aria-label="Enviar" type="button"><span class="material-symbols-outlined">send</span></button>
   </div>
+  <div class="emoji-picker" id="emojiPicker" hidden></div>
   <input type="file" id="adjArchivo" accept="image/*,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.csv,.zip" hidden>
   <div class="hint">El chat es un espacio formal con tus estudiantes. El lenguaje ofensivo bloquea el envío y admite imágenes o documentos de hasta 5 MB.</div>
 </div>
@@ -449,6 +475,7 @@
   function burbuja(msg){
     var b = document.createElement('div');
     b.className = 'burbuja ' + (msg.de === 'me' ? 'me' : 'alum');
+    if (msg.id != null) b.dataset.idMensaje = msg.id;
     var adj = msg.adjunto;
     if (adj){
       if (adj.es_imagen){
@@ -478,6 +505,22 @@
     }
     if (msg.txt){ var p = document.createElement('p'); p.textContent = msg.txt; b.appendChild(p); }
     var s = document.createElement('span'); s.textContent = msg.h; b.appendChild(s);
+
+    /* Boton eliminar: borra el mensaje PARA TODOS (docente y estudiante).
+       Solo aparece con el backend real, porque necesita el id de la fila. */
+    if (msg.id != null && !isFile()){
+      var borrar = document.createElement('button');
+      borrar.type = 'button';
+      borrar.className = 'btn-del';
+      borrar.setAttribute('aria-label', 'Eliminar mensaje para todos');
+      borrar.title = 'Eliminar para todos';
+      borrar.innerHTML = '<span class="material-symbols-outlined">delete</span>';
+      borrar.addEventListener('click', function(e){
+        e.stopPropagation();
+        eliminarMensaje(msg.id, b);
+      });
+      b.appendChild(borrar);
+    }
     return b;
   }
 
@@ -623,6 +666,77 @@
 
   $('btnAdj').addEventListener('click', function(){ archivoInput.click(); });
   $('adjQuitar').addEventListener('click', quitarAdjunto);
+
+  /* ---------- selector de emojis ----------
+     Emojis simples y normales (nada raro). El botón abre una grilla y cada
+     emoji se inserta en la posicion del cursor. Un emoji NO es lenguaje
+     ofensivo: el filtro de palabras solo mira letras, asi que conviven. */
+  var EMOJIS = [
+    ['Caritas', ['😀','😄','😁','😊','🙂','😉','😍','🥰','😎','🤗','😂','😅',
+      '😢','😭','😔','😞','😟','😮','😱','🙄','😴','🤔','😐','😬']],
+    ['Gestos', ['👍','👎','👏','🙏','🤝','✌️','👋','🤟','💪','👌','🤙','✋',
+      '🖐️','👊','🤛','🤞']],
+    ['Corazones', ['❤️','💙','💚','💛','💜','🧡','🤍','💖','💝','💕','💘','💗',
+      '💓','💞','💟','❣️']],
+    ['Colegio', ['📚','📖','✏️','📝','🎓','🏫','✅','❌','⭐','🌟','✨','🔥',
+      '💡','🎯','🏆','📅','⏰','📌','📎','🔔']],
+  ];
+
+  var emojiPicker = $('emojiPicker');
+  var btnEmoji = $('btnEmoji');
+
+  function armarPicker(){
+    EMOJIS.forEach(function(grupo){
+      var titulo = document.createElement('div');
+      titulo.className = 'emoji-titulo';
+      titulo.textContent = grupo[0];
+      emojiPicker.appendChild(titulo);
+      grupo[1].forEach(function(carita){
+        var b = document.createElement('button');
+        b.type = 'button';
+        b.textContent = carita;
+        b.setAttribute('aria-label', 'Insertar ' + carita);
+        b.addEventListener('click', function(){ insertarEmoji(carita); });
+        emojiPicker.appendChild(b);
+      });
+    });
+  }
+
+  function insertarEmoji(carita){
+    var inicio = input.selectionStart != null ? input.selectionStart : input.value.length;
+    var fin = input.selectionEnd != null ? input.selectionEnd : input.value.length;
+    input.value = input.value.slice(0, inicio) + carita + input.value.slice(fin);
+    var pos = inicio + carita.length;
+    input.setSelectionRange(pos, pos);
+    input.focus();
+    /* Insertar un emoji puede desbloquear un aviso previo: se re-evalua. */
+    if (contieneProhibida(input.value)) marcarBloqueo(palabrasOfensivas(input.value));
+    else limpiarBloqueo();
+    autoGrow();
+  }
+
+  function alternarPicker(mostrar){
+    var abierto = (mostrar != null) ? mostrar : emojiPicker.hidden;
+    emojiPicker.hidden = !abierto;
+    btnEmoji.setAttribute('aria-expanded', abierto ? 'true' : 'false');
+  }
+
+  if (emojiPicker && btnEmoji){
+    armarPicker();
+    btnEmoji.addEventListener('click', function(e){ e.stopPropagation(); alternarPicker(); });
+    document.addEventListener('click', function(e){
+      if (!emojiPicker.hidden && !emojiPicker.contains(e.target) && e.target !== btnEmoji){
+        alternarPicker(false);
+      }
+    });
+    document.addEventListener('keydown', function(e){
+      if (e.key === 'Escape' && !emojiPicker.hidden) alternarPicker(false);
+    });
+  } else if (btnEmoji){
+    /* Sin panel (pagina vieja), el boton queda inofensivo. */
+    btnEmoji.addEventListener('click', function(){ archivoInput.click(); });
+  }
+
   archivoInput.addEventListener('change', function(){
     var f = archivoInput.files && archivoInput.files[0];
     if (!f){ quitarAdjunto(); return; }
@@ -679,7 +793,7 @@
           return;
         }
         var m = res.d.mensaje;
-        chat.push({ de:m.de, txt:m.texto, h:m.hora, adjunto:m.adjunto });
+        chat.push({ id:m.id, de:m.de, txt:m.texto, h:m.hora, adjunto:m.adjunto });
         renderBurbujas();
         limpiarComposer();
       })
@@ -718,6 +832,31 @@
     if (e.key === 'Enter' && !e.shiftKey){ e.preventDefault(); enviar(); }
   });
 
+  /* ---------- eliminar un mensaje para todos ----------
+     Llama al backend (DELETE /api/mensaje-eliminar/<id>). El backend borra la
+     fila de la tabla `mensajes` (y el adjunto del disco), así que desaparece
+     tanto para el docente como para el estudiante. */
+  function eliminarMensaje(idMensaje, burbujaEl){
+    if (!confirm('¿Eliminar este mensaje para todos? Esta acción no se puede deshacer.')) return;
+    fetch(API + '/api/mensaje-eliminar/' + idMensaje, {
+      method: 'DELETE',
+      credentials: 'include',
+    })
+      .then(function(r){ return r.json().then(function(d){ return { ok:r.ok, d:d }; },
+                                                 function(){ return { ok:false, d:{} }; }); })
+      .then(function(res){
+        if (!res.ok || !res.d.success){
+          toast(res.d.error || 'No se pudo eliminar el mensaje');
+          return;
+        }
+        /* Se quita del arreglo local y se repinta: el id ya no vuelve del backend. */
+        chat = chat.filter(function(m){ return m.id !== idMensaje; });
+        if (burbujaEl) burbujaEl.remove();
+        toast('Mensaje eliminado para todos');
+      })
+      .catch(function(){ toast('No se pudo conectar con el servidor'); });
+  }
+
   /* ---------- cargar la conversación real ---------- */
   function pintarConversacion(d){
     contacto = d.estudiante;
@@ -727,7 +866,7 @@
       enLinea:d.estudiante.en_linea, nombre:d.estudiante.nombre });
     chat = [];
     (d.mensajes || []).forEach(function(m){
-      chat.push({ de:m.de, txt:m.texto, h:m.hora, adjunto:m.adjunto });
+      chat.push({ id:m.id, de:m.de, txt:m.texto, h:m.hora, adjunto:m.adjunto });
     });
     renderBurbujas();
   }

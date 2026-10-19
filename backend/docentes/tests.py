@@ -21,6 +21,7 @@ from django.utils import timezone
 from .models import (
     Actividad,
     Asistencia,
+    Mensaje,
     Sesion,
     SolicitudRecuperacion,
     Usuario,
@@ -1329,3 +1330,123 @@ class ApiSesionServicioTests(BaseModuloDocentes):
 
         titulos = [f['titulo'] for f in self._lista().json()['registros']]
         self.assertEqual(titulos, ['Mia'])
+
+
+class ApiMensajesEliminarTests(BaseModuloDocentes):
+    """
+    Eliminar un mensaje del chat: el docente borra PARA TODOS un mensaje de su
+    propia conversacion, y nunca puede tocar la de otro docente.
+    """
+
+    def setUp(self):
+        # Cada prueba arranca con su propio mensaje en el hilo.
+        self.client.force_login(self.docente)
+        self.mensaje = Mensaje.objects.create(
+            id_docente=self.docente,
+            id_estudiante=self.estudiante,
+            remitente=Mensaje.REMITENTE_DOCENTE,
+            contenido='Mensaje de prueba',
+            estado=Mensaje.ESTADO_ENVIADO,
+        )
+
+    def _ruta(self, id_mensaje=None):
+        if id_mensaje is None:
+            return reverse('api-mensaje-eliminar-json')
+        return reverse('api-mensaje-eliminar', args=[id_mensaje])
+
+    def test_elimina_el_mensaje_por_la_url(self):
+        respuesta = self.client.delete(self._ruta(self.mensaje.pk))
+        self.assertEqual(respuesta.status_code, 200)
+        self.assertTrue(respuesta.json()['success'])
+        self.assertFalse(Mensaje.objects.filter(pk=self.mensaje.pk).exists())
+
+    def test_elimina_el_mensaje_con_el_id_en_el_cuerpo(self):
+        respuesta = self.client.delete(
+            self._ruta(),
+            data=json.dumps({'id': self.mensaje.pk}),
+            content_type='application/json',
+        )
+        self.assertEqual(respuesta.status_code, 200)
+        self.assertFalse(Mensaje.objects.filter(pk=self.mensaje.pk).exists())
+
+    def test_el_mensaje_desaparece_del_chat(self):
+        self.client.delete(self._ruta(self.mensaje.pk))
+        datos = self.client.get(
+            reverse('api-chat-maestro'), {'estudiante': self.estudiante.pk},
+        ).json()
+        self.assertEqual(datos['mensajes'], [])
+
+    def test_no_se_puede_borrar_el_mensaje_de_otro_docente(self):
+        otro = Usuario.objects.create_user(
+            correo='otro-docente@test.local',
+            password=CLAVE,
+            nombre_completo='Otro Docente',
+            codigo='DOC-8888',
+            rol=Usuario.ROL_PROFESOR,
+        )
+        ajeno = Mensaje.objects.create(
+            id_docente=otro,
+            id_estudiante=self.estudiante,
+            remitente=Mensaje.REMITENTE_DOCENTE,
+            contenido='Mensaje ajeno',
+            estado=Mensaje.ESTADO_ENVIADO,
+        )
+
+        respuesta = self.client.delete(self._ruta(ajeno.pk))
+        self.assertEqual(respuesta.status_code, 404)
+        self.assertTrue(Mensaje.objects.filter(pk=ajeno.pk).exists())
+
+    def test_un_id_inexistente_responde_404(self):
+        respuesta = self.client.delete(self._ruta(999999))
+        self.assertEqual(respuesta.status_code, 404)
+
+    def test_sin_sesion_no_borra_nada(self):
+        self.client.logout()
+        respuesta = self.client.delete(self._ruta(self.mensaje.pk))
+        self.assertEqual(respuesta.status_code, 401)
+        self.assertTrue(Mensaje.objects.filter(pk=self.mensaje.pk).exists())
+
+    def test_el_chat_marca_los_mensajes_como_eliminables(self):
+        datos = self.client.get(
+            reverse('api-chat-maestro'), {'estudiante': self.estudiante.pk},
+        ).json()
+        self.assertTrue(datos['mensajes'][0]['se_puede_eliminar'])
+
+
+class ApiMensajesLenguajeTests(BaseModuloDocentes):
+    """
+    El filtro de lenguaje del backend sigue mandando: un mensaje ofensivo no se
+    guarda. En cambio un emoji (que no es una letra) nunca se marca como tal.
+    """
+
+    def setUp(self):
+        self.client.force_login(self.docente)
+
+    def _enviar(self, texto):
+        return self.client.post(
+            reverse('api-mensajes-maestro'),
+            data=json.dumps({'estudiante': self.estudiante.pk, 'contenido': texto}),
+            content_type='application/json',
+        )
+
+    def test_rechaza_una_palabra_ofensiva(self):
+        respuesta = self._enviar('sos un puto')
+        self.assertEqual(respuesta.status_code, 400)
+        self.assertEqual(respuesta.json()['motivo'], 'lenguaje')
+        self.assertEqual(Mensaje.objects.count(), 0)
+
+    def test_rechaza_la_palabra_disfrazada(self):
+        # p.u.t.a con numeros y puntos sigue cayendo por la normalizacion.
+        respuesta = self._enviar('sos un p.u.t.4')
+        self.assertEqual(respuesta.status_code, 400)
+        self.assertEqual(respuesta.json()['motivo'], 'lenguaje')
+
+    def test_los_emojis_no_se_bloquean(self):
+        respuesta = self._enviar('Excelente trabajo 👍😀❤️')
+        self.assertEqual(respuesta.status_code, 201)
+        self.assertEqual(Mensaje.objects.count(), 1)
+
+    def test_una_palabra_permitida_no_se_bloquea(self):
+        respuesta = self._enviar('Traeme la pijama para el taller')
+        self.assertEqual(respuesta.status_code, 201)
+

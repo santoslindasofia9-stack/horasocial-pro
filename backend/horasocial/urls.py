@@ -176,6 +176,19 @@ urlpatterns = [
         docentes_views.api_chat_maestro,
         name='api-chat-maestro',
     ),
+
+    # Eliminar un mensaje del hilo (borrado para todos). El docente solo
+    # puede borrar mensajes de sus propias conversaciones.
+    path(
+        'api/mensaje-eliminar/<int:id_mensaje>',
+        docentes_views.api_mensaje_eliminar,
+        name='api-mensaje-eliminar',
+    ),
+    path(
+        'api/mensaje-eliminar',
+        docentes_views.api_mensaje_eliminar,
+        name='api-mensaje-eliminar-json',
+    ),
 ]
 
 # En desarrollo el runserver sirve las evidencias subidas desde MEDIA_ROOT.
