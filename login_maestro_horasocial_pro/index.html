@@ -568,18 +568,36 @@ function togglePassword() {
   icon.textContent = show ? 'visibility_off' : 'visibility';
 }
 
-// El backend (Django) puede servir esta misma pagina en /profesor/login.
-// Cuando eso ocurre, el formulario apunta al MISMO origen para que la cookie
-// de sesion quede en el host correcto. Si la pagina se sirve desde server.js
-// (:3000) o Live Server (:5500), se usa el backend de Django en :8000.
+// El backend (Django) puede servir esta misma pagina en /profesor/login, y
+// server.js la sirve en cualquier puerto (ahora con proxy /api/* -> Django).
+// Estrategia a prueba de puertos:
+//   - file://  -> se queda la maqueta (sin backend).
+//   - El action del HTML apunta DIRECTO a Django (:8000): es el camino seguro.
+//   - Al cargar, se comprueba si el MISMO ORIGEN responde la API (Django puro,
+//     o server.js con el proxy). Solo entonces el form postea en same-origin,
+//     que es lo que mantiene la cookie y la redireccion en el host correcto.
+//   - Si el mismo origen no tiene API (Live Server, otro servidor estatico),
+//     se conserva el backend directo en :8000. Nunca se postea a una ruta
+//     que no exista.
 (function configurarBackendDelLogin() {
   if (location.protocol === 'file:') return;
   const form = document.getElementById('loginForm');
   if (!form) return;
-  const desdeOtroServidor = location.port === '3000' || location.port === '5500';
-  form.action = desdeOtroServidor
-    ? 'http://127.0.0.1:8000/api/login-maestro'
-    : location.origin + '/api/login-maestro';
+
+  fetch(location.origin + '/api/sesion-actual', {
+    credentials: 'include',
+    redirect: 'manual',
+  })
+    .then((respuesta) => {
+      const respondeLaApi =
+        respuesta.ok ||
+        (respuesta.status >= 200 && respuesta.status < 400);
+      if (respondeLaApi) {
+        form.action = location.origin + '/api/login-maestro';
+      }
+    })
+    /* Sin respuesta se conserva el action hacia Django :8000. */
+    .catch(() => {});
 })();
 
 document.getElementById('loginForm').addEventListener('submit', (e) => {

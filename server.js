@@ -1,8 +1,10 @@
 const express = require('express');
+const http = require('http');
 const path = require('path');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+const BACKEND = { host: '127.0.0.1', port: 8000 };
 
 // ==========================================
 // MIDDLEWARE GENERAL
@@ -16,11 +18,46 @@ app.use((req, res, next) => {
     next();
 });
 
+// ==========================================
+// PROXY /api/* -> DJANGO (:8000)
+// ==========================================
+//
+// El backend Django (carpeta backend/) autentica de verdad contra MySQL. Este
+// servidor pasa a ser solo el "rostro" del frontend: cualquier llamada a /api/...
+// (login, sesion, mensajes, estudiantes, sesionservicio...) se reenvia tal cual
+// a Django y se devuelve la respuesta. Así el formulario de login funciona
+// igual si la pagina se sirve desde aqui o desde Django, sin importar el puerto.
+
+app.use('/api', (req, res) => {
+    const opciones = {
+        hostname: BACKEND.host,
+        port: BACKEND.port,
+        path: req.originalUrl,
+        method: req.method,
+        headers: { ...req.headers, host: `${BACKEND.host}:${BACKEND.port}` },
+    };
+
+    const presto = http.request(opciones, (respuesta) => {
+        res.writeHead(respuesta.statusCode, respuesta.headers);
+        respuesta.pipe(res);
+    });
+
+    presto.on('error', () => {
+        res.status(502).json({
+            error: 'backend_no_disponible',
+            mensaje: 'No responde Django en 127.0.0.1:8000. Levantalo con: python manage.py runserver',
+        });
+    });
+
+    // Cuerpo del POST (formulario o JSON) reenviado sin procesar.
+    req.pipe(presto);
+});
+
 // Archivos estáticos de las páginas (CSS, JS e imágenes de cada carpeta).
 app.use(express.static(path.join(__dirname), { index: false }));
 
 // ==========================================
-// NOTA: EL FLUJO DE CONTRASEÑAS YA NO VIVE AQUÍ
+// NOTA: EL FLUJO DE CONTRASEÑAS NO VIVE AQUÍ
 // ==========================================
 //
 // El login y la recuperación de contraseña de docentes se movieron al backend
