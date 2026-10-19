@@ -1374,7 +1374,7 @@
     var sesSel = {};
 
     /* ---------- sesionservicio: actividades reales del docente ---------- */
-    var API = 'http://127.0.0.1:8000';
+    var API = (location.protocol === 'file:') ? '' : ((location.port === '3000' || location.port === '5500') ? 'http://127.0.0.1:8000' : location.origin);
     var real = false;   /* true cuando las actividades vienen de la tabla sesionservicio */
     function inicialesDe(nombre){
       var p = String(nombre).split(' ').filter(Boolean);

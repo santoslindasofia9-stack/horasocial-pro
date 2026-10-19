@@ -293,7 +293,7 @@
   /* ---------- datos reales del backend (tabla mensajes) ---------- */
   /* Abierto desde el servidor se pide la bandeja real del docente; abierto
      como archivo (file:) se queda el catálogo de demostración de arriba. */
-  var API = 'http://127.0.0.1:8000';
+  var API = (location.protocol === 'file:') ? '' : ((location.port === '3000' || location.port === '5500') ? 'http://127.0.0.1:8000' : location.origin);
   var real = false;   // true cuando la lista viene de la base de datos
 
   function aplicarConversaciones(d){

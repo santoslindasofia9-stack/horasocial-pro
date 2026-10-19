@@ -112,12 +112,15 @@ LOGIN_URL = 'docentes:login'
 LOGIN_REDIRECT_URL = 'docentes:dashboard'
 LOGOUT_REDIRECT_URL = 'docentes:login'
 
-# A donde vuelve el formulario decorado de login (server.js en :3000) despues
-# de autenticar contra MySQL. Si el frontend se publica en otro host o puerto,
-# cambiar SOLO esta URL. Con cadena vacia, el login vuelve al panel de Django.
+# A donde vuelve el formulario decorado de login despues de autenticar contra
+# MySQL. Django sirve el dashboard decorado en esta misma ruta (ver
+# horasocial/urls.py), asi que el flujo completo funciona con UN SOLO
+# servidor: no hace falta levantar server.js ni convivir con otro puerto.
+# La ruta es relativa a proposito: aterriza en el mismo host que autentico,
+# lo que mantiene la cookie de sesion en el origen correcto.
 DASHBOARD_DOCENTE_URL = os.environ.get(
     'DASHBOARD_DOCENTE_URL',
-    'http://127.0.0.1:3000/profesor/dashboard',
+    '/profesor/dashboard',
 )
 
 # A donde vuelve el formulario decorado cuando el login FALLA. Sin esto, un
@@ -126,7 +129,7 @@ DASHBOARD_DOCENTE_URL = os.environ.get(
 # al formulario que estaba usando. Con cadena vacia, vuelve al login de Django.
 LOGIN_DOCENTE_URL = os.environ.get(
     'LOGIN_DOCENTE_URL',
-    'http://127.0.0.1:3000/profesor/login',
+    '/profesor/login',
 )
 
 

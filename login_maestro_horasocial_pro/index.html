@@ -568,6 +568,20 @@ function togglePassword() {
   icon.textContent = show ? 'visibility_off' : 'visibility';
 }
 
+// El backend (Django) puede servir esta misma pagina en /profesor/login.
+// Cuando eso ocurre, el formulario apunta al MISMO origen para que la cookie
+// de sesion quede en el host correcto. Si la pagina se sirve desde server.js
+// (:3000) o Live Server (:5500), se usa el backend de Django en :8000.
+(function configurarBackendDelLogin() {
+  if (location.protocol === 'file:') return;
+  const form = document.getElementById('loginForm');
+  if (!form) return;
+  const desdeOtroServidor = location.port === '3000' || location.port === '5500';
+  form.action = desdeOtroServidor
+    ? 'http://127.0.0.1:8000/api/login-maestro'
+    : location.origin + '/api/login-maestro';
+})();
+
 document.getElementById('loginForm').addEventListener('submit', (e) => {
   if (location.protocol === 'file:') {
     e.preventDefault();

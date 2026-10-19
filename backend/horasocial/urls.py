@@ -12,17 +12,82 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
 from django.views.generic import RedirectView
+from django.views.static import serve as serve_static
 
 from docentes import views as docentes_views
+
+# Raiz del frontend decorado (un nivel arriba de backend/).
+FRONTEND_DIR = settings.BASE_DIR.parent
+
+
+def _pagina_decorada(carpeta):
+    """Sirve el index.html de una carpeta del frontend decorado."""
+    return {
+        'document_root': str(FRONTEND_DIR / carpeta),
+        'path': 'index.html',
+    }
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('docentes/', include('docentes.urls')),
 
-    # La raiz lleva al login del docente.
+    # ------------------------------------------------------------------
+    # PAGINAS DECORADAS SERVIDAS POR DJANGO
+    #
+    # El login decorado postea a /api/login-maestro y Django lo redirige a
+    # /profesor/dashboard en el MISMO origen. Resultado: el flujo completo
+    # (login -> dashboard con la sesion del docente) funciona con solo
+    # `python manage.py runserver`, sin depender de server.js en :3000 y sin
+    # problemas de cookies entre puertos u hosts distintos.
+    # ------------------------------------------------------------------
+    path(
+        'profesor/login',
+        serve_static,
+        _pagina_decorada('login_maestro_horasocial_pro'),
+        name='profesor-login',
+    ),
+    path(
+        'profesor/recuperar-contrasena',
+        serve_static,
+        _pagina_decorada('recuperar_contrasena_maestro_horasocial_pro'),
+        name='profesor-recuperar',
+    ),
+    path(
+        'profesor/dashboard',
+        serve_static,
+        _pagina_decorada('dashboard_maestro_horasocial_pro'),
+        name='profesor-dashboard',
+    ),
+    path(
+        'profesor/estudiantes',
+        serve_static,
+        _pagina_decorada('gestion_estudiantes_maestro_horasocial_pro'),
+        name='profesor-estudiantes',
+    ),
+    path(
+        'profesor/tecnica',
+        serve_static,
+        _pagina_decorada('gestion_tecnica_maestro_horasocial_pro'),
+        name='profesor-tecnica',
+    ),
+    path(
+        'profesor/chat',
+        serve_static,
+        _pagina_decorada('chat_maestro_horasocial_pro'),
+        name='profesor-chat',
+    ),
+    path(
+        'profesor/mensajes',
+        serve_static,
+        _pagina_decorada('mensajes_maestro_horasocial_pro'),
+        name='profesor-mensajes',
+    ),
+
+    # La raiz lleva directo al login decorado.
     path(
         '',
-        RedirectView.as_view(pattern_name='docentes:login', permanent=False),
+        RedirectView.as_view(url='/profesor/login', permanent=False),
         name='inicio',
     ),
 
@@ -118,3 +183,14 @@ urlpatterns = [
 # se agrega cuando DEBUG esta encendido.
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+    # Imagenes del frontend decorado (avatares, logos locales). Las paginas
+    # servidas en /profesor/* las referencian como ../img/..., que resuelve a
+    # /img/...
+    urlpatterns += [
+        path(
+            'img/<path:path>',
+            serve_static,
+            {'document_root': str(FRONTEND_DIR / 'img')},
+        ),
+    ]

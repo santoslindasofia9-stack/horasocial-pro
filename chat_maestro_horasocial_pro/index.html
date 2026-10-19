@@ -385,7 +385,7 @@
   /* ---------- datos reales del backend (tabla mensajes) ---------- */
   /* Abierto desde el servidor el chat se llena con lo que hay en la base;
      abierto como archivo (file:) queda la conversación de demostración. */
-  var API = 'http://127.0.0.1:8000';
+  var API = (location.protocol === 'file:') ? '' : ((location.port === '3000' || location.port === '5500') ? 'http://127.0.0.1:8000' : location.origin);
   var real = false;          // true cuando la conversación viene de la base
   var contacto = null;
   var maxAdjuntoMB = 5;      // lo confirma el backend al abrir el chat
