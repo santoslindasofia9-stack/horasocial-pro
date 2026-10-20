@@ -1,0 +1,36 @@
+============================================================
+  HORASOCIAL PRO - GUIA PARA LA SUSTENTACION (Modulo Docente)
+============================================================
+
+PASO 1:  Doble clic en  DEMO.bat
+         (Arranca MySQL, Django y el servidor web, y abre el
+          navegador en el login del docente. No hay que tipear nada.)
+
+PASO 2:  Ingresar con:
+             Usuario ....... sofia
+             Contrasena .... sofia2026
+         (la clave es sofia2026, todo en minusculas)
+
+PASO 3:  Al terminar, doble clic en  APAGAR.bat
+
+------------------------------------------------------------
+QUE HACE CADA ARCHIVO
+------------------------------------------------------------
+  DEMO.bat            -> arranca todo (USA ESTE)
+  APAGAR.bat          -> apaga todo
+  iniciar-demo.ps1    -> motor del arranque
+  detener-demo.ps1    -> motor del apagado
+  server.js           -> servidor web :3000 (proyecto decorado)
+  backend\            -> backend Django :8000 (base de datos)
+
+------------------------------------------------------------
+SI ALGO FALLA
+------------------------------------------------------------
+  - La ventana no se cierra sola: deja leer el error.
+  - Si dice "MySQL no responde": abrir Laragon y dar Start All,
+    luego volver a hacer doble clic en DEMO.bat.
+  - Logs:
+      %TEMP%\horasocial_django_err.log
+      %TEMP%\horasocial_node_err.log
+
+============================================================

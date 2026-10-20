@@ -59,6 +59,56 @@ function EsperarHttp($url, $segundos = 40) {
     return $false
 }
 
+function Morir {
+    # Detiene la ventana para que el mensaje se pueda leer con doble clic.
+    Escribir ''
+    Read-Host '  Presiona ENTER para cerrar esta ventana'
+    exit 1
+}
+
+function MysqlEscuchando {
+    # MySQL/Laragon escucha en 3306 cuando esta arriba.
+    return [bool](Get-NetTCPConnection -LocalPort 3306 -State Listen -ErrorAction SilentlyContinue)
+}
+
+function AsegurarMysql {
+    # Si MySQL no responde, intenta arrancar Laragon solo y espera a que suba.
+    # Asi el jueves no hay que abrir Laragon a mano antes de la demo.
+    if (MysqlEscuchando) {
+        Escribir '  - MySQL ............... OK (puerto 3306 activo)' 'Green'
+        return $true
+    }
+
+    $rutasLaragon = @(
+        'C:\laragon\laragon.exe',
+        "$env:USERPROFILE\laragon\laragon.exe",
+        'C:\tools\laragon\laragon.exe'
+    )
+    $laragonExe = $rutasLaragon | Where-Object { Test-Path $_ } | Select-Object -First 1
+
+    if (-not $laragonExe) {
+        Escribir '  X MySQL no responde y no se encontro Laragon.' 'Red'
+        Escribir '    Abre Laragon y dale Start All, luego vuelve a ejecutar la demo.' 'Red'
+        return $false
+    }
+
+    Escribir '  - MySQL apagado: arrancando Laragon automaticamente...' 'Yellow'
+    Start-Process -FilePath $laragonExe -ArgumentList 'start' -ErrorAction SilentlyContinue
+    Start-Sleep -Seconds 3
+
+    $fin = (Get-Date).AddSeconds(45)
+    while ((Get-Date) -lt $fin) {
+        if (MysqlEscuchando) {
+            Escribir '  - MySQL ............... OK (arrancado por el script)' 'Green'
+            return $true
+        }
+        Start-Sleep -Seconds 2
+    }
+
+    Escribir '  X MySQL no arranco a tiempo. Abre Laragon y dale Start All.' 'Red'
+    return $false
+}
+
 Escribir ''
 Escribir '============================================================' 'Cyan'
 Escribir '        HORASOCIAL PRO - Arranque de la DEMO (Docente)'       'Cyan'
@@ -71,7 +121,7 @@ Escribir '[1/5] Verificando requisitos...' 'Yellow'
 if (-not (Test-Path $VenvPy)) {
     Escribir "  X No se encontro el entorno virtual en $VenvPy" 'Red'
     Escribir '    Crea el entorno con: python -m venv backend\.venv' 'Red'
-    exit 1
+    Morir
 }
 $versionDjango = & $VenvPy -c "import django;print(django.get_version())" 2>$null
 Escribir "  - Python del venv ......... OK (Django $versionDjango)" 'Green'
@@ -79,7 +129,7 @@ Escribir "  - Python del venv ......... OK (Django $versionDjango)" 'Green'
 $node = Get-Command node -ErrorAction SilentlyContinue
 if (-not $node) {
     Escribir '  X No se encontro Node.js en el PATH.' 'Red'
-    exit 1
+    Morir
 }
 Escribir "  - Node.js ................. OK ($(node --version))" 'Green'
 
@@ -91,15 +141,24 @@ if (-not (Test-Path (Join-Path $Raiz 'node_modules\express'))) {
 }
 Escribir '  - Dependencias de Node .... OK (express)' 'Green'
 
-# Verifica que MySQL/documento responda: un `check` no toca la base, pero
-# detecta errores de configuracion antes de arrancar el servidor.
+# MySQL primero: sin base de datos, Django no sirve los datos del panel.
+if (-not (AsegurarMysql)) {
+    Escribir ''
+    Escribir '  La demo no puede arrancar sin la base de datos.' 'Red'
+    Read-Host '  Presiona ENTER para cerrar'
+    Morir
+}
+
+# `check` no toca la base, pero detecta errores de configuracion antes de
+# arrancar el servidor.
 Push-Location $Backend
 $check = & $VenvPy manage.py check 2>&1
 Pop-Location
 if ($LASTEXITCODE -ne 0) {
     Escribir '  X `manage.py check` reporto problemas:' 'Red'
     Escribir $check 'Red'
-    exit 1
+    Read-Host '  Presiona ENTER para cerrar'
+    Morir
 }
 Escribir '  - Configuracion Django .... OK (manage.py check)' 'Green'
 
@@ -133,7 +192,7 @@ if (EsperarHttp "http://127.0.0.1:$PuertoDjango/profesor/login") {
     Escribir '  - X Django no respondio. Revisa el log:' 'Red'
     Escribir "    $DjangoErr" 'Red'
     Get-Content $DjangoErr -Tail 15 -ErrorAction SilentlyContinue | ForEach-Object { Escribir "    $_" 'DarkRed' }
-    exit 1
+    Morir
 }
 
 # --------------------------- 4. server.js ---------------------------------
@@ -152,7 +211,7 @@ if (EsperarHttp "http://127.0.0.1:$PuertoNode/api/sesion-actual") {
     Escribir '  - X server.js no respondio. Revisa el log:' 'Red'
     Escribir "    $NodeErr" 'Red'
     Get-Content $NodeErr -Tail 15 -ErrorAction SilentlyContinue | ForEach-Object { Escribir "    $_" 'DarkRed' }
-    exit 1
+    Morir
 }
 
 # --------------------------- 5. Abrir navegador ---------------------------
@@ -183,3 +242,6 @@ Escribir "    Node   : $NodeErr" 'DarkGray'
 Escribir ''
 Escribir '  Para apagar todo, ejecuta: .\detener-demo.ps1' 'Gray'
 Escribir ''
+Escribir '  (Esta ventana se puede cerrar: los servidores siguen corriendo.)' 'DarkGray'
+Escribir ''
+Read-Host '  Presiona ENTER para cerrar esta ventana'
