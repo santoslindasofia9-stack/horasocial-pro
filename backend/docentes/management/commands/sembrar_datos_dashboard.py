@@ -94,48 +94,7 @@ ASISTENCIAS = [
      Asistencia.VALIDACION_POR_VALIDAR, Asistencia.CONFIRMACION_ASISTE, 4),
     (4, ['EST-D08', 'EST-D09'],
      Asistencia.VALIDACION_POR_VALIDAR, Asistencia.CONFIRMACION_ASISTE, 4),
-                creados['asistencias'] += 1
-            else:
-                reuse['asistencias'] += 1
-
-        # ----------------------------- Mensajes ----------------------------
-        ahora = timezone.now()
-        for codigo, remitente, contenido, minutos, leido, con_adjunto in MENSAJES:
-            mensaje, creado = Mensaje.objects.get_or_create(
-                id_docente=docente,
-                id_estudiante=por_codigo[codigo],
-                remitente=remitente,
-                contenido=contenido,
-            )
-            if creado:
-                cambios = {
-                    'fecha_hora': ahora - timedelta(minutes=minutos),
-                    'estado': (Mensaje.ESTADO_LEIDO if leido
-                               else Mensaje.ESTADO_ENVIADO),
-                }
-                if con_adjunto:
-                    # El adjunto se guarda en MEDIA y la fila apunta a el.
-                    mensaje.adjunto.save(
-                        'plan-de-mejora.txt',
-                        ContentFile(PLAN_DE_MEJORA.encode('utf-8')),
-                        save=False,
-                    )
-                    mensaje.adjunto_nombre = 'plan-de-mejora.txt'
-                    mensaje.adjunto_tipo = Mensaje.ADJUNTO_ARCHIVO
-                    cambios['adjunto'] = mensaje.adjunto.name
-                    cambios['adjunto_nombre'] = mensaje.adjunto_nombre
-                    cambios['adjunto_tipo'] = mensaje.adjunto_tipo
-                # `fecha_hora` es auto_now_add, asi que el momento real de la
-                # conversacion se fija con un update posterior al insert.
-                Mensaje.objects.filter(pk=mensaje.pk).update(**cambios)
-                creados['mensajes'] += 1
-            else:
-                reuse['mensajes'] += 1
-
-        # Conexion de los estudiantes que la demo muestra en linea.
-        Usuario.objects.filter(
-            pk__in=[por_codigo[codigo].pk for codigo in EN_LINEA],
-        ).update(last_login=timezone.now() - timedelta(minutes=MINUTOS_EN_LINEA))
+]
 
 # Documento que acompana uno de los mensajes sembrados.
 PLAN_DE_MEJORA = """PLAN DE MEJORA - SERVICIO SOCIAL
@@ -157,23 +116,78 @@ DOCENTE = Mensaje.REMITENTE_DOCENTE
 ESTUDIANTE = Mensaje.REMITENTE_ESTUDIANTE
 
 MENSAJES = [
+    # --- EST-D01 Camilo: coordinacion de una charla ---
     ('EST-D01', ESTUDIANTE, 'Profe, la charla de seguridad es en la biblioteca?',
      240, True, False),
     ('EST-D01', DOCENTE, 'Si, Camilo. Nos vemos a las 9:30 en la biblioteca municipal.',
      225, True, False),
     ('EST-D01', ESTUDIANTE, 'Perfecto, profe. Llevo el cuaderno de campo.',
      35, False, False),
+
+    # --- EST-D02 Valentina: excelente trabajo + agradecimiento ---
+    ('EST-D02', DOCENTE, 'Valentina, excelente trabajo en la jornada del sabado.',
+     300, True, False),
+    ('EST-D02', ESTUDIANTE, 'Gracias profe, me alegra que le haya gustado.',
+     292, True, False),
+
+    # --- EST-D03 Santiago: dudas con la actividad ---
+    ('EST-D03', ESTUDIANTE, 'Profe, tengo una duda con la actividad de la huerta.',
+     210, True, False),
+    ('EST-D03', DOCENTE, 'Claro Santiago, llevas guantes y te explico alla mismo.',
+     205, True, False),
+    ('EST-D03', ESTUDIANTE, 'Gracias profe, con eso me queda claro.',
+     18, False, False),
+
+    # --- EST-D04 Daniela: plan de mejora con adjunto ---
     ('EST-D04', DOCENTE, 'Daniela, revisa el plan de mejora antes del viernes.',
      310, True, False),
     ('EST-D04', ESTUDIANTE, 'Le adjunto el plan de mejora corregido, profe.',
      145, False, True),
+
+    # --- EST-D05 Mateo: inasistencia justificada ---
+    ('EST-D05', ESTUDIANTE, 'Profe, no pude ir a la huerta porque estaba enfermo.',
+     180, True, False),
+    ('EST-D05', DOCENTE, 'Gracias por avisar, Mateo. Recuperas esas horas la otra semana.',
+     175, True, False),
+    ('EST-D05', ESTUDIANTE, 'Listo profe, muchas gracias.',
+     22, False, False),
+
+    # --- EST-D06 Isabella: entrega de evidencia ---
+    ('EST-D06', DOCENTE, 'Isabella, ya subiste la evidencia de la jornada?',
+     260, True, False),
+    ('EST-D06', ESTUDIANTE, 'Si profe, la entrego hoy mismo en la tarde.',
+     120, True, False),
+
+    # --- EST-D07 Nicolas: puntualidad ---
+    ('EST-D07', ESTUDIANTE, 'Profe, manana si puedo llegar a la sesion.',
+     150, False, False),
+    ('EST-D07', DOCENTE, 'Perfecto Nicolas, sere puntual con la lista.',
+     140, True, False),
+
+    # --- EST-D08 Gabriela: felicitacion ---
     ('EST-D08', DOCENTE, 'Gabriela, felicitaciones por la asistencia a la jornada.',
      1560, True, False),
+    ('EST-D08', ESTUDIANTE, 'Muchas gracias profe, lo hago con gusto.',
+     45, False, False),
+
+    # --- EST-D09 Sebastian: reunion de brigada ---
+    ('EST-D09', DOCENTE, 'Sebastian, la reunion de brigada es el jueves a las 2.',
+     90, True, False),
+    ('EST-D09', ESTUDIANTE, 'Ok profe, anotado en mi agenda.',
+     12, False, False),
+
+    # --- EST-D10 Laura: refuerzo escolar ---
+    ('EST-D10', ESTUDIANTE, 'Profe, puedo apoyar el refuerzo escolar del miercoles?',
+     200, True, False),
+    ('EST-D10', DOCENTE, 'Claro Laura, te espero en el aula de medios.',
+     195, True, False),
+    ('EST-D10', ESTUDIANTE, 'Gracias profe, ahi estare.',
+     28, False, False),
 ]
 
 # Estudiantes con sesion abierta: su `last_login` queda a minutos de la
 # corrida y el punto verde de la bandeja es un dato real, no un adorno.
-EN_LINEA = ['EST-D01', 'EST-D04', 'EST-D08']
+EN_LINEA = ['EST-D01', 'EST-D02', 'EST-D03', 'EST-D05', 'EST-D08', 'EST-D10']
 MINUTOS_EN_LINEA = 4
 
 
@@ -309,6 +323,48 @@ class Command(BaseCommand):
             if sesion.cupos_disponibles != disponibles:
                 sesion.cupos_disponibles = disponibles
                 sesion.save(update_fields=['cupos_disponibles'])
+
+        # ----------------------------- Mensajes ----------------------------
+        # Conversaciones previas del chat: cada estudiante a cargo arranca con
+        # un hilo ya armado (preguntas, coordinacion, felicitaciones...), asi la
+        # pantalla no se ve vacia en la sustentacion.
+        ahora = timezone.now()
+        for codigo, remitente, contenido, minutos, leido, con_adjunto in MENSAJES:
+            mensaje, creado = Mensaje.objects.get_or_create(
+                id_docente=docente,
+                id_estudiante=por_codigo[codigo],
+                remitente=remitente,
+                contenido=contenido,
+            )
+            if creado:
+                cambios = {
+                    'fecha_hora': ahora - timedelta(minutes=minutos),
+                    'estado': (Mensaje.ESTADO_LEIDO if leido
+                               else Mensaje.ESTADO_ENVIADO),
+                }
+                if con_adjunto:
+                    # El adjunto se guarda en MEDIA y la fila apunta a el.
+                    mensaje.adjunto.save(
+                        'plan-de-mejora.txt',
+                        ContentFile(PLAN_DE_MEJORA.encode('utf-8')),
+                        save=False,
+                    )
+                    mensaje.adjunto_nombre = 'plan-de-mejora.txt'
+                    mensaje.adjunto_tipo = Mensaje.ADJUNTO_ARCHIVO
+                    cambios['adjunto'] = mensaje.adjunto.name
+                    cambios['adjunto_nombre'] = mensaje.adjunto_nombre
+                    cambios['adjunto_tipo'] = mensaje.adjunto_tipo
+                # `fecha_hora` es auto_now_add, asi que el momento real de la
+                # conversacion se fija con un update posterior al insert.
+                Mensaje.objects.filter(pk=mensaje.pk).update(**cambios)
+                creados['mensajes'] += 1
+            else:
+                reuse['mensajes'] += 1
+
+        # Conexion de los estudiantes que la demo muestra en linea.
+        Usuario.objects.filter(
+            pk__in=[por_codigo[codigo].pk for codigo in EN_LINEA],
+        ).update(last_login=timezone.now() - timedelta(minutes=MINUTOS_EN_LINEA))
 
         # ------------------------------ Resumen ----------------------------
         self.stdout.write('')

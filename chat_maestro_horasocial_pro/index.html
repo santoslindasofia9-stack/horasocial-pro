@@ -775,6 +775,18 @@
     else enviarDemo(texto, adjunto);
   }
 
+  /* Burbuja temporal "escribiendo..." mientras llega la respuesta del alumno. */
+  function mostrarEscribiendo(cuandoTermina){
+    var ec = document.createElement('div');
+    ec.className = 'burbuja alum escrib';
+    ec.innerHTML = '<span class="dots"><i></i><i></i><i></i></span>';
+    msgs.appendChild(ec); scrollBottom();
+    setTimeout(function(){
+      ec.remove();
+      cuandoTermina();
+    }, 900);
+  }
+
   /* Modo servidor: el texto y el adjunto se guardan en la tabla mensajes. */
   function enviarAlBackend(texto){
     enviando = true; refrescarBoton();
@@ -796,6 +808,16 @@
         chat.push({ id:m.id, de:m.de, txt:m.texto, h:m.hora, adjunto:m.adjunto });
         renderBurbujas();
         limpiarComposer();
+
+        /* El estudiante contesta solo: se muestra "escribiendo..." un momento
+           y despues aparece su respuesta, para que el chat se sienta vivo. */
+        if (res.d.respuesta_estudiante){
+          mostrarEscribiendo(function(){
+            var r = res.d.respuesta_estudiante;
+            chat.push({ id:r.id, de:r.de, txt:r.texto, h:r.hora, adjunto:r.adjunto });
+            renderBurbujas();
+          });
+        }
       })
       .catch(function(){ toast('No se pudo conectar con el servidor'); })
       .then(function(){ enviando = false; refrescarBoton(); });

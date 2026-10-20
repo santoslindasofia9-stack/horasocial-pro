@@ -1444,9 +1444,54 @@ class ApiMensajesLenguajeTests(BaseModuloDocentes):
     def test_los_emojis_no_se_bloquean(self):
         respuesta = self._enviar('Excelente trabajo 👍😀❤️')
         self.assertEqual(respuesta.status_code, 201)
-        self.assertEqual(Mensaje.objects.count(), 1)
+        # El mensaje del docente + la respuesta automatica del estudiante.
+        self.assertEqual(Mensaje.objects.count(), 2)
 
     def test_una_palabra_permitida_no_se_bloquea(self):
         respuesta = self._enviar('Traeme la pijama para el taller')
         self.assertEqual(respuesta.status_code, 201)
+
+
+class ApiRespuestaAutomaticaTests(BaseModuloDocentes):
+    """
+    El estudiante contesta solo segun lo que escribe el docente. La respuesta
+    queda guardada en el mismo hilo y se marca como no leida (la manda el
+    estudiante).
+    """
+
+    def setUp(self):
+        self.client.force_login(self.docente)
+
+    def _enviar(self, texto):
+        return self.client.post(
+            reverse('api-mensajes-maestro'),
+            data=json.dumps({'estudiante': self.estudiante.pk, 'contenido': texto}),
+            content_type='application/json',
+        )
+
+    def test_excelente_trabajo_responde_con_agradecimiento(self):
+        datos = self._enviar('Excelente trabajo, felicitaciones').json()
+        rta = datos['respuesta_estudiante']
+        self.assertEqual(rta['de'], 'alum')
+        self.assertIn('gracias', rta['texto'].lower())
+
+    def test_la_respuesta_queda_guardada_en_el_hilo(self):
+        self._enviar('Excelente trabajo')
+        mensajes = Mensaje.objects.filter(
+            id_docente=self.docente, id_estudiante=self.estudiante,
+        )
+        self.assertEqual(mensajes.count(), 2)
+        alumno = mensajes.get(remitente=Mensaje.REMITENTE_ESTUDIANTE)
+        # Sin leer: alimenta el contador de la bandeja.
+        self.assertEqual(alumno.estado, Mensaje.ESTADO_ENVIADO)
+
+    def test_una_pregunta_generica_igual_tiene_respuesta(self):
+        datos = self._enviar('Nos vemos manana en la jornada').json()
+        self.assertTrue(datos['respuesta_estudiante']['texto'])
+
+    def test_un_mensaje_ofensivo_no_genera_respuesta(self):
+        respuesta = self._enviar('sos un pendejo')
+        self.assertEqual(respuesta.status_code, 400)
+        self.assertEqual(Mensaje.objects.count(), 0)
+
 

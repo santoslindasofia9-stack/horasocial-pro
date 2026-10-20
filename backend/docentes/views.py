@@ -15,6 +15,7 @@ hash (PBKDF2) y lo contrasta con la columna `password` de la tabla `usuariosa`.
 
 import json
 import os
+import random
 import unicodedata
 from datetime import datetime, time, timedelta
 from functools import wraps
@@ -1713,6 +1714,84 @@ def _enviar_mensaje(docente, estudiante, datos, archivos):
     return mensaje, None, []
 
 
+# Respuestas automaticas del estudiante segun lo que escriba el docente.
+# La primera regla que coincide gana; si ninguna coincide se usa RESPUESTA_GENERICA.
+# Son deliberadamente variadas para que un mismo mensaje no responda siempre igual.
+PALABRAS_CLAVE_RESPUESTAS = (
+    # (claves que busca el mensaje del docente, respuestas posibles del alumno)
+    (
+        ('excelente', 'felicitacion', 'felicitaciones', 'muy bien',
+         'bien hecho', 'gran trabajo', 'buen trabajo', 'felicidades'),
+        ('Gracias profe 🙏', 'Muchas gracias profe, lo hago con gusto.',
+         'Gracias profe, me alegra que le haya gustado.'),
+    ),
+    (
+        ('gracias', 'agradezco'),
+        ('Con gusto profe.', 'De nada profe, para eso estoy.',
+         'Un placer ayudarle, profe.'),
+    ),
+    (
+        ('tarea', 'actividad', 'trabajo', 'plan de mejora', 'informe'),
+        ('Si profe, lo tengo pendiente y lo entrego a tiempo.',
+         'Entendido profe, me pongo con eso ya.',
+         'Listo profe, lo dejo listo para la fecha.'),
+    ),
+    (
+        ('reunion', 'cita', 'nos vemos', 'encuentro', 'charla', 'sesion',
+         'biblioteca', 'jornada'),
+        ('Perfecto profe, ahi estare.', 'Listo, alla nos vemos profe.',
+         'Ok profe, anotado en mi agenda.'),
+    ),
+    (
+        ('asistencia', 'falta', 'asistir', 'puntual', 'llegar'),
+        ('Si profe, no faltare.', 'Entendido, sere puntual profe.',
+         'Ok profe, aviso si algo me impide asistir.'),
+    ),
+    (
+        ('pregunta', 'duda', 'consulta'),
+        ('Profe, le pregunto en clase para no equivocarme.',
+         'Si profe, tengo una duda, se la cuento despues.',
+         'Gracias profe, con eso me queda claro.'),
+    ),
+)
+
+RESPUESTA_GENERICA = (
+    'Entendido profe, gracias.',
+    'Listo profe, quedo atento.',
+    'Ok profe, cualquier cosa le aviso.',
+    'Perfecto profe.',
+)
+
+
+def _respuesta_del_estudiante(contenido):
+    """
+    Elige una respuesta automatica del estudiante segun lo que escribio el
+    docente. Devuelve SIEMPRE un texto; si no hay coincidencia usa una generica.
+    """
+    texto = _normalizar_lenguaje(contenido)
+    for claves, respuestas in PALABRAS_CLAVE_RESPUESTAS:
+        if any(clave in texto for clave in claves):
+            return random.choice(respuestas)
+    return random.choice(RESPUESTA_GENERICA)
+
+
+def _crear_respuesta_estudiante(docente, estudiante, contenido_docente):
+    """
+    Guarda la respuesta automatica del estudiante en el mismo hilo.
+
+    Se marca como NO leida (ESTADO_ENVIADO) porque la manda el estudiante: asi
+    la bandeja del docente muestra el contador de mensajes por leer y el chat
+    la pinta como burbuja del alumno.
+    """
+    return Mensaje.objects.create(
+        id_docente=docente,
+        id_estudiante=estudiante,
+        remitente=Mensaje.REMITENTE_ESTUDIANTE,
+        contenido=_respuesta_del_estudiante(contenido_docente),
+        estado=Mensaje.ESTADO_ENVIADO,
+    )
+
+
 @csrf_exempt
 @habilita_cors
 @require_http_methods(['GET', 'POST', 'OPTIONS'])
@@ -1770,9 +1849,16 @@ def api_mensajes_maestro(request):
             respuesta['palabras'] = ofensivas
         return JsonResponse(respuesta, status=400)
 
+    # El estudiante contesta solo: se guarda su respuesta en el mismo hilo y se
+    # devuelve junto al mensaje del docente para que el chat la muestre al toque.
+    respuesta_estudiante = _crear_respuesta_estudiante(
+        docente, estudiante, mensaje.contenido,
+    )
+
     return JsonResponse({
         'success': True,
         'mensaje': _fila_mensaje(request, mensaje),
+        'respuesta_estudiante': _fila_mensaje(request, respuesta_estudiante),
         'estudiante': {
             'id': estudiante.pk,
             'nombre': estudiante.nombre_completo,
