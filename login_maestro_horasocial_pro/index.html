@@ -522,7 +522,7 @@
 <!-- Backend Django: autenticacion real contra MySQL (Laragon).
      Si el backend se mueve de host o puerto, cambiar solo esta URL. -->
 <div class="login-error" id="loginError" role="alert" hidden></div>
-<form id="loginForm" action="http://127.0.0.1:8000/api/login-maestro" method="post" autocomplete="on">
+<form id="loginForm" action="/api/login-maestro" method="post" autocomplete="on">
 <div class="field">
 <label for="username">Código o correo electrónico</label>
 <div class="input-wrap">
@@ -568,37 +568,14 @@ function togglePassword() {
   icon.textContent = show ? 'visibility_off' : 'visibility';
 }
 
-// El backend (Django) puede servir esta misma pagina en /profesor/login, y
-// server.js la sirve en cualquier puerto (ahora con proxy /api/* -> Django).
-// Estrategia a prueba de puertos:
-//   - file://  -> se queda la maqueta (sin backend).
-//   - El action del HTML apunta DIRECTO a Django (:8000): es el camino seguro.
-//   - Al cargar, se comprueba si el MISMO ORIGEN responde la API (Django puro,
-//     o server.js con el proxy). Solo entonces el form postea en same-origin,
-//     que es lo que mantiene la cookie y la redireccion en el host correcto.
-//   - Si el mismo origen no tiene API (Live Server, otro servidor estatico),
-//     se conserva el backend directo en :8000. Nunca se postea a una ruta
-//     que no exista.
-(function configurarBackendDelLogin() {
-  if (location.protocol === 'file:') return;
-  const form = document.getElementById('loginForm');
-  if (!form) return;
-
-  fetch(location.origin + '/api/sesion-actual', {
-    credentials: 'include',
-    redirect: 'manual',
-  })
-    .then((respuesta) => {
-      const respondeLaApi =
-        respuesta.ok ||
-        (respuesta.status >= 200 && respuesta.status < 400);
-      if (respondeLaApi) {
-        form.action = location.origin + '/api/login-maestro';
-      }
-    })
-    /* Sin respuesta se conserva el action hacia Django :8000. */
-    .catch(() => {});
-})();
+  // DEFIINITIVO: siempre postear al MISMO ORIGEN para evitar rechazos de conexión
+  // Funciona con server.js proxy (:3000) o con Django directo (:8000)
+  (function configurarBackendDelLogin() {
+    if (location.protocol === 'file:') return;
+    const form = document.getElementById('loginForm');
+    if (!form) return;
+    form.action = location.origin + '/api/login-maestro';
+  })();
 
 document.getElementById('loginForm').addEventListener('submit', (e) => {
   if (location.protocol === 'file:') {
