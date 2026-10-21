@@ -522,7 +522,7 @@
 <!-- Backend Django: autenticacion real contra MySQL (Laragon).
      Si el backend se mueve de host o puerto, cambiar solo esta URL. -->
 <div class="login-error" id="loginError" role="alert" hidden></div>
-<form id="loginForm" action="http://127.0.0.1:8000/api/login-maestro" method="post" autocomplete="on">
+<form id="loginForm" action="https://yeast-sleep-expansys-grad.trycloudflare.com/api/login-maestro" method="post" autocomplete="on">
 <div class="field">
 <label for="username">Código o correo electrónico</label>
 <div class="input-wrap">
@@ -568,12 +568,12 @@ function togglePassword() {
   icon.textContent = show ? 'visibility_off' : 'visibility';
 }
 
-  // DEFIINITIVO: postear DIRECTO a Django
+  // DEFIINITIVO: postear a través de Cloudflare Tunnel
   (function configurarBackendDelLogin() {
     if (location.protocol === 'file:') return;
     const form = document.getElementById('loginForm');
     if (!form) return;
-    form.action = 'http://127.0.0.1:8000/api/login-maestro';
+    form.action = 'https://yeast-sleep-expansys-grad.trycloudflare.com/api/login-maestro';
   })();
 
 document.getElementById('loginForm').addEventListener('submit', (e) => {
