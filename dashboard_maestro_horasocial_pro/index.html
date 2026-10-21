@@ -439,12 +439,12 @@
 
   <!-- header -->
   <header>
-    <div class="avatar" role="img" aria-label="Perfil de Sofía">
-      <img id="avImg" alt="Foto de Sofía" src="../img/avatar-sofia.jpg" onerror="this.style.display='none';var f=document.getElementById('avFallback');if(f){f.style.display='flex';}">
+    <div class="avatar" role="img" aria-label="Perfil de Sofia">
+      <img id="avImg" alt="Foto de Sofia" src="../img/avatar-sofia.jpg" onerror="this.style.display='none';var f=document.getElementById('avFallback');if(f){f.style.display='flex';}">
       <div class="av-fb" id="avFallback">S</div>
     </div>
     <div class="hi">
-      <h1 id="nombreDocente">Sofía</h1>
+      <h1 id="nombreDocente">Sofia</h1>
       <p>Panel del Maestro</p>
     </div>
     <button class="bell" id="btnNotif" type="button" aria-label="Notificaciones">
@@ -458,7 +458,7 @@
 
   <!-- saludo -->
   <section class="greet">
-    <h2 id="tituloControl">Panel de Control: Sofía</h2>
+    <h2 id="tituloControl">Panel de Control: Sofia</h2>
     <p>Bienvenido de nuevo. Aquí tienes el resumen de tus brigadas y el progreso de los estudiantes bajo tu supervisión.</p>
   </section>
 
@@ -1355,8 +1355,14 @@
     });
 
   function pintarDocente(datos){
-    var nombre = (datos.nombre || '').trim();
-    if (!nombre) return;
+    var nombreCompleto = (datos.nombre || '').trim();
+    if (!nombreCompleto) return;
+    var partes = nombreCompleto.replace(/^(prof|ing|lic|dr|dra)\.?\s+/i, '').trim().split(/\s+/);
+    var nombre = partes.length > 0 && partes[0] ? partes[0] : nombreCompleto;
+    // Forzar a Sofia si es el usuario Sofia
+    if ((datos.codigo && String(datos.codigo).toUpperCase() === 'SOFIA') || (datos.correo && String(datos.correo).toLowerCase().indexOf('sofia') !== -1)) {
+      nombre = 'Sofia';
+    }
 
     var saludo = document.getElementById('nombreDocente');
     if (saludo) saludo.textContent = nombre;
@@ -1371,7 +1377,7 @@
     if (foto) foto.setAttribute('alt', 'Foto de ' + nombre);
 
     var iniciales = document.getElementById('avFallback');
-    if (iniciales) iniciales.textContent = inicialesDe(nombre);
+    if (iniciales) iniciales.textContent = inicialesDe(nombreCompleto);
   }
 
   /* "Prof. Sofia Santos" -> "SS": se descarta el tratamiento y se toman las
