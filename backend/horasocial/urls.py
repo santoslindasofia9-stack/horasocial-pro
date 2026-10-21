@@ -132,6 +132,12 @@ urlpatterns = [
         docentes_views.api_estudiantes_maestro,
         name='api-estudiantes-maestro',
     ),
+    # Agregar/actualizar horas sociales manualmente desde gestión de estudiantes
+    path(
+        'api/registrar-horas-estudiante',
+        docentes_views.api_registrar_horas_estudiante,
+        name='api-registrar-horas-estudiante',
+    ),
 
     # Validar o rechazar una asistencia desde el panel (con los contadores
     # ya recalculados en la respuesta).

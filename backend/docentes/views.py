@@ -915,6 +915,123 @@ def api_estudiantes_maestro(request):
     return JsonResponse(_datos_estudiantes(docente))
 
 
+@csrf_exempt
+@habilita_cors
+@require_http_methods(['POST', 'OPTIONS'])
+def api_registrar_horas_estudiante(request):
+    """
+    Agregar/actualizar horas sociales de un estudiante desde Gestión de Estudiantes.
+    Crea o actualiza un registro de asistencia manual, lo marca como Cumplida
+    para que sume inmediatamente en el listado y en el dashboard.
+    """
+
+    if request.method == 'OPTIONS':
+        return HttpResponse(status=204)
+
+    docente = _docente_en_sesion(request)
+    if docente is None:
+        return _respuesta_sin_sesion()
+
+    try:
+        datos = json.loads(request.body or b'{}')
+    except (TypeError, ValueError):
+        return JsonResponse({'success': False, 'error': 'JSON inválido.'}, status=400)
+
+    codigo = (datos.get('codigo') or datos.get('id_estudiante') or '').strip()
+    horas = datos.get('horas')
+    comentario = (datos.get('comentario') or datos.get('nota') or '').strip()
+
+    if not codigo or horas is None:
+        return JsonResponse({'success': False, 'error': 'Faltan datos (codigo/horas).'}, status=400)
+
+    try:
+        horas_int = int(horas)
+    except (TypeError, ValueError):
+        return JsonResponse({'success': False, 'error': 'Horas inválidas.'}, status=400)
+
+    if horas_int < 0 or horas_int > 24:
+        return JsonResponse({'success': False, 'error': 'Las horas deben estar entre 0 y 24.'}, status=400)
+
+    # Buscar estudiante a cargo
+    estudiante = None
+    # Primero por codigo
+    estudiante = Usuario.objects.filter(codigo=codigo, rol=Usuario.ROL_ESTUDIANTE).first()
+    if estudiante is None and str(codigo).startswith('EST-'):
+        try:
+            pk = int(str(codigo).replace('EST-', ''))
+            estudiante = Usuario.objects.filter(pk=pk, rol=Usuario.ROL_ESTUDIANTE).first()
+        except Exception:
+            pass
+    if estudiante is None:
+        estudiante = Usuario.objects.filter(pk=codigo, rol=Usuario.ROL_ESTUDIANTE).first()
+
+    # Verificar que esté a cargo de este docente
+    if estudiante is None or not docente.estudiantes_a_cargo.filter(pk=estudiante.pk).exists():
+        return JsonResponse({'success': False, 'error': 'Estudiante no encontrado o no está a tu cargo.'}, status=403)
+
+    # Buscar o crear una sesión "Manual" para este docente si no existe
+    tipo_manual, _ = TipoActividad.objects.get_or_create(
+        nombre_actividad='Horas Sociales - Registro Manual',
+        defaults={'descripcion': 'Registro manual desde gestión de estudiantes'}
+    )
+
+    # Usar la sesión más reciente del docente o crear una genérica
+    sesion = Sesion.objects.filter(id_profesor=docente).order_by('-fecha_hora').first()
+    if sesion is None:
+        sesion = Sesion.objects.create(
+            id_profesor=docente,
+            id_tipo=tipo_manual,
+            fecha_hora=timezone.now(),
+            duracion_horas=max(horas_int, 1),
+            cupos=50,
+            cupos_disponibles=50,
+            estado='Finalizada',
+        )
+    else:
+        # Asegurar que sea del mismo docente
+        if sesion.id_profesor_id != docente.pk:
+            sesion = Sesion.objects.create(
+                id_profesor=docente,
+                id_tipo=tipo_manual,
+                fecha_hora=timezone.now(),
+                duracion_horas=max(horas_int, 1),
+                cupos=50,
+                cupos_disponibles=50,
+                estado='Finalizada',
+            )
+
+    # Crear o actualizar asistencia
+    asistencia, created = Asistencia.objects.get_or_create(
+        id_sesion=sesion,
+        id_estudiante=estudiante,
+        defaults={
+            'confirmacion': Asistencia.CONFIRMACION_ASISTE,
+            'validacion_prof': Asistencia.VALIDACION_CUMPLIDA,
+            'horas_ganadas': horas_int,
+            'comentario_profesor': comentario,
+            'fecha_confirmacion': timezone.now(),
+        }
+    )
+
+    if not created:
+        asistencia.horas_ganadas = horas_int
+        asistencia.validacion_prof = Asistencia.VALIDACION_CUMPLIDA
+        asistencia.confirmacion = Asistencia.CONFIRMACION_ASISTE
+        if comentario:
+            asistencia.comentario_profesor = comentario
+        asistencia.fecha_confirmacion = timezone.now()
+        asistencia.save()
+
+    return JsonResponse({
+        'success': True,
+        'mensaje': 'Horas actualizadas correctamente.',
+        'estudiante': estudiante.nombre_completo,
+        'codigo': estudiante.codigo or f'EST-{estudiante.pk}',
+        'horas': horas_int,
+        'total_horas': estudiante.horas_registradas(),
+    })
+
+
 # ==========================================================================
 # USUARIO SESION: actividades que registra el docente (tabla sesionservicio)
 # ==========================================================================

@@ -904,16 +904,78 @@
 
     /* ---------- modal registrar horas ---------- */
     var horasCodigoActual = null;
+    var horasEstudianteActual = null;
     function abrirHoras(s){
       horasCodigoActual = s.codigo;
+      horasEstudianteActual = s;
       var av = $('horasAv'), nm = $('horasNombre'), cd = $('horasCodigo'), hi = $('horasInput'), ni = $('notaInput');
       if (av){ av.className = 's-av ' + clsBrigada(s.brigada); av.textContent = iniciales(s.nombre); }
       if (nm) nm.textContent = s.nombre;
       if (cd) cd.textContent = s.codigo;
-      if (hi) hi.value = '';
+      if (hi) hi.value = s.horas || '';
       if (ni) ni.value = '';
       abrirModal($('modalHoras'));
     }
+
+    function registrarHorasBackend(){
+      var hi = $('horasInput'), ni = $('notaInput');
+      if (!hi) return;
+      var horas = parseInt(hi.value, 10);
+      if (isNaN(horas) || horas < 0 || horas > 24){
+        toast('Ingresa un valor válido entre 0 y 24 horas');
+        hi.focus();
+        return;
+      }
+      var btn = $('btnRegistrarHoras');
+      if (btn){ btn.disabled = true; btn.style.opacity = '.6'; }
+
+      fetch(API + '/api/registrar-horas-estudiante', {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ codigo: horasCodigoActual, horas: horas, comentario: ni ? ni.value : '' })
+      })
+      .then(function(r){ return r.json().catch(function(){ return { success: false, error: 'Error al guardar' }; }); })
+      .then(function(resp){
+        if (resp && resp.success){
+          // Actualizar localmente para ver cambio inmediato
+          if (horasEstudianteActual){
+            horasEstudianteActual.horas = horas;
+            horasEstudianteActual.estado = (horas > 0) ? 'Al día' : 'Pendiente';
+            // Añadir al historial
+            if (!horasEstudianteActual.historial) horasEstudianteActual.historial = [];
+            horasEstudianteActual.historial.unshift({ f: fechaHoy(), h: horas, n: (ni && ni.value) ? ni.value : 'Registro manual' });
+          }
+          try{ localStorage.setItem(LS_EST, JSON.stringify(est)); }catch(e){}
+          renderStats();
+          renderList();
+          cerrarModal($('modalHoras'));
+          toast('Horas guardadas correctamente');
+        }else{
+          toast(resp.error || 'No se pudo guardar');
+        }
+      })
+      .catch(function(){
+        // Fallback local si falla backend
+        if (horasEstudianteActual){
+          horasEstudianteActual.horas = horas;
+          horasEstudianteActual.estado = (horas > 0) ? 'Al día' : 'Pendiente';
+          if (!horasEstudianteActual.historial) horasEstudianteActual.historial = [];
+          horasEstudianteActual.historial.unshift({ f: fechaHoy(), h: horas, n: (ni && ni.value) ? ni.value : 'Registro manual' });
+        }
+        try{ localStorage.setItem(LS_EST, JSON.stringify(est)); }catch(e){}
+        renderStats();
+        renderList();
+        cerrarModal($('modalHoras'));
+        toast('Guardado local (sin conexión al backend)');
+      })
+      .finally(function(){
+        if (btn){ btn.disabled = false; btn.style.opacity = '1'; }
+      });
+    }
+
+    var btnRegHoras = $('btnRegistrarHoras');
+    if (btnRegHoras) btnRegHoras.addEventListener('click', registrarHorasBackend);
 
     /* ---------- render notificaciones ---------- */
     function renderNotifs(){
