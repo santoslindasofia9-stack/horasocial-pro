@@ -522,7 +522,7 @@
 <!-- Backend Django: autenticacion real contra MySQL (Laragon).
      Si el backend se mueve de host o puerto, cambiar solo esta URL. -->
 <div class="login-error" id="loginError" role="alert" hidden></div>
-<form id="loginForm" action="/api/login-maestro" method="post" autocomplete="on">
+<form id="loginForm" action="http://127.0.0.1:8000/api/login-maestro" method="post" autocomplete="on">
 <div class="field">
 <label for="username">Código o correo electrónico</label>
 <div class="input-wrap">
@@ -568,13 +568,12 @@ function togglePassword() {
   icon.textContent = show ? 'visibility_off' : 'visibility';
 }
 
-  // DEFIINITIVO: siempre postear al MISMO ORIGEN para evitar rechazos de conexión
-  // Funciona con server.js proxy (:3000) o con Django directo (:8000)
+  // DEFIINITIVO: postear DIRECTO a Django para evitar el proxy
   (function configurarBackendDelLogin() {
     if (location.protocol === 'file:') return;
     const form = document.getElementById('loginForm');
     if (!form) return;
-    form.action = location.origin + '/api/login-maestro';
+    form.action = 'http://127.0.0.1:8000/api/login-maestro';
   })();
 
 document.getElementById('loginForm').addEventListener('submit', (e) => {

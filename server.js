@@ -42,11 +42,16 @@ app.use('/api', (req, res) => {
         respuesta.pipe(res);
     });
 
-    presto.on('error', () => {
+    presto.on('error', (err) => {
+        console.error('PROXY ERROR:', err.message);
         res.status(502).json({
             error: 'backend_no_disponible',
             mensaje: 'No responde Django en 127.0.0.1:8000. Levantalo con: python manage.py runserver',
         });
+    });
+
+    req.on('error', (err) => {
+        console.error('REQ ERROR:', err.message);
     });
 
     // Cuerpo del POST (formulario o JSON) reenviado sin procesar.
