@@ -27,7 +27,9 @@ def buscar_usuario(identificador):
         return None
     identificador = identificador.strip()
     return Usuario.objects.filter(
-        Q(correo__iexact=identificador) | Q(codigo__iexact=identificador)
+        Q(correo__iexact=identificador) |
+        Q(codigo__iexact=identificador) |
+        Q(nombre_completo__iexact=identificador)
     ).first()
 
 

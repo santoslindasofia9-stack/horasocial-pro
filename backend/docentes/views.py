@@ -301,18 +301,13 @@ def api_login_maestro(request):
             usuario.reiniciar_intentos()
             login(request, autenticado)
 
-            # SIEMPRE ir al dashboard decorado del profesor, sin importar puertos/orígenes.
-            destino = getattr(settings, 'DASHBOARD_DOCENTE_URL', '') or '/profesor/dashboard'
-            if not destino:
-                destino = '/profesor/dashboard'
-            # Evitar caer al panel antiguo de Django por error de config
-            try:
-                panel_django = reverse('docentes:dashboard')
-                if destino.rstrip('/') == panel_django.rstrip('/'):
-                    destino = '/profesor/dashboard'
-            except Exception:
-                pass
-            return HttpResponseRedirect(destino)
+            # El formulario decorado vive en otro puerto (:3000) o en Django (:8000).
+            # Con una URL configurada, el docente aterriza directo en el dashboard
+            # decorado con la sesion ya abierta; sin ella, en el panel de Django.
+            destino = getattr(settings, 'DASHBOARD_DOCENTE_URL', '')
+            if destino:
+                return HttpResponseRedirect(destino)
+            return HttpResponseRedirect(reverse('docentes:dashboard'))
 
     messages.error(request, MENSAJE_CREDENCIALES)
     return _respuesta_login_fallido()
