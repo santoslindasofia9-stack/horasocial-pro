@@ -118,7 +118,7 @@ if (!process.env.VERCEL) {
         ]);
     });
 
-    app.all('/api/*', (req, res) => {
+    app.use('/api', (req, res) => {
         res.json({ success: true });
     });
 }
